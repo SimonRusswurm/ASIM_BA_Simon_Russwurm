@@ -1,0 +1,117 @@
+html, body {margin: 0; padding: 0; background-color: #FBFBFB;}
+
+body{display: flex; justify-content: center;}
+
+
+
+.mc8{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    width: 150vh;
+    height: 100vh;
+    background: #333333;
+
+}
+
+.gridcontainer{
+    width: 98%;
+    height: 98%;
+    background:  #FBFBFB;
+}
+
+.grid{
+    display: grid;
+    height:100%;
+    width: 100%;
+    grid-template-columns: repeat(24, 1fr);
+    grid-template-rows: repeat(16, 1fr);
+}
+
+.ROM{
+    background-color: coral;
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row-start: 1;
+    grid-row-end: 15;
+}
+
+.RAM{
+    background-color: coral;
+    grid-column-start: -1;
+    grid-column-end: -6;
+    grid-row-start: 1;
+    grid-row-end: 15;
+}
+
+.IO1{
+    background-color: coral;
+    grid-column-start: 7;
+    grid-column-end: 10;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+.IO2{
+    background-color: coral;
+    grid-column-start: 11;
+    grid-column-end: 15;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+.IO3{
+    background-color: coral;
+    grid-column-start: 16;
+    grid-column-end: 19;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.Akkumulator{
+    background-color: coral;
+    grid-column-start: 7;
+    grid-column-end: 10;
+    grid-row-start: 4;
+    grid-row-end: 5;
+}
+
+.Register{
+    background-color: coral;
+    grid-column-start: 7;
+    grid-column-end: 10;
+    grid-row-start: 6;
+    grid-row-end: 12;
+}
+
+.ALU{
+    background-color: coral;
+    grid-column-start: 13;
+    grid-column-end: 19;
+    grid-row-start: 4;
+    grid-row-end: 7;
+}
+
+.Schaltwerk{
+    background-color: coral;
+    grid-column-start: 13;
+    grid-column-end: 19;
+    grid-row-start: 8;
+    grid-row-end: 12;
+}
+
+.Decoder{
+    background-color: coral;
+    grid-column-start: 16;
+    grid-column-end: 19;
+    grid-row-start: 14;
+    grid-row-end: 15;
+}
+
+.Steuerleiste{
+    background-color: coral;
+    grid-column-start: 7;
+    grid-column-end: 19;
+    grid-row-start: -1;
+    grid-row-end: -2;
+}

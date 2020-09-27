@@ -24,9 +24,9 @@ window.addEventListener('resize', function () {
         
     }
    
-    if(mc8.offsetHeight >= window.innerHeight){        
-        mc8.style.width = "150vh";
-        mc8.style.height = "100vh";
+    if(mc8.offsetHeight >= window.innerHeight){      
+        mc8.style.width = 1.5*window.innerHeight;
+        mc8.style.height = innerHeight;
         style.innerHTML = "h1{margin: 0; padding: 0; font-size: 2.2vh; color: #19B2FF; font-family: lato-bold;} p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-reg;}"
     }
 });

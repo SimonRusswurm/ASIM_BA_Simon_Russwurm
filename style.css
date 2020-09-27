@@ -1,7 +1,26 @@
 html, body {margin: 0; padding: 0; background-color: #FBFBFB;}
-
 body{display: flex; justify-content: center;}
 
+@font-face{
+    src:url(fonts/Lato-Regular.ttf);
+    font-family: lato-reg;
+}
+@font-face{
+    src:url(fonts/Lato-Bold.ttf);
+    font-family: lato-bold;
+}
+/* h1{margin: 0; padding: 0; font-size: 2.2vh; color: #19B2FF; font-family: lato-bold;}
+p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-reg;} */
+
+.grid-template{
+    display: grid;
+    height: 100%;
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+    box-sizing: border-box;
+    border: 1px solid #333333;
+}
 
 
 .mc8{
@@ -12,7 +31,7 @@ body{display: flex; justify-content: center;}
     top: 0px;
     width: 150vh;
     height: 100vh;
-    background: #333333;
+    background: black;
 
 }
 
@@ -22,96 +41,135 @@ body{display: flex; justify-content: center;}
     background:  #FBFBFB;
 }
 
-.grid{
+.globalgrid{
     display: grid;
     height:100%;
     width: 100%;
-    grid-template-columns: repeat(24, 1fr);
-    grid-template-rows: repeat(16, 1fr);
+    grid-template-columns: repeat(46, 1fr);
+    grid-template-rows: repeat(32, 1fr);
 }
 
 .ROM{
-    background-color: coral;
     grid-column-start: 1;
-    grid-column-end: 6;
+    grid-column-end: 11;
     grid-row-start: 1;
-    grid-row-end: 15;
+    grid-row-end: 33;
+
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 1fr 14fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.Adresse-1-F{
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 1fr 1fr;
+}
+.Adresse-000x-1FFx{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(14, 1fr);
+}
+.ROM-Adresse{ 
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(28, 1fr);
+}
+.Punkte{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: -1;
+    grid-row-end: -2;
+    background-image: url(images/points.svg);
+    background-position: center center;
+    background-size: 2%;
+    background-repeat: no-repeat;
+
 }
 
 .RAM{
-    background-color: coral;
     grid-column-start: -1;
-    grid-column-end: -6;
+    grid-column-end: -11;
     grid-row-start: 1;
-    grid-row-end: 15;
+    grid-row-end: 33;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }
 
 .IO1{
-    background-color: coral;
-    grid-column-start: 7;
-    grid-column-end: 10;
-    grid-row-start: 1;
-    grid-row-end: 2;
-}
-.IO2{
-    background-color: coral;
-    grid-column-start: 11;
-    grid-column-end: 15;
-    grid-row-start: 1;
-    grid-row-end: 2;
-}
-.IO3{
-    background-color: coral;
-    grid-column-start: 16;
+    grid-column-start: 13;
     grid-column-end: 19;
     grid-row-start: 1;
-    grid-row-end: 2;
+    grid-row-end: 3;
+    border-radius: 5px;
+    border: 1px solid #333333;
+}
+.IO2{
+    grid-column-start: 21;
+    grid-column-end: 27;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    border-radius: 5px;
+    border: 1px solid #333333;
+}
+.IO3{
+    grid-column-start: 29;
+    grid-column-end: 35;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }
 
 .Akkumulator{
-    background-color: coral;
-    grid-column-start: 7;
-    grid-column-end: 10;
-    grid-row-start: 4;
-    grid-row-end: 5;
+    grid-column-start: 13;
+    grid-column-end: 20;
+    grid-row-start: 7;
+    grid-row-end: 9;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }
 
 .Register{
-    background-color: coral;
-    grid-column-start: 7;
-    grid-column-end: 10;
-    grid-row-start: 6;
-    grid-row-end: 12;
+    grid-column-start: 13;
+    grid-column-end: 19;
+    grid-row-start: 11;
+    grid-row-end: 23;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }
 
 .ALU{
-    background-color: coral;
-    grid-column-start: 13;
-    grid-column-end: 19;
-    grid-row-start: 4;
-    grid-row-end: 7;
+    grid-column-start: 23;
+    grid-column-end: 35;
+    grid-row-start: 7;
+    grid-row-end: 13;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }
 
 .Schaltwerk{
-    background-color: coral;
-    grid-column-start: 13;
-    grid-column-end: 19;
-    grid-row-start: 8;
-    grid-row-end: 12;
+    grid-column-start: 23;
+    grid-column-end: 35;
+    grid-row-start: 15;
+    grid-row-end: 23;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }
 
 .Decoder{
-    background-color: coral;
-    grid-column-start: 16;
-    grid-column-end: 19;
-    grid-row-start: 14;
-    grid-row-end: 15;
+    grid-column-start: 29;
+    grid-column-end: 35;
+    grid-row-start: 27;
+    grid-row-end: 29;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }
 
 .Steuerleiste{
-    background-color: coral;
-    grid-column-start: 7;
-    grid-column-end: 19;
+    grid-column-start: 12;
+    grid-column-end: 36;
     grid-row-start: -1;
-    grid-row-end: -2;
+    grid-row-end: -3;
+    border-radius: 5px;
+    border: 1px solid #333333;
 }

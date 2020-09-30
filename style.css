@@ -31,7 +31,7 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     top: 0px;
     width: 150vh;
     height: 100vh;
-    background: red;
+    background: #FBFBFB;
 
 }
 
@@ -48,7 +48,7 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     grid-template-columns: repeat(46, 1fr);
     grid-template-rows: repeat(32, 1fr);
 }
-
+/* --------------------------------ROM---------------------------------- */
 .ROM{
     grid-column-start: 1;
     grid-column-end: 11;
@@ -85,14 +85,27 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     background-repeat: no-repeat;
 
 }
-
+/* --------------------------------RAM---------------------------------- */
 .RAM{
     grid-column-start: -1;
     grid-column-end: -11;
     grid-row-start: 1;
     grid-row-end: 33;
-    border-radius: 5px;
-    border: 1px solid #333333;
+
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-template-rows: 1fr 14fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+.Adresse-200x-3FFx{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(14, 1fr);
+}
+
+.RAM-Adresse{ 
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(28, 1fr);
 }
 
 .IO1{

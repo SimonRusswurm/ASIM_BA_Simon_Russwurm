@@ -1,14 +1,8 @@
-var mc8 = document.querySelector(".mc8");
-var style = document.querySelector("style");
-var rom = document.querySelector(".ROM-Adresse");
-let wiH = window.innerHeight;
-let wiW = window.innerWidth;
+//resize window
+{
+let mc8 = document.querySelector(".mc8");
+let style = document.querySelector("style");
 
-for(var i = 0; i<224; i++){
-    let p = document.createElement('p');
-    p.innerHTML = "FF";
-    rom.appendChild(p);
-}
 
 window.addEventListener('DOMContentLoaded', function () {
     if(window.innerHeight*1.5 > window.innerWidth){
@@ -35,4 +29,23 @@ window.addEventListener('resize', function () {
         style.innerHTML = "h1{margin: 0; padding: 0; font-size: 2.2vh; color: #19B2FF; font-family: lato-bold;} p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-reg;}"
     }  
 });
+}
+
+
+//fill ROM
+{
+let rom = document.querySelector(".ROM-Adresse");
+let ram = document.querySelector(".RAM-Adresse");
+console.log(rom);
+
+for(var i = 0; i<224; i++){
+    let ro = document.createElement('p');
+    let ra = document.createElement('p');
+    ro.textContent = "FF";
+    ra.textContent = "FF";
+    rom.appendChild(ro);
+    ram.appendChild(ra);
+}
+}
+
 

@@ -1,1 +1,3 @@
-# ASIM_BA_Simon_Russwurm
+# ASIM_Simulator
+
+This is a Bachelorthesis 

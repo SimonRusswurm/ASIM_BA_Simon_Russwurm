@@ -4,11 +4,6 @@ var rom = document.querySelector(".ROM-Adresse");
 let wiH = window.innerHeight;
 let wiW = window.innerWidth;
 
-
-
-
-
-
 for(var i = 0; i<224; i++){
     let p = document.createElement('p');
     p.innerHTML = "FF";

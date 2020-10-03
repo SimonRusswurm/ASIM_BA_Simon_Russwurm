@@ -6,8 +6,6 @@
     <link rel="stylesheet" href="style.css">
     <title>MC8</title>
     <style>
-        h1{margin: 0; padding: 0; font-size: 2.2vh; color: #19B2FF; font-family: lato-bold;}
-        p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-reg;}
     </style>
 </head>
 <body>
@@ -18,50 +16,144 @@
                     <div class="label grid-template">
                         <h1>ROM</h1>
                     </div>
-                    <div class="Adresse-1-F grid-template">
+                    <div class="Label-1-F grid-template">
                         <p>0</p><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p>
                         <p>8</p><p>9</p><p>A</p><p>B</p><p>C</p><p>D</p><p>E</p><p>F</p>
                     </div>
-                    <div class="Adresse-000x-1FFx grid-template">
+                    
+                    <div class="Label-000x-1FFx grid-template">
                         <p>000x</p><p>001x</p><p>002x</p><p>003x</p><p>004x</p><p>005x</p><p>006x</p>
                         <p>007x</p><p>008x</p><p>009x</p><p>00Ax</p><p>00Bx</p><p>00Cx</p><p>00Dx</p>
                     </div>
-                    <div class="ROM-Adresse grid-template">
+                    <div class="Adresse-000x-1FFx grid-template">
                         
+                    </div>
+                </div>
+
+                <div class="IO IO1 grid-template">
+                    <div class="label grid-template">
+                        <h1>IO1</h1>
+                    </div>
+                    <div class="io-arrow">
 
                     </div>
-                    <div class="Punkte grid-template">
+                     <h2 id="io-input1">FF</h2>
+                    
+                </div>
+
+                <div class="IO IO2 grid-template">
+                    <div class="label grid-template">
+                        <h1>IO2</h1>
+                    </div>
+                    <div class="io-arrow">
 
                     </div>
+                    <div class="io-input">
+                        <h2>FF</h2>
+                    </div>
+                </div>
+
+                <div class="IO IO3 grid-template">
+                    <div class="label grid-template">
+                        <h1>IO3</h1>
+                    </div>
+                    <div class="io-arrow">
+
+                    </div>
+                    <div class="io-input">
+                        <h2>FF</h2>
+                    </div>
+                </div>
+
+                <div class="ALU grid-template">
+                    <p>ALU</p>
 
                 </div>
-                <div class="IO1">
+                <div class="Akkumulator grid-template">
+                    <div class="label grid-template">
+                        <h1>A</h1>
+                    </div>
+                    <h2 id="A">00</h2>
+                    <div class="flags grid-template">
+                        <div class="label">
+                            <h1>C</h1>
+                        </div>
+                        <div class="label">
+                            <h1>Z</h1>
+                        </div>
+                        <div class="label">
+                            <h1>P</h1>
+                        </div>
+                        <div class="label">
+                            <h1>S</h1>
+                        </div>
+                        <p id="c-flag">0</p>
+                        <p id="z-flag">0</p>
+                        <p id="p-flag">0</p>
+                        <p id="s-flag">0</p>
+
+
+                    </div>
+                </div>
+                <div class="Register grid-template">
+                    <div class="BC-Register grid-template">
+                        <div class="label"> <h1>B</h1></div>
+                        <div id="B"><h2>00</h2></div>
+                        <div id="C"><h2>00</h2></div>
+                        <div class="label"> <h1>C</h1></div>
+                    </div>
+                    <div class="label"><h1>HL</h1></div>
+                    <h2 id="HL">0000</h2>
+                    <div class="label"><h1>IX</h1></div>
+                    <h2 id="IX">0000</h2>
+                    <div class="label"><h1>SP</h1></div>
+                    <h2 id="SP">0000</h2>
+                    <div class="label"><h1>PC</h1></div>
+                    <h2 id="PC">0000</h2>
+                    <div class="label"><h1>ZR</h1></div>
+                    <h2 id="ZR">0000</h2>
+                    
 
                 </div>
-                <div class="IO2">
-
+                <div class="Steuerwerk grid-template">
+                    <div class="SW1 grid-template">
+                        <p>Steuerwerk</p>
+                        <div class="label">
+                            <h1>IR</h1>
+                        </div>
+                        <h2 id="IR">00</h2>
+                       
+                        
+                    </div>
+                    <div class="Befehl grid-template">
+                        <p>MOV SP , dat_16</p>
+                        <div class="IR-Arrow"></div>
+                    </div>
+                    <div class="Einzelschritt grid-template">
+                        <p id="befehlsschrittnummer" class="grid-template">0</p>
+                        <p id="befehlsschritt">Hole den nächsten Befehl</p>
+                    </div>
+                    <div class="dec-leitung grid-template">
+                        <div></div>
+                        <div class="dec-bits grid-template">
+                            <div class="label"><h3>WR</h3></div>
+                            <div class="label"><h3>RD</h3></div>
+                            <div class="label"><h3>M</h3></div>
+                            <div class="label"><h3>IO</h3></div>
+                            <p id="WR">0</p>
+                            <p id="RD">0</p>
+                            <p id="M">0</p>
+                            <p id="IO">0</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="IO3">
-
-                </div>
-                <div class="ALU">
-
-                </div>
-                <div class="Akkumulator">
-
-                </div>
-                <div class="Register">
-
-                </div>
-                <div class="Schaltwerk">
-
-                </div>
-                <div class="Decoder">
-
+                <div class="Decoder grid-template">
+                    <div class="label">
+                        <h1>DEC</h1>
+                    </div>
                 </div>
                 <div class="RAM">
-                    
-                    <div class="Adresse-1-F grid-template">
+                    <div class="Label-1-F grid-template">
                         <p>0</p><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p>
                         <p>8</p><p>9</p><p>A</p><p>B</p><p>C</p><p>D</p><p>E</p><p>F</p>
                     </div>
@@ -69,20 +161,37 @@
                         <h1>RAM</h1>
                     </div>
                     
-                    <div class="RAM-Adresse grid-template">
-                        
-
-                    </div>
                     <div class="Adresse-200x-3FFx grid-template">
-                        <p>200x</p><p>201x</p><p>202x</p><p>203x</p><p>204x</p><p>205x</p><p>206x</p>
-                        <p>007x</p><p>008x</p><p>009x</p><p>00Ax</p><p>00Bx</p><p>00Cx</p><p>00Dx</p>
+                        
                     </div>
-                    <div class="Punkte grid-template">
 
-                    </div>                    
+                    <div class="Label-200x-3FFx grid-template">
+                        <p>000x</p><p>001x</p><p>002x</p><p>003x</p><p>004x</p><p>005x</p><p>006x</p>
+                    </div>
+                    <div></div><div></div>
+                    <div class="Adresse-200x-3FFx grid-template">
+                        
+                    </div>
+                    <div class="Label-200x-3FFx grid-template">
+                        <p>3F9x</p><p>3FAx</p><p>3FBx</p><p>3FCx</p><p>3FDx</p><p>3FEx</p><p>3FFx</p>
+                    </div>         
                 </div>
-                <div class="Steuerleiste">
-                    <a href="movObj/object_move.html">Klick hier für die Testseite</a>
+    
+                <div class="Steuerleiste grid-template">
+                    <a href="movObj/object_move.html" class="grid-template"></a>
+                    <!-- <button id="play" type="button" onclick=""></button> -->
+                    <button id="pause" type="button" onclick=""></button>
+                    <button id="stop" type="button" onclick=""></button>
+                    <button id="slow" type="button" onclick=""></button>
+                    <button id="fast" type="button" onclick=""></button>
+                    <button id="increase" type="button" onclick=""></button>
+                    <button id="decrease" type="button" onclick=""></button>
+                    <button id="einzeilschritt-button" type="button" onclick=""></button>
+                    <button id="behlsschritt-button" type="button" onclick=""></button>
+                    <button id="komplett" type="button" onclick=""></button>
+                    <button id="settings" type="button" onclick=""></button>
+                    <button id="toggleTheme" type="button" onclick=""></button>
+
                 </div>
 
             </div>

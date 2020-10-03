@@ -1,0 +1,37 @@
+<svg width="250" height="800" viewBox="0 0 250 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0.25 750.25H249.75V795C249.75 797.623 247.623 799.75 245 799.75H5C2.37664 799.75 0.25 797.623 0.25 795V750.25Z" stroke="#333333" stroke-width="0.5"/>
+<circle cx="125" cy="766" r="2" fill="#333333"/>
+<circle cx="125" cy="775" r="2" fill="#333333"/>
+<circle cx="125" cy="784" r="2" fill="#333333"/>
+<rect x="50.25" y="50.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="50.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="100.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="100.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="150.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="150.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="200.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="200.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="250.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="250.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="300.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="300.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="350.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="350.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="400.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="400.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="450.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="450.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="500.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="500.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="550.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="550.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="600.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="600.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="650.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="650.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="50.25" y="700.25" width="199.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.25" y="700.25" width="49.5" height="49.5" stroke="#333333" stroke-width="0.5"/>
+<path d="M50.25 0.25H245C247.623 0.25 249.75 2.37665 249.75 5V49.75H50.25V0.25Z" stroke="#333333" stroke-width="0.5"/>
+<path d="M5 0.25H49.75V49.75H0.25V5C0.25 2.37665 2.37665 0.25 5 0.25Z" stroke="#333333" stroke-width="0.5"/>
+<rect x="0.5" y="0.5" width="249" height="799" rx="4.5" stroke="#333333"/>
+</svg>

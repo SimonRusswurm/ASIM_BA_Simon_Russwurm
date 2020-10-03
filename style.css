@@ -9,8 +9,22 @@ body{display: flex; justify-content: center;}
     src:url(fonts/Lato-Bold.ttf);
     font-family: lato-bold;
 }
-/* h1{margin: 0; padding: 0; font-size: 2.2vh; color: #19B2FF; font-family: lato-bold;}
-p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-reg;} */
+@font-face{
+    src:url(fonts/Lato-Light.ttf);
+    font-family: lato-light;
+}
+h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg;}
+h2{margin: 0; padding: 0; color: #333333; font-family: lato-reg;}
+h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light;}
+p{ margin: 0; padding: 0; color: #333333; font-family: lato-reg;}
+
+button{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border-color: transparent;
+    cursor: pointer;
+}
 
 .grid-template{
     display: grid;
@@ -18,8 +32,27 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     width: 100%;
     justify-items: center;
     align-items: center;
-    box-sizing: border-box;
-    border: 1px solid #333333;
+}
+
+.addYellowBg{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 90%;
+    height: 90%;
+    background-color: yellow;
+    border-radius: 0.5vh;
+}
+#PC{
+    position: relative;
+    z-index: -1;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: yellow;
+    border-radius: 0.5vh;
 }
 
 
@@ -29,16 +62,19 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     justify-content: center;
     align-items: center;
     top: 0px;
-    width: 150vh;
+    width: 143.75vh;
     height: 100vh;
     background: #FBFBFB;
-
+    /* background: black; */
 }
 
 .gridcontainer{
     width: 98%;
     height: 98%;
-    background:  #FBFBFB;
+    background-image: url(images/Bus-System_light.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .globalgrid{
@@ -57,34 +93,30 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
 
     display: grid;
     grid-template-columns: 1fr 4fr;
-    grid-template-rows: 1fr 14fr 1fr;
+    grid-template-rows:  1fr 14fr 1fr;
     justify-items: center;
     align-items: center;
-}
 
-.Adresse-1-F{
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: 1fr 1fr;
-}
-.Adresse-000x-1FFx{
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(14, 1fr);
-}
-.ROM-Adresse{ 
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(28, 1fr);
-}
-.Punkte{
-    grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: -1;
-    grid-row-end: -2;
-    background-image: url(images/points.svg);
+    background-image: url(images/ROMBackground.svg);
     background-position: center center;
-    background-size: 2%;
+    background-size: contain;
     background-repeat: no-repeat;
 
 }
+
+.Label-1-F{
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 1fr 1fr;
+}
+.Label-000x-1FFx{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(14, 1fr);
+}
+.Adresse-000x-1FFx{
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(28, 1fr);
+}
+
 /* --------------------------------RAM---------------------------------- */
 .RAM{
     grid-column-start: -1;
@@ -94,52 +126,77 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
 
     display: grid;
     grid-template-columns: 4fr 1fr;
-    grid-template-rows: 1fr 14fr 1fr;
+    grid-template-rows: 1fr 7fr 1fr 7fr;
     justify-items: center;
     align-items: center;
+
+    background-image: url(images/RAMBackground.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
+
+
 .Adresse-200x-3FFx{
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(14, 1fr);
 }
 
-.RAM-Adresse{ 
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(28, 1fr);
+/* --------------------------------IO---------------------------------- */
+.IO{
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    background-image: url(images/IOBg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
-
 .IO1{
     grid-column-start: 13;
     grid-column-end: 19;
     grid-row-start: 1;
     grid-row-end: 3;
-    border-radius: 5px;
-    border: 1px solid #333333;
 }
 .IO2{
     grid-column-start: 21;
     grid-column-end: 27;
     grid-row-start: 1;
-    grid-row-end: 3;
-    border-radius: 5px;
-    border: 1px solid #333333;
+    grid-row-end: 3; 
 }
 .IO3{
     grid-column-start: 29;
     grid-column-end: 35;
     grid-row-start: 1;
-    grid-row-end: 3;
-    border-radius: 5px;
-    border: 1px solid #333333;
+    grid-row-end: 3; 
 }
 
+.io-arrow{
+    width: 100%;
+    height: 75%;
+    background-image: url(images/IOArrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* --------------------------------Register---------------------------------- */
 .Akkumulator{
     grid-column-start: 13;
     grid-column-end: 20;
     grid-row-start: 7;
     grid-row-end: 9;
-    border-radius: 5px;
-    border: 1px solid #333333;
+    background-image: url(images/ABg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 2fr 4fr;
+}
+
+.flags{
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .Register{
@@ -147,8 +204,23 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     grid-column-end: 19;
     grid-row-start: 11;
     grid-row-end: 23;
-    border-radius: 5px;
-    border: 1px solid #333333;
+    background-image: url(images/RegisterBg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: 1fr 2fr;
+}
+
+.BC-Register{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
 }
 
 .ALU{
@@ -156,26 +228,79 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     grid-column-end: 35;
     grid-row-start: 7;
     grid-row-end: 13;
-    border-radius: 5px;
-    border: 1px solid #333333;
+    background-image: url(images/ALUBg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
-
-.Schaltwerk{
+/* --------------------------------Steuerwerk---------------------------------- */
+.Steuerwerk{
     grid-column-start: 23;
     grid-column-end: 35;
     grid-row-start: 15;
     grid-row-end: 23;
-    border-radius: 5px;
-    border: 1px solid #333333;
+    background-image: url(images/SteuerwerkBg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: 1fr;
+    position: relative;
 }
+
+.SW1{
+    grid-template-rows: 1fr;
+    grid-template-columns: 3fr 1fr 2fr;
+}
+#befehlsschrittnummer{
+    height: 55%;
+    width: 55%;
+}
+#befehlsschritt{
+    justify-self: start;
+}
+
+.dec-leitung{
+    grid-template-rows: 1fr;
+    grid-template-columns: 2fr 1fr;
+}
+.dec-bits{
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4,1fr);
+}
+
+
+.Befehl{
+    grid-template-rows: 1fr;
+    grid-template-columns: 4fr 2fr;
+    justify-items: self-end;
+}
+.IR-Arrow{
+    width: 100%;
+    height: 100%;
+    background-image: url(images/IRArrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.Einzelschritt{
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 5fr;
+}
+
 
 .Decoder{
     grid-column-start: 29;
     grid-column-end: 35;
     grid-row-start: 27;
     grid-row-end: 29;
-    border-radius: 5px;
-    border: 1px solid #333333;
+    background-image: url(images/IOBg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .Steuerleiste{
@@ -183,6 +308,11 @@ p{ margin: 0; padding: 0; font-size: 2.2vh; color: #333333; font-family: lato-re
     grid-column-end: 36;
     grid-row-start: -1;
     grid-row-end: -3;
-    border-radius: 5px;
-    border: 1px solid #333333;
+
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(12, 1fr);
+    background-image: url(images/SteuerleisteBg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }

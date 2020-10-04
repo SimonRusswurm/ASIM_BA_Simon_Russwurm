@@ -29,7 +29,6 @@
                         
                     </div>
                 </div>
-
                 <div class="IO IO1 grid-template">
                     <div class="label grid-template">
                         <h1>IO1</h1>
@@ -40,7 +39,6 @@
                      <h2 id="io-input1">FF</h2>
                     
                 </div>
-
                 <div class="IO IO2 grid-template">
                     <div class="label grid-template">
                         <h1>IO2</h1>
@@ -49,22 +47,20 @@
 
                     </div>
                     <div class="io-input">
-                        <h2>FF</h2>
+                        <h2 id="io-input2">FF</h2>
                     </div>
                 </div>
-
                 <div class="IO IO3 grid-template">
                     <div class="label grid-template">
-                        <h1>IO3</h1>
+                        <h1 id="io-input">IO3</h1>
                     </div>
-                    <div class="io-arrow">
+                    <div class="io-arrow turn180">
 
                     </div>
                     <div class="io-input">
                         <h2>FF</h2>
                     </div>
                 </div>
-
                 <div class="ALU grid-template">
                     <p>ALU</p>
 
@@ -87,10 +83,10 @@
                         <div class="label">
                             <h1>S</h1>
                         </div>
-                        <p id="c-flag">0</p>
-                        <p id="z-flag">0</p>
-                        <p id="p-flag">0</p>
-                        <p id="s-flag">0</p>
+                        <p id="c_flag">0</p>
+                        <p id="z_flag">0</p>
+                        <p id="p_flag">0</p>
+                        <p id="s_flag">0</p>
 
 
                     </div>
@@ -98,8 +94,8 @@
                 <div class="Register grid-template">
                     <div class="BC-Register grid-template">
                         <div class="label"> <h1>B</h1></div>
-                        <div id="B"><h2>00</h2></div>
-                        <div id="C"><h2>00</h2></div>
+                        <div><h2 id="B">00</h2></div>
+                        <div><h2 id="C">00</h2></div>
                         <div class="label"> <h1>C</h1></div>
                     </div>
                     <div class="label"><h1>HL</h1></div>
@@ -112,8 +108,6 @@
                     <h2 id="PC">0000</h2>
                     <div class="label"><h1>ZR</h1></div>
                     <h2 id="ZR">0000</h2>
-                    
-
                 </div>
                 <div class="Steuerwerk grid-template">
                     <div class="SW1 grid-template">
@@ -126,12 +120,12 @@
                         
                     </div>
                     <div class="Befehl grid-template">
-                        <p>MOV SP , dat_16</p>
+                        <p id="mc8Command">MOV SP , dat_16</p>
                         <div class="IR-Arrow"></div>
                     </div>
                     <div class="Einzelschritt grid-template">
-                        <p id="befehlsschrittnummer" class="grid-template">0</p>
-                        <p id="befehlsschritt">Hole den nächsten Befehl</p>
+                        <p id="commandNumber" class="grid-template">0</p>
+                        <p id="commandStep">Hole den nächsten Befehl</p>
                     </div>
                     <div class="dec-leitung grid-template">
                         <div></div>
@@ -178,22 +172,21 @@
                 </div>
     
                 <div class="Steuerleiste grid-template">
-                    <a href="movObj/object_move.html" class="grid-template"></a>
-                    <!-- <button id="play" type="button" onclick=""></button> -->
-                    <button id="pause" type="button" onclick=""></button>
+                    
+                    <button id="play" type="button" onclick="start()"></button>
+                    <button id="pause" type="button" onclick="pause()"></button>
                     <button id="stop" type="button" onclick=""></button>
                     <button id="slow" type="button" onclick=""></button>
                     <button id="fast" type="button" onclick=""></button>
-                    <button id="increase" type="button" onclick=""></button>
-                    <button id="decrease" type="button" onclick=""></button>
+                    <button id="increase" type="button" onclick="increaseSpeed()"></button>
+                    <button id="decrease" type="button" onclick="decreaseSpeed()"></button>
                     <button id="einzeilschritt-button" type="button" onclick=""></button>
                     <button id="behlsschritt-button" type="button" onclick=""></button>
                     <button id="komplett" type="button" onclick=""></button>
-                    <button id="settings" type="button" onclick=""></button>
+                    <!-- <button id="settings" type="button" onclick=""></button> -->
+                    <a href="movObj/object_move.html" class="grid-template"></a>
                     <button id="toggleTheme" type="button" onclick=""></button>
-
-                </div>
-
+                </div> 
             </div>
         </div>
     </div>

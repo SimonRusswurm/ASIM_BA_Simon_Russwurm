@@ -176,7 +176,7 @@ function getPathAtoB(pointIndexA, pointIndexB){
 }
 
 //returns an array of the
-function pathFromTo(pointA, pointB){
+function pointsFromTo(pointA, pointB){
     let fixPointIndexA = -1;
     let fixPointIndexB = -1;
     let AtoB = [];
@@ -218,7 +218,7 @@ function convertlabelToPoint(label){
 
 
 
-let path = pathFromTo(convertlabelToPoint("ROM1"), convertlabelToPoint("ROM2"));
+let path = pointsFromTo(convertlabelToPoint("ROM1"), convertlabelToPoint("ROM2"));
 let mov = createMovingObj(path);
 
 let j = 0;

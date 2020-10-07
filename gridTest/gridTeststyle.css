@@ -37,7 +37,7 @@
     border: 0.001em solid #666666;
 }
 .topLeft{
-    border-top-left-radius: 5px;
+    border-top-left-radius: 0.3empx;
 }
 .topRight{
     border-top-right-radius: 5px;

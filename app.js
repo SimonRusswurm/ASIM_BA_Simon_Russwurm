@@ -32,21 +32,21 @@ window.addEventListener('resize', function () {
 }
 
 
-//fill ROM
+// fill ROM
 {
-let rom = document.querySelector(".Adresse-000x-1FFx");
+let rom = document.getElementsByClassName("Adresse-000x-1FFx");
 let ram = document.getElementsByClassName("Adresse-200x-3FFx");
+let j = 0;
 for(var i = 0; i<224; i++){
     let ro = document.createElement('p');
     let ra = document.createElement('p');
     ro.textContent = "FF";
     ra.textContent = "FF";
-    rom.appendChild(ro);
-    if(i<112){
-        ram[0].appendChild(ra);
-    }else{
-        ram[1].appendChild(ra);
+    if(i%16 === 0 && i !== 0){
+        j++;
     }
+    rom[j].appendChild(ro);
+    ram[j].appendChild(ra);
 }
 }
 
@@ -445,7 +445,7 @@ function createMovingObj(aPath){
     iDiv.innerHTML = "FF";
     iDiv.style.background = "yellow";
     iDiv.style.zIndex = "10";
-    iDiv.style.border = "1px solid #333333"
+    iDiv.style.border = "0.01em solid #333333"
     iDiv.style.borderRadius = "15%";
     document.querySelector(".globalgrid").appendChild(iDiv);
 
@@ -633,6 +633,7 @@ console.log(mov.path);
 //button functions
 function start(){
     animationRuns = true;
+    document.getElementById('play').toggleAttribute('buttonPressed');
 }
 function pause(){
     animationRuns = false;

@@ -18,9 +18,10 @@ body{display: flex; justify-content: center;}
     font-family: lato-light;
 }
 h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg;}
-h2{margin: 0; padding: 0; color: #333333; font-family: lato-reg;}
+h2{margin: 0; padding: 0; letter-spacing: 0.05em; color: #222222; font-family: lato-reg;}
 h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light;}
-p{ margin: 0; padding: 0; color: #333333; font-family: lato-reg;}
+h4{margin: 0; padding: 0; letter-spacing: 0.05em; color: #222222; font-family: lato-reg;}
+p{ margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
 
 button{
     width: 100%;
@@ -53,19 +54,19 @@ button:hover{
     border: 0.01em solid #666666;
 }
 .topLeft{
-    border-top-left-radius: 5px;
+    border-top-left-radius: 0.5vw;
 }
 .topRight{
-    border-top-right-radius: 5px;
+    border-top-right-radius: 0.5vw;
 }
 .bottomLeft{
-    border-bottom-left-radius: 5px;
+    border-bottom-left-radius: 0.5vw;
 }
 .bottomRight{
-    border-bottom-right-radius: 5px;
+    border-bottom-right-radius: 0.5vw;
 }
 .rounded{
-    border-radius: 5px;
+    border-radius: 0.5vw;
 }
 
 .addYellowBg{

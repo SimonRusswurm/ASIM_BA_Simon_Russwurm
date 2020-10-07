@@ -8,12 +8,12 @@ window.addEventListener('DOMContentLoaded', function () {
     if(window.innerHeight*1.4375 > window.innerWidth){
         mc8.style.width = String(window.innerWidth) + "px";
         mc8.style.height = String(window.innerWidth/1.4375) + "px";
-        style.innerHTML = "h1{font-size: 1.46666vw;} p{font-size: 1.3913vw;} h2{font-size: 2.7vw;} h3{font-size: 1vw;}";
+        style.innerHTML = "h1{font-size: 1.46666vw;} p{font-size: 1.3913vw;} h2{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw}";
         
     } else{
         mc8.style.width = String(window.innerHeight*1.4375) + "px";
         mc8.style.height = String(window.innerHeight) + "px";
-        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 3.88125vh;} h3{font-size: 1.4375vh;}";
+        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh}";
     }  
 });
 
@@ -21,12 +21,12 @@ window.addEventListener('resize', function () {
     if(window.innerHeight*1.4375 > window.innerWidth){
         mc8.style.width = String(window.innerWidth) + "px";
         mc8.style.height = String(window.innerWidth/1.4375) + "px";
-        style.innerHTML = "h1{font-size: 1.46666vw;} p{font-size: 1.3913vw;} h2{font-size: 2.7vw;} h3{font-size: 1vw;}";
+        style.innerHTML = "h1{font-size: 1.46666vw;} p{font-size: 1.3913vw;} h2{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw}";
         
     } else{
         mc8.style.width = String(window.innerHeight*1.4375) + "px";
         mc8.style.height = String(window.innerHeight) + "px";
-        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 3.88125vh;} h3{font-size: 1.4375vh;}";
+        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh}";
     }  
 });
 }
@@ -426,7 +426,7 @@ let OFFSET_Y = 0;
 
 function createMovingObj(aPath){
     
-    let iDiv = document.createElement('h2');
+    let iDiv = document.createElement('h4');
     let h = 3.125*1.6;
     let w = 3.125/1.4375*1.6;
     
@@ -437,7 +437,7 @@ function createMovingObj(aPath){
     iDiv.style.position = "absolute";
     iDiv.style.top = String(aPath[0].y*3.125-OFFSET_Y) + "%" ;
     iDiv.style.left = String(aPath[0].x*2.173913 -OFFSET_X) + "%";
-    iDiv.style.display = "flex";
+    iDiv.style.display = "grid";
     iDiv.style.justifyContent = "center";
     iDiv.style.alignItems = "center";
     iDiv.style.height = String(h) + "%";
@@ -446,7 +446,7 @@ function createMovingObj(aPath){
     iDiv.style.background = "yellow";
     iDiv.style.zIndex = "10";
     iDiv.style.border = "0.01em solid #333333"
-    iDiv.style.borderRadius = "15%";
+    iDiv.style.borderRadius = "0.5vw";
     document.querySelector(".globalgrid").appendChild(iDiv);
 
     let movObj = {aDiv: iDiv, path: aPath};

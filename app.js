@@ -77,8 +77,53 @@ let M = document.getElementById('M');
 let IO = document.getElementById('IO');
 let rom = document.querySelector(".Adresse-000x-1FFx");
 let ram = document.getElementsByClassName("Adresse-200x-3FFx");
-let romArray = [];
+let romArray = ['3E','12','06','22'];
 let ramArray = [];
+const commands = [
+    {
+        label: "Hole den nächsten Befehl",
+        assemb: "",
+        flags: false,
+        index: 0,
+        wr: "1",
+        rd: "0",
+        m: "0",
+        io: "1",
+    },
+    {
+        label: "Erhöhe den Programmzähler um 1",
+        assemb: "",
+        machine: "",
+        flags: false,
+        index: 1,
+        wr: "",
+        rd: "",
+        m: "",
+        io: "",
+    },
+    {
+        label: "Erkenne den Befehl",
+        assemb: "",
+        maschine: "",
+        flags: false,
+        index: 2,
+        wr: "",
+        rd: "",
+        m: "",
+        io: "",
+    },
+    {
+        label: "Hole den Parameter",
+        assemb: "MOV A,dat_8",
+        maschine: "3E",
+        flags: false,
+        wr: "",
+        rd: "",
+        m: "",
+        io: "",
+    },
+
+];
 
 const fixPoints = [
     {
@@ -425,7 +470,6 @@ let OFFSET_Y = 0;
 
 
 function createMovingObj(aPath){
-    
     let iDiv = document.createElement('h4');
     let h = 3.125*1.6;
     let w = 3.125/1.4375*1.6;
@@ -436,7 +480,7 @@ function createMovingObj(aPath){
     iDiv.className = 'movObj';
     iDiv.style.position = "absolute";
     iDiv.style.top = String(aPath[0].y*3.125-OFFSET_Y) + "%" ;
-    iDiv.style.left = String(aPath[0].x*2.173913 -OFFSET_X) + "%";
+    iDiv.style.left = String(aPath[0].x*3.125/1.4375-OFFSET_X) + "%";
     iDiv.style.display = "grid";
     iDiv.style.justifyContent = "center";
     iDiv.style.alignItems = "center";
@@ -445,14 +489,13 @@ function createMovingObj(aPath){
     iDiv.innerHTML = "FF";
     iDiv.style.background = "yellow";
     iDiv.style.zIndex = "10";
-    iDiv.style.border = "0.01em solid #333333"
+    iDiv.style.border = "0.1em solid #333333"
     iDiv.style.borderRadius = "0.5vw";
     document.querySelector(".globalgrid").appendChild(iDiv);
 
     let movObj = {aDiv: iDiv, path: aPath};
     return movObj;
 }
-
 
 //AtoB
 {
@@ -487,6 +530,7 @@ function getPathZerotoA(pointIndexA){
     return zeroToPointA;
 }
 
+//returns index array
 function getPathAtoB(pointIndexA, pointIndexB){
     let zeroToPointA = getPathZerotoA(pointIndexA);
     let zeroToPointB = getPathZerotoA(pointIndexB);
@@ -534,7 +578,7 @@ function getPathAtoB(pointIndexA, pointIndexB){
     return AtoB;
 }
 
-//returns an array of the
+//returns an array of points
 function pathFromTo(pointA, pointB){
     let fixPointIndexA = -1;
     let fixPointIndexB = -1;
@@ -574,7 +618,7 @@ function convertlabelToPoint(label){
 }
 }
 
-let path = pathFromTo(convertlabelToPoint("ROM1"), convertlabelToPoint("SW"));
+let path = pathFromTo(convertlabelToPoint("ROM1"), convertlabelToPoint("A"));
 let mov = createMovingObj(path);
 
 let j = 0;
@@ -602,13 +646,9 @@ function updateMovObjPosition(aMovObj){
             aMovObj.path.shift();
         }
         aMovObj.aDiv.style.top = String(aMovObj.path[0].y*3.125-OFFSET_Y) + "%" ;
-        aMovObj.aDiv.style.left = String(aMovObj.path[0].x*2.173913-OFFSET_X) + "%";
+        aMovObj.aDiv.style.left = String(aMovObj.path[0].x*3.125/1.4375-OFFSET_X) + "%";
     } 
 }
-
-// function getIdunderObj(aMovObj){
-//     aMovObj.
-// }
 
 function main(currentTime){
     window.requestAnimationFrame(main);
@@ -628,10 +668,9 @@ function update(){
 function draw(grid){
     updateMovObjPosition(mov);
 }
-console.log(mov.path);
 
 //button functions
-function start(){
+function play(){
     animationRuns = true;
     document.getElementById('play').toggleAttribute('buttonPressed');
 }

@@ -489,7 +489,7 @@ function createMovingObj(aPath){
     iDiv.innerHTML = "FF";
     iDiv.style.background = "yellow";
     iDiv.style.zIndex = "10";
-    iDiv.style.border = "1px solid #333333"
+    iDiv.style.border = "0.5px solid #666666"
     iDiv.style.borderRadius = "0.5vw";
     document.querySelector(".globalgrid").appendChild(iDiv);
 

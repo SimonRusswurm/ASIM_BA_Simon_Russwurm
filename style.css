@@ -51,7 +51,7 @@ button:hover{
 
 .boxborder{
     box-sizing: border-box;
-    border: 1px solid #666666;
+    border: 0.5px solid #666666;
 }
 .topLeft{
     border-top-left-radius: 0.5vw;

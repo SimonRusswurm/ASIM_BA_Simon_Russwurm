@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', function () {
     } else{
         mc8.style.width = String(window.innerHeight*1.4375) + "px";
         mc8.style.height = String(window.innerHeight) + "px";
-        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;}h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh}";
+        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh}";
     }  
 });
 
@@ -26,7 +26,7 @@ window.addEventListener('resize', function () {
     } else{
         mc8.style.width = String(window.innerHeight*1.4375) + "px";
         mc8.style.height = String(window.innerHeight) + "px";
-        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh; h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh}";
+        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh}";
     }  
 });
 }

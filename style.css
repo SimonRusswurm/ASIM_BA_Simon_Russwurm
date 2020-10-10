@@ -19,6 +19,7 @@ body{display: flex; justify-content: center;}
 }
 h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg;}
 h2{margin: 0; padding: 0; letter-spacing: 0.02em; color: #222222; font-family: lato-reg;}
+.h2mov{ letter-spacing: 0.02em; font-family: lato-bold;}
 h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light;}
 h4{margin: 0; padding: 0; letter-spacing: 0.02em; color: #222222; font-family: lato-reg;}
 p{ margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
@@ -69,26 +70,6 @@ button:hover{
     border-radius: 0.5vw;
 }
 
-.addYellowBg{
-    display: grid;
-    justify-items: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: yellow;
-    border-radius: 0.5vw;
-}
-#commandNumber{
-    position: relative;
-    z-index: -1;
-    display: grid;
-    justify-items: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: yellow;
-}
-
 /* --------------------------------actual desig---------------------------------- */
 .mc8{
     position: fixed;
@@ -109,22 +90,85 @@ button:hover{
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
-}
-
-.globalgrid{
     display: grid;
-    position: relative;
-    height:100%;
-    width: 100%;
     grid-template-columns: repeat(46, 1fr);
     grid-template-rows: repeat(32, 1fr);
 }
+
+.romElement{
+    position: absolute;
+    height: calc(100%/32);
+    width: calc(100%/46);
+}
+
+.square2x2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*2);
+}
+
+.rectangle1x2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*1);
+}
+
+.rectangle4x2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*4);
+}
+.rectangle6x2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*6);
+}
+
+.rectangle8x2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*8);
+}
+.rectangle12x2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*12);
+}
+.rectangle12x4{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*4);
+    width: calc(100%/46*12);
+}
+
 /* --------------------------------ROM---------------------------------- */
 .ROM{
-    grid-column-start: 1;
-    grid-column-end: 11;
-    grid-row-start: 1;
-    grid-row-end: 33;
+    position: absolute;
+    height: 100%;
+    width: calc(100%/46*10);
+    top: 0%;
+    left: 0%;
+    
 
     display: grid;
     grid-template-columns: 1fr 4fr;
@@ -157,10 +201,11 @@ button:hover{
 
 /* --------------------------------RAM---------------------------------- */
 .RAM{
-    grid-column-start: -1;
-    grid-column-end: -11;
-    grid-row-start: 1;
-    grid-row-end: 33;
+    position: absolute;
+    height: 100%;
+    width: calc(100%/46*10);
+    top: 0%;
+    left: calc(100%/46*36);
 
     display: grid;
     grid-template-columns: 4fr 1fr;
@@ -183,133 +228,210 @@ button:hover{
     grid-template-rows: 1fr 1fr;
 }
 
-/* --------------------------------IO---------------------------------- */
-.IO{
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
+/* ---------------------------------IOs--------------------------------------- */
+#io1{
+    top: calc(100%/32*0);
+    left: calc(100%/46*12);
 }
-.IO1{
-    grid-column-start: 13;
-    grid-column-end: 19;
-    grid-row-start: 1;
-    grid-row-end: 3;
-}
-.IO2{
-    grid-column-start: 21;
-    grid-column-end: 27;
-    grid-row-start: 1;
-    grid-row-end: 3; 
-}
-.IO3{
-    grid-column-start: 29;
-    grid-column-end: 35;
-    grid-row-start: 1;
-    grid-row-end: 3; 
-}
-
-.io-arrow{
-    width: 100%;
-    height: 75%;
+#io1_arrow{
+    top: calc(100%/32*0);
+    left: calc(100%/46*14);
     background-image: url(images/IOArrow.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
 }
-
-/* --------------------------------Register---------------------------------- */
-.Akkumulator{
-    grid-column-start: 13;
-    grid-column-end: 20;
-    grid-row-start: 7;
-    grid-row-end: 9;
-
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr 2fr 4fr;
+#IO1{
+    top: calc(100%/32*0);
+    left: calc(100%/46*16);
 }
 
-.flags{
+#io2{
+    top: calc(100%/32*0);
+    left: calc(100%/46*20);
+}
+#io2_arrow{
+    top: calc(100%/32*0);
+    left: calc(100%/46*22);
+    background-image: url(images/IOArrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+#IO2{
+    top: calc(100%/32*0);
+    left: calc(100%/46*24);
+}
+
+#io3{
+    top: calc(100%/32*0);
+    left: calc(100%/46*28);
+}
+#io3_arrow{
+    top: calc(100%/32*0);
+    left: calc(100%/46*30);
+    background-image: url(images/IOArrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+#IO3{
+    top: calc(100%/32*0);
+    left: calc(100%/46*32);
+}
+
+
+/* ---------------------------------Akku/flags--------------------------------------- */
+#A{
+    top: calc(100%/32*6);
+    left: calc(100%/46*13);   
+}
+#a{
+    top: calc(100%/32*6);
+    left: calc(100%/46*12);
+}
+#flags{
+    top: calc(100%/32*6);
+    left: calc(100%/46*15);
+    display: grid;
+    justify-items: center;
+    align-items: center;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: repeat(4, 1fr);
 }
 
-.Register{
-    grid-column-start: 13;
-    grid-column-end: 19;
-    grid-row-start: 11;
-    grid-row-end: 23;
-    
-    grid-template-rows: repeat(6, 1fr);
-    grid-template-columns: 1fr 2fr;
+/* ---------------------------------Register--------------------------------------- */
+
+#B{
+    top: calc(100%/32*10);
+    left: calc(100%/46*13);   
+}
+#b{
+    top: calc(100%/32*10);
+    left: calc(100%/46*12);
+}
+#C{
+    top: calc(100%/32*10);
+    left: calc(100%/46*15);   
+}
+#c{
+    top: calc(100%/32*10);
+    left: calc(100%/46*17);
 }
 
-.BC-Register{
-    grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
-
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr 2fr 2fr 1fr;
+#HL{
+    top: calc(100%/32*12);
+    left: calc(100%/46*14);   
 }
+#hl{
+    top: calc(100%/32*12);
+    left: calc(100%/46*12);
+}
+
+#IX{
+    top: calc(100%/32*14);
+    left: calc(100%/46*14);   
+}
+#ix{
+    top: calc(100%/32*14);
+    left: calc(100%/46*12);
+}
+
+#SP{
+    top: calc(100%/32*16);
+    left: calc(100%/46*14);   
+}
+#sp{
+    top: calc(100%/32*16);
+    left: calc(100%/46*12);   
+}
+
+#PC{
+    top: calc(100%/32*18);
+    left: calc(100%/46*14);   
+}
+#pc{
+    top: calc(100%/32*18);
+    left: calc(100%/46*12);
+}
+#ZR{
+    top: calc(100%/32*20);
+    left: calc(100%/46*14);   
+}
+#zr{
+    top: calc(100%/32*20);
+    left: calc(100%/46*12);
+}
+/* ---------------------------------ALU--------------------------------------- */
 
 .ALU{
-    grid-column-start: 23;
-    grid-column-end: 35;
-    grid-row-start: 7;
-    grid-row-end: 13;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: calc(100%/32*6);
+    width: calc(100%/46*12);
+    top: calc(100%/32*6);
+    left: calc(100%/46*22);
     background-image: url(images/ALUBg.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
 }
-/* --------------------------------Steuerwerk---------------------------------- */
-.Steuerwerk{
-    grid-column-start: 23;
-    grid-column-end: 35;
-    grid-row-start: 15;
-    grid-row-end: 23;
+/* ---------------------------------Controlunit--------------------------------------- */
 
-    grid-template-rows: 1fr 1fr 2fr;
-    grid-template-columns: 1fr;
-    position: relative;
+#controlunit{
+    top: calc(100%/32*14);
+    left: calc(100%/46*22);
 }
-
-.SW1{
+#ir{
+    top: calc(100%/32*14);
+    left: calc(100%/46*30);
+}
+#IR{
+    top: calc(100%/32*14);
+    left: calc(100%/46*32);
+}
+#SW1{
+    top: calc(100%/32*16);
+    left: calc(100%/46*22);
+    display: grid;
+    justify-items: center;
+    align-items: center;
     grid-template-rows: 1fr;
-    grid-template-columns: 3fr 1fr 2fr;
+    grid-template-columns: 5fr 1fr;
 }
-.SW2{
+#SW2{
+    top: calc(100%/32*18);
+    left: calc(100%/46*22);
+    display: grid;
+    justify-items: center;
+    align-items: center;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr;
+
 }
-.cNum{
+#SW3{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 5fr;
+}
+.sNum{
+    display: grid;
+    justify-items: center;
+    align-items: center;
     height: 60%;
     width: 60%;
 }
-#befehlsschrittnummer{
-    height: 55%;
-    width: 55%;
-}
-#befehlsschritt{
+
+#stepDescription{
     justify-self: start;
 }
-
-.dec-leitung{
-    grid-template-rows: 1fr;
-    grid-template-columns: 2fr 1fr;
-}
-.dec-bits{
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: repeat(4,1fr);
-}
-
-
-.Befehl{
-    grid-template-rows: 1fr;
-    grid-template-columns: 4fr 2fr;
-    justify-items: self-end;
-}
-.IR-Arrow{
+#ir_arrow{
     width: 100%;
     height: 100%;
     background-image: url(images/IRArrow.svg);
@@ -317,25 +439,38 @@ button:hover{
     background-size: contain;
     background-repeat: no-repeat;
 }
-
-.Einzelschritt{
+#SW4{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 5fr;
+    grid-template-columns: 4fr 2fr;
 }
 
-
-.Decoder{
-    grid-column-start: 29;
-    grid-column-end: 35;
-    grid-row-start: 27;
-    grid-row-end: 29;
+.dec-bits{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
 }
 
-.Steuerleiste{
-    grid-column-start: 12;
-    grid-column-end: 36;
-    grid-row-start: -1;
-    grid-row-end: -3;
+#dec{
+    top: calc(100%/32*26);
+    left: calc(100%/46*28);
+}
+
+/* ---------------------------------ControlPanel--------------------------------------- */
+.controlPanel{
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*24);
+    top: calc(100%/32*30);
+    left: calc(100%/46*11);
 
     grid-template-rows: 1fr;
     grid-template-columns: repeat(12, 1fr);

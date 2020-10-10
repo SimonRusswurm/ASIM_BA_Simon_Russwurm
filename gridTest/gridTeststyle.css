@@ -1,11 +1,138 @@
+
+
+
+
+
+
+
+
+
+
+
+
+html, body {margin: 0; padding: 0; 
+    background: #FBFBFB;
+    /* background: white; */
+    /* background: black; */
+}
+body{display: flex; justify-content: center;}
+
+@font-face{
+    src:url(fonts/Lato-Regular.ttf);
+    font-family: lato-reg;
+}
+@font-face{
+    src:url(fonts/Lato-Bold.ttf);
+    font-family: lato-bold;
+}
+@font-face{
+    src:url(fonts/Lato-Light.ttf);
+    font-family: lato-light;
+}
+h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg;}
+h2{margin: 0; padding: 0; letter-spacing: 0.02em; color: #222222; font-family: lato-reg;}
+.h2size{ letter-spacing: 0.02em; }
+h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light;}
+h4{margin: 0; padding: 0; letter-spacing: 0.02em; color: #222222; font-family: lato-reg;}
+p{ margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
+
+button{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border-color: transparent;
+    cursor: pointer;
+    box-sizing: border-box;    
+}
+
+button:hover{
+    background-color: rgba(25, 178, 255, 0.7);
+    transition: all 0.1s linear;    
+}
+
+.turn180{
+    transform: rotate(180deg);
+}
+
+.grid-template{
+    display: grid;
+    height: 100%;
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+}
+
+.boxborder{
+    box-sizing: border-box;
+    border: 0.5px solid #666666;
+}
+.topLeft{
+    border-top-left-radius: 0.5vw;
+}
+.topRight{
+    border-top-right-radius: 0.5vw;
+}
+.bottomLeft{
+    border-bottom-left-radius: 0.5vw;
+}
+.bottomRight{
+    border-bottom-right-radius: 0.5vw;
+}
+.rounded{
+    border-radius: 0.5vw;
+}
+
+.addYellowBg{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: yellow;
+    border-radius: 0.5vw;
+}
+#commandNumber{
+    position: relative;
+    z-index: -1;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: yellow;
+}
+
+/* --------------------------------actual desig---------------------------------- */
+.mc8{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    width: 143.75vh;
+    height: 100vh;
+    
+}
+
+.gridcontainer{
+    width: 98%;
+    height: 98%;
+    position: relative;
+    background-image: url(images/Bus-System_light.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 .globalgrid{
     display: grid;
     position: relative;
-    height:100vh;
-    width: 100vw;
+    height:100%;
+    width: 100%;
     grid-template-columns: repeat(46, 1fr);
     grid-template-rows: repeat(32, 1fr);
 }
+/* --------------------------------ROM---------------------------------- */
 .ROM{
     grid-column-start: 1;
     grid-column-end: 11;
@@ -17,28 +144,284 @@
     grid-template-rows:  repeat(16,1fr);
     justify-items: center;
     align-items: center;
+}
 
-    background-image: url(images/ROMBackground.svg);
+.Label-1-F{
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 1fr 1fr;
+}
+.Label-000x-1FFx{
+}
+.Adresse-000x-1FFx{
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+.points1{
+    grid-row-start: -2;
+    grid-row-end: -1;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background-image: url(images/points.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
-
 }
 
-.centered{
+
+/* --------------------------------RAM---------------------------------- */
+.RAM{
+    grid-column-start: -1;
+    grid-column-end: -11;
+    grid-row-start: 1;
+    grid-row-end: 33;
+
     display: grid;
-    align-items: center;
+    grid-template-columns: 4fr 1fr;
+    grid-template-rows: repeat(16,1fr);
     justify-items: center;
+    align-items: center;
+}
+.points2{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background-image: url(images/points.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+.Adresse-200x-3FFx{
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 1fr 1fr;
+}
+
+/* --------------------------------IO---------------------------------- */
+.IO{
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+.IO1{
+    grid-column-start: 13;
+    grid-column-end: 19;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+.IO2{
+    grid-column-start: 21;
+    grid-column-end: 27;
+    grid-row-start: 1;
+    grid-row-end: 3; 
+}
+.IO3{
+    grid-column-start: 29;
+    grid-column-end: 35;
+    grid-row-start: 1;
+    grid-row-end: 3; 
+}
+
+.io-arrow{
+    width: 100%;
+    height: 75%;
+    background-image: url(images/IOArrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* --------------------------------Register---------------------------------- */
+.Akkumulator{
+    grid-column-start: 13;
+    grid-column-end: 20;
+    grid-row-start: 7;
+    grid-row-end: 9;
+
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 2fr 4fr;
+}
+
+.flags{
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.Register{
+    grid-column-start: 13;
+    grid-column-end: 19;
+    grid-row-start: 11;
+    grid-row-end: 23;
+    
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: 1fr 2fr;
+}
+
+.BC-Register{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+}
+
+.ALU{
+    grid-column-start: 23;
+    grid-column-end: 35;
+    grid-row-start: 7;
+    grid-row-end: 13;
+    background-image: url(images/ALUBg.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+/* --------------------------------Steuerwerk---------------------------------- */
+.Steuerwerk{
+    grid-column-start: 23;
+    grid-column-end: 35;
+    grid-row-start: 15;
+    grid-row-end: 23;
+
+    grid-template-rows: 1fr 1fr 2fr;
+    grid-template-columns: 1fr;
+    position: relative;
+}
+
+.SW1{
+    grid-template-rows: 1fr;
+    grid-template-columns: 3fr 1fr 2fr;
+}
+.SW2{
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr;
+}
+.cNum{
+    height: 60%;
+    width: 60%;
+}
+#befehlsschrittnummer{
+    height: 55%;
+    width: 55%;
+}
+#befehlsschritt{
+    justify-self: start;
+}
+
+.dec-leitung{
+    grid-template-rows: 1fr;
+    grid-template-columns: 2fr 1fr;
+}
+.dec-bits{
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4,1fr);
+}
+
+
+.Befehl{
+    grid-template-rows: 1fr;
+    grid-template-columns: 4fr 2fr;
+    justify-items: self-end;
+}
+.IR-Arrow{
     width: 100%;
     height: 100%;
+    background-image: url(images/IRArrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
-.boxborder{
-    box-sizing: border-box;
-    border: 0.001em solid #666666;
+
+.Einzelschritt{
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 5fr;
 }
-.topLeft{
-    border-top-left-radius: 0.3empx;
+
+
+.Decoder{
+    grid-column-start: 29;
+    grid-column-end: 35;
+    grid-row-start: 27;
+    grid-row-end: 29;
 }
-.topRight{
-    border-top-right-radius: 5px;
+
+.Steuerleiste{
+    grid-column-start: 12;
+    grid-column-end: 36;
+    grid-row-start: -1;
+    grid-row-end: -3;
+
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+#play{
+    background-image: url(images/play_button.svg);
+    background-size: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#pause{
+    background-image: url(images/pause_button.svg);
+    background-size: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#stop{
+    background-image: url(images/stop_button.svg);
+    background-size: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#slow{
+    background-image: url(images/slow_button.svg);
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#fast{
+    background-image: url(images/fast_button.svg);
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}#increase{
+    background-image: url(images/increase_button.svg);
+    background-size: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#decrease{
+    background-image: url(images/decrease_button.svg);
+    background-size: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#singlestep{
+    background-image: url(images/singlestep_button.svg);
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#commandstep{
+    background-image: url(images/commandstep.svg);
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#fullcomand{
+    background-image: url(images/fullcomand.svg);
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#settings{
+    background-image: url(images/settings_button.svg);
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#toggleTheme{
+    background-image: url(images/toggleTheme_button.svg);
+    background-size: 70%;
+    background-position: center center;
+    background-repeat: no-repeat;
 }

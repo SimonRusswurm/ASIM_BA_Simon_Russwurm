@@ -1,0 +1,37 @@
+<svg width="250" height="800" viewBox="0 0 250 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M249.75 400.25H0.25V449.75H249.75V400.25Z" stroke="#333333" stroke-width="0.5"/>
+<circle r="2" transform="matrix(-1 0 0 1 125 416)" fill="#333333"/>
+<circle r="2" transform="matrix(-1 0 0 1 125 425)" fill="#333333"/>
+<circle r="2" transform="matrix(-1 0 0 1 125 434)" fill="#333333"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 50)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 50)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 100)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 100)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 150)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 150)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 200)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 200)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 250)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 250)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 300)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 300)" stroke="#333333" stroke-width="0.5"/>
+<path d="M199.75 750.25H0.250061V795C0.250061 797.623 2.37671 799.75 5.00006 799.75H199.75V750.25Z" stroke="#333333" stroke-width="0.5"/>
+<path d="M249.75 750.25H200.25V799.75H245C247.623 799.75 249.75 797.623 249.75 795V750.25Z" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 350)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 350)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 450)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 450)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 500)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 500)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 550)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 550)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 600)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 600)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 650)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 650)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="199.5" height="49.5" transform="matrix(-1 0 0 1 199.5 700)" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.25" y="0.25" width="49.5" height="49.5" transform="matrix(-1 0 0 1 249.5 700)" stroke="#333333" stroke-width="0.5"/>
+<path d="M199.75 0.25H5.00006C2.37671 0.25 0.250061 2.37665 0.250061 5V49.75H199.75V0.25Z" stroke="#333333" stroke-width="0.5"/>
+<path d="M245 0.25H200.25V49.75H249.75V5C249.75 2.37665 247.623 0.25 245 0.25Z" stroke="#333333" stroke-width="0.5"/>
+<rect x="-0.5" y="0.5" width="249" height="799" rx="4.5" transform="matrix(-1 0 0 1 249 0)" stroke="#333333"/>
+</svg>

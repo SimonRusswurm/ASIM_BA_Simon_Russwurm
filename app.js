@@ -62,7 +62,7 @@ let IO = document.getElementById('IO');
 let rom = document.querySelector(".Adresse-000x-1FFx");
 let ram = document.getElementsByClassName("Adresse-200x-3FFx");
 let romArray = ['3E','12','06','22'];
-let romPoints = [];
+let romEntries = [];
 let ramArray = [];
 
 const commands = [
@@ -468,9 +468,6 @@ const fixPoints = [
 
 //-----------------------------------Test starts here--------------------------
 
-SP.textContent = "3FFF";
-
-
 let ANIMATION_SPEED = 0.2; //vielfache von 0.02
 let animationRuns = false;
 let lastRenderTime = 0;
@@ -486,6 +483,7 @@ function createMovingObj(elementId, aPath){
     clone.style.zIndex = "10";
     clone.id = "clonedElement";
     clone.style.background = "yellow";
+    clone.style.color = "#222222";
     clone.style.top = String(100/32*aPath[0].y) +"%";
     clone.style.left = String(100/46*aPath[0].x) +"%";
 
@@ -494,6 +492,13 @@ function createMovingObj(elementId, aPath){
     let  movObj = {aDiv: clone, path: aPath};
     return movObj;
 
+}
+
+function convertHexToInt(hexString){
+    return parseInt(hexString, 16);
+}
+function getRomElement(){
+    return document.getElementById('romElement' + String(convertHexToInt(PC.textContent)));
 }
 
 //AtoB
@@ -650,10 +655,10 @@ function romElementToROM1(romElementID){
 
 
 
+PC.textContent = "0004";
+let path = pathFromTo(getRomElement().id,"SW");
 
-let path = pathFromTo("romElement130","SW");
-
-let mov = createMovingObj('romElement130', path);
+let mov = createMovingObj(getRomElement().id, path);
 
 let j = 0;
 
@@ -722,12 +727,17 @@ function pause(){
 
 function increaseSpeed(){
     if(ANIMATION_SPEED < 0.7)
-        ANIMATION_SPEED += 0.08
+        ANIMATION_SPEED += 0.08;
 
 }
 function decreaseSpeed(){
     if(ANIMATION_SPEED > 0.16)
         ANIMATION_SPEED -= 0.08
+}
+
+function toggleTheme(){
+    document.getElementsByClassName('mc8')[0].classList.toggle('black');
+    console.log(document.getElementsByTagName('h2'))
 }
 
 

@@ -166,6 +166,11 @@ button:hover{
     background-size: contain;
     background-repeat: no-repeat;
 }
+.romElement{
+    position: absolute;
+    height: calc(100%/32);
+    width: calc(100%/46);
+}
 
 
 /* --------------------------------RAM---------------------------------- */
@@ -289,7 +294,7 @@ button:hover{
 
 .SW1{
     grid-template-rows: 1fr;
-    grid-template-columns: 3fr 1fr 2fr;
+    grid-template-columns: 4fr 1fr 1fr;
 }
 .SW2{
     grid-template-rows: 1fr 1fr;
@@ -319,7 +324,7 @@ button:hover{
 
 .Befehl{
     grid-template-rows: 1fr;
-    grid-template-columns: 4fr 2fr;
+    grid-template-columns: 5fr 1fr;
     justify-items: self-end;
 }
 .IR-Arrow{

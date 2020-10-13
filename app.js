@@ -61,7 +61,7 @@ let M = document.getElementById('M');
 let IO = document.getElementById('IO');
 let rom = document.querySelector(".Adresse-000x-1FFx");
 let ram = document.getElementsByClassName("Adresse-200x-3FFx");
-let romArray = ['3E','12','06','22'];
+let romArray = ['3E','12','06','22', '3C', '3C'];
 let romEntries = [];
 let ramArray = [];
 
@@ -466,6 +466,23 @@ const fixPoints = [
     }
 }
 
+let redRectangle = document.getElementById('romElement0').cloneNode(true);
+redRectangle.classList.add("boxborder");
+redRectangle.id = "redRectangle";
+redRectangle.style.borderColor = "#FF1930";
+redRectangle.style.background = "#FCDEE1";
+document.querySelector(".gridcontainer").appendChild(redRectangle);
+
+function updateRedRectangle(PC_IntValue){
+    let xPos = PC_IntValue%8 +2;
+    let yPos = Math.floor(PC_IntValue/8) + 2;
+
+    redRectangle.style.left = String(100/46*(xPos)) + "%";
+    redRectangle.style.top = String(100/32*(yPos)) + "%";
+}
+
+
+
 //-----------------------------------Test starts here--------------------------
 
 let ANIMATION_SPEED = 0.2; //vielfache von 0.02
@@ -477,21 +494,24 @@ let OFFSET_Y = 0;
 
 
 function createMovingObj(elementId, aPath){
-    element = document.getElementById(elementId);
+    let element = document.getElementById(elementId);
     let clone = element.cloneNode(true);
-    clone.classList.add("boxborder", "rounded");
+    clone.classList.add("boxborder" ,"rounded");
     clone.style.zIndex = "10";
     clone.id = "clonedElement";
     clone.style.background = "yellow";
     clone.style.color = "#222222";
     clone.style.top = String(100/32*aPath[0].y) +"%";
     clone.style.left = String(100/46*aPath[0].x) +"%";
+    clone.style.transition = "width 0.3s, height 0.3s, font-size 0.3s, border-radius 0.5s";
 
+    if(elementId.includes('romElement')){
+        clone.id = "clonedRomElement";
+    }
 
     document.querySelector(".gridcontainer").appendChild(clone);
     let  movObj = {aDiv: clone, path: aPath};
     return movObj;
-
 }
 
 function convertHexToInt(hexString){
@@ -655,15 +675,17 @@ function romElementToROM1(romElementID){
 
 
 
-PC.textContent = "0004";
+PC.textContent = "0000";
 let path = pathFromTo(getRomElement().id,"SW");
-
 let mov = createMovingObj(getRomElement().id, path);
+updateRedRectangle(convertHexToInt(PC.textContent));
+// let path = pathFromTo("IO1","RAM1");
+// let mov = createMovingObj("IO1", path);
 
 let j = 0;
 
 function updateMovObjPosition(aMovObj){
-    
+
     if(aMovObj.path.length > 1){
         if(aMovObj.path[1].x >  aMovObj.path[0].x){
             aMovObj.path[0].x += ANIMATION_SPEED;
@@ -684,7 +706,7 @@ function updateMovObjPosition(aMovObj){
 
         //if RomElement
         if(Math.floor(aMovObj.path[0].x) === 9 && Math.floor(aMovObj.path[0].y) === 2){
-            aMovObj.aDiv.classList.add('square2x2' , 'h2mov');   
+            aMovObj.aDiv.classList.add('square2x2' , 'h2mov');
         }
        
         if(Math.abs(aMovObj.path[1].x-aMovObj.path[0].x) < ANIMATION_SPEED && Math.abs(aMovObj.path[1].y - aMovObj.path[0].y) < ANIMATION_SPEED){

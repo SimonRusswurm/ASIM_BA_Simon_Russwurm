@@ -52,9 +52,12 @@ let SP = document.getElementById('SP');
 let PC = document.getElementById('PC');
 let ZR = document.getElementById('ZR');
 let IR = document.getElementById('IR');
-let mc8Command = document.getElementById('mc8Command');
-let commandNumber = document.getElementById('commandNumber');
-let commandStep = document.getElementById('commandStep');
+let assemblerCommand = document.getElementById('assemblerCommand');
+let stepNumber = document.getElementById('stepNumber');
+let stepDescription = document.getElementById('stepDescription');
+let stepNumberBackground = document.getElementsByClassName('sNum')[0];
+let registerArrow = document.getElementById('registerArrow');
+let irArrow = document.getElementById('ir_arrow');
 let WR = document.getElementById('WR');
 let RD = document.getElementById('RD');
 let M = document.getElementById('M');
@@ -65,10 +68,11 @@ let romArray = ['3E','12','06','22', '3C', '3C'];
 let romEntries = [];
 let ramArray = [];
 
+
 const commands = [
     {
-        label: "Hole den nächsten Befehl",
-        assemb: "",
+        hex: "3E",
+        assemb: "MOV SP, dat_16",
         flags: false,
         index: 0,
         wr: "1",
@@ -476,7 +480,7 @@ document.querySelector(".gridcontainer").appendChild(redRectangle);
 function updateRedRectangle(PC_IntValue){
     let xPos = PC_IntValue%8 +2;
     let yPos = Math.floor(PC_IntValue/8) + 2;
-
+    redRectangle.textContent = romArray[PC_IntValue];
     redRectangle.style.left = String(100/46*(xPos)) + "%";
     redRectangle.style.top = String(100/32*(yPos)) + "%";
 }
@@ -489,6 +493,10 @@ let ANIMATION_SPEED = 0.2; //vielfache von 0.02
 let animationRuns = false;
 let lastRenderTime = 0;
 const FRAMERATE = 50;
+let stepCounter = 0;
+let frameCounter = 0;
+let isMovAnimationFinished = true;
+let isMovAnimation = false;
 let OFFSET_X = 0;
 let OFFSET_Y = 0;
 
@@ -517,8 +525,22 @@ function createMovingObj(elementId, aPath){
 function convertHexToInt(hexString){
     return parseInt(hexString, 16);
 }
+function convertIntToHex4(intNum){
+    intNum = intNum.toString(16);
+    let len = intNum.length;
+    for(i=4; i>len;i--){
+        intNum = '0' +intNum;
+    }
+    return intNum;
+}
 function getRomElement(){
     return document.getElementById('romElement' + String(convertHexToInt(PC.textContent)));
+}
+ const getAssemblerCommand = (hexStr) =>{
+    for(i=0; i<commands.length; i++){
+        if(commands[i].hex === hexStr)
+            return commands[i].assemb; 
+    }
 }
 
 //AtoB
@@ -676,31 +698,30 @@ function romElementToROM1(romElementID){
 
 
 PC.textContent = "0000";
-let path = pathFromTo(getRomElement().id,"SW");
-let mov = createMovingObj(getRomElement().id, path);
-updateRedRectangle(convertHexToInt(PC.textContent));
+// let path = pathFromTo(getRomElement().id,"SW");
+// let mov = createMovingObj(getRomElement().id, path);
+// updateRedRectangle(convertHexToInt(PC.textContent));
 // let path = pathFromTo("IO1","RAM1");
 // let mov = createMovingObj("IO1", path);
-
+let path = 0;
+let mov = 0;
 let j = 0;
+const getNextPositivValue = (pathValue) => Math.round((pathValue+ANIMATION_SPEED)*100)/100;
+const getNextNegativValue = (pathValue) => Math.round((pathValue-ANIMATION_SPEED)*100)/100;
 
 function updateMovObjPosition(aMovObj){
-
+    if(aMovObj === 0)return false;
     if(aMovObj.path.length > 1){
         if(aMovObj.path[1].x >  aMovObj.path[0].x){
-            aMovObj.path[0].x += ANIMATION_SPEED;
-            aMovObj.path[0].x = Math.round(aMovObj.path[0].x*100)/100;
+            aMovObj.path[0].x = getNextPositivValue(aMovObj.path[0].x);
         } else if(aMovObj.path[1].x <  aMovObj.path[0].x){
-            aMovObj.path[0].x -= ANIMATION_SPEED;
-            aMovObj.path[0].x = Math.round(aMovObj.path[0].x*100)/100;   
+            aMovObj.path[0].x = getNextNegativValue(aMovObj.path[0].x);
         }
 
         if(aMovObj.path[1].y >  aMovObj.path[0].y){
-            aMovObj.path[0].y += ANIMATION_SPEED;
-            aMovObj.path[0].y = Math.round(aMovObj.path[0].y*100)/100;
+            aMovObj.path[0].y = getNextPositivValue(aMovObj.path[0].y);
         } else if(aMovObj.path[1].y <  aMovObj.path[0].y){
-            aMovObj.path[0].y -= ANIMATION_SPEED;
-            aMovObj.path[0].y = Math.round(aMovObj.path[0].y*100)/100;
+            aMovObj.path[0].y =  getNextNegativValue(aMovObj.path[0].y);
         }
         
 
@@ -715,9 +736,83 @@ function updateMovObjPosition(aMovObj){
         aMovObj.aDiv.style.top = String(aMovObj.path[0].y*100/32) + "%" ;
         aMovObj.aDiv.style.left = String(aMovObj.path[0].x*100/46) + "%";
     }else{
-        aMovObj.aDiv.remove();
+        return true;
+    }
+    return false;
+}
+
+//stepFunctions
+const updatePC = () => {
+    PC.textContent = convertIntToHex4(convertHexToInt(PC.textContent)+1);
+    updateRedRectangle(convertHexToInt(PC.textContent));
+}
+const increaseStepNumber = () => {
+    stepNumber.textContent = String(Number(stepNumber.textContent)+1);
+}
+const addYellow = (element) => {
+    element.classList.add('yellowBg');
+}
+const removeYellow = (element) => {
+    element.classList.remove('yellowBg');
+}
+
+
+//animations
+function getNextCommand(step){
+    switch(step){
+        case 0: stepDescription.textContent = "Hole nächsten Befehl";
+                increaseStepNumber();
+                addYellow(stepNumberBackground);
+                break;
+        case 1: addYellow(stepNumberBackground);
+                registerArrow.classList.add('PC_arrow');
+                break;
+
+        case 2: isMovAnimation = true;
+                registerArrow.classList.remove('PC_arrow');
+                path = pathFromTo('PC',"ROM2");
+                mov = createMovingObj('PC', path);
+                break;
+        case 3: isMovAnimation = true;
+                mov.aDiv.remove();
+                path = pathFromTo(getRomElement().id, "SW");
+                mov = createMovingObj(getRomElement().id, path);
+                break;
+        case 4: isMovAnimation = false;
+                IR.textContent = getRomElement().textContent;
+                addYellow(IR);
+                mov.aDiv.remove();
+                mov  =0;
+                break;
+        case 5: isMovAnimation = false;
+                removeYellow(IR);
+                stepDescription.textContent = "Erhöhe Programmzähler um 1";
+                addYellow(stepNumberBackground);
+                increaseStepNumber();
+                break;
+        case 6: removeYellow(stepNumberBackground);
+                registerArrow.classList.add('PC_arrow');
+                addYellow(PC);
+                updatePC();
+                break;
+        case 7: stepDescription.textContent = "Erkenne den Befehl";
+                increaseStepNumber();
+                addYellow(stepNumberBackground);
+                registerArrow.classList.remove('PC_arrow');
+                removeYellow(PC);
+                break;
+        case 8: removeYellow(stepNumberBackground);
+                irArrow.classList.add('ir_arrow');
+                addYellow(IR);
+                assemblerCommand.textContent = getAssemblerCommand(IR.textContent);
+                break;
+        case 9: removeYellow(IR);
+                irArrow.classList.remove('ir_arrow');
+                break;   
+
     }
 }
+
 
 function main(currentTime){
     window.requestAnimationFrame(main);
@@ -725,16 +820,24 @@ function main(currentTime){
     if(secondsSinceLastRender < 1/FRAMERATE || !animationRuns){
         return;
     }
+    
+    if(frameCounter === 0 || isMovAnimationFinished){
+        frameCounter = Math.round(FRAMERATE/2);
+        if(isMovAnimationFinished || !isMovAnimation){
+            getNextCommand(stepCounter);
+            stepCounter++;
+        }        
+    }
+    frameCounter--;
     lastRenderTime = currentTime;
-    update();
-    draw(document.querySelector('gridcontainer'));
+    isMovAnimationFinished = updateMovObjPosition(mov);
 }
 
 function update(){
     
 }
 
-function draw(grid){
+function draw(){
     updateMovObjPosition(mov);
 }
 

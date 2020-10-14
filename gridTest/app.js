@@ -82,7 +82,7 @@ let ramArray = [];
 
 const commands = [
     {
-        label: "Hole den nächsten Befehl",
+        label: "3E",
         assemb: "",
         flags: false,
         index: 0,

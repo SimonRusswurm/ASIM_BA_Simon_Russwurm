@@ -129,103 +129,103 @@ const commands = [
 const fixPoints = [
     {
         x: 10,
-        y: 3,
+        y: 2,
         index: 0,
         label: "ROM1",
         parent: -1,
         childs: [1]
     },
     {
-        x: 15,
-        y: 3,
+        x: 14,
+        y: 2,
         index: 1,
         label: "",
         parent: 0,
         childs: [2,4]
     },
     {
-        x: 15,
-        y: 1,
+        x: 14,
+        y: 0,
         index: 2,
         label: "",
-        parent: 2,
+        parent: 1,
         childs: [3]
     },
     {
-        x: 17,
-        y: 1,
+        x: 16,
+        y: 0,
         index: 3,
         label: "IO1",
         parent: 2,
         childs: []
     },
     {
-        x: 19,
-        y: 3,
+        x: 18,
+        y: 2,
         index: 4,
         label: "",
         parent: 1,
         childs: [5,12]
     },
     {
-        x: 23,
-        y: 3,
+        x: 22,
+        y: 2,
         index: 5,
         label: "",
         parent: 4,
         childs: [6,8]
     },
     {
-        x: 23,
-        y: 1,
+        x: 22,
+        y: 0,
         index: 6,
         label: "",
         parent: 5,
         childs: [7]
     },
     {
-        x: 25,
-        y: 1,
+        x: 24,
+        y: 0,
         index: 7,
         label: "IO2",
         parent: 6,
         childs: []
     },
     {
-        x: 31,
-        y: 3,
+        x: 30,
+        y: 2,
         index: 8,
         label: "",
         parent: 5,
         childs: [9,11]
     },
     {
-        x: 31,
-        y: 1,
+        x: 30,
+        y: 0,
         index: 9,
         label: "",
         parent: 8,
         childs: [10]
     },
     {
-        x: 33,
-        y: 1,
+        x: 32,
+        y: 0,
         index: 10,
         label: "IO3",
         parent: 9,
         childs: []
     },
     {
-        x: 36,
-        y: 3,
+        x: 34,
+        y: 2,
         index: 11,
         label: "RAM1",
         parent: 8,
         childs: []
     },
     {
-        x: 19,
-        y: 5,
+        x: 18,
+        y: 4,
         index: 12,
         label: "",
         parent: 3,
@@ -233,7 +233,7 @@ const fixPoints = [
     },
     {
         x: 24,
-        y: 5,
+        y: 4,
         index: 13,
         label: "",
         parent: 12,
@@ -248,15 +248,15 @@ const fixPoints = [
         childs: []
     },
     {
-        x: 32,
-        y: 5,
+        x: 30,
+        y: 4,
         index: 15,
         label: "",
         parent: 13,
         childs: [16,17]
     },
     {
-        x: 32,
+        x: 30,
         y: 6,
         index: 16,
         label: "ALU2",
@@ -264,40 +264,40 @@ const fixPoints = [
         childs: []
     },
     {
-        x: 35,
-        y: 5,
+        x: 34,
+        y: 4,
         index: 17,
         label: "",
         parent: 15,
         childs: [18]
     },
     {
-        x: 35,
-        y: 13,
+        x: 34,
+        y: 12,
         index: 18,
         label: "",
         parent: 17,
         childs: [19,21]
     },
     {
-        x: 28,
-        y: 13,
+        x: 27,
+        y: 12,
         index: 19,
         label: "",
         parent: 18,
         childs: [20]
     },
     {
-        x: 28,
-        y: 12,
+        x: 27,
+        y: 10,
         index: 20,
         label: "ALUOUT",
         parent: 19,
         childs: []
     },
     {
-        x: 35,
-        y: 15,
+        x: 34,
+        y: 14,
         index: 21,
         label: "",
         parent: 18,
@@ -305,150 +305,158 @@ const fixPoints = [
     },
     {
         x: 32,
-        y: 15,
+        y: 14,
         index: 22,
         label: "SW",
         parent: 21,
         childs: []
     },
     {
-        x: 14,
-        y: 5,
+        x: 13,
+        y: 4,
         index: 23,
         label: "",
         parent: 12,
         childs: [24,25]
     },
     {
-        x: 14,
-        y: 7,
+        x: 13,
+        y: 6,
         index: 24,
         label: "A",
         parent: 23,
         childs: []
     },
     {
-        x: 11,
-        y: 5,
+        x: 10,
+        y: 4,
         index: 25,
         label: "",
         parent: 23,
         childs: [26]
     },
     {
-        x: 11,
-        y: 16,
+        x: 10,
+        y: 15,
         index: 26,
         label: "",
         parent: 25,
         childs: [27]
     },
     {
-        x: 16,
-        y: 16,
+        x: 14,
+        y: 15,
         index: 27,
         label: "",
         parent: 26,
-        childs: [28,32]
+        childs: [28,33]
     },
     {
-        x: 16,
-        y: 15,
+        x: 14,
+        y: 14,
         index: 28,
         label: "IX",
         parent: 27,
-        childs: [28]
+        childs: [29]
     },
     {
-        x: 16,
-        y: 13,
+        x: 14,
+        y: 12,
         index: 29,
         label: "HL",
         parent: 28,
         childs: [30]
     },
     {
-        x: 16,
-        y: 11,
+        x: 14,
+        y: 10,
         index: 30,
-        label: "C",
+        label: "",
         parent: 29,
-        childs: [31]
+        childs: [31,32]
+
     },
     {
-        x: 14,
-        y: 11,
+        x: 13,
+        y: 10,
         index: 31,
         label: "B",
+        parent: 30,
+        childs: [32]
+    },
+    {
+        x: 15,
+        y: 10,
+        index: 32,
+        label: "C",
         parent: 30,
         childs: []
     },
     {
-        x: 16,
-        y: 17,
-        index: 32,
+        x: 14,
+        y: 16,
+        index: 33,
         label: "SP",
         parent: 27,
-        childs: [33]
-    },
-    {
-        x: 16,
-        y: 19,
-        index: 33,
-        label: "PC",
-        parent: 32,
         childs: [34]
     },
     {
-        x: 16,
-        y: 21,
+        x: 14,
+        y: 18,
         index: 34,
-        label: "ZR",
+        label: "PC",
         parent: 33,
         childs: [35]
     },
     {
-        x: 16,
-        y: 25,
+        x: 14,
+        y: 20,
         index: 35,
-        label: "",
+        label: "ZR",
         parent: 34,
-        childs: [36,37]
+        childs: [36]
+    },
+    {
+        x: 14,
+        y: 24,
+        index: 36,
+        label: "",
+        parent: 35,
+        childs: [37,38]
     },
     {
         x: 10,
-        y: 25,
-        index: 36,
-        label: "ROM2",
-        parent: 35,
-        childs: []
-    },
-    {
-        x: 29,
-        y: 25,
+        y: 24,
         index: 37,
-        label: "",
-        parent: 35,
-        childs: [38,39]
+        label: "ROM2",
+        parent: 36,
+        childs: []
     },
     {
-        x: 29,
-        y: 26,
+        x: 28,
+        y: 24,
         index: 38,
+        label: "",
+        parent: 36,
+        childs: [39,40]
+    },
+    {
+        x: 28,
+        y: 26,
+        index: 39,
         label: "DEC",
-        parent: 37,
+        parent: 38,
         childs: []
     },
     {
-        x: 36,
-        y: 25,
-        index: 39,
+        x: 34,
+        y: 24,
+        index: 40,
         label: "RAM2",
-        parent: 37,
+        parent: 38,
         childs: []
-    }
+    },
 ]
-
 
 //-----------------------------------Test starts here--------------------------
 

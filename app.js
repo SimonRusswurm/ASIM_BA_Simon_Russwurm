@@ -538,9 +538,6 @@ const movAdat_8 = (step) =>{
             isMovAnimation = false;
             removeYellow(A);
             addYellow
-
-
-
     
         default:
             break;

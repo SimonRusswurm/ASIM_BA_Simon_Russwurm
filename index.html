@@ -294,6 +294,13 @@
 
             <h1 id="dec" class="rectangle6x2 boxborder rounded">DEC</h1>
             
+            <div id="settings" class="settingsWindow boxborder rounded">
+                <div id="innerSettings" class="boxborder rounded">
+                    <button id="closeSettings" type="button" onclick="toggleSettings()">Save</button>
+
+                </div>
+            </div>
+            
             <div class="controlPanel grid-template boxborder rounded">
                 <button id="play" type="button" onclick="play()"></button>
                 <button id="pause" type="button" onclick="pause()"></button>
@@ -305,8 +312,8 @@
                 <button id="singlestep" type="button" onclick=""></button>
                 <button id="commandstep" type="button" onclick=""></button>
                 <button id="fullcomand" type="button" onclick=""></button>
-                <!-- <button id="settings" type="button" onclick=""></button> -->
-                <a id="settings"href="gridTest/gridTest.html" class="grid-template"></a>
+                <button id="settingsButton" type="button" onclick="toggleSettings()"></button>
+                <!-- <a id="settings"href="gridTest/gridTest.html" class="grid-template"></a> -->
                 <button id="toggleTheme" type="button" onclick="toggleTheme()"></button>
             </div> 
         </div>

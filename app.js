@@ -122,6 +122,7 @@ let M = document.getElementById('M');
 let IO = document.getElementById('IO');
 let rom = document.querySelector(".Adresse-000x-1FFx");
 let ram = document.getElementsByClassName("Adresse-200x-3FFx");
+let settings = document.getElementById('settings');
 
 
 //fixpoints on the canvas
@@ -285,12 +286,11 @@ const getPointsAtoB = (elementIDStringA, elementIDStringB) => {
 
     pointsAtoB = getAtoBindexArray(getZeroToAindexArray(getPointIndex(elementIDStringA)),
                                    getZeroToAindexArray(getPointIndex(elementIDStringB)));
-    console.log(pointsAtoB);
+
     //convert Index-Array to Point-Array
     for (let i = 0; i < pointsAtoB.length; i++) {
         pointsAtoB[i] = fixPoints[pointsAtoB[i]];        
     }
-    console.log(pointsAtoB);
     return pointsAtoB;
 }
 
@@ -381,12 +381,15 @@ const getAssemblerCommand = (hexStr) =>{
 const getNextPositivValue = (pathValue) => Math.round((pathValue+ANIMATION_SPEED)*100)/100;
 const getNextNegativValue = (pathValue) => Math.round((pathValue-ANIMATION_SPEED)*100)/100;
 
+
+//TODO: second Time Pc is called errors
 function updateMovObjPosition(aMovObj){
     let isfinished = false;
     if(aMovObj === 0)
         return false;
 
     if(aMovObj.path.length > 1){
+        var t0 =performance.now();
         if(aMovObj.path[1].x >  aMovObj.path[0].x){
             aMovObj.path[0].x = getNextPositivValue(aMovObj.path[0].x);
         } else if(aMovObj.path[1].x <  aMovObj.path[0].x){
@@ -398,7 +401,6 @@ function updateMovObjPosition(aMovObj){
         } else if(aMovObj.path[1].y <  aMovObj.path[0].y){
             aMovObj.path[0].y =  getNextNegativValue(aMovObj.path[0].y);
         }
-        
 
         //case: RomElement (grow bigger)
         if(Math.floor(aMovObj.path[0].x) === 9 && Math.floor(aMovObj.path[0].y) === 2){
@@ -448,6 +450,10 @@ const removeArrow = (element) => {
 
 
 //animations
+let processArray = [];
+
+
+
 function getNextCommand(step){
     switch(step){
         case 0: stepDesc("Hole nächsten Befehl");
@@ -597,6 +603,11 @@ function decreaseSpeed(){
 function toggleTheme(){
     document.getElementsByClassName('mc8')[0].classList.toggle('black');
     console.log(document.getElementsByTagName('h2'))
+}
+
+const toggleSettings = () => {
+    
+    settings.classList.toggle('toggleDisplay');
 }
 
 

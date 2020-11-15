@@ -564,7 +564,7 @@ button:hover{
     background-position: center center;
     background-repeat: no-repeat;
 }
-#settings{
+#settingsButton{
     background-image: url(images/settings_button.svg);
     background-size: 60%;
     background-position: center center;
@@ -575,4 +575,27 @@ button:hover{
     background-size: 70%;
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+/* ---------------------------------Settings--------------------------------------- */
+.settingsWindow{
+    position: absolute;
+    display: none;
+    z-index: 10;
+    background-color: rgba(50, 50, 50, 0.8);
+    height: 100%;
+    width: 100%;
+}
+#innerSettings{
+    position: absolute;
+    background-color: #FBFBFB;
+    border: 2px solid #19B2FF;
+    height: 80%;
+    width: 80%;
+    top: 10%;
+    left: 10%;
+
+}
+.toggleDisplay{
+    display: unset;
 }

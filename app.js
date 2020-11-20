@@ -3,6 +3,7 @@
 let mc8 = document.querySelector(".mc8");
 let style = document.querySelector("style");
 
+
 const resizeWindow = () => {
 	if(window.innerHeight*1.4375 > window.innerWidth){
         mc8.style.width = String(window.innerWidth) + "px";
@@ -22,7 +23,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
 
 window.addEventListener('resize', function () {
-	resizeWindow();
+    resizeWindow();
 });
 }
 
@@ -446,7 +447,6 @@ const removeArrow = (element) => {
 
 //animations
 let processArray = [];
-
 
 
 function getNextCommand(step){

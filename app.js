@@ -29,6 +29,7 @@ window.addEventListener('resize', function () {
 
 
 //variables
+let isFullscreen = false;
 let ANIMATION_SPEED = 0.2;
 let WAITTIME = 700;
 let FRAMES = 30;
@@ -342,6 +343,8 @@ redRectangle.classList.add("boxborder");
 redRectangle.id = "redRectangle";
 redRectangle.style.borderColor = "#FF1930";
 redRectangle.style.background = "#FCDEE1";
+redRectangle.style.color = "Black";
+
 document.querySelector(".gridcontainer").appendChild(redRectangle);
 
 function updateRedRectangle(PC_IntValue){
@@ -649,8 +652,10 @@ const add_yellow_background_for_WAITTIME = async(DOM_variable) => {
         return false;
     }   
     DOM_variable.classList.add('yellowBg');
+    DOM_variable.style = "color: black";
     await Sleep_Waittime();
     DOM_variable.classList.remove('yellowBg');
+    DOM_variable.style = "";
     return true;
 }
 
@@ -890,6 +895,30 @@ function toggleTheme(){
 const toggleSettings = () => {
     
     settings.classList.toggle('toggleDisplay');
+}
+
+const toggleFullscreen = () => {
+    
+
+    if(!isFullscreen){
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+            document.documentElement.msRequestFullscreen();
+        }
+        isFullscreen = true;
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+        isFullscreen = false;
+    }
 }
 
 //main loop

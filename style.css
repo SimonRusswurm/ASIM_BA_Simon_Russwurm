@@ -77,10 +77,11 @@ button:hover{
 .black h2, .black p{
     color: white;
 }
-.yellowBg{
+.yellowBg , .yellowBg p{
     background-color: yellow;
     color: black;
 }
+
 
 /* ******************************* ACTUAL DESIGN ******************************* */
 .mc8{
@@ -90,8 +91,7 @@ button:hover{
     align-items: center;
     top: 0px;
     width: 143.75vh;
-    height: 100vh;
-    
+    height: 100vh; 
 }
 
 .gridcontainer{

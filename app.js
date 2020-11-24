@@ -30,7 +30,10 @@ window.addEventListener('resize', function () {
 
 //variables
 let ANIMATION_SPEED = 0.2;
+let WAITTIME = 700;
+let FRAMES = 30;
 let animationRuns = false;
+let stopPressed = true;
 let lastRenderTime = 0;
 const FRAMERATE = 50;
 let stepCounter = 0;
@@ -40,13 +43,33 @@ let isMovAnimation = false;
 let path = 0;   //animation Path
 let mov = 0;    //moving Object
 
-let romArray = ['3E','12','06','22', '3C', '3C'];
+let romArray = ['3E','12','06','22', '76', 'FF'];
 let romEntries = [];
 let ramArray = [];
 const commands = [
     {
+        hex: "76",
+        assemb: "HALT",
+        flags: false,
+        index: 0,
+        wr: "0",
+        rd: "0",
+        m: "0",
+        io: "0",
+    },
+    {
         hex: "3E",
-        assemb: "MOV SP, dat_16",
+        assemb: "MOV A, dat_8",
+        flags: false,
+        index: 0,
+        wr: "1",
+        rd: "0",
+        m: "0",
+        io: "1",
+    },
+    {
+        hex: "06",
+        assemb: "MOV B, dat_8",
         flags: false,
         index: 0,
         wr: "1",
@@ -304,7 +327,7 @@ const getPointsAtoB = (elementIDStringA, elementIDStringB) => {
        if(i<romArray.length){
            romElement.textContent = romArray[i]
        } else {
-            romElement.textContent ='FF';
+            romElement.textContent = 'FF';
        }
 
         romElement.style.top = String(100/32*(j+2)) + "%";
@@ -335,8 +358,8 @@ function createMovingObj(elementId, aPath){
     let element = document.getElementById(elementId);
     let clone = element.cloneNode(true);
     clone.classList.add("boxborder" ,"rounded");
-    clone.style.zIndex = "10";
-    clone.id = "clonedElement";
+    clone.style.zIndex = "5";
+    clone.id = "movingObject";
     clone.style.background = "yellow";
     clone.style.color = "#222222";
     clone.style.top = String(100/32*aPath[0].y) +"%";
@@ -344,7 +367,7 @@ function createMovingObj(elementId, aPath){
     clone.style.transition = "width 0.3s, height 0.3s, font-size 0.3s, border-radius 0.5s";
 
     if(elementId.includes('romElement')){
-        clone.id = "clonedRomElement";
+        clone.id = "movingRomElement";
     }
 
     document.querySelector(".gridcontainer").appendChild(clone);
@@ -506,55 +529,17 @@ function getNextCommand(step){
     return false;
 }
 
-const movAdat_8 = (step) =>{
-    switch (step) {
-        case 0:
-            stepDesc('Hole den Parameter');
-            addYellow(stepNumberBackground);      
-            break;
-        case 1:
-            removeYellow(stepNumberBackground);
-            addArrow(PC);
-            break;
-        case 2:
-            isMovAnimation = true;
-            removeArrow(PC);
-            path = getPointsAtoB('PC',"ROM2");
-            mov = createMovingObj('PC', path);
-            break;
-        case 3:
-            isMovAnimation = true;
-            mov.aDiv.remove();
-            path = getPointsAtoB(getRomElement().id,"A");
-            mov = createMovingObj(getRomElement(), path);
-            break;
-        case 4:
-            isMovAnimation = false;
-            A.textContent = getRomElement().textContent;
-            addYellow(A);
-            mov.aDiv.remove();
-            mov = 0;
-            break;
-        case 5:
-            isMovAnimation = false;
-            removeYellow(A);
-            addYellow
-    
-        default:
-            break;
-    }
-    
-}
-
 
 
 function main(currentTime){
     window.requestAnimationFrame(main);
     const secondsSinceLastRender = (currentTime - lastRenderTime)/1000;
+    
     if(secondsSinceLastRender < 1/FRAMERATE || !animationRuns){
         return;
     }
-    
+    //code below is going to run only when animationRuns === true (play-button is pressed)
+
     if(frameCounter === 0 || isMovAnimationFinished){
         frameCounter = Math.round(FRAMERATE/2);
         if(isMovAnimationFinished || !isMovAnimation){
@@ -568,6 +553,297 @@ function main(currentTime){
     isMovAnimationFinished = updateMovObjPosition(mov);
 }
 
+/*******************************NEW ANIMATION IMPLIMENTATION*************************************** */
+const isRunning = async() => {
+    while(true) {
+        if(animationRuns)
+            return true;
+        else{
+            if(stopPressed)
+                return false;
+            console.log('waiting for userinput');
+            await Sleep(100);
+        }    
+    }   
+}
+
+function Sleep(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
+function Sleep_Waittime() {
+    return Sleep(WAITTIME);
+}
+
+//*********************************Moving Anmiations*********************************
+const calcIntermediatePositions = (path) => {
+    let xPositions = [path[0].x];
+    let yPositions = [path[0].y];
+    let posDiff = 0;
+    
+
+    for (let j = 0; j < path.length-1; j++) {
+        if(path[j].y !== path[j+1].y){
+            posDiff = Math.abs((path[j+1].y-path[j].y));
+
+            for (let i = 0; i < 5*posDiff; i++) {
+                if((path[j+1].y>path[j].y))
+                    yPositions.push(path[j].y + 0.2*(i+1));
+                else
+                    yPositions.push(path[j].y - 0.2*(i+1))
+
+                xPositions.push(path[j].x)
+            }
+        }
+        if(path[j].x !== path[j+1].x){
+            posDiff = Math.abs((path[j+1].x-path[j].x));
+
+            for (let i = 0; i < 5*posDiff; i++) {
+                if((path[j+1].x>path[j].x))
+                    xPositions.push(path[j].x + 0.2*(i+1));
+                else
+                    xPositions.push(path[j].x - 0.2*(i+1))
+
+                yPositions.push(path[j].y)
+            }
+        }
+    }
+    return [xPositions, yPositions];
+}
+
+const updatePosition = (movingObject, x, y) => {
+    movingObject.aDiv.style.top = String(100/32*y) +"%";
+    movingObject.aDiv.style.left = String(100/46*x) +"%";
+}
+
+const transfer = async(elementIDA_string, elementIDB_string) => {
+    const path = getPointsAtoB(elementIDA_string, elementIDB_string);
+    let movingObject = createMovingObj(elementIDA_string, path);
+    let movingObjectCoordinates = calcIntermediatePositions(path);
+    console.log(movingObjectCoordinates);
+
+    //ROM-BUS Schnittstelle
+    for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
+        if(movingObjectCoordinates[0][i] === 9 && movingObjectCoordinates[1][i] === 2){
+            movingObject.aDiv.classList.add('square2x2' , 'h2mov');
+        }
+        if(await isRunning()){
+            updatePosition(movingObject, movingObjectCoordinates[0][i], movingObjectCoordinates[1][i]);
+            await Sleep(1000/FRAMES);
+        }  
+        else {
+            movingObject.aDiv.remove();
+            movingObject = 0;
+            return false;
+        }      
+    }
+
+    movingObject.aDiv.remove();
+    movingObject = 0;
+    return true;
+}
+
+/********************************** single animations ****************************** */
+const add_yellow_background_for_WAITTIME = async(DOM_variable) => {
+    if(!await isRunning()){
+        return false;
+    }   
+    DOM_variable.classList.add('yellowBg');
+    await Sleep_Waittime();
+    DOM_variable.classList.remove('yellowBg');
+    return true;
+}
+
+const description_update = async(description_string) => {
+    if(!await isRunning()){
+        return false;
+    }
+    stepDesc(description_string);
+    increaseStepNumber();
+    await add_yellow_background_for_WAITTIME(stepNumberBackground);
+    return true;
+}
+
+const addArrow_new = async(element) => {
+    if(!await isRunning()){
+        return false;
+    }
+    if(element === PC){
+        registerArrow.classList.add('PC_arrow');
+        await Sleep_Waittime();
+        registerArrow.classList.remove('PC_arrow');
+    }
+    else if(element === IR){
+        irArrow.classList.add('ir_arrow');
+        await Sleep_Waittime();
+        irArrow.classList.remove('ir_arrow');
+    }
+    return true;
+}
+
+const updatePC_new = async() => {
+    if(!await isRunning())
+        return false;
+    PC.textContent = convertIntToHex4(convertHexToInt(PC.textContent)+1);
+    updateRedRectangle(convertHexToInt(PC.textContent));
+    await add_yellow_background_for_WAITTIME(PC);
+    return true;
+}
+
+const updateRegister_hex2 = async(register, hex2_string) => {
+    if(!await isRunning())
+        return false;
+    register.textContent = hex2_string;
+    await add_yellow_background_for_WAITTIME(register);
+    return true;
+}
+
+const assemblerCommand_update = async(hex_string) => {
+    if(!await isRunning())
+        return false;
+    add_yellow_background_for_WAITTIME(IR);
+    for(i=0; i<commands.length; i++){
+        if(commands[i].hex === hex_string)
+            assemblerCommand.textContent = commands[i].assemb; 
+    }
+    await addArrow_new(IR);
+    return true;
+}
+
+
+/********************************** composite animations ****************************** */
+const get_next_command = async() => {
+    if(await description_update('Hole nächsten Befehl')){
+        if(await addArrow_new(PC)){
+            if(await transfer('PC', 'ROM2')){
+                if(await transfer(getRomElement().id, "SW")){
+                    if(await updateRegister_hex2(IR, getRomElement().textContent)){
+                        if(await description_update('Erhöhe Programmzähler um 1')){
+                            if(await addArrow_new(PC)){
+                                if(await updatePC_new()){
+                                    if(await description_update('Erkenne den Befehl')){
+                                        if(await assemblerCommand_update(IR.textContent)){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+const movAdat_8 = async() => {
+    if(await description_update('Hole den Parameter')){
+        if(await addArrow_new(PC)){
+            if(await transfer('PC', 'ROM2')){
+                if(await transfer(getRomElement().id, "A")){
+                    if(await updateRegister_hex2(A, getRomElement().textContent)){
+                        if(await description_update('Erhöhe Programmzähler um 1')){
+                            if(await addArrow_new(PC)){
+                                if(await updatePC_new()){
+                                    stepNumber.textContent = '0';
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+const movBdat_8 = async() => {
+    if(await description_update('Hole den Parameter')){
+        if(await addArrow_new(PC)){
+            if(await transfer('PC', 'ROM2')){
+                if(await transfer(getRomElement().id, "B")){
+                    if(await updateRegister_hex2(B, getRomElement().textContent)){
+                        if(await description_update('Erhöhe Programmzähler um 1')){
+                            if(await addArrow_new(PC)){
+                                if(await updatePC_new()){
+                                    stepNumber.textContent = '0';
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+let programList =   [
+                        async function () {  return get_next_command(); },
+                        async function () {  return movAdat_8(); },
+                        async function () {  return get_next_command(); },
+                        async function () {  return movBdat_8(); },
+                        async function () {  return get_next_command(); },
+                        async function () {  return window.alert('TEST FINISHED'); }
+                    ];
+
+
+const run_program = async(currentTime) => {
+    for(let i = 0; i<programList.length; i++){
+        if(!await programList[i]()){
+            return false;
+        }
+    }
+}
+const init = () => {
+    try {
+        document.querySelector(".gridcontainer").removeChild(document.getElementById('movingObject'));
+    } catch (error) {
+        
+    }
+    try {
+        document.querySelector(".gridcontainer").removeChild(document.getElementById('movingRomElement'));
+    } catch (error) {
+        
+    }
+    IO1.textContent = 'FF';
+    IO2.textContent = 'FF';
+    IO3.textContent = 'FF';
+    A.textContent = '00';
+    B.textContent = '00';
+    C.textContent = '00';
+    HL.textContent = '0000';
+    IX.textContent = '0000';
+    SP.textContent = '0000';
+    PC.textContent = '0000';
+    ZR.textContent = '0000';
+    IR.textContent = '00';
+    c_flag.textContent = '0';
+    z_flag.textContent = '0';
+    p_flag.textContent = '0';
+    s_flag.textContent = '0';
+    WR.textContent = '0';
+    RD.textContent = '0';
+    M.textContent = '0';
+    IO.textContent = '0';
+
+    stepNumber.textContent = '0';
+    stepDescription.textContent = 'Prozessor angehalten';
+    assemblerCommand.textContent = '';
+    
+    updateRedRectangle(convertHexToInt(PC.textContent));
+
+    // let stepNumberBackground = document.getElementsByClassName('sNum')[0];
+    // let registerArrow = document.getElementById('registerArrow');
+    // let irArrow = document.getElementById('ir_arrow');
+    
+    // let rom = document.querySelector(".Adresse-000x-1FFx");
+    // let ram = document.getElementsByClassName("Adresse-200x-3FFx");
+    // let settings = document.getElementById('settings');
+
+}
 
 function draw(){
     updateMovObjPosition(mov);
@@ -576,20 +852,34 @@ function draw(){
 //button functions
 function play(){
     animationRuns = true;
+    if(stopPressed){
+        stopPressed = false;
+        run_program();
+    }
     document.getElementById('play').toggleAttribute('buttonPressed');
 }
 function pause(){
     animationRuns = false;
+}
+function stopBtn(){
+    animationRuns = false;
+    stopPressed = true;
+    init();
 }
 
 function increaseSpeed(){
     if(ANIMATION_SPEED < 0.7)
         ANIMATION_SPEED += 0.08;
 
+    if(FRAMES < 200)
+        FRAMES += 30;
 }
+
 function decreaseSpeed(){
     if(ANIMATION_SPEED > 0.16)
         ANIMATION_SPEED -= 0.08
+    if(FRAMES > 30)
+        FRAMES -= 30;
 }
 
 function toggleTheme(){
@@ -602,6 +892,5 @@ const toggleSettings = () => {
     settings.classList.toggle('toggleDisplay');
 }
 
-
 //main loop
-window.requestAnimationFrame(main);
+//window.requestAnimationFrame(main);

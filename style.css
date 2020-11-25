@@ -503,12 +503,12 @@ button:hover{
 .controlPanel{
     position: absolute;
     height: calc(100%/32*2);
-    width: calc(100%/46*24);
+    width: calc(100%/46*26);
     top: calc(100%/32*30);
-    left: calc(100%/46*11);
+    left: calc(100%/46*10);
 
     grid-template-rows: 1fr;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(13, 1fr);
 }
 
 #play{
@@ -576,6 +576,13 @@ button:hover{
     background-position: center center;
     background-repeat: no-repeat;
 }
+#fullscreenButton{
+    background-image: url(images/fullscreen_button.svg);
+    background-size: 70%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
 #toggleTheme{
     background-image: url(images/toggleTheme_button.svg);
     background-size: 70%;

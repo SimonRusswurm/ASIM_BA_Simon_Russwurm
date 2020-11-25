@@ -741,6 +741,20 @@ const get_next_command = async() => {
     }
     return false;
 }
+const get_next_command_noAnim = async() => {
+    if(await description_update('Hole nächsten Befehl')){
+        if(await updateRegister_hex2(IR, getRomElement().textContent)){
+            if(await updatePC_new()){
+                if(await description_update('Erkenne den Befehl')){
+                    if(await assemblerCommand_update(IR.textContent)){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
 
 const movAdat_8 = async() => {
     if(await description_update('Hole den Parameter')){
@@ -758,6 +772,16 @@ const movAdat_8 = async() => {
                         }
                     }
                 }
+            }
+        }
+    }
+    return false;
+}
+const movAdat_8_noAnim = async() => {
+    if(await updateRegister_hex2(A, getRomElement().textContent)){
+        if(await updatePC_new()){
+            if(await description_update('Prozessor Angehalten')){
+                return true;
             }
         }
     }

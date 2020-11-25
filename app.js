@@ -912,7 +912,7 @@ function decreaseSpeed(){
 }
 
 function toggleTheme(){
-    document.getElementsByClassName('mc8')[0].classList.toggle('black');
+    document.getElementsByTagName('html')[0].classList.toggle('black');
     console.log(document.getElementsByTagName('h2'))
 }
 

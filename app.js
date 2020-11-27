@@ -31,6 +31,8 @@ window.addEventListener('resize', function () {
 //variables
 let isFullscreen = false;
 let ANIMATION_SPEED = 0.2;
+let noAnimation = false;
+let completeExecution = false;
 let WAITTIME = 700;
 let FRAMES = 30;
 let animationRuns = false;
@@ -367,7 +369,7 @@ function createMovingObj(elementId, aPath){
     clone.style.color = "#222222";
     clone.style.top = String(100/32*aPath[0].y) +"%";
     clone.style.left = String(100/46*aPath[0].x) +"%";
-    clone.style.transition = "width 0.3s, height 0.3s, font-size 0.3s, border-radius 0.5s";
+    clone.style.transition = "width 0.4s, height 0.4s, font-size 0.4s, border-radius 0.4s";
 
     if(elementId.includes('romElement')){
         clone.id = "movingRomElement";
@@ -455,9 +457,7 @@ const addYellow = (element) => {
 const removeYellow = (element) => {
     element.classList.remove('yellowBg');
 }
-const stepDesc = (StringDescription) => {
-    stepDescription.textContent = StringDescription;
-}
+
 
 const addArrow = (element) => {
     if(element === PC){
@@ -477,7 +477,7 @@ let processArray = [];
 
 function getNextCommand(step){
     switch(step){
-        case 0: stepDesc("Hole nächsten Befehl");
+        case 0: change_stepDescription("Hole nächsten Befehl");
                 increaseStepNumber();
                 addYellow(stepNumberBackground);
                 break;
@@ -503,7 +503,7 @@ function getNextCommand(step){
                 break;
         case 5: isMovAnimation = false;
                 removeYellow(IR);
-                stepDesc("Erhöhe Programmzähler um 1");
+                change_stepDescription("Erhöhe Programmzähler um 1");
                 addYellow(stepNumberBackground);
                 increaseStepNumber();
                 break;
@@ -512,7 +512,7 @@ function getNextCommand(step){
                 addYellow(PC);
                 updatePC();
                 break;
-        case 7: stepDesc('Erkenne den Befehl');
+        case 7: change_stepDescription('Erkenne den Befehl');
                 increaseStepNumber();
                 addYellow(stepNumberBackground);
                 removeArrow(PC);
@@ -577,6 +577,22 @@ function Sleep(milliseconds) {
 function Sleep_Waittime() {
     return Sleep(WAITTIME);
 }
+function Sleep_NoAnimationTime() {
+    return Sleep(50);
+}
+
+const change_stepDescription = (StringDescription) => {
+    stepDescription.textContent = StringDescription;
+}
+
+const check_AnimationType = () => {
+    if(!completeExecution){
+        description_update('Prozessor angehalten');
+        if(noAnimation)
+            animationRuns = false;
+        noAnimation = false;
+    }
+}
 
 //*********************************Moving Anmiations*********************************
 const calcIntermediatePositions = (path) => {
@@ -620,29 +636,32 @@ const updatePosition = (movingObject, x, y) => {
 }
 
 const transfer = async(elementIDA_string, elementIDB_string) => {
-    const path = getPointsAtoB(elementIDA_string, elementIDB_string);
-    let movingObject = createMovingObj(elementIDA_string, path);
-    let movingObjectCoordinates = calcIntermediatePositions(path);
-    console.log(movingObjectCoordinates);
+    if(!noAnimation){
+        const path = getPointsAtoB(elementIDA_string, elementIDB_string);
+        let movingObject = createMovingObj(elementIDA_string, path);
+        let movingObjectCoordinates = calcIntermediatePositions(path);
+        console.log(movingObjectCoordinates);
 
-    //ROM-BUS Schnittstelle
-    for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
-        if(movingObjectCoordinates[0][i] === 9 && movingObjectCoordinates[1][i] === 2){
-            movingObject.aDiv.classList.add('square2x2' , 'h2mov');
+        
+        for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
+            //ROM-BUS Schnittstelle
+            if(movingObjectCoordinates[0][i] === 9 && movingObjectCoordinates[1][i] === 2){
+                movingObject.aDiv.classList.add('square2x2' , 'h2mov');
+            }
+            if(await isRunning()){
+                updatePosition(movingObject, movingObjectCoordinates[0][i], movingObjectCoordinates[1][i]);
+                await Sleep(1000/FRAMES);
+            }  
+            else {
+                movingObject.aDiv.remove();
+                movingObject = 0;
+                return false;
+            }      
         }
-        if(await isRunning()){
-            updatePosition(movingObject, movingObjectCoordinates[0][i], movingObjectCoordinates[1][i]);
-            await Sleep(1000/FRAMES);
-        }  
-        else {
-            movingObject.aDiv.remove();
-            movingObject = 0;
-            return false;
-        }      
-    }
 
-    movingObject.aDiv.remove();
-    movingObject = 0;
+        movingObject.aDiv.remove();
+        movingObject = 0;
+    }
     return true;
 }
 
@@ -650,12 +669,16 @@ const transfer = async(elementIDA_string, elementIDB_string) => {
 const add_yellow_background_for_WAITTIME = async(DOM_variable) => {
     if(!await isRunning()){
         return false;
-    }   
-    DOM_variable.classList.add('yellowBg');
-    DOM_variable.style = "color: black";
-    await Sleep_Waittime();
-    DOM_variable.classList.remove('yellowBg');
-    DOM_variable.style = "";
+    }
+    if(!noAnimation){
+        DOM_variable.classList.add('yellowBg');
+        DOM_variable.style = "color: black";
+        await Sleep_Waittime();
+        DOM_variable.classList.remove('yellowBg');
+        DOM_variable.style = "";
+    }else{
+        await Sleep_NoAnimationTime();
+    }
     return true;
 }
 
@@ -663,9 +686,10 @@ const description_update = async(description_string) => {
     if(!await isRunning()){
         return false;
     }
-    stepDesc(description_string);
+    change_stepDescription(description_string);
     increaseStepNumber();
     await add_yellow_background_for_WAITTIME(stepNumberBackground);
+    
     return true;
 }
 
@@ -673,16 +697,18 @@ const addArrow_new = async(element) => {
     if(!await isRunning()){
         return false;
     }
-    if(element === PC){
-        registerArrow.classList.add('PC_arrow');
-        await Sleep_Waittime();
-        registerArrow.classList.remove('PC_arrow');
-    }
-    else if(element === IR){
-        irArrow.classList.add('ir_arrow');
-        await Sleep_Waittime();
-        irArrow.classList.remove('ir_arrow');
-    }
+    if(!noAnimation){
+        if(element === PC){
+            registerArrow.classList.add('PC_arrow');
+            await Sleep_Waittime();
+            registerArrow.classList.remove('PC_arrow');
+        }
+        else if(element === IR){
+            irArrow.classList.add('ir_arrow');
+            await Sleep_Waittime();
+            irArrow.classList.remove('ir_arrow');
+        }
+    } 
     return true;
 }
 
@@ -718,6 +744,7 @@ const assemblerCommand_update = async(hex_string) => {
 
 /********************************** composite animations ****************************** */
 const get_next_command = async() => {
+    stepNumber.textContent = '0';
     if(await description_update('Hole nächsten Befehl')){
         if(await addArrow_new(PC)){
             if(await transfer('PC', 'ROM2')){
@@ -741,20 +768,6 @@ const get_next_command = async() => {
     }
     return false;
 }
-const get_next_command_noAnim = async() => {
-    if(await description_update('Hole nächsten Befehl')){
-        if(await updateRegister_hex2(IR, getRomElement().textContent)){
-            if(await updatePC_new()){
-                if(await description_update('Erkenne den Befehl')){
-                    if(await assemblerCommand_update(IR.textContent)){
-                        return true;
-                    }
-                }
-            }
-        }
-    }
-    return false;
-}
 
 const movAdat_8 = async() => {
     if(await description_update('Hole den Parameter')){
@@ -765,7 +778,7 @@ const movAdat_8 = async() => {
                         if(await description_update('Erhöhe Programmzähler um 1')){
                             if(await addArrow_new(PC)){
                                 if(await updatePC_new()){
-                                    stepNumber.textContent = '0';
+                                    check_AnimationType();
                                     return true;
                                 }
                             }
@@ -777,16 +790,7 @@ const movAdat_8 = async() => {
     }
     return false;
 }
-const movAdat_8_noAnim = async() => {
-    if(await updateRegister_hex2(A, getRomElement().textContent)){
-        if(await updatePC_new()){
-            if(await description_update('Prozessor Angehalten')){
-                return true;
-            }
-        }
-    }
-    return false;
-}
+
 const movBdat_8 = async() => {
     if(await description_update('Hole den Parameter')){
         if(await addArrow_new(PC)){
@@ -796,7 +800,7 @@ const movBdat_8 = async() => {
                         if(await description_update('Erhöhe Programmzähler um 1')){
                             if(await addArrow_new(PC)){
                                 if(await updatePC_new()){
-                                    stepNumber.textContent = '0';
+                                    check_AnimationType();
                                     return true;
                                 }
                             }
@@ -814,8 +818,7 @@ let programList =   [
                         async function () {  return movAdat_8(); },
                         async function () {  return get_next_command(); },
                         async function () {  return movBdat_8(); },
-                        async function () {  return get_next_command(); },
-                        async function () {  return window.alert('TEST FINISHED'); }
+                        async function () {  return get_next_command(); }
                     ];
 
 
@@ -863,6 +866,9 @@ const init = () => {
     assemblerCommand.textContent = '';
     
     updateRedRectangle(convertHexToInt(PC.textContent));
+    noAnimation = false;
+    animationRuns = false;
+    completeExecution = false;
 
     // let stepNumberBackground = document.getElementsByClassName('sNum')[0];
     // let registerArrow = document.getElementById('registerArrow');
@@ -916,14 +922,23 @@ function toggleTheme(){
     console.log(document.getElementsByTagName('h2'))
 }
 
+const runNextSingleStep = () => {
+    noAnimation = true;
+    play();
+}
+
+const runCompleteExecution = () => {
+    completeExecution = true;
+    noAnimation = true;
+    play();
+}
+
 const toggleSettings = () => {
     
     settings.classList.toggle('toggleDisplay');
 }
 
 const toggleFullscreen = () => {
-    
-
     if(!isFullscreen){
         if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();

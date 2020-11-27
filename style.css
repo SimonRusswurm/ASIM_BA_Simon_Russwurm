@@ -503,12 +503,12 @@ button:hover{
 .controlPanel{
     position: absolute;
     height: calc(100%/32*2);
-    width: calc(100%/46*26);
+    width: calc(100%/46*24);
     top: calc(100%/32*30);
-    left: calc(100%/46*10);
+    left: calc(100%/46*11);
 
     grid-template-rows: 1fr;
-    grid-template-columns: repeat(13, 1fr);
+    grid-template-columns: repeat(12, 1fr);
 }
 
 #play{

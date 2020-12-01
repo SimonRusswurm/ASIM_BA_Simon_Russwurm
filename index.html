@@ -296,7 +296,8 @@
             
             <div id="settings" class="settingsWindow boxborder rounded">
                 <div id="innerSettings" class="boxborder rounded">
-                    <button id="closeSettings" type="button" onclick="toggleSettings()">Save</button>
+                    <textarea name="linker-file" id="linker-file" cols="30" rows="30"></textarea>
+                    <button id="closeSettings" type="button" onclick="saveSettings()">Save</button>
 
                 </div>
             </div>
@@ -305,8 +306,8 @@
                 <button id="play" type="button" onclick="play()"></button>
                 <button id="pause" type="button" onclick="pause()"></button>
                 <button id="stop" type="button" onclick="stopBtn()"></button>
-                <button id="slow" type="button" onclick=""></button>
-                <button id="fast" type="button" onclick=""></button>
+                <button id="slow" type="button" onclick="snailSpeed_on()"></button>
+                <button id="fast" type="button" onclick="rocketSpeed_on()"></button>
                 <button id="increase" type="button" onclick="increaseSpeed()"></button>
                 <button id="decrease" type="button" onclick="decreaseSpeed()"></button>
                 <button id="singlestep" type="button" onclick="runNextSingleStep()"></button>

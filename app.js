@@ -33,7 +33,9 @@ let isFullscreen = false;
 let ANIMATION_SPEED = 2;
 let noAnimation = false;
 let completeExecution = false;
+let rocketSpeed = false;
 let WAITTIME = 500;
+let NOANIMATIONTIME = 30;
 let FRAMES = 60;
 let animationRuns = false;
 let stopPressed = true;
@@ -46,9 +48,8 @@ let isMovAnimation = false;
 let path = 0;   //animation Path
 let mov = 0;    //moving Object
 
-let romArray = ['3E','12','06','22', '76', 'FF'];
-let romEntries = [];
-let ramArray = [];
+
+
 const commands = [
     {
         hex: "76",
@@ -79,39 +80,8 @@ const commands = [
         rd: "0",
         m: "0",
         io: "1",
-    },
-    {
-        label: "Erhöhe den Programmzähler um 1",
-        assemb: "",
-        machine: "",
-        flags: false,
-        index: 1,
-        wr: "",
-        rd: "",
-        m: "",
-        io: "",
-    },
-    {
-        label: "Erkenne den Befehl",
-        assemb: "",
-        maschine: "",
-        flags: false,
-        index: 2,
-        wr: "",
-        rd: "",
-        m: "",
-        io: "",
-    },
-    {
-        label: "Hole den Parameter",
-        assemb: "MOV A,dat_8",
-        maschine: "3E",
-        flags: false,
-        wr: "",
-        rd: "",
-        m: "",
-        io: "",
-    },
+    }
+    
 ]
 
 
@@ -146,9 +116,73 @@ let rom = document.querySelector(".Adresse-000x-1FFx");
 let ram = document.getElementsByClassName("Adresse-200x-3FFx");
 let settings = document.getElementById('settings');
 
+let linker_string = '';
+let opCommands = [];
+let romArray = [];
+let program = [];
 
 
 /*********************************** rom/ram ************************************/
+/****************** convert Hex/Int *******************/
+const convertHexToInt = (hexString) => {
+    return parseInt(hexString, 16);
+}
+
+const convertIntToHex_4digits = (intNum) => {
+    intNum = intNum.toString(16);
+    intNum = intNum.toUpperCase();
+    let len = intNum.length;
+    for(i=4; i>len;i--){
+        intNum = '0' +intNum;
+    }
+    return intNum;
+}
+
+/****************** linker-to-rom *******************/
+
+class opCommand {
+    constructor(commandLength, adress, commands_array){
+        this.commandLength = commandLength;
+        this.adress = adress;
+        this.commands_array = commands_array;
+    }
+}
+
+const linkerString_to_opCommands = (linker_string) =>{
+    opCommands.length = 0;
+    for (let i = 0; i < linker_string.length; i++) {
+        if(linker_string[i] === ':'){
+            if(linker_string[i+8] === '1')
+                break;
+            let length = Number(linker_string[i+2]);
+            let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
+            let commands = [];
+            for (let j = 0; j < length+2; j+=2) {
+                commands.push(linker_string[i+9+j]+linker_string[i+10+j]);                
+            }
+            const command = new opCommand(length, adress, commands);
+            opCommands.push(command);     
+        }
+    }
+    return true;
+}
+
+const createRomArray  = (opCommands) => {
+    const rom_array = [];
+    for(var i = 0; i<224; i++){
+        rom_array.push('FF');
+    }
+
+    for (let i = 0; i < opCommands.length; i++) {
+        for (let j = 0; j < opCommands[i].commandLength; j++) {
+            rom_array[opCommands[i].adress+j] = opCommands[i].commands_array[j];
+        }
+    }
+    return rom_array;
+}
+
+romArray = createRomArray(opCommands);
+
 const initRom = () => {
     let j = 0;
     for(var i = 0; i<224; i++){
@@ -161,12 +195,7 @@ const initRom = () => {
         if(!(i%8) && i !== 0)
             j++;
 
-        //define textContent of romElement
-        if(i<romArray.length){
-            romElement.textContent = romArray[i]
-        } else {
-            romElement.textContent = 'FF';
-        }
+        romElement.textContent = 'FF';
 
         //define Position of romElement
         romElement.style.top = String(100/32*(j+2)) + "%";
@@ -207,9 +236,13 @@ const initRam = () => {
 }
 initRam();
 
+const updateRom = (romArray) => {
+    for(var i = 0; i<224; i++){
+        document.getElementById("romElement" + String(i)).textContent = romArray[i];
+    }
+}
+
 const getRomElement = () => document.getElementById('romElement' + String(convertHexToInt(PC.textContent)));
-
-
 
 /*********************************** bussystem and pathlogic ************************************/
 class Point{
@@ -416,29 +449,15 @@ const createMovingObj = (elementId, aPath) => {
     clone.style.color = "#222222";
     clone.style.top = String(100/32*aPath[0].y) +"%";
     clone.style.left = String(100/46*aPath[0].x) +"%";
-    clone.style.transition = "width 0.5s, height 0.5s, font-size 0.5s, border-radius 0.5s";
 
     if(elementId.includes('romElement')){
         clone.id = "movingRomElement";
+        clone.classList.add('square2x2' , 'h2mov');
     }
 
     document.querySelector(".gridcontainer").appendChild(clone);
     let  movObj = {aDiv: clone, path: aPath};
     return movObj;
-}
-
-/*********************************** convert Hex/Int ************************************/
-const convertHexToInt = (hexString) => {
-    return parseInt(hexString, 16);
-}
-
-const convertIntToHex_4digits = (intNum) => {
-    intNum = intNum.toString(16);
-    let len = intNum.length;
-    for(i=4; i>len;i--){
-        intNum = '0' +intNum;
-    }
-    return intNum;
 }
 
 /******************************* ANIMATION IMPLIMENTATION *************************************** */
@@ -462,7 +481,7 @@ const Sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milli
 
 const Sleep_Waittime = () => Sleep(WAITTIME);
 
-const Sleep_NoAnimationTime = () => Sleep(50);
+const Sleep_NoAnimationTime = () => Sleep(NOANIMATIONTIME);
 
 const check_AnimationType = () => {
     if(!completeExecution){
@@ -480,10 +499,13 @@ const increaseStepNumber = () => stepNumber.textContent = String(Number(stepNumb
 
 const change_assemblerCommand = (hex2digit_string) =>{
     for(i=0; i<commands.length; i++){
-        if(commands[i].hex === hex2digit_string)
+        if(commands[i].hex === hex2digit_string){
             assemblerCommand.textContent = commands[i].assemb;
+            return true;
+        }
     }
-    return true;
+    assemblerCommand.textContent = 'Befehl unbekannt';
+    return false;
 }
 
 //*********************************Moving Anmiations*********************************
@@ -580,14 +602,22 @@ const transfer = async(elementIDA_string, elementIDB_string) => {
         const xCoord = movingObjectCoordinates[0];
         const yCoord = movingObjectCoordinates[1];
         
+        if(rocketSpeed){
+            document.querySelector(".gridcontainer").classList.add('bussystem_yellow');
+            await Sleep_Waittime();
+            document.querySelector(".gridcontainer").classList.remove('bussystem_yellow');
+            await Sleep_Waittime();
+        } else {
+            for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
+                if(!await conditionalPositionupdate(xCoord[i], yCoord[i], ANIMATION_SPEED, movingObject))
+                    return false;
+            }
+        }       
 
-        for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
-            if(!await conditionalPositionupdate(xCoord[i], yCoord[i], ANIMATION_SPEED, movingObject))
-                return false;
-        }
         movingObject.aDiv.remove();
         movingObject = 0;  
     }
+    
     return true;
 }
 
@@ -602,9 +632,6 @@ const conditionalPositionupdate = async(xCoord, yCoord, speed, movingObject) => 
             movingObject = 0;
             return false;
         }  
-    }
-    if(xCoord[xCoord.length-1] === 9 && yCoord[xCoord.length-1] === 2){
-        movingObject.aDiv.classList.add('square2x2' , 'h2mov');
     }
     return true;
 }
@@ -679,11 +706,11 @@ const assemblerCommand_update = async(hex2digit_string) => {
     if(!await isRunning())
         return false;
     add_yellow_background_for_WAITTIME(IR);
-    change_assemblerCommand(hex2digit_string)
+    if(!change_assemblerCommand(hex2digit_string))
+        return false;
     await addArrow(IR);
     return true;
 }
-
 
 /********************************** composite animations ****************************** */
 const get_next_command = async() => {
@@ -756,22 +783,40 @@ const movBdat_8 = async() => {
     return false;
 }
 
-let programList =   [
-                        async function () {  return get_next_command(); },
-                        async function () {  return movAdat_8(); },
-                        async function () {  return get_next_command(); },
-                        async function () {  return movBdat_8(); },
-                        async function () {  return get_next_command(); }
-                    ];
+let programList = [get_next_command, movAdat_8, movBdat_8];
 
+const romArray_to_programmList = () => {
+    const arr = [];
+   
+    for (let i = 0; i < opCommands.length; i++) {
+        arr.push(get_next_command)
+        switch(opCommands[i].commands_array[0]){
+            case '3E':
+                arr.push(movAdat_8);
+                break;
+            case '06':
+                arr.push(movBdat_8);
+                break;
+            case'76':
+                return arr;
+            default:
+                break;
+        }
+    }
+    arr.push(get_next_command);
+    return arr;
+}
+
+program = romArray_to_programmList();
 
 const run_program = async(currentTime) => {
-    for(let i = 0; i<programList.length; i++){
-        if(!await programList[i]()){
+    for(let i = 0; i<program.length; i++){
+        if(!await program[i]()){
             return false;
         }
     }
 }
+
 const init = () => {
     try {
         document.querySelector(".gridcontainer").removeChild(document.getElementById('movingObject'));
@@ -823,11 +868,8 @@ const init = () => {
 
 }
 
-function draw(){
-    updateMovObjPosition(mov);
-}
+/********************************** button functions ****************************** */
 
-//button functions
 function play(){
     animationRuns = true;
     if(stopPressed){
@@ -837,7 +879,9 @@ function play(){
     document.getElementById('play').toggleAttribute('buttonPressed');
 }
 function pause(){
+    completeExecution = false;
     animationRuns = false;
+    noAnimation = false;
 }
 function stopBtn(){
     animationRuns = false;
@@ -875,7 +919,15 @@ function toggleTheme(){
     console.log(document.getElementsByTagName('h2'))
 }
 
+const rocketSpeed_on = () => {
+    console.log(rocketSpeed = true);
+}
+const snailSpeed_on = () => {
+    console.log(rocketSpeed = false);
+}
+
 const runNextSingleStep = () => {
+    completeExecution = false;
     noAnimation = true;
     play();
 }
@@ -911,4 +963,18 @@ const toggleFullscreen = () => {
         }
         isFullscreen = false;
     }
+}
+
+const saveSettings = () => {
+    stopBtn();
+    let str = document.getElementById('linker-file').value;
+    linkerString_to_opCommands(str.replace(/\r\n|\n|\r/gm, ''));
+    romArray = createRomArray(opCommands);
+    updateRom(romArray);
+    program = romArray_to_programmList();
+    updateRedRectangle(0);
+    console.log(run_program);
+
+
+    toggleSettings();
 }

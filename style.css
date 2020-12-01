@@ -106,6 +106,9 @@ button:hover{
     grid-template-columns: repeat(46, 1fr);
     grid-template-rows: repeat(32, 1fr);
 }
+.bussystem_yellow{
+    background-image: url(images/Bus-System_yellow.svg);
+}
 .romValues{
     width: 100%;
     height: 100%;
@@ -601,12 +604,15 @@ button:hover{
 }
 #innerSettings{
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #FBFBFB;
     border: 2px solid #19B2FF;
-    height: 80%;
-    width: 80%;
-    top: 10%;
-    left: 10%;
+    height: 90%;
+    width: 90%;
+    top: 5%;
+    left: 5%;
 
 }
 .toggleDisplay{

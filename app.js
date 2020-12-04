@@ -48,7 +48,41 @@ let isMovAnimation = false;
 let path = 0;   //animation Path
 let mov = 0;    //moving Object
 
+//variables DOM
+let IO1 = document.getElementById('IO1');
+let I02 = document.getElementById('IO2');
+let I03 = document.getElementById('IO3');
+let A = document.getElementById('A');
+let c_flag = document.getElementById('c_flag');
+let z_flag = document.getElementById('z_flag');
+let p_flag = document.getElementById('p_flag');
+let s_flag = document.getElementById('s_flag');
+let B = document.getElementById('B');
+let C = document.getElementById('C');
+let HL = document.getElementById('HL');
+let IX = document.getElementById('IX');
+let SP = document.getElementById('SP');
+let PC = document.getElementById('PC');
+let ZR = document.getElementById('ZR');
+let IR = document.getElementById('IR');
+let assemblerCommand = document.getElementById('assemblerCommand');
+let stepNumber = document.getElementById('stepNumber');
+let stepDescription = document.getElementById('stepDescription');
+let stepNumberBackground = document.getElementsByClassName('sNum')[0];
+let registerArrow = document.getElementById('registerArrow');
+let irArrow = document.getElementById('ir_arrow');
+let WR = document.getElementById('WR');
+let RD = document.getElementById('RD');
+let M = document.getElementById('M');
+let IO = document.getElementById('IO');
+let rom = document.querySelector(".Adresse-000x-1FFx");
+let ram = document.getElementsByClassName("Adresse-200x-3FFx");
+let settings = document.getElementById('settings');
 
+let linker_string = '';
+let opCommands = [];
+let romArray = [];
+let program = [];
 
 const commands = [
     {
@@ -85,41 +119,24 @@ const commands = [
 ]
 
 
-//variables DOM
-let IO1 = document.getElementById('IO1');
-let I02 = document.getElementById('IO2');
-let I03 = document.getElementById('IO3');
-let A = document.getElementById('A');
-let c_flag = document.getElementById('c_flag');
-let z_flag = document.getElementById('z_flag');
-let p_flag = document.getElementById('p_flag');
-let s_flag = document.getElementById('s_flag');
-let B = document.getElementById('B');
-let C = document.getElementById('C');
-let HL = document.getElementById('HL');
-let IX = document.getElementById('IX');
-let SP = document.getElementById('SP');
-let PC = document.getElementById('PC');
-let ZR = document.getElementById('ZR');
-let IR = document.getElementById('IR');
-let assemblerCommand = document.getElementById('assemblerCommand');
-let stepNumber = document.getElementById('stepNumber');
-let stepDescription = document.getElementById('stepDescription');
-let stepNumberBackground = document.getElementsByClassName('sNum')[0];
-let registerArrow = document.getElementById('registerArrow');
-let irArrow = document.getElementById('ir_arrow');
-let WR = document.getElementById('WR');
-let RD = document.getElementById('RD');
-let M = document.getElementById('M');
-let IO = document.getElementById('IO');
-let rom = document.querySelector(".Adresse-000x-1FFx");
-let ram = document.getElementsByClassName("Adresse-200x-3FFx");
-let settings = document.getElementById('settings');
 
-let linker_string = '';
-let opCommands = [];
-let romArray = [];
-let program = [];
+class mc8_command {
+    constructor(assembler_notation_string, maschinecode_decimal, maschinecode_hex_string, bytes, flags_array, animationFunction){
+        this.assembler_notation_string = assembler_notation_string;
+        this.maschinecode_decimal = maschinecode_decimal;
+        this.maschinecode_hex_string = maschinecode_hex_string;
+        this.bytes = bytes;
+        this.flags_array = flags_array;
+        this.animationFunction = animationFunction;
+    }
+    
+    async runAnimation() {
+        return this.animationFunction();        
+    }
+}
+
+
+
 
 
 /*********************************** rom/ram ************************************/
@@ -183,7 +200,7 @@ const createRomArray  = (opCommands) => {
 
 romArray = createRomArray(opCommands);
 
-const initRom = () => {
+const initRom_DOM = () => {
     let j = 0;
     for(var i = 0; i<224; i++){
         //create a romElement
@@ -206,7 +223,7 @@ const initRom = () => {
     }
     return true;
 }
-initRom();
+initRom_DOM();
 
 const initRam = () => {
     let j = 0;
@@ -501,6 +518,7 @@ const change_assemblerCommand = (hex2digit_string) =>{
     for(i=0; i<commands.length; i++){
         if(commands[i].hex === hex2digit_string){
             assemblerCommand.textContent = commands[i].assemb;
+
             return true;
         }
     }
@@ -810,11 +828,18 @@ const romArray_to_programmList = () => {
 program = romArray_to_programmList();
 
 const run_program = async(currentTime) => {
-    for(let i = 0; i<program.length; i++){
+    let i = 0;
+    while(true){
         if(!await program[i]()){
             return false;
-        }
+        } 
+        i++;
     }
+    // for(let i = 0; i<program.length; i++){
+    //     if(!await program[i]()){
+    //         return false;
+    //     }
+    // }
 }
 
 const init = () => {
@@ -969,12 +994,79 @@ const saveSettings = () => {
     stopBtn();
     let str = document.getElementById('linker-file').value;
     linkerString_to_opCommands(str.replace(/\r\n|\n|\r/gm, ''));
+    linkerString_to_rom_dec(str.replace(/\r\n|\n|\r/gm, ''));
     romArray = createRomArray(opCommands);
-    updateRom(romArray);
+    updateRom_DOM();
     program = romArray_to_programmList();
     updateRedRectangle(0);
     console.log(run_program);
 
 
     toggleSettings();
+}
+
+
+const mc8_command_list = [
+    new mc8_command('MOV A,dat_8', 62, '3E', 2, [0,0,0,0], movAdat_8),
+    new mc8_command('MOV B,dat_8', 06, '06', 2, [0,0,0,0], movBdat_8)
+];
+
+/******************************* ROM *********************************** */
+const rom_dec = [];
+const initRom_dec = () =>{
+    for (let i = 0; i < 224; i++) {
+        rom_dec.push(255);        
+    } 
+    return true;
+}
+initRom_dec();
+
+const linkerString_to_rom_dec = (linker_string) =>{
+    for (let i = 0; i < linker_string.length; i++) {
+        if(linker_string[i] === ':'){
+            if(linker_string[i+8] === '1')
+                break;
+            let length = Number(linker_string[i+2]);
+            let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
+            
+            for (let j = 0; j < length+2; j+=2) {
+                rom_dec[adress+j/2] = (convertHexToInt(linker_string[i+9+j]+linker_string[i+10+j]));                
+            }   
+        }
+    }
+    return true;
+}
+
+// const initRom_DOM = () => {
+//     let j = 0;
+//     for(var i = 0; i<224; i++){
+//         //create a romElement
+//         let romElement = document.createElement('p');
+//         romElement.classList.add('romElement', 'grid-template');
+//         romElement.id = "romElement" + String(i);
+
+//         //after every 8th romElement -> new line should be filled
+//         if(!(i%8) && i !== 0)
+//             j++;
+
+//         romElement.textContent = 'FF';
+
+//         //define Position of romElement
+//         romElement.style.top = String(100/32*(j+2)) + "%";
+//         romElement.style.left = String(100/46*((i%8)+2)) + "%";
+
+//         //add romElement to body
+//         document.querySelector(".gridcontainer").appendChild(romElement);    
+//     }
+//     return true;
+// }
+
+const updateRom_DOM = () => {
+    for(var i = 0; i<224; i++){
+        buf_string = rom_dec[i].toString(16).toUpperCase();
+        if(buf_string.length === 1)
+            buf_string = '0' + buf_string;
+        document.getElementById("romElement" + String(i)).textContent = buf_string;
+    }
+
 }

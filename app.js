@@ -27,44 +27,223 @@ window.addEventListener('resize', function () {
 });
 }
 
+/*************************************************************** Classes ***************************************************************/
+
+
+/******************************* ROM *********************************** */
+class Rom {
+	constructor() {
+		this.dec_array = this.init_dec();
+		this.init_DOM();		
+	}
+	
+	init_dec() {
+		let buf_arr = [];
+		for (let i = 0; i < 224; i++)
+        	buf_arr.push(255);
+		return buf_arr;	
+    }
+	
+	init_DOM() {
+	    let j = 0;
+	    for(var i = 0; i<224; i++){
+	        //create a romElement
+	        let romElement = document.createElement('p');
+	        romElement.classList.add('romElement', 'grid-template');
+	        romElement.id = "romElement" + String(i);
+	
+	        //after every 8th romElement -> new line should be filled
+	        if(!(i%8) && i !== 0)
+	            j++;
+	
+	        romElement.textContent = 'FF';
+	
+	        //define Position of romElement
+	        romElement.style.top = String(100/32*(j+2)) + "%";
+	        romElement.style.left = String(100/46*((i%8)+2)) + "%";
+	
+	        //add romElement to body
+	        document.querySelector(".gridcontainer").appendChild(romElement);    
+	    }
+	    return true;
+    }
+
+    update() {
+		let buf_string = '';
+		let linker_string = document.getElementById('linker-file').value.replace(/\r\n|\n|\r/gm, '');
+		
+		//update dec_arr
+		for (let i = 0; i < linker_string.length; i++) {
+        	if(linker_string[i] === ':'){
+            	if(linker_string[i+8] === '1')
+                	break;
+            	let length = Number(linker_string[i+2]);
+            	let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
+            
+            	for (let j = 0; j < length+2; j+=2) {
+                	this.dec_array[adress+j/2] = (convertHexToInt(linker_string[i+9+j]+linker_string[i+10+j]));                
+            	}   
+        	}
+    	}
+		
+		//update DOM
+		for(let i = 0; i<224; i++){
+        	buf_string = this.dec_array[i].toString(16).toUpperCase();
+        	if(buf_string.length === 1)
+            	buf_string = '0' + buf_string;
+        	document.getElementById("romElement" + String(i)).textContent = buf_string;
+		}
+	}
+}
+
+/******************************* RedRactangle *********************************** */
+class RedRactangle {
+
+}
+
+/******************************* IOs *********************************** */
+
+class IO{
+	constructor(IO_DOM){
+		this.dec = 255;
+		this.DOM = IO_DOM;
+	}
+	
+	update(decimal_number){
+		this.dec = decimal_number;
+		this.DOM.textcontent = convertNumberToHex(decimal_number);
+	}
+}
+
+/******************************* Register *********************************** */
+
+class Register_x2 {
+	constructor(register_DOM){
+		this.DOM = register_DOM;
+		this.dec = 255;
+	}
+	
+	update(decimal_number){
+		this.dec = decimal_number;
+		this.DOM.textContent = convertIntToHex(decimal_number);		
+	}
+	
+}
+
+class Register_x4 {
+	constructor(register_DOM){
+		this.dec = 0;
+		this.DOM = register_DOM;
+		this.hi_dec = 0;
+		this.low_dec = 0;
+	}
+	
+	update(decimal_number){
+		this.dec = decimal_number;
+		this.DOM.textContent = convertNumberToHex_4digits(decimal_number);
+	}	
+	
+	update_low(decimal_number){
+		let buf_string = this.DOM.textContent;
+		this.low_dec = decimal_number;
+		this.DOM.textContent = buf_string[0] + buf_string[1] + convertIntToHex(decimal_number);
+	}
+	
+	update_hi(decimal_number){
+		let buf_string = this.DOM.textContent;
+		this.hi_dec = decimal_number;
+		this.DOM.textContent = convertIntToHex(decimal_number) + buf_string[2] + buf_string[3];
+	}
+}
+
+/******************************* Flags *********************************** */
+
+class Flags {
+	constructor(c_flag_DOM, z_flag_DOM, p_flag_DOM, s_flag_DOM){
+		this.c_dec = 0;
+		this.z_dec = 0;
+		this.p_dec = 0;
+		this.s_dec = 0;
+		this.c_DOM = c_flag_DOM;
+		this.z_DOM = z_flag_DOM;
+		this.p_DOM = p_flag_DOM;
+		this.s_DOM = s_flag_DOM;
+	}
+	
+	update(c_0or1, z_0or1, p_0or1, s_0or1){
+		this.c_dec = c_0or1;
+		this.z_dec = z_0or1;
+		this.p_dec = p_0or1;
+		this.s_dec = s_0or1;
+		this.c_DOM.textContent = c_0or1.toString();
+		this.z_DOM.textContent = z_0or1.toString();
+		this.p_DOM.textContent = p_0or1.toString();
+		this.s_DOM.textContent = s_0or1.toString();
+	}	
+}
+
+/******************************* mc8_command ********************************* */
+
+class mc8_command {
+    constructor(assembler_notation_string, maschinecode_decimal, maschinecode_hex_string, bytes, flags_array, animationFunction){
+        this.assembler_notation_string = assembler_notation_string;
+        this.maschinecode_decimal = maschinecode_decimal;
+        this.maschinecode_hex_string = maschinecode_hex_string;
+        this.bytes = bytes;
+        this.flags_array = flags_array;
+        this.animationFunction = animationFunction;
+    }
+    
+    async runAnimation() {
+        return this.animationFunction();        
+    }
+}
 
 //variables
 let isFullscreen = false;
 let ANIMATION_SPEED = 2;
 let noAnimation = false;
-let completeExecution = false;
-let rocketSpeed = false;
-let WAITTIME = 500;
-let NOANIMATIONTIME = 30;
-let FRAMES = 60;
 let animationRuns = false;
 let stopPressed = true;
-let lastRenderTime = 0;
-const FRAMERATE = 50;
-let stepCounter = 0;
-let frameCounter = 0;
-let isMovAnimationFinished = true;
-let isMovAnimation = false;
-let path = 0;   //animation Path
-let mov = 0;    //moving Object
+let completeExecution = false;
+let rocketSpeed = false;
+const WAITTIME = 500;
+const NOANIMATIONTIME = 30;
+const FRAMES = 60;
 
 //variables DOM
-let IO1 = document.getElementById('IO1');
-let I02 = document.getElementById('IO2');
-let I03 = document.getElementById('IO3');
-let A = document.getElementById('A');
-let c_flag = document.getElementById('c_flag');
-let z_flag = document.getElementById('z_flag');
-let p_flag = document.getElementById('p_flag');
-let s_flag = document.getElementById('s_flag');
-let B = document.getElementById('B');
-let C = document.getElementById('C');
-let HL = document.getElementById('HL');
-let IX = document.getElementById('IX');
-let SP = document.getElementById('SP');
-let PC = document.getElementById('PC');
-let ZR = document.getElementById('ZR');
-let IR = document.getElementById('IR');
+const IO1 = new IO(document.getElementById('IO1'));
+const IO2 = new IO(document.getElementById('IO2'));
+const IO3 = new IO(document.getElementById('IO3'));
+const A   = new Register_x2(document.getElementById('A'));
+const B   = new Register_x2(document.getElementById('B'));
+const C   = new Register_x2(document.getElementById('C'));
+const IR  = new Register_x2(document.getElementById('IR'));
+const HL  = new Register_x4(document.getElementById('HL'));
+const IX  = new Register_x4(document.getElementById('IX'));
+const SP  = new Register_x4(document.getElementById('SP'));
+const PC  = new Register_x4(document.getElementById('PC'));
+const ZR  = new Register_x4(document.getElementById('ZR'));
+const FLAGS = new Flags(document.getElementById('c_flag'),document.getElementById('z_flag'),document.getElementById('p_flag'),document.getElementById('s_flag'));
+const ROM = new Rom();
+
+
+// let IO1 = document.getElementById('IO1');
+// let I02 = document.getElementById('IO2');
+// let I03 = document.getElementById('IO3');
+// let A = document.getElementById('A');
+// let c_flag = document.getElementById('c_flag');
+// let z_flag = document.getElementById('z_flag');
+// let p_flag = document.getElementById('p_flag');
+// let s_flag = document.getElementById('s_flag');
+// let B = document.getElementById('B');
+// let C = document.getElementById('C');
+// let HL = document.getElementById('HL');
+// let IX = document.getElementById('IX');
+// let SP = document.getElementById('SP');
+// let PC = document.getElementById('PC');
+// let ZR = document.getElementById('ZR');
+// let IR = document.getElementById('IR');
 let assemblerCommand = document.getElementById('assemblerCommand');
 let stepNumber = document.getElementById('stepNumber');
 let stepDescription = document.getElementById('stepDescription');
@@ -74,9 +253,9 @@ let irArrow = document.getElementById('ir_arrow');
 let WR = document.getElementById('WR');
 let RD = document.getElementById('RD');
 let M = document.getElementById('M');
-let IO = document.getElementById('IO');
-let rom = document.querySelector(".Adresse-000x-1FFx");
-let ram = document.getElementsByClassName("Adresse-200x-3FFx");
+let io = document.getElementById('IO');
+// let rom = document.querySelector(".Adresse-000x-1FFx");
+// let ram = document.getElementsByClassName("Adresse-200x-3FFx");
 let settings = document.getElementById('settings');
 
 let linker_string = '';
@@ -119,111 +298,101 @@ const commands = [
 ]
 
 
-
-class mc8_command {
-    constructor(assembler_notation_string, maschinecode_decimal, maschinecode_hex_string, bytes, flags_array, animationFunction){
-        this.assembler_notation_string = assembler_notation_string;
-        this.maschinecode_decimal = maschinecode_decimal;
-        this.maschinecode_hex_string = maschinecode_hex_string;
-        this.bytes = bytes;
-        this.flags_array = flags_array;
-        this.animationFunction = animationFunction;
-    }
-    
-    async runAnimation() {
-        return this.animationFunction();        
-    }
-}
-
-
-
-
-
 /*********************************** rom/ram ************************************/
 /****************** convert Hex/Int *******************/
-const convertHexToInt = (hexString) => {
-    return parseInt(hexString, 16);
+const convertHexToInt = (hex_string) => {
+    return parseInt(hex_string, 16);
 }
 
-const convertIntToHex_4digits = (intNum) => {
-    intNum = intNum.toString(16);
-    intNum = intNum.toUpperCase();
-    let len = intNum.length;
+const convertNumberToHex_4digits = (number_dec) => {
+    number_dec = number_dec.toString(16);
+    number_dec = number_dec.toUpperCase();
+    let len = number_dec.length;
     for(i=4; i>len;i--){
-        intNum = '0' +intNum;
+        number_dec = '0' +number_dec;
     }
-    return intNum;
+    return number_dec;
+}
+
+const convertNumberToHex_2digits = (number_dec) => {
+    number_dec = number_dec.toString(16);
+    number_dec = number_dec.toUpperCase();
+    let len = number_dec.length;
+    for(i=2; i>len;i--){
+        number_dec = '0' + number_dec;
+    }
+    return number_dec;
 }
 
 /****************** linker-to-rom *******************/
 
-class opCommand {
-    constructor(commandLength, adress, commands_array){
-        this.commandLength = commandLength;
-        this.adress = adress;
-        this.commands_array = commands_array;
-    }
-}
+// class opCommand {
+//     constructor(commandLength, adress, commands_array){
+//         this.commandLength = commandLength;
+//         this.adress = adress;
+//         this.commands_array = commands_array;
+//     }
+// }
 
-const linkerString_to_opCommands = (linker_string) =>{
-    opCommands.length = 0;
-    for (let i = 0; i < linker_string.length; i++) {
-        if(linker_string[i] === ':'){
-            if(linker_string[i+8] === '1')
-                break;
-            let length = Number(linker_string[i+2]);
-            let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
-            let commands = [];
-            for (let j = 0; j < length+2; j+=2) {
-                commands.push(linker_string[i+9+j]+linker_string[i+10+j]);                
-            }
-            const command = new opCommand(length, adress, commands);
-            opCommands.push(command);     
-        }
-    }
-    return true;
-}
+// const linkerString_to_opCommands = (linker_string) =>{
+//     opCommands.length = 0;
+//     for (let i = 0; i < linker_string.length; i++) {
+//         if(linker_string[i] === ':'){
+//             if(linker_string[i+8] === '1')
+//                 break;
+//             let length = Number(linker_string[i+2]);
+//             let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
+//             let commands = [];
+//             for (let j = 0; j < length+2; j+=2) {
+//                 commands.push(linker_string[i+9+j]+linker_string[i+10+j]);                
+//             }
+//             const command = new opCommand(length, adress, commands);
+//             opCommands.push(command);     
+//         }
+//     }
+//     return true;
+// }
 
-const createRomArray  = (opCommands) => {
-    const rom_array = [];
-    for(var i = 0; i<224; i++){
-        rom_array.push('FF');
-    }
+// const createRomArray  = (opCommands) => {
+//     const rom_array = [];
+//     for(var i = 0; i<224; i++){
+//         rom_array.push('FF');
+//     }
 
-    for (let i = 0; i < opCommands.length; i++) {
-        for (let j = 0; j < opCommands[i].commandLength; j++) {
-            rom_array[opCommands[i].adress+j] = opCommands[i].commands_array[j];
-        }
-    }
-    return rom_array;
-}
+//     for (let i = 0; i < opCommands.length; i++) {
+//         for (let j = 0; j < opCommands[i].commandLength; j++) {
+//             rom_array[opCommands[i].adress+j] = opCommands[i].commands_array[j];
+//         }
+//     }
+//     return rom_array;
+// }
 
-romArray = createRomArray(opCommands);
+// romArray = createRomArray(opCommands);
 
-const initRom_DOM = () => {
-    let j = 0;
-    for(var i = 0; i<224; i++){
-        //create a romElement
-        let romElement = document.createElement('p');
-        romElement.classList.add('romElement', 'grid-template');
-        romElement.id = "romElement" + String(i);
+// const initRom_DOM = () => {
+//     let j = 0;
+//     for(var i = 0; i<224; i++){
+//         //create a romElement
+//         let romElement = document.createElement('p');
+//         romElement.classList.add('romElement', 'grid-template');
+//         romElement.id = "romElement" + String(i);
 
-        //after every 8th romElement -> new line should be filled
-        if(!(i%8) && i !== 0)
-            j++;
+//         //after every 8th romElement -> new line should be filled
+//         if(!(i%8) && i !== 0)
+//             j++;
 
-        romElement.textContent = 'FF';
+//         romElement.textContent = 'FF';
 
-        //define Position of romElement
-        romElement.style.top = String(100/32*(j+2)) + "%";
-        romElement.style.left = String(100/46*((i%8)+2)) + "%";
+//         //define Position of romElement
+//         romElement.style.top = String(100/32*(j+2)) + "%";
+//         romElement.style.left = String(100/46*((i%8)+2)) + "%";
 
-        //add romElement to body
-        document.querySelector(".gridcontainer").appendChild(romElement);    
-    }
-    return true;
-}
-initRom_DOM();
+//         //add romElement to body
+//         document.querySelector(".gridcontainer").appendChild(romElement);    
+//     }
+//     return true;
+// }
+// initRom_DOM();
 
 const initRam = () => {
     let j = 0;
@@ -253,13 +422,13 @@ const initRam = () => {
 }
 initRam();
 
-const updateRom = (romArray) => {
-    for(var i = 0; i<224; i++){
-        document.getElementById("romElement" + String(i)).textContent = romArray[i];
-    }
-}
+// const updateRom = (romArray) => {
+//     for(var i = 0; i<224; i++){
+//         document.getElementById("romElement" + String(i)).textContent = romArray[i];
+//     }
+// }
 
-const getRomElement = () => document.getElementById('romElement' + String(convertHexToInt(PC.textContent)));
+const getRomElement = () => document.getElementById('romElement' + String(PC.dec));
 
 /*********************************** bussystem and pathlogic ************************************/
 class Point{
@@ -337,17 +506,17 @@ const fixPoints = [
 //TODO: comment functions
 
 //AtoB functions
-const convertlabelToPoint = (elementIDString) =>{
+const convertlabelToPoint = (fixPointLabel_string) =>{
     for(let i=0; i<fixPoints.length;i++){
-        if(fixPoints[i].label === elementIDString)
+        if(fixPoints[i].label === fixPointLabel_string)
            return fixPoints[i];
     }
     return null;
 }
 
-const getPointIndex = (elementIDString) =>{
+const getPointIndex = (elementID_string) =>{
      for(let i=0; i<fixPoints.length;i++){
-         if(fixPoints[i].label === elementIDString)
+         if(fixPoints[i].label === elementID_string)
             return i;
      }
      return -1;
@@ -392,9 +561,9 @@ const getAtoBindexArray = (arrayZtoA, arrayZtoB) =>{
     return AtoB;
 }
 
-const romElementToROM1 = (romElementID) =>{
+const romElementToROM1 = (romElementID_string) =>{
     let toROM1 = [];
-    let romElement = document.getElementById(romElementID);
+    let romElement = document.getElementById(romElementID_string);
     let rEx = romElement.style.left.replace('%','');
     let rEy = romElement.style.top.replace('%','');
     rEx = Math.round(Number(rEx) *46/100);
@@ -408,22 +577,22 @@ const romElementToROM1 = (romElementID) =>{
     return toROM1;
 }
 
-const getPointsAtoB = (elementIDStringA, elementIDStringB) => {
+const getPointsAtoB = (fixPointLabel_A_string, fixPointLabel_B_string) => {
     let pointsAtoB = [];
     let pointA = 0;
     let pointB = 0;
 
-    if(elementIDStringA.includes('romElement')){
-        pointsAtoB = getPointsAtoB('ROM1',elementIDStringB);
-        pointsAtoB = romElementToROM1(elementIDStringA).concat(pointsAtoB);
+    if(fixPointLabel_A_string.includes('romElement')){
+        pointsAtoB = getPointsAtoB('ROM1',fixPointLabel_B_string);
+        pointsAtoB = romElementToROM1(fixPointLabel_A_string).concat(pointsAtoB);
         return pointsAtoB;
     }
     
-    pointA = convertlabelToPoint(elementIDStringA);
-    pointB = convertlabelToPoint(elementIDStringB);
+    pointA = convertlabelToPoint(fixPointLabel_A_string);
+    pointB = convertlabelToPoint(fixPointLabel_B_string);
 
-    pointsAtoB = getAtoBindexArray(getZeroToAindexArray(getPointIndex(elementIDStringA)),
-                                   getZeroToAindexArray(getPointIndex(elementIDStringB)));
+    pointsAtoB = getAtoBindexArray(getZeroToAindexArray(getPointIndex(fixPointLabel_A_string)),
+                                   getZeroToAindexArray(getPointIndex(fixPointLabel_B_string)));
 
     //convert Index-Array to Point-Array
     for (let i = 0; i < pointsAtoB.length; i++) {
@@ -449,7 +618,7 @@ const updateRedRectangle = (PC_IntValue) =>{
     //should always be on the position the PC is pointing at
     let xPos = PC_IntValue%8 +2;
     let yPos = Math.floor(PC_IntValue/8) + 2;
-    redRectangle.textContent = romArray[PC_IntValue];
+    redRectangle.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_IntValue]);
     redRectangle.style.left = String(100/46*(xPos)) + "%";
     redRectangle.style.top = String(100/32*(yPos)) + "%";
 }
@@ -493,7 +662,6 @@ const isRunning = async() => {
         }    
     }   
 }
-
 const Sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 const Sleep_Waittime = () => Sleep(WAITTIME);
@@ -533,7 +701,7 @@ const calcIntermediatePositions = (path) => {
     let bufferX = [];
     let bufferY = [];
     let posDiff = 0;
-    const interPointsQuantity = 12;
+    const interPointsQuantity = 12; //max Speed = 12
     const reciprocal = 1/interPointsQuantity;
     
     
@@ -583,39 +751,10 @@ const updatePosition = (movingObject, x, y) => {
     movingObject.aDiv.style.left = String(100/46*x) +"%";
 }
 
-const transfer_new = async(elementIDA_string, elementIDB_string) => {
+const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
     if(!noAnimation){
-        const path = getPointsAtoB(elementIDA_string, elementIDB_string);
-        let movingObject = createMovingObj(elementIDA_string, path);
-        let movingObjectCoordinates = calcIntermediatePositions(path);
-
-
-        for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
-            //ROM-BUS Schnittstelle
-            if(movingObjectCoordinates[0][i] === 9 && movingObjectCoordinates[1][i] === 2){
-                movingObject.aDiv.classList.add('square2x2' , 'h2mov');
-            }
-            if(await isRunning()){
-                updatePosition(movingObject, movingObjectCoordinates[0][i], movingObjectCoordinates[1][i]);
-                await Sleep(1000/FRAMES);
-            }  
-            else {
-                movingObject.aDiv.remove();
-                movingObject = 0;
-                return false;
-            }      
-        }
-
-        movingObject.aDiv.remove();
-        movingObject = 0;
-    }
-    return true;
-}
-
-const transfer = async(elementIDA_string, elementIDB_string) => {
-    if(!noAnimation){
-        const path = getPointsAtoB(elementIDA_string, elementIDB_string);
-        let movingObject = createMovingObj(elementIDA_string, path);
+        const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
+        let movingObject = createMovingObj(fixPointLabel_A_string, path);
         const movingObjectCoordinates = calcIntermediatePositions(path);
         const xCoord = movingObjectCoordinates[0];
         const yCoord = movingObjectCoordinates[1];
@@ -657,16 +796,16 @@ const conditionalPositionupdate = async(xCoord, yCoord, speed, movingObject) => 
 
 
 /********************************** single animations ****************************** */
-const add_yellow_background_for_WAITTIME = async(DOM_variable) => {
+const add_yellow_background_for_WAITTIME = async(variable_DOM) => {
     if(!await isRunning()){
         return false;
     }
     if(!noAnimation){
-        DOM_variable.classList.add('yellowBg');
-        DOM_variable.style = "color: black";
+        variable_DOM.classList.add('yellowBg');
+        variable_DOM.style = "color: black";
         await Sleep_Waittime();
-        DOM_variable.classList.remove('yellowBg');
-        DOM_variable.style = "";
+        variable_DOM.classList.remove('yellowBg');
+        variable_DOM.style = "";
     }else{
         await Sleep_NoAnimationTime();
     }
@@ -684,17 +823,17 @@ const description_update = async(description_string) => {
     return true;
 }
 
-const addArrow = async(element) => {
+const addArrow = async(register_DOM) => {
     if(!await isRunning()){
         return false;
     }
     if(!noAnimation){
-        if(element === PC){
+        if(register_DOM === PC.DOM){
             registerArrow.classList.add('PC_arrow');
             await Sleep_Waittime();
             registerArrow.classList.remove('PC_arrow');
         }
-        else if(element === IR){
+        else if(register_DOM === IR.DOM){
             irArrow.classList.add('ir_arrow');
             await Sleep_Waittime();
             irArrow.classList.remove('ir_arrow');
@@ -706,40 +845,43 @@ const addArrow = async(element) => {
 const updatePC = async() => {
     if(!await isRunning())
         return false;
-    PC.textContent = convertIntToHex_4digits(convertHexToInt(PC.textContent)+1);
-    updateRedRectangle(convertHexToInt(PC.textContent));
-    await add_yellow_background_for_WAITTIME(PC);
+    PC.DOM.textContent = convertNumberToHex_4digits(convertHexToInt(PC.DOM.textContent)+1);
+    updateRedRectangle(convertHexToInt(PC.DOM.textContent));
+    await add_yellow_background_for_WAITTIME(PC.DOM);
     return true;
 }
 
-const updateRegister_hex2 = async(register, hex2_string) => {
+const updateRegister_hex2 = async(register_DOM, hex2_string) => {
     if(!await isRunning())
         return false;
-    register.textContent = hex2_string;
-    await add_yellow_background_for_WAITTIME(register);
+    register_DOM.textContent = hex2_string;
+    await add_yellow_background_for_WAITTIME(register_DOM);
     return true;
 }
 
 const assemblerCommand_update = async(hex2digit_string) => {
     if(!await isRunning())
         return false;
-    add_yellow_background_for_WAITTIME(IR);
+    add_yellow_background_for_WAITTIME(IR.DOM);
     if(!change_assemblerCommand(hex2digit_string))
         return false;
-    await addArrow(IR);
+    await addArrow(IR.DOM);
     return true;
 }
 
 /********************************** composite animations ****************************** */
+
+
+
 const get_next_command = async() => {
     stepNumber.textContent = '0';
     if(await description_update('Hole nächsten Befehl')){
-        if(await addArrow(PC)){
+        if(await addArrow(PC.DOM)){
             if(await transfer('PC', 'ROM2')){
                 if(await transfer(getRomElement().id, "SW")){
-                    if(await updateRegister_hex2(IR, getRomElement().textContent)){
+                    if(await updateRegister_hex2(IR.DOM, getRomElement().textContent)){
                         if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow(PC)){
+                            if(await addArrow(PC.DOM)){
                                 if(await updatePC()){
                                     if(await description_update('Erkenne den Befehl')){
                                         if(await assemblerCommand_update(IR.textContent)){
@@ -759,12 +901,12 @@ const get_next_command = async() => {
 
 const movAdat_8 = async() => {
     if(await description_update('Hole den Parameter')){
-        if(await addArrow(PC)){
+        if(await addArrow(PC.DOM)){
             if(await transfer('PC', 'ROM2')){
                 if(await transfer(getRomElement().id, "A")){
-                    if(await updateRegister_hex2(A, getRomElement().textContent)){
+                    if(await updateRegister_hex2(A.DOM, getRomElement().textContent)){
                         if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow(PC)){
+                            if(await addArrow(PC.DOM)){
                                 if(await updatePC()){
                                     check_AnimationType();
                                     return true;
@@ -781,12 +923,12 @@ const movAdat_8 = async() => {
 
 const movBdat_8 = async() => {
     if(await description_update('Hole den Parameter')){
-        if(await addArrow(PC)){
+        if(await addArrow(PC.DOM)){
             if(await transfer('PC', 'ROM2')){
                 if(await transfer(getRomElement().id, "B")){
-                    if(await updateRegister_hex2(B, getRomElement().textContent)){
+                    if(await updateRegister_hex2(B.DOM, getRomElement().textContent)){
                         if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow(PC)){
+                            if(await addArrow(PC.DOM)){
                                 if(await updatePC()){
                                     check_AnimationType();
                                     return true;
@@ -992,12 +1134,7 @@ const toggleFullscreen = () => {
 
 const saveSettings = () => {
     stopBtn();
-    let str = document.getElementById('linker-file').value;
-    linkerString_to_opCommands(str.replace(/\r\n|\n|\r/gm, ''));
-    linkerString_to_rom_dec(str.replace(/\r\n|\n|\r/gm, ''));
-    romArray = createRomArray(opCommands);
-    updateRom_DOM();
-    program = romArray_to_programmList();
+    ROM.update();
     updateRedRectangle(0);
     console.log(run_program);
 
@@ -1011,9 +1148,11 @@ const mc8_command_list = [
     new mc8_command('MOV B,dat_8', 06, '06', 2, [0,0,0,0], movBdat_8)
 ];
 
-/******************************* ROM *********************************** */
+
+/******************************* Decoder *********************************** */
+
 const rom_dec = [];
-const initRom_dec = () =>{
+const initRom_dec = () => {
     for (let i = 0; i < 224; i++) {
         rom_dec.push(255);        
     } 
@@ -1021,7 +1160,7 @@ const initRom_dec = () =>{
 }
 initRom_dec();
 
-const linkerString_to_rom_dec = (linker_string) =>{
+const linkerString_to_rom_dec = (linker_string) => {
     for (let i = 0; i < linker_string.length; i++) {
         if(linker_string[i] === ':'){
             if(linker_string[i+8] === '1')
@@ -1037,36 +1176,13 @@ const linkerString_to_rom_dec = (linker_string) =>{
     return true;
 }
 
-// const initRom_DOM = () => {
-//     let j = 0;
-//     for(var i = 0; i<224; i++){
-//         //create a romElement
-//         let romElement = document.createElement('p');
-//         romElement.classList.add('romElement', 'grid-template');
-//         romElement.id = "romElement" + String(i);
-
-//         //after every 8th romElement -> new line should be filled
-//         if(!(i%8) && i !== 0)
-//             j++;
-
-//         romElement.textContent = 'FF';
-
-//         //define Position of romElement
-//         romElement.style.top = String(100/32*(j+2)) + "%";
-//         romElement.style.left = String(100/46*((i%8)+2)) + "%";
-
-//         //add romElement to body
-//         document.querySelector(".gridcontainer").appendChild(romElement);    
-//     }
-//     return true;
-// }
-
 const updateRom_DOM = () => {
-    for(var i = 0; i<224; i++){
+    let buf_string = '';
+	for(let i = 0; i<224; i++){
         buf_string = rom_dec[i].toString(16).toUpperCase();
         if(buf_string.length === 1)
             buf_string = '0' + buf_string;
         document.getElementById("romElement" + String(i)).textContent = buf_string;
     }
-
 }
+

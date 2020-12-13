@@ -93,7 +93,11 @@ class Rom {
             	buf_string = '0' + buf_string;
         	document.getElementById("romElement" + String(i)).textContent = buf_string;
 		}
-	}
+    }
+    
+    getPCValue(PC_dec) {
+        return this.dec_array[PC_dec];
+    }
 }
 
 /******************************* RedRactangle *********************************** */
@@ -111,7 +115,7 @@ class IO{
 	
 	update(decimal_number){
 		this.dec = decimal_number;
-		this.DOM.textcontent = convertNumberToHex(decimal_number);
+		this.DOM.textcontent = convertNumberToHex_2digits(decimal_number);
 	}
 }
 
@@ -125,7 +129,7 @@ class Register_x2 {
 	
 	update(decimal_number){
 		this.dec = decimal_number;
-		this.DOM.textContent = convertIntToHex(decimal_number);		
+		this.DOM.textContent = convertNumberToHex_2digits(decimal_number);		
 	}
 	
 }
@@ -185,9 +189,9 @@ class Flags {
 /******************************* mc8_command ********************************* */
 
 class mc8_command {
-    constructor(assembler_notation_string, maschinecode_decimal, maschinecode_hex_string, bytes, flags_array, animationFunction){
+    constructor(assembler_notation_string, maschinecode_dec, maschinecode_hex_string, bytes, flags_array, animationFunction){
         this.assembler_notation_string = assembler_notation_string;
-        this.maschinecode_decimal = maschinecode_decimal;
+        this.maschinecode_dec = maschinecode_dec;
         this.maschinecode_hex_string = maschinecode_hex_string;
         this.bytes = bytes;
         this.flags_array = flags_array;
@@ -202,9 +206,9 @@ class mc8_command {
 //variables
 let isFullscreen = false;
 let ANIMATION_SPEED = 2;
-let noAnimation = false;
-let animationRuns = false;
+let playPressed = false;
 let stopPressed = true;
+let noAnimation = false;
 let completeExecution = false;
 let rocketSpeed = false;
 const WAITTIME = 500;
@@ -227,23 +231,6 @@ const ZR  = new Register_x4(document.getElementById('ZR'));
 const FLAGS = new Flags(document.getElementById('c_flag'),document.getElementById('z_flag'),document.getElementById('p_flag'),document.getElementById('s_flag'));
 const ROM = new Rom();
 
-
-// let IO1 = document.getElementById('IO1');
-// let I02 = document.getElementById('IO2');
-// let I03 = document.getElementById('IO3');
-// let A = document.getElementById('A');
-// let c_flag = document.getElementById('c_flag');
-// let z_flag = document.getElementById('z_flag');
-// let p_flag = document.getElementById('p_flag');
-// let s_flag = document.getElementById('s_flag');
-// let B = document.getElementById('B');
-// let C = document.getElementById('C');
-// let HL = document.getElementById('HL');
-// let IX = document.getElementById('IX');
-// let SP = document.getElementById('SP');
-// let PC = document.getElementById('PC');
-// let ZR = document.getElementById('ZR');
-// let IR = document.getElementById('IR');
 let assemblerCommand = document.getElementById('assemblerCommand');
 let stepNumber = document.getElementById('stepNumber');
 let stepDescription = document.getElementById('stepDescription');
@@ -254,52 +241,10 @@ let WR = document.getElementById('WR');
 let RD = document.getElementById('RD');
 let M = document.getElementById('M');
 let io = document.getElementById('IO');
-// let rom = document.querySelector(".Adresse-000x-1FFx");
-// let ram = document.getElementsByClassName("Adresse-200x-3FFx");
 let settings = document.getElementById('settings');
 
-let linker_string = '';
-let opCommands = [];
-let romArray = [];
-let program = [];
 
-const commands = [
-    {
-        hex: "76",
-        assemb: "HALT",
-        flags: false,
-        index: 0,
-        wr: "0",
-        rd: "0",
-        m: "0",
-        io: "0",
-    },
-    {
-        hex: "3E",
-        assemb: "MOV A, dat_8",
-        flags: false,
-        index: 0,
-        wr: "1",
-        rd: "0",
-        m: "0",
-        io: "1",
-    },
-    {
-        hex: "06",
-        assemb: "MOV B, dat_8",
-        flags: false,
-        index: 0,
-        wr: "1",
-        rd: "0",
-        m: "0",
-        io: "1",
-    }
-    
-]
-
-
-/*********************************** rom/ram ************************************/
-/****************** convert Hex/Int *******************/
+/***************************************** conversion Hex/Int *********************************/
 const convertHexToInt = (hex_string) => {
     return parseInt(hex_string, 16);
 }
@@ -324,75 +269,6 @@ const convertNumberToHex_2digits = (number_dec) => {
     return number_dec;
 }
 
-/****************** linker-to-rom *******************/
-
-// class opCommand {
-//     constructor(commandLength, adress, commands_array){
-//         this.commandLength = commandLength;
-//         this.adress = adress;
-//         this.commands_array = commands_array;
-//     }
-// }
-
-// const linkerString_to_opCommands = (linker_string) =>{
-//     opCommands.length = 0;
-//     for (let i = 0; i < linker_string.length; i++) {
-//         if(linker_string[i] === ':'){
-//             if(linker_string[i+8] === '1')
-//                 break;
-//             let length = Number(linker_string[i+2]);
-//             let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
-//             let commands = [];
-//             for (let j = 0; j < length+2; j+=2) {
-//                 commands.push(linker_string[i+9+j]+linker_string[i+10+j]);                
-//             }
-//             const command = new opCommand(length, adress, commands);
-//             opCommands.push(command);     
-//         }
-//     }
-//     return true;
-// }
-
-// const createRomArray  = (opCommands) => {
-//     const rom_array = [];
-//     for(var i = 0; i<224; i++){
-//         rom_array.push('FF');
-//     }
-
-//     for (let i = 0; i < opCommands.length; i++) {
-//         for (let j = 0; j < opCommands[i].commandLength; j++) {
-//             rom_array[opCommands[i].adress+j] = opCommands[i].commands_array[j];
-//         }
-//     }
-//     return rom_array;
-// }
-
-// romArray = createRomArray(opCommands);
-
-// const initRom_DOM = () => {
-//     let j = 0;
-//     for(var i = 0; i<224; i++){
-//         //create a romElement
-//         let romElement = document.createElement('p');
-//         romElement.classList.add('romElement', 'grid-template');
-//         romElement.id = "romElement" + String(i);
-
-//         //after every 8th romElement -> new line should be filled
-//         if(!(i%8) && i !== 0)
-//             j++;
-
-//         romElement.textContent = 'FF';
-
-//         //define Position of romElement
-//         romElement.style.top = String(100/32*(j+2)) + "%";
-//         romElement.style.left = String(100/46*((i%8)+2)) + "%";
-
-//         //add romElement to body
-//         document.querySelector(".gridcontainer").appendChild(romElement);    
-//     }
-//     return true;
-// }
-// initRom_DOM();
 
 const initRam = () => {
     let j = 0;
@@ -422,13 +298,8 @@ const initRam = () => {
 }
 initRam();
 
-// const updateRom = (romArray) => {
-//     for(var i = 0; i<224; i++){
-//         document.getElementById("romElement" + String(i)).textContent = romArray[i];
-//     }
-// }
 
-const getRomElement = () => document.getElementById('romElement' + String(PC.dec));
+const getRomElement = (position_dec = PC.dec) => document.getElementById('romElement' + String(position_dec));
 
 /*********************************** bussystem and pathlogic ************************************/
 class Point{
@@ -626,8 +497,7 @@ const updateRedRectangle = (PC_IntValue) =>{
 /*********************************** moving object ************************************/
 const createMovingObj = (elementId, aPath) => {
     // select the div which should be moved
-    let element = document.getElementById(elementId);
-    let clone = element.cloneNode(true);
+    let clone = document.getElementById(elementId).cloneNode(true);
     clone.classList.add("boxborder" ,"rounded");
     clone.style.zIndex = "5";
     clone.id = "movingObject";
@@ -646,18 +516,19 @@ const createMovingObj = (elementId, aPath) => {
     return movObj;
 }
 
+
 /******************************* ANIMATION IMPLIMENTATION *************************************** */
 
 /******************** basic functions ********************/
 
-const isRunning = async() => {
+const isRunning = async() => { // function checks if play/pause/stop is pressed
     while(true) {
-        if(animationRuns)
+        if(playPressed)
             return true;
         else{               
             if(stopPressed)
                 return false;
-            console.log('waiting for userinput'); //if pause is pressed user will be caught in this loop till h
+            console.log('waiting for userinput'); //if pause is pressed user will be caught in this loop till pressing play or stop
             await Sleep(100);
         }    
     }   
@@ -668,13 +539,30 @@ const Sleep_Waittime = () => Sleep(WAITTIME);
 
 const Sleep_NoAnimationTime = () => Sleep(NOANIMATIONTIME);
 
-const check_AnimationType = () => {
+const check_AnimationType = () => { //checks the animation type
     if(!completeExecution){
         description_update('Prozessor angehalten');
         if(noAnimation)
-            animationRuns = false;
+            playPressed = false;
         noAnimation = false;
     }
+}
+
+const pushNextCommand = () => {
+    switch(IR.dec){
+        case 62: //3E
+            runningProgramm.push(movAdat_8);
+            break;
+        case 6: //06
+            runningProgramm.push(movBdat_8);
+            break;
+        case 118: //76
+            return;
+        default:
+            break;
+    }
+    runningProgramm.push(get_next_command);
+    return;
 }
 
 /******************** instant changes ********************/
@@ -682,11 +570,10 @@ const change_stepDescription = (StringDescription) => stepDescription.textConten
 
 const increaseStepNumber = () => stepNumber.textContent = String(Number(stepNumber.textContent)+1);
 
-const change_assemblerCommand = (hex2digit_string) =>{
-    for(i=0; i<commands.length; i++){
-        if(commands[i].hex === hex2digit_string){
-            assemblerCommand.textContent = commands[i].assemb;
-
+const change_assemblerCommand = () =>{
+    for(i=0; i<mc8_commands_array.length; i++){
+        if(mc8_commands_array[i].maschinecode_dec === IR.dec){
+            assemblerCommand.textContent = mc8_commands_array[i].assembler_notation_string;
             return true;
         }
     }
@@ -758,6 +645,7 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
         const movingObjectCoordinates = calcIntermediatePositions(path);
         const xCoord = movingObjectCoordinates[0];
         const yCoord = movingObjectCoordinates[1];
+        //await Sleep_Waittime(); 
         
         if(rocketSpeed){
             document.querySelector(".gridcontainer").classList.add('bussystem_yellow');
@@ -793,8 +681,6 @@ const conditionalPositionupdate = async(xCoord, yCoord, speed, movingObject) => 
     return true;
 }
 
-
-
 /********************************** single animations ****************************** */
 const add_yellow_background_for_WAITTIME = async(variable_DOM) => {
     if(!await isRunning()){
@@ -823,17 +709,17 @@ const description_update = async(description_string) => {
     return true;
 }
 
-const addArrow = async(register_DOM) => {
+const addArrow = async(register_string) => {
     if(!await isRunning()){
         return false;
     }
     if(!noAnimation){
-        if(register_DOM === PC.DOM){
+        if(register_string === 'PC'){
             registerArrow.classList.add('PC_arrow');
             await Sleep_Waittime();
             registerArrow.classList.remove('PC_arrow');
         }
-        else if(register_DOM === IR.DOM){
+        else if(register_string === 'IR'){
             irArrow.classList.add('ir_arrow');
             await Sleep_Waittime();
             irArrow.classList.remove('ir_arrow');
@@ -845,46 +731,51 @@ const addArrow = async(register_DOM) => {
 const updatePC = async() => {
     if(!await isRunning())
         return false;
-    PC.DOM.textContent = convertNumberToHex_4digits(convertHexToInt(PC.DOM.textContent)+1);
-    updateRedRectangle(convertHexToInt(PC.DOM.textContent));
+    //PC.DOM.textContent = convertNumberToHex_4digits(convertHexToInt(PC.DOM.textContent)+1);
+    PC.update(PC.dec + 1);
+    updateRedRectangle(PC.dec);
     await add_yellow_background_for_WAITTIME(PC.DOM);
     return true;
 }
 
-const updateRegister_hex2 = async(register_DOM, hex2_string) => {
+const updateRegister_hex2 = async(register_class, hex2_dec) => {
     if(!await isRunning())
         return false;
-    register_DOM.textContent = hex2_string;
-    await add_yellow_background_for_WAITTIME(register_DOM);
+    register_class.update(hex2_dec);
+    await add_yellow_background_for_WAITTIME(register_class.DOM);
     return true;
 }
 
-const assemblerCommand_update = async(hex2digit_string) => {
+const assemblerCommand_update = async() => {
     if(!await isRunning())
         return false;
     add_yellow_background_for_WAITTIME(IR.DOM);
-    if(!change_assemblerCommand(hex2digit_string))
+    if(!change_assemblerCommand()){
+        await addArrow('IR');
         return false;
-    await addArrow(IR.DOM);
+    }
+    await addArrow('IR');
     return true;
 }
 
+
 /********************************** composite animations ****************************** */
-
-
 
 const get_next_command = async() => {
     stepNumber.textContent = '0';
+    assemblerCommand.textContent = '';
+    const romEle = getRomElement();
     if(await description_update('Hole nächsten Befehl')){
-        if(await addArrow(PC.DOM)){
+        if(await addArrow('PC')){
             if(await transfer('PC', 'ROM2')){
-                if(await transfer(getRomElement().id, "SW")){
-                    if(await updateRegister_hex2(IR.DOM, getRomElement().textContent)){
+                if(await transfer(romEle.id, "SW")){
+                    if(await updateRegister_hex2(IR, ROM.getPCValue(PC.dec))){
                         if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow(PC.DOM)){
+                            if(await addArrow('PC')){
                                 if(await updatePC()){
                                     if(await description_update('Erkenne den Befehl')){
-                                        if(await assemblerCommand_update(IR.textContent)){
+                                        if(await assemblerCommand_update()){
+                                            pushNextCommand();
                                             return true;
                                         }
                                     }
@@ -900,15 +791,16 @@ const get_next_command = async() => {
 }
 
 const movAdat_8 = async() => {
+    const romEle = getRomElement();
     if(await description_update('Hole den Parameter')){
-        if(await addArrow(PC.DOM)){
+        if(await addArrow('PC')){
             if(await transfer('PC', 'ROM2')){
-                if(await transfer(getRomElement().id, "A")){
-                    if(await updateRegister_hex2(A.DOM, getRomElement().textContent)){
+                if(await transfer(romEle.id, 'A')){
+                    if(await updateRegister_hex2(A, ROM.getPCValue(PC.dec))){
                         if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow(PC.DOM)){
+                            if(await addArrow('PC')){
                                 if(await updatePC()){
-                                    check_AnimationType();
+                                    check_AnimationType(); //checking if program should pause (noAnimation)
                                     return true;
                                 }
                             }
@@ -922,15 +814,16 @@ const movAdat_8 = async() => {
 }
 
 const movBdat_8 = async() => {
+    const romEle = getRomElement();
     if(await description_update('Hole den Parameter')){
-        if(await addArrow(PC.DOM)){
+        if(await addArrow('PC')){
             if(await transfer('PC', 'ROM2')){
-                if(await transfer(getRomElement().id, "B")){
-                    if(await updateRegister_hex2(B.DOM, getRomElement().textContent)){
+                if(await transfer(romEle.id, 'B')){
+                    if(await updateRegister_hex2(B, ROM.getPCValue(PC.dec))){
                         if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow(PC.DOM)){
+                            if(await addArrow('PC')){
                                 if(await updatePC()){
-                                    check_AnimationType();
+                                    check_AnimationType(); //checking if program should pause (noAnimation)
                                     return true;
                                 }
                             }
@@ -943,48 +836,22 @@ const movBdat_8 = async() => {
     return false;
 }
 
-let programList = [get_next_command, movAdat_8, movBdat_8];
-
-const romArray_to_programmList = () => {
-    const arr = [];
-   
-    for (let i = 0; i < opCommands.length; i++) {
-        arr.push(get_next_command)
-        switch(opCommands[i].commands_array[0]){
-            case '3E':
-                arr.push(movAdat_8);
-                break;
-            case '06':
-                arr.push(movBdat_8);
-                break;
-            case'76':
-                return arr;
-            default:
-                break;
-        }
-    }
-    arr.push(get_next_command);
-    return arr;
-}
-
-program = romArray_to_programmList();
+let runningProgramm = [get_next_command];
 
 const run_program = async(currentTime) => {
     let i = 0;
     while(true){
-        if(!await program[i]()){
+        if(runningProgramm[i] === undefined)
+            return false;
+        if(!await runningProgramm[i]()){
             return false;
         } 
         i++;
     }
-    // for(let i = 0; i<program.length; i++){
-    //     if(!await program[i]()){
-    //         return false;
-    //     }
-    // }
 }
 
 const init = () => {
+    runningProgramm = [get_next_command];
     try {
         document.querySelector(".gridcontainer").removeChild(document.getElementById('movingObject'));
     } catch (error) {
@@ -995,34 +862,31 @@ const init = () => {
     } catch (error) {
         
     }
-    IO1.textContent = 'FF';
-    IO2.textContent = 'FF';
-    IO3.textContent = 'FF';
-    A.textContent = '00';
-    B.textContent = '00';
-    C.textContent = '00';
-    HL.textContent = '0000';
-    IX.textContent = '0000';
-    SP.textContent = '0000';
-    PC.textContent = '0000';
-    ZR.textContent = '0000';
-    IR.textContent = '00';
-    c_flag.textContent = '0';
-    z_flag.textContent = '0';
-    p_flag.textContent = '0';
-    s_flag.textContent = '0';
+    IO1.update(255);
+    IO2.update(255);
+    IO3.update(255);
+    A.update(0);
+    B.update(0);
+    C.update(0);
+    HL.update(0);
+    IX.update(0);
+    SP.update(0);
+    PC.update(0);
+    ZR.update(0);
+    IR.update(0);
+    FLAGS.update(0,0,0,0);
     WR.textContent = '0';
     RD.textContent = '0';
     M.textContent = '0';
-    IO.textContent = '0';
+    io.textContent = '0';
 
     stepNumber.textContent = '0';
     stepDescription.textContent = 'Prozessor angehalten';
     assemblerCommand.textContent = '';
     
-    updateRedRectangle(convertHexToInt(PC.textContent));
+    updateRedRectangle(convertHexToInt(PC.dec));
     noAnimation = false;
-    animationRuns = false;
+    playPressed = false;
     completeExecution = false;
 
     // let stepNumberBackground = document.getElementsByClassName('sNum')[0];
@@ -1038,7 +902,7 @@ const init = () => {
 /********************************** button functions ****************************** */
 
 function play(){
-    animationRuns = true;
+    playPressed = true;
     if(stopPressed){
         stopPressed = false;
         run_program();
@@ -1047,11 +911,11 @@ function play(){
 }
 function pause(){
     completeExecution = false;
-    animationRuns = false;
+    playPressed = false;
     noAnimation = false;
 }
 function stopBtn(){
-    animationRuns = false;
+    playPressed = false;
     stopPressed = true;
     init();
 }
@@ -1063,9 +927,6 @@ function increaseSpeed(){
         ANIMATION_SPEED = 6;
     if(ANIMATION_SPEED === 7)
         ANIMATION_SPEED = 12;
-    console.log(ANIMATION_SPEED);
-    // if(FRAMES < 200)
-    //     FRAMES += 30;
 }
 
 function decreaseSpeed(){
@@ -1075,27 +936,24 @@ function decreaseSpeed(){
         ANIMATION_SPEED = 6;
     if(ANIMATION_SPEED === 5)
         ANIMATION_SPEED = 4;
-    console.log(ANIMATION_SPEED)
-
-    // if(FRAMES > 30)
-    //     FRAMES -= 30;
 }
 
 function toggleTheme(){
     document.getElementsByTagName('html')[0].classList.toggle('black');
-    console.log(document.getElementsByTagName('h2'))
 }
 
 const rocketSpeed_on = () => {
-    console.log(rocketSpeed = true);
+    rocketSpeed = true;
 }
+
 const snailSpeed_on = () => {
-    console.log(rocketSpeed = false);
+    rocketSpeed = false;
 }
 
 const runNextSingleStep = () => {
     completeExecution = false;
     noAnimation = true;
+    
     play();
 }
 
@@ -1106,7 +964,6 @@ const runCompleteExecution = () => {
 }
 
 const toggleSettings = () => {
-    
     settings.classList.toggle('toggleDisplay');
 }
 
@@ -1133,56 +990,17 @@ const toggleFullscreen = () => {
 }
 
 const saveSettings = () => {
-    stopBtn();
+    stopBtn(); //init
     ROM.update();
     updateRedRectangle(0);
-    console.log(run_program);
-
-
     toggleSettings();
 }
 
 
-const mc8_command_list = [
-    new mc8_command('MOV A,dat_8', 62, '3E', 2, [0,0,0,0], movAdat_8),
-    new mc8_command('MOV B,dat_8', 06, '06', 2, [0,0,0,0], movBdat_8)
+/******************************* mc8_commands *********************************** */
+
+const mc8_commands_array = [
+    movAdat_8_command = new mc8_command('MOV A, dat_8', 62, '3E', 2, [0,0,0,0], movAdat_8),
+    movBdat_8_command = new mc8_command('MOV B, dat_8',  6, '06', 2, [0,0,0,0], movBdat_8)
+
 ];
-
-
-/******************************* Decoder *********************************** */
-
-const rom_dec = [];
-const initRom_dec = () => {
-    for (let i = 0; i < 224; i++) {
-        rom_dec.push(255);        
-    } 
-    return true;
-}
-initRom_dec();
-
-const linkerString_to_rom_dec = (linker_string) => {
-    for (let i = 0; i < linker_string.length; i++) {
-        if(linker_string[i] === ':'){
-            if(linker_string[i+8] === '1')
-                break;
-            let length = Number(linker_string[i+2]);
-            let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
-            
-            for (let j = 0; j < length+2; j+=2) {
-                rom_dec[adress+j/2] = (convertHexToInt(linker_string[i+9+j]+linker_string[i+10+j]));                
-            }   
-        }
-    }
-    return true;
-}
-
-const updateRom_DOM = () => {
-    let buf_string = '';
-	for(let i = 0; i<224; i++){
-        buf_string = rom_dec[i].toString(16).toUpperCase();
-        if(buf_string.length === 1)
-            buf_string = '0' + buf_string;
-        document.getElementById("romElement" + String(i)).textContent = buf_string;
-    }
-}
-

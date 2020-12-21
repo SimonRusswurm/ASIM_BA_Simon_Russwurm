@@ -18,18 +18,18 @@ body{display: flex; justify-content: center;}
     font-family: lato-light;
 }
 h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg;}
-h2{margin: 0; padding: 0; letter-spacing: 0.02em; color: #222222; font-family: lato-reg;}
-.h2mov{ letter-spacing: 0.02em; font-family: lato-bold;}
+h2{margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
+.h2mov{font-family: lato-bold;}
 h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light;}
-h4{margin: 0; padding: 0; letter-spacing: 0.02em; color: #222222; font-family: lato-reg;}
+h4{margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
 p{ margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
 
 button{
     width: 100%;
     height: 100%;
+    cursor: pointer;
     background-color: transparent;
     border-color: transparent;
-    cursor: pointer;
     box-sizing: border-box;    
 }
 
@@ -51,6 +51,8 @@ button:hover{
 }
 
 .boxborder{
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;
     border: 0.1px solid #6A6A6A;
 }
@@ -68,6 +70,9 @@ button:hover{
 }
 .rounded{
     border-radius: 0.5vw;
+}
+.lightrounded{
+    border-radius: 3px;
 }
 
 .black{
@@ -614,6 +619,120 @@ button:hover{
     top: 5%;
     left: 5%;
 
+}
+
+#linker-file{
+    position: absolute;
+    top: calc(100%/26*7);
+    left: calc(100%/39*2);
+    height: calc(100%/26*15);
+    width: calc(100%/39*13);
+    font-size: 13px;    
+    font-family: lato-reg;
+    letter-spacing: 0.2px;
+    padding: 0px 4px;
+    resize: none;
+}
+#linkerDatei{
+    position: absolute;
+    top: calc(100%/26*6);
+    left: calc(100%/39*2);
+}
+
+#command-select{
+    position: absolute;
+    top: calc(100%/26*4);
+    left: calc(100%/39*2);
+    width: calc(100%/39*13);
+    font-size: 13px;
+    /* font-family: lato-reg; */
+    letter-spacing: 0.2px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;  
+}
+
+#closeSettings:hover{
+    background-color: #19B2FF;
+
+}
+
+#konfigROM{
+    position: absolute;
+    top: calc(100%/26*2);
+    left: calc(100%/39*2);
+}
+#konfigIO{
+    position: absolute;
+    top: calc(100%/26*2);
+    left: calc(100%/39*17);
+}
+/* Radio */
+.radio{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+#ioKonfig {
+    position: absolute;
+    top: calc(100%/26*4);
+    left: calc(100%/39*17);
+}
+.adressInput{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 90%;
+}
+
+
+#io1Konfig{
+    position: absolute;
+    top: calc(100%/26*7);
+    left: calc(100%/39*17);
+    width: calc(100%/39*6);
+    height: calc(100%/26*6);
+}
+#io2Konfig{
+    position: absolute;
+    top: calc(100%/26*7);
+    left: calc(100%/39*24);
+    width: calc(100%/39*6);
+    height: calc(100%/26*6);
+}
+#io3Konfig{
+    position: absolute;
+    top: calc(100%/26*7);
+    left: calc(100%/39*31);
+    width: calc(100%/39*6);
+    height: calc(100%/26*6);
+}
+
+#konfigRAM{
+    position: absolute;
+    top: calc(100%/26*15);
+    left: calc(100%/39*17);
+}
+
+#Adressbereich{
+    position: absolute;
+    top: calc(100%/26*17);
+    left: calc(100%/39*17);
+}
+
+#adressRAM{
+    position: absolute;
+    top: calc(100%/26*17);
+    left: calc(100%/39*22);
+}
+
+#closeSettings{
+    position: absolute;
+    top: calc(100%/26*20);
+    left: calc(100%/39*32);
+    height: calc(100%/26*2);
+    width: calc(100%/39*5);
+    background-color: #19b2ff4d;
+    font-size: 10px;
 }
 .toggleDisplay{
     display: unset;

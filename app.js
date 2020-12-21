@@ -28,7 +28,66 @@ window.addEventListener('resize', function () {
 }
 
 /*************************************************************** Classes ***************************************************************/
+class PlayStatus{
+    constructor(){
+        this.play = false;
+        this.stop = true;
+        this.pause = false;
+        this.noAnim = false;
+        this.completeExe = false;
+        this.rocketSpeed = false;
+    }
 
+    getStatus(){
+        console.log('play: ' + this.play);
+        console.log('stop: ' + this.stop);
+        console.log('pause: ' + this.pause);
+        console.log('noAnim: ' + this.noAnim);
+        console.log('completeExe: ' + this.completeExe);
+        console.log('rocketSpeed: ' + this.rocketSpeed);
+    }
+
+    setPlay(){
+        this.play = true;
+        this.stop = false;
+        this.pause = false;
+    }
+
+    setPause(){
+        this.play = false;
+        this.stop = false;
+        this.pause = true;
+        this.completeExe = false;
+        this.noAnim = false;
+    }
+
+    setStop(){
+        this.play = false;
+        this.stop = true;
+        this.pause = false;
+        this.noAnim = false;
+        this.completeExe = false;
+        this.rocketSpeed = false;
+    }
+
+    setCompleteExecution(){
+        this.noAnim = true;
+        this.completeExe = true;
+    }
+
+    setNoAnimation(){
+        this.noAnim = true;
+    }
+
+    setRocketSpeed(){
+        this.rocketSpeed = true;
+    }
+
+    setSnailSpeed(){
+        this.rocketSpeed = false;
+    }
+
+}
 
 /******************************* ROM *********************************** */
 class Rom {
@@ -206,6 +265,7 @@ class mc8_command {
 //variables
 let isFullscreen = false;
 let ANIMATION_SPEED = 2;
+const playStatus = new PlayStatus();
 let playPressed = false;
 let stopPressed = true;
 let noAnimation = false;
@@ -214,6 +274,7 @@ let rocketSpeed = false;
 const WAITTIME = 500;
 const NOANIMATIONTIME = 30;
 const FRAMES = 60;
+
 
 //variables DOM
 const IO1 = new IO(document.getElementById('IO1'));
@@ -520,18 +581,26 @@ const createMovingObj = (elementId, aPath) => {
 /******************************* ANIMATION IMPLIMENTATION *************************************** */
 
 /******************** basic functions ********************/
-
+const pausePressed = async() =>{
+    while(true){
+        if(playStatus.play){
+            return true;
+        } else {
+            console.log('waiting for userinput');
+            await Sleep(100);
+        }
+    }
+}
 const isRunning = async() => { // function checks if play/pause/stop is pressed
     while(true) {
-        if(playPressed)
+        if(playStatus.play)
             return true;
-        else{               
-            if(stopPressed)
-                return false;
-            console.log('waiting for userinput'); //if pause is pressed user will be caught in this loop till pressing play or stop
-            await Sleep(100);
-        }    
-    }   
+        if(playStatus.stop)
+            throw Error('Stop Pressed');
+        
+        console.log('waiting for userinput'); //if pause is pressed user will be caught in this loop till pressing play or stop
+        await Sleep(100);
+    }
 }
 const Sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -539,13 +608,23 @@ const Sleep_Waittime = () => Sleep(WAITTIME);
 
 const Sleep_NoAnimationTime = () => Sleep(NOANIMATIONTIME);
 
-const check_AnimationType = () => { //checks the animation type
-    if(!completeExecution){
-        description_update('Prozessor angehalten');
-        if(noAnimation)
-            playPressed = false;
-        noAnimation = false;
+const check_completeExecution = () => {     //checks if completeExecution is true
+    if(!playStatus.completeExe){
+        if(playStatus.noAnim){
+            description_update('Prozessor angehalten');
+            playStatus.setPause();
+            playStatus.getStatus();
+        }
     }
+    
+    
+    // if(!completeExecution){                 //if completeExecution == true -> skip
+    //     if(noAnimation){                    //if noAnimation true but completeExecution == false -> stop Prozessor
+    //         description_update('Prozessor angehalten');
+    //         playPressed = false;
+    //     }  
+    //     noAnimation = false;                //reset to normal Animation after Prozessor was stopped
+    // }
 }
 
 const pushNextCommand = () => {
@@ -559,6 +638,7 @@ const pushNextCommand = () => {
         case 118: //76
             return;
         default:
+            //throw Error('push next command not found');
             break;
     }
     runningProgramm.push(get_next_command);
@@ -570,7 +650,7 @@ const change_stepDescription = (StringDescription) => stepDescription.textConten
 
 const increaseStepNumber = () => stepNumber.textContent = String(Number(stepNumber.textContent)+1);
 
-const change_assemblerCommand = () =>{
+const change_assemblerCommand = () =>{      //throws Error
     for(i=0; i<mc8_commands_array.length; i++){
         if(mc8_commands_array[i].maschinecode_dec === IR.dec){
             assemblerCommand.textContent = mc8_commands_array[i].assembler_notation_string;
@@ -578,7 +658,7 @@ const change_assemblerCommand = () =>{
         }
     }
     assemblerCommand.textContent = 'Befehl unbekannt';
-    return false;
+    throw Error('Unknown command');
 }
 
 //*********************************Moving Anmiations*********************************
@@ -639,23 +719,24 @@ const updatePosition = (movingObject, x, y) => {
 }
 
 const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
+    await isRunning();
     if(!noAnimation){
         const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
         let movingObject = createMovingObj(fixPointLabel_A_string, path);
         const movingObjectCoordinates = calcIntermediatePositions(path);
         const xCoord = movingObjectCoordinates[0];
         const yCoord = movingObjectCoordinates[1];
-        //await Sleep_Waittime(); 
+        //await Sleep_Waittime(); //intended pause to reduce lag
         
+        //TODO: arrows
         if(rocketSpeed){
             document.querySelector(".gridcontainer").classList.add('bussystem_yellow');
             await Sleep_Waittime();
             document.querySelector(".gridcontainer").classList.remove('bussystem_yellow');
             await Sleep_Waittime();
         } else {
-            for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
-                if(!await conditionalPositionupdate(xCoord[i], yCoord[i], ANIMATION_SPEED, movingObject))
-                    return false;
+            for (let i = 0; i < movingObjectCoordinates[0].length; i++) {  //iterate through Coordinates
+                await conditionalPositionupdate(xCoord[i], yCoord[i], ANIMATION_SPEED, movingObject)
             }
         }       
 
@@ -668,24 +749,22 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
 
 const conditionalPositionupdate = async(xCoord, yCoord, speed, movingObject) => {
     for (let j = 0; j < xCoord.length/speed; j++) {
-        if(await isRunning()){
-            updatePosition(movingObject, xCoord[j*speed], yCoord[j*speed]);
-            await Sleep(1000/FRAMES);
-        }  
-        else {
-            movingObject.aDiv.remove();
-            movingObject = 0;
-            return false;
-        }  
+        await isRunning()
+        updatePosition(movingObject, xCoord[j*speed], yCoord[j*speed]);
+        await Sleep(1000/FRAMES);
+        // else {
+        //     movingObject.aDiv.remove();
+        //     movingObject = 0;
+        //     return false;
+        // }  
     }
     return true;
 }
 
 /********************************** single animations ****************************** */
 const add_yellow_background_for_WAITTIME = async(variable_DOM) => {
-    if(!await isRunning()){
-        return false;
-    }
+    await isRunning()
+    
     if(!noAnimation){
         variable_DOM.classList.add('yellowBg');
         variable_DOM.style = "color: black";
@@ -765,75 +844,112 @@ const get_next_command = async() => {
     stepNumber.textContent = '0';
     assemblerCommand.textContent = '';
     const romEle = getRomElement();
-    if(await description_update('Hole nächsten Befehl')){
-        if(await addArrow('PC')){
-            if(await transfer('PC', 'ROM2')){
-                if(await transfer(romEle.id, "SW")){
-                    if(await updateRegister_hex2(IR, ROM.getPCValue(PC.dec))){
-                        if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow('PC')){
-                                if(await updatePC()){
-                                    if(await description_update('Erkenne den Befehl')){
-                                        if(await assemblerCommand_update()){
-                                            pushNextCommand();
-                                            return true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return false;
+    
+    await description_update('Hole nächsten Befehl');
+    await addArrow('PC');
+    await transfer('PC', 'ROM2');
+    await transfer(romEle.id, "SW");
+    await updateRegister_hex2(IR, ROM.getPCValue(PC.dec));
+    await description_update('Erhöhe Programmzähler um 1');
+    await addArrow('PC');
+    await updatePC();
+    await description_update('Erkenne den Befehl');
+    await assemblerCommand_update()
+    pushNextCommand();
+    return true;
+
+    // if(await description_update('Hole nächsten Befehl')){
+    //     if(await addArrow('PC')){
+    //         if(await transfer('PC', 'ROM2')){
+    //             if(await transfer(romEle.id, "SW")){
+    //                 if(await updateRegister_hex2(IR, ROM.getPCValue(PC.dec))){
+    //                     if(await description_update('Erhöhe Programmzähler um 1')){
+    //                         if(await addArrow('PC')){
+    //                             if(await updatePC()){
+    //                                 if(await description_update('Erkenne den Befehl')){
+    //                                     if(await assemblerCommand_update()){
+    //                                         pushNextCommand();
+    //                                         return true;
+    //                                     }
+    //                                 }
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // return false;
 }
 
 const movAdat_8 = async() => {
     const romEle = getRomElement();
-    if(await description_update('Hole den Parameter')){
-        if(await addArrow('PC')){
-            if(await transfer('PC', 'ROM2')){
-                if(await transfer(romEle.id, 'A')){
-                    if(await updateRegister_hex2(A, ROM.getPCValue(PC.dec))){
-                        if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow('PC')){
-                                if(await updatePC()){
-                                    check_AnimationType(); //checking if program should pause (noAnimation)
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return false;
+    await description_update('Hole den Parameter');
+    await addArrow('PC');
+    await transfer('PC', 'ROM2');
+    await transfer(romEle.id, 'A');
+    await updateRegister_hex2(A, ROM.getPCValue(PC.dec));
+    await description_update('Erhöhe Programmzähler um 1');
+    await addArrow('PC');
+    await updatePC();
+    check_completeExecution();
+    return true;
+    
+    // if(await description_update('Hole den Parameter')){
+    //     if(await addArrow('PC')){
+    //         if(await transfer('PC', 'ROM2')){
+    //             if(await transfer(romEle.id, 'A')){
+    //                 if(await updateRegister_hex2(A, ROM.getPCValue(PC.dec))){
+    //                     if(await description_update('Erhöhe Programmzähler um 1')){
+    //                         if(await addArrow('PC')){
+    //                             if(await updatePC()){
+    //                                 check_AnimationType(); //checking if program should pause (noAnimation)
+    //                                 return true;
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // return false;
 }
 
 const movBdat_8 = async() => {
     const romEle = getRomElement();
-    if(await description_update('Hole den Parameter')){
-        if(await addArrow('PC')){
-            if(await transfer('PC', 'ROM2')){
-                if(await transfer(romEle.id, 'B')){
-                    if(await updateRegister_hex2(B, ROM.getPCValue(PC.dec))){
-                        if(await description_update('Erhöhe Programmzähler um 1')){
-                            if(await addArrow('PC')){
-                                if(await updatePC()){
-                                    check_AnimationType(); //checking if program should pause (noAnimation)
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return false;
+    await description_update('Hole den Parameter');
+    await addArrow('PC');
+    await transfer('PC', 'ROM2');
+    await transfer(romEle.id, 'B');
+    await updateRegister_hex2(B, ROM.getPCValue(PC.dec));
+    await description_update('Erhöhe Programmzähler um 1');
+    await addArrow('PC');
+    await updatePC();
+    check_completeExecution();
+    return true;
+
+    // const romEle = getRomElement();
+    // if(await description_update('Hole den Parameter')){
+    //     if(await addArrow('PC')){
+    //         if(await transfer('PC', 'ROM2')){
+    //             if(await transfer(romEle.id, 'B')){
+    //                 if(await updateRegister_hex2(B, ROM.getPCValue(PC.dec))){
+    //                     if(await description_update('Erhöhe Programmzähler um 1')){
+    //                         if(await addArrow('PC')){
+    //                             if(await updatePC()){
+    //                                 check_completeExecution(); //checking if program should pause (noAnimation)
+    //                                 return true;
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // return false;
 }
 
 let runningProgramm = [get_next_command];
@@ -843,9 +959,17 @@ const run_program = async(currentTime) => {
     while(true){
         if(runningProgramm[i] === undefined)
             return false;
-        if(!await runningProgramm[i]()){
-            return false;
-        } 
+        try{
+            await runningProgramm[i]()
+            // if(!await runningProgramm[i]()){
+            //     return false;
+            // } 
+        }
+        catch(e){
+            console.log('In catch:');
+            console.log(e);
+        }
+        
         i++;
     }
 }
@@ -902,6 +1026,8 @@ const init = () => {
 /********************************** button functions ****************************** */
 
 function play(){
+    playStatus.setPlay();
+    
     playPressed = true;
     if(stopPressed){
         stopPressed = false;
@@ -910,11 +1036,15 @@ function play(){
     document.getElementById('play').toggleAttribute('buttonPressed');
 }
 function pause(){
+    playStatus.setPause();
+
     completeExecution = false;
     playPressed = false;
     noAnimation = false;
 }
 function stopBtn(){
+    playStatus.setStop();
+
     playPressed = false;
     stopPressed = true;
     init();
@@ -943,14 +1073,18 @@ function toggleTheme(){
 }
 
 const rocketSpeed_on = () => {
+    playStatus.setRocketSpeed();
     rocketSpeed = true;
 }
 
 const snailSpeed_on = () => {
+    playStatus.setSnailSpeed();
     rocketSpeed = false;
 }
 
 const runNextSingleStep = () => {
+    playStatus.setNoAnimation();
+    
     completeExecution = false;
     noAnimation = true;
     
@@ -958,6 +1092,8 @@ const runNextSingleStep = () => {
 }
 
 const runCompleteExecution = () => {
+    playStatus.setCompleteExecution();
+
     completeExecution = true;
     noAnimation = true;
     play();

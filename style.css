@@ -609,18 +609,19 @@ button:hover{
 }
 #innerSettings{
     position: absolute;
-    display: flex;
+    /* TODO --- remove grid*/
+    display: grid;
     justify-content: center;
     align-items: center;
+    grid-template-columns: repeat(39, 1fr);
+    grid-template-rows: repeat(26, 1fr);
     background-color: #FBFBFB;
     border: 2px solid #19B2FF;
     height: 90%;
     width: 90%;
     top: 5%;
     left: 5%;
-
 }
-
 #linker-file{
     position: absolute;
     top: calc(100%/26*7);
@@ -672,6 +673,23 @@ button:hover{
     display: grid;
     grid-template-columns: 1fr 3fr;
 }
+
+.radiostyle{
+    width: calc(100%/39*1);
+    height: calc(100%/26*1);
+}
+#radioIOmapped{
+    position: absolute;
+    top: calc(100%/26*4);
+    left: calc(100%/39*17);
+    width: calc(100%/39*1);
+    height: calc(100%/26*1);
+}
+#radioMemoryMap{
+    position: absolute;
+    top: calc(100%/26*5);
+    left: calc(100%/39*17);
+}
 #ioKonfig {
     position: absolute;
     top: calc(100%/26*4);
@@ -705,6 +723,9 @@ button:hover{
     left: calc(100%/39*31);
     width: calc(100%/39*6);
     height: calc(100%/26*6);
+}
+#io3Adress{
+    font-size: 1em;
 }
 
 #konfigRAM{

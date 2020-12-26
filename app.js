@@ -8,12 +8,12 @@ const resizeWindow = () => {
 	if(window.innerHeight*1.4375 > window.innerWidth){
         mc8.style.width = String(window.innerWidth) + "px";
         mc8.style.height = String(window.innerWidth/1.4375) + "px";
-        style.innerHTML = "h1{font-size: 1.46666vw;} p{font-size: 1.3913vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw}";
+        style.innerHTML = "h1{font-size: 1.46666vw;} p{font-size: 1.3913vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}";
         
     } else {
         mc8.style.width = String(window.innerHeight*1.4375) + "px";
         mc8.style.height = String(window.innerHeight) + "px";
-        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh}";
+        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
     }
 }
 
@@ -129,18 +129,19 @@ class Rom {
 
     update() {
 		let buf_string = '';
-		let linker_string = document.getElementById('linker-file').value.replace(/\r\n|\n|\r/gm, '');
+        let linker_string = document.getElementById('linker-file').value.replace(/\r\n|\n|\r/gm, '');
 		
 		//update dec_arr
 		for (let i = 0; i < linker_string.length; i++) {
         	if(linker_string[i] === ':'){
             	if(linker_string[i+8] === '1')
                 	break;
-            	let length = Number(linker_string[i+2]);
-            	let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
-            
-            	for (let j = 0; j < length+2; j+=2) {
-                	this.dec_array[adress+j/2] = (convertHexToInt(linker_string[i+9+j]+linker_string[i+10+j]));                
+                let length = Number(linker_string[i+2]);
+                let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
+                let command = '';
+
+            	for (let j = 0; j < length; j++) {
+                    this.dec_array[adress+j] = convertHexToInt(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
             	}   
         	}
     	}

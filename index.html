@@ -294,76 +294,106 @@
 
             <h1 id="dec" class="rectangle6x2 boxborder rounded">DEC</h1>
             
+            <!-- ************************************************** Settings *************************************************  -->
             <div id="settings" class="settingsWindow boxborder rounded">
                 <div id="innerSettings" class="boxborder rounded">
                     <h4 id="konfigROM">Konfiguration ROM:</h4>
                     <p id="linkerDatei">Linker-Datei:</p>
-                    <select name="command-select" class="lightrounded boxborder" id="command-select">
+                    <select name="command-select" class="lightrounded boxborder textareaFontSize" id="command-select">
                         <option value="own">Eigenes Programm</option>
                         <option value="fetch">Eklärung FETCH-Phase</option>
                         <option value="Bsp11">Bsp 11 -Memory mapped Ein- und Ausgabe</option>
                     </select>
-                    <textarea name="linker-file" class="lightrounded boxborder" id="linker-file">:020000003E01af&#10;:020002000602d4&#10;:020004003E03af&#10;:020006000604d4&#10;:020008003E05af&#10;:02000a000606d4</textarea>
+                    <textarea name="linker-file" class="lightrounded boxborder textareaFontSize" id="linker-file">:020000003E01af&#10;:020002000602d4&#10;:020004003E03af&#10;:020006000604d4&#10;:020008003E05af&#10;:02000a000606d4&#10;:04001e00DD2A01E0d6</textarea>
                     
 
                     <h4 id="konfigIO">Konfiguration IO-Bausteine:</h4>
-                    <input type="radio" id="radioIOmapped" class="radiostyle" name="radioMap" value="IOmapped" checked="checked">
-                    <input type="radio" id="radioMemoryMap" class="radiostyle" name="radioMap" value="Memory">
-                    <div id="ioKonfig" class="radio" >
-                        
+                    <div class="singleSettingUnit centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*17);">
+                        <input type="radio" id="radioIOmapped" class="radiostyle" name="radioMap" value="IOmapped" checked="checked">
+                    </div>
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>IO mapped</p>
-                        
+                    </div>
+                    <div class="singleSettingUnit centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*17);">
+                        <input type="radio" id="radioMemoryMap" class="radiostyle" name="radioMap" value="Memory">
+                    </div>
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>Memory map</p>
                     </div>
                     
+                    
+                    <!-- IO1 -->
                     <div id="io1Konfig" class="boxborder lightrounded grid-template">
-                        <p>IO1</p>
-                        <div class="adressInput" >
-                            <p>Adresse:</p>
-                            <textarea name="io1Adress" id="io1Adress" class="boxborder lightrounded" cols="4" rows="1" style="resize: none; text-align:right;">0000</textarea>
-                            <p>h</p>                        
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
+                            <textarea name="io1Adress" id="io1Adress" class="boxborder lightrounded textareaFontSize" style="resize: none; text-align:right;">0000</textarea>
                         </div>
-                        <div class="radio">
-                            <input type="radio" id="IO1In" name="IO1In" value="In" checked="checked">
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
+
+                        <div class="centered" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
+                            <input type="radio" class="radio" id="IO1In" name="IO1In" value="In" checked="checked">
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Eingang</p>
+                        </div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
                             <input type="radio" id="IO1Out" name="IO1In" value="Out">
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Ausgang</p>
                         </div>
                     </div>
 
                     <div id="io2Konfig" class="boxborder lightrounded grid-template">
-                        <p>IO2</p>
-                        <div class="adressInput" >
-                            <p>Adresse:</p>
-                            <textarea name="io2Adress" id="io2Adress" class="boxborder lightrounded" cols="4" rows="1" style="resize: none;  text-align:right;">0001</textarea>
-                            <p>h</p>                        
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
+                            <textarea name="io2Adress" id="io2Adress" class="boxborder lightrounded textareaFontSize" style="resize: none; text-align:right;">0000</textarea>
                         </div>
-                        <div class="radio">
-                            <input type="radio" id="IO2In" name="IO2In" value="In" >
+                        
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
+
+                        <div class="centered" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
+                            <input type="radio" class="radio" id="IO2In" name="IO2In" value="In" >
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Eingang</p>
+                        </div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
                             <input type="radio" id="IO2Out" name="IO2In" value="Out" checked="checked">
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Ausgang</p>
                         </div>
                     </div>
 
                     <div id="io3Konfig" class="boxborder lightrounded grid-template">
-                        <p>IO3</p>
-                        <div class="adressInput" >
-                            <p>Adresse:</p>
-                            <textarea name="io3Adress" id="io3Adress" class="boxborder lightrounded" cols="4" rows="1" style="resize: none; text-align:right;">0002</textarea>
-                            <p>h</p>                        
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
+                            <textarea name="io3Adress" id="io3Adress" class="boxborder lightrounded textareaFontSize" style="resize: none; text-align:right;">0000</textarea>
+                        </div>                        
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
+
+                        <div class="centered" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
+                            <input type="radio" class="radio" id="IO3In" name="IO3In" value="In" checked="checked">
                         </div>
-                        <div class="radio">
-                            <input type="radio" id="IO3In" name="IO3In" value="In" checked="checked">
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Eingang</p>
+                        </div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
                             <input type="radio" id="IO3Out" name="IO3In" value="Out">
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Ausgang</p>
                         </div>
                     </div>
 
+
                     <h4 id="konfigRAM">Konfiguration RAM:</h4>
                     <p id="Adressbereich">Adressbereich:</p>
-                    <select name="adressRAM" class="lightrounded boxborder" id="adressRAM">
+                    <select name="adressRAM" class="lightrounded boxborder textareaFontSize" id="adressRAM">
                         <option value="2000h">2000h - 3FFFh</option>
                         <option value="4000h">4000h - 5FFFh</option>
                         <option value="6000h">6000h - 7FFFh</option>
@@ -373,7 +403,7 @@
                         <option value="E000h">E000h - FFFFh</option>
                     </select>
 
-                    <button id="closeSettings" class="lightrounded boxborder" type="button" onclick="saveSettings()">Speichern</button>
+                    <button id="closeSettings" class="lightrounded boxborder" type="button" onclick="saveSettings()"><p>Speichern</p></button>
                 </div>
             </div>
             

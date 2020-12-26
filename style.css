@@ -49,6 +49,23 @@ button:hover{
     justify-items: center;
     align-items: center;
 }
+.centeredHorizontal{
+    display: grid;
+    align-content: center;
+} 
+.centeredVertical{
+    display: grid;
+    justify-items: center;    
+}
+.centered{
+    display: grid;
+    justify-items: center;
+    align-content: center;
+}
+.singleSettingUnit{
+    height: calc(100%/26*1);
+    width: calc(100%/39*1);
+}
 
 .boxborder{
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -627,11 +644,10 @@ button:hover{
     top: calc(100%/26*7);
     left: calc(100%/39*2);
     height: calc(100%/26*15);
-    width: calc(100%/39*13);
-    font-size: 13px;    
+    width: calc(100%/39*13);   
     font-family: lato-reg;
     letter-spacing: 0.2px;
-    padding: 0px 4px;
+    padding: 0px 0.7%;
     resize: none;
 }
 #linkerDatei{
@@ -645,8 +661,6 @@ button:hover{
     top: calc(100%/26*4);
     left: calc(100%/39*2);
     width: calc(100%/39*13);
-    font-size: 13px;
-    /* font-family: lato-reg; */
     letter-spacing: 0.2px;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -655,8 +669,17 @@ button:hover{
 
 #closeSettings:hover{
     background-color: #19B2FF;
-
 }
+textarea{
+    padding: 7% 0% 0% 0%;
+}
+
+/* input{  
+    height: 1vw;
+    width: 1vw;
+    min-width: 1vw;
+    min-height: 1vw;
+} */
 
 #konfigROM{
     position: absolute;
@@ -668,38 +691,30 @@ button:hover{
     top: calc(100%/26*2);
     left: calc(100%/39*17);
 }
-/* Radio */
-.radio{
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-}
 
-.radiostyle{
-    width: calc(100%/39*1);
-    height: calc(100%/26*1);
-}
-#radioIOmapped{
-    position: absolute;
-    top: calc(100%/26*4);
-    left: calc(100%/39*17);
-    width: calc(100%/39*1);
-    height: calc(100%/26*1);
-}
-#radioMemoryMap{
-    position: absolute;
-    top: calc(100%/26*5);
-    left: calc(100%/39*17);
-}
 #ioKonfig {
     position: absolute;
     top: calc(100%/26*4);
     left: calc(100%/39*17);
 }
+
 .adressInput{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     width: 90%;
+}
+#io1Adress{
+    width: 100%;
+    height: 100%;  
+}
+#io2Adress{
+    width: 100%;
+    height: 100%;  
+}
+#io3Adress{
+    width: 100%;
+    height: 100%;  
 }
 
 
@@ -723,9 +738,6 @@ button:hover{
     left: calc(100%/39*31);
     width: calc(100%/39*6);
     height: calc(100%/26*6);
-}
-#io3Adress{
-    font-size: 1em;
 }
 
 #konfigRAM{

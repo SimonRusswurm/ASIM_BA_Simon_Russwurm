@@ -27,6 +27,8 @@ window.addEventListener('resize', function () {
 });
 }
 
+
+
 /*************************************************************** Classes ***************************************************************/
 class PlayStatus{
     constructor(){
@@ -129,7 +131,7 @@ class Rom {
 
     update() {
 		let buf_string = '';
-        let linker_string = document.getElementById('linker-file').value.replace(/\r\n|\n|\r/gm, '');
+        let linker_string = linkerFile.value.replace(/\r\n|\n|\r/gm, '');
 		
 		//update dec_arr
 		for (let i = 0; i < linker_string.length; i++) {
@@ -138,7 +140,6 @@ class Rom {
                 	break;
                 let length = Number(linker_string[i+2]);
                 let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
-                let command = '';
 
             	for (let j = 0; j < length; j++) {
                     this.dec_array[adress+j] = convertHexToInt(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
@@ -267,11 +268,6 @@ class mc8_command {
 let isFullscreen = false;
 let ANIMATION_SPEED = 2;
 const playStatus = new PlayStatus();
-let playPressed = false;
-let stopPressed = true;
-let noAnimation = false;
-let completeExecution = false;
-let rocketSpeed = false;
 const WAITTIME = 500;
 const NOANIMATIONTIME = 30;
 const FRAMES = 60;
@@ -304,7 +300,24 @@ let RD = document.getElementById('RD');
 let M = document.getElementById('M');
 let io = document.getElementById('IO');
 let settings = document.getElementById('settings');
+let linkerFile = document.getElementById('linkerFile');
+let commandSelect = document.getElementById('commandSelect');
 
+
+commandSelect.addEventListener('input', function (){
+    switch(commandSelect.value){
+        case 'own':
+            linkerFile.textContent = 'Fügen Sie hier den Inhalt der vom Linker erzeugten .OBJ-Datei ein.\n(im Intel-HEX-Format)';
+            break;
+        case 'test':
+            linkerFile.textContent = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:020008003E05B3\n:02000A000606E8\n:00000001FF';
+            break;
+        default:
+            linkerFile.textContent = '';
+            break;
+
+    }
+})
 
 /***************************************** conversion Hex/Int *********************************/
 const convertHexToInt = (hex_string) => {
@@ -617,15 +630,6 @@ const check_completeExecution = () => {     //checks if completeExecution is tru
             playStatus.getStatus();
         }
     }
-    
-    
-    // if(!completeExecution){                 //if completeExecution == true -> skip
-    //     if(noAnimation){                    //if noAnimation true but completeExecution == false -> stop Prozessor
-    //         description_update('Prozessor angehalten');
-    //         playPressed = false;
-    //     }  
-    //     noAnimation = false;                //reset to normal Animation after Prozessor was stopped
-    // }
 }
 
 const pushNextCommand = () => {
@@ -659,7 +663,7 @@ const change_assemblerCommand = () =>{      //throws Error
         }
     }
     assemblerCommand.textContent = 'Befehl unbekannt';
-    throw Error('Unknown command');
+    return false;
 }
 
 //*********************************Moving Anmiations*********************************
@@ -721,7 +725,7 @@ const updatePosition = (movingObject, x, y) => {
 
 const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
     await isRunning();
-    if(!noAnimation){
+    if(!playStatus.noAnim){
         const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
         let movingObject = createMovingObj(fixPointLabel_A_string, path);
         const movingObjectCoordinates = calcIntermediatePositions(path);
@@ -730,7 +734,7 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
         //await Sleep_Waittime(); //intended pause to reduce lag
         
         //TODO: arrows
-        if(rocketSpeed){
+        if(playStatus.rocketSpeed){
             document.querySelector(".gridcontainer").classList.add('bussystem_yellow');
             await Sleep_Waittime();
             document.querySelector(".gridcontainer").classList.remove('bussystem_yellow');
@@ -753,11 +757,6 @@ const conditionalPositionupdate = async(xCoord, yCoord, speed, movingObject) => 
         await isRunning()
         updatePosition(movingObject, xCoord[j*speed], yCoord[j*speed]);
         await Sleep(1000/FRAMES);
-        // else {
-        //     movingObject.aDiv.remove();
-        //     movingObject = 0;
-        //     return false;
-        // }  
     }
     return true;
 }
@@ -766,7 +765,7 @@ const conditionalPositionupdate = async(xCoord, yCoord, speed, movingObject) => 
 const add_yellow_background_for_WAITTIME = async(variable_DOM) => {
     await isRunning()
     
-    if(!noAnimation){
+    if(!playStatus.noAnim){
         variable_DOM.classList.add('yellowBg');
         variable_DOM.style = "color: black";
         await Sleep_Waittime();
@@ -793,7 +792,7 @@ const addArrow = async(register_string) => {
     if(!await isRunning()){
         return false;
     }
-    if(!noAnimation){
+    if(!playStatus.noAnim){
         if(register_string === 'PC'){
             registerArrow.classList.add('PC_arrow');
             await Sleep_Waittime();
@@ -832,10 +831,9 @@ const assemblerCommand_update = async() => {
     add_yellow_background_for_WAITTIME(IR.DOM);
     if(!change_assemblerCommand()){
         await addArrow('IR');
-        return false;
+        throw Error('Unknown command');
     }
     await addArrow('IR');
-    return true;
 }
 
 
@@ -858,30 +856,6 @@ const get_next_command = async() => {
     await assemblerCommand_update()
     pushNextCommand();
     return true;
-
-    // if(await description_update('Hole nächsten Befehl')){
-    //     if(await addArrow('PC')){
-    //         if(await transfer('PC', 'ROM2')){
-    //             if(await transfer(romEle.id, "SW")){
-    //                 if(await updateRegister_hex2(IR, ROM.getPCValue(PC.dec))){
-    //                     if(await description_update('Erhöhe Programmzähler um 1')){
-    //                         if(await addArrow('PC')){
-    //                             if(await updatePC()){
-    //                                 if(await description_update('Erkenne den Befehl')){
-    //                                     if(await assemblerCommand_update()){
-    //                                         pushNextCommand();
-    //                                         return true;
-    //                                     }
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // return false;
 }
 
 const movAdat_8 = async() => {
@@ -896,26 +870,6 @@ const movAdat_8 = async() => {
     await updatePC();
     check_completeExecution();
     return true;
-    
-    // if(await description_update('Hole den Parameter')){
-    //     if(await addArrow('PC')){
-    //         if(await transfer('PC', 'ROM2')){
-    //             if(await transfer(romEle.id, 'A')){
-    //                 if(await updateRegister_hex2(A, ROM.getPCValue(PC.dec))){
-    //                     if(await description_update('Erhöhe Programmzähler um 1')){
-    //                         if(await addArrow('PC')){
-    //                             if(await updatePC()){
-    //                                 check_AnimationType(); //checking if program should pause (noAnimation)
-    //                                 return true;
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // return false;
 }
 
 const movBdat_8 = async() => {
@@ -930,27 +884,6 @@ const movBdat_8 = async() => {
     await updatePC();
     check_completeExecution();
     return true;
-
-    // const romEle = getRomElement();
-    // if(await description_update('Hole den Parameter')){
-    //     if(await addArrow('PC')){
-    //         if(await transfer('PC', 'ROM2')){
-    //             if(await transfer(romEle.id, 'B')){
-    //                 if(await updateRegister_hex2(B, ROM.getPCValue(PC.dec))){
-    //                     if(await description_update('Erhöhe Programmzähler um 1')){
-    //                         if(await addArrow('PC')){
-    //                             if(await updatePC()){
-    //                                 check_completeExecution(); //checking if program should pause (noAnimation)
-    //                                 return true;
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // return false;
 }
 
 let runningProgramm = [get_next_command];
@@ -1010,44 +943,29 @@ const init = () => {
     assemblerCommand.textContent = '';
     
     updateRedRectangle(convertHexToInt(PC.dec));
-    noAnimation = false;
-    playPressed = false;
-    completeExecution = false;
-
-    // let stepNumberBackground = document.getElementsByClassName('sNum')[0];
-    // let registerArrow = document.getElementById('registerArrow');
-    // let irArrow = document.getElementById('ir_arrow');
-    
-    // let rom = document.querySelector(".Adresse-000x-1FFx");
-    // let ram = document.getElementsByClassName("Adresse-200x-3FFx");
-    // let settings = document.getElementById('settings');
-
 }
 
 /********************************** button functions ****************************** */
 
 function play(){
-    playStatus.setPlay();
-    
-    playPressed = true;
-    if(stopPressed){
-        stopPressed = false;
+
+    if(playStatus.stop){
+        playStatus.setPlay();
         run_program();
     }
+    playStatus.setPlay();
+    
+    // if(stopPressed){
+    //     stopPressed = false;
+    //     run_program();
+    // }
     document.getElementById('play').toggleAttribute('buttonPressed');
 }
 function pause(){
     playStatus.setPause();
-
-    completeExecution = false;
-    playPressed = false;
-    noAnimation = false;
 }
 function stopBtn(){
     playStatus.setStop();
-
-    playPressed = false;
-    stopPressed = true;
     init();
 }
 
@@ -1075,28 +993,19 @@ function toggleTheme(){
 
 const rocketSpeed_on = () => {
     playStatus.setRocketSpeed();
-    rocketSpeed = true;
 }
 
 const snailSpeed_on = () => {
     playStatus.setSnailSpeed();
-    rocketSpeed = false;
 }
 
 const runNextSingleStep = () => {
-    playStatus.setNoAnimation();
-    
-    completeExecution = false;
-    noAnimation = true;
-    
+    playStatus.setNoAnimation();    
     play();
 }
 
 const runCompleteExecution = () => {
     playStatus.setCompleteExecution();
-
-    completeExecution = true;
-    noAnimation = true;
     play();
 }
 

@@ -639,7 +639,7 @@ button:hover{
     top: 5%;
     left: 5%;
 }
-#linker-file{
+#linkerFile{
     position: absolute;
     top: calc(100%/26*7);
     left: calc(100%/39*2);
@@ -656,7 +656,7 @@ button:hover{
     left: calc(100%/39*2);
 }
 
-#command-select{
+#commandSelect{
     position: absolute;
     top: calc(100%/26*4);
     left: calc(100%/39*2);

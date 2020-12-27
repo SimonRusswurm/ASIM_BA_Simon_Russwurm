@@ -299,12 +299,14 @@
                 <div id="innerSettings" class="boxborder rounded">
                     <h4 id="konfigROM">Konfiguration ROM:</h4>
                     <p id="linkerDatei">Linker-Datei:</p>
-                    <select name="command-select" class="lightrounded boxborder textareaFontSize" id="command-select">
+                    <select name="commandSelect" class="lightrounded boxborder textareaFontSize" id="commandSelect">
+                        <option value="" disabled selected hidden>Wählen Sie ein Programm</option>
                         <option value="own">Eigenes Programm</option>
+                        <option value="test">Testprogramm</option>
                         <option value="fetch">Eklärung FETCH-Phase</option>
                         <option value="Bsp11">Bsp 11 -Memory mapped Ein- und Ausgabe</option>
                     </select>
-                    <textarea name="linker-file" class="lightrounded boxborder textareaFontSize" id="linker-file">:020000003E01af&#10;:020002000602d4&#10;:020004003E03af&#10;:020006000604d4&#10;:020008003E05af&#10;:02000a000606d4&#10;:04001e00DD2A01E0d6</textarea>
+                    <textarea name="linkerFile" class="lightrounded boxborder textareaFontSize" id="linkerFile"></textarea>
                     
 
                     <h4 id="konfigIO">Konfiguration IO-Bausteine:</h4>

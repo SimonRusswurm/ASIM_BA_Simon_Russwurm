@@ -17,7 +17,7 @@ body{display: flex; justify-content: center;}
     src:url(fonts/Lato-Light.ttf);
     font-family: lato-light;
 }
-h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg;}
+h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg; cursor: pointer;}
 h2{margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
 .h2mov{font-family: lato-bold;}
 h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light;}
@@ -271,52 +271,48 @@ button:hover{
 }
 
 /* ******************************* IOs ******************************* */
-
-#io1{
+.ioArrow{
+    background-image: url(images/IOArrow.svg);
+    background-position: center center;
+    background-size: 37%;
+    background-repeat: no-repeat;
+}
+.ioArrowOUT{
+    background-image: url(images/IOArrowUP.svg);
+}
+#io1_h1{
     top: calc(100%/32*0);
     left: calc(100%/46*12);
 }
 #io1_arrow{
     top: calc(100%/32*0);
     left: calc(100%/46*14);
-    background-image: url(images/IOArrow.svg);
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 #IO1{
     top: calc(100%/32*0);
     left: calc(100%/46*16);
 }
 
-#io2{
+#io2_h1{
     top: calc(100%/32*0);
     left: calc(100%/46*20);
 }
 #io2_arrow{
     top: calc(100%/32*0);
     left: calc(100%/46*22);
-    background-image: url(images/IOArrow.svg);
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 #IO2{
     top: calc(100%/32*0);
     left: calc(100%/46*24);
 }
 
-#io3{
+#io3_h1{
     top: calc(100%/32*0);
     left: calc(100%/46*28);
 }
 #io3_arrow{
     top: calc(100%/32*0);
     left: calc(100%/46*30);
-    background-image: url(images/IOArrow.svg);
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 #IO3{
     top: calc(100%/32*0);
@@ -769,4 +765,60 @@ textarea{
 }
 .toggleDisplay{
     display: unset;
+}
+
+/* ---------------------------------hoverElements--------------------------------------- */
+.hoverElement{
+    display: none;
+    z-index: 5;
+    position: absolute;
+    background-color: yellow;
+    padding: 0.5%;
+}
+.toggleGrid{
+    display: grid;
+}
+#rom_hover{
+    grid-template-columns: 4fr 2fr 2fr;
+    grid-template-rows: repeat(4,1fr);
+    top: calc(100%/32*2);
+    left: calc(100%/46*0);
+    width: calc(100%/46*10);
+    height: calc(100%/32*4);
+}
+
+#ram_hover{
+    grid-template-columns: 4fr 2fr 2fr;
+    grid-template-rows: repeat(4,1fr);
+    top: calc(100%/32*2);
+    left: calc(100%/46*36);
+    width: calc(100%/46*10);
+    height: calc(100%/32*4);
+}
+
+#io1_hover{
+    grid-template-columns: 6fr 3fr;
+    grid-template-rows: repeat(3,1fr);
+    top: calc(100%/32*2);
+    left: calc(100%/46*12);
+    width: calc(100%/46*6);
+    height: calc(100%/32*3);
+}
+
+#io2_hover{
+    grid-template-columns: 6fr 3fr;
+    grid-template-rows: repeat(3,1fr);
+    top: calc(100%/32*2);
+    left: calc(100%/46*20);
+    width: calc(100%/46*6);
+    height: calc(100%/32*3);
+}
+
+#io3_hover{
+    grid-template-columns: 6fr 3fr;
+    grid-template-rows: repeat(3,1fr);
+    top: calc(100%/32*2);
+    left: calc(100%/46*28);
+    width: calc(100%/46*6);
+    height: calc(100%/32*3);
 }

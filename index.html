@@ -13,9 +13,15 @@
         <div class="gridcontainer">
             
             <!-- ************************** ROM **************************  -->
+            <div id="rom_hover" class="hoverElement boxborder rounded">
+                <p>ROM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p style="text-align: end;">0000h</p><p style="text-align: end;">0</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p style="text-align: end;">1FFFh</p><p style="text-align: end;">8191</p>
+            </div>
             <div class="ROM">
                 <div class="label grid-template boxborder topLeft">
-                    <h1>ROM</h1>
+                    <h1 id="rom_h1">ROM</h1>
                 </div>
                 <div class="Label-1-F grid-template boxborder topRight">
                     <p>0</p><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p>
@@ -112,55 +118,61 @@
             </div>
 			
 			<!-- ************************** RAM **************************  -->
+            <div id="ram_hover" class="hoverElement boxborder rounded">
+                <p>RAM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p id="ramStartAdress_hex" style="text-align: end;">2000h</p><p id="ramStartAdress_dec" style="text-align: end;">8192</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p id="ramEndAdress_hex"style="text-align: end;">3FFFh</p><p id="ramEndAdress_dec"style="text-align: end;">16383</p>
+            </div>
             <div class="RAM">
                 <div class="Label-1-F grid-template boxborder topLeft">
                     <p>0</p><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p>
                     <p>8</p><p>9</p><p>A</p><p>B</p><p>C</p><p>D</p><p>E</p><p>F</p>
                 </div>
                 <div class="label grid-template boxborder topRight">
-                    <h1>RAM</h1>
+                    <h1  id="ram_h1">RAM</h1>
                 </div>                    
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>200x</p>
+                    <p class="RamAdressLabel">200x</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>201x</p>
+                    <p class="RamAdressLabel">201x</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>202x</p>
+                    <p class="RamAdressLabel">202x</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>203x</p>
+                    <p class="RamAdressLabel">203x</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>204x</p>
+                    <p class="RamAdressLabel">204x</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>205x</p>
+                    <p class="RamAdressLabel">205x</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>206x</p>
+                    <p class="RamAdressLabel">206x</p>
                 </div>
 
                 <div class="points2 grid-template boxborder"></div>
@@ -169,58 +181,73 @@
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>3F9x</p>
+                    <p class="RamAdressLabel">3F9x</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>3FAx</p>
+                    <p class="RamAdressLabel">3FAx</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>3FBx</p>
+                    <p class="RamAdressLabel">3FBx</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>3FCx</p>
+                    <p class="RamAdressLabel">3FCx</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>3FDx</p>
+                    <p class="RamAdressLabel">3FDx</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder">
-                    <p>3FEx</p>
+                    <p class="RamAdressLabel">3FEx</p>
                 </div>
                 <div class="Adresse-200x-3FFx grid-template boxborder bottomLeft">
                     
                 </div>
                 <div class="Label-200x-3FFx grid-template boxborder bottomRight">
-                    <p>3FFx</p>
+                    <p class="RamAdressLabel">3FFx</p>
                 </div>       
             </div>
            
 
             <!-- ************************** IOs **************************  -->
-            <h1 id="io1" class="square2x2 boxborder topLeft bottomLeft">IO1</h1>
-            <div id="io1_arrow" class="square2x2 boxborder"></div>
+            <div id="io1_hover" class="hoverElement boxborder rounded">
+                <p>IO1</p><p></p>
+                <p>Adresse:</p><p id="io1Adress_hex" style="text-align: end;">0000h</p>
+                <p id="io1Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+            </div>
+            <h1 id="io1_h1" class="square2x2 boxborder topLeft bottomLeft">IO1</h1>
+            <div id="io1_arrow" class="square2x2 boxborder ioArrow"></div>
             <h2 id="IO1" class="square2x2 boxborder topRight bottom bottomRight">FF</h2>
 
-            <h1 id="io2" class="square2x2 boxborder topLeft bottomLeft">IO2</h1>
-            <div id="io2_arrow" class="square2x2 boxborder"></div>
+            <div id="io2_hover" class="hoverElement boxborder rounded">
+                <p>IO2</p><p></p>
+                <p>Adresse:</p><p id="io2Adress_hex" style="text-align: end;">0000h</p>
+                <p id="io2Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+            </div>
+            <h1 id="io2_h1" class="square2x2 boxborder topLeft bottomLeft">IO2</h1>
+            <div id="io2_arrow" class="square2x2 boxborder ioArrow ioArrowOUT"></div>
             <h2 id="IO2" class="square2x2 boxborder topRight bottom bottomRight">FF</h2>
 
-            <h1 id="io3" class="square2x2 boxborder topLeft bottomLeft">IO3</h1>
-            <div id="io3_arrow" class="square2x2 boxborder"></div>
+            <div id="io3_hover" class="hoverElement boxborder rounded" >
+                <p>IO3</p><p></p>
+                <p>Adresse:</p><p id="io3Adress_hex" style="text-align: end;">0000h</p>
+                <p id="io3Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+            </div>
+            <h1 id="io3_h1" class="square2x2 boxborder topLeft bottomLeft">IO3</h1>
+            <div id="io3_arrow" class="square2x2 boxborder ioArrow "></div>
             <h2 id="IO3" class="square2x2 boxborder topRight bottom bottomRight">FF</h2>
 
 
@@ -311,20 +338,19 @@
 
                     <h4 id="konfigIO">Konfiguration IO-Bausteine:</h4>
                     <div class="singleSettingUnit centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*17);">
-                        <input type="radio" id="radioIOmapped" class="radiostyle" name="radioMap" value="IOmapped" checked="checked">
+                        <input type="radio" id="radioIOmapped" class="radiostyle" name="radioMap" value="IO-mapped" checked="checked">
                     </div>
                     <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>IO mapped</p>
                     </div>
                     <div class="singleSettingUnit centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*17);">
-                        <input type="radio" id="radioMemoryMap" class="radiostyle" name="radioMap" value="Memory">
+                        <input type="radio" id="radioMemoryMap" class="radiostyle" name="radioMap" value="Memory-mapped">
                     </div>
                     <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>Memory map</p>
                     </div>
                     
                     
-                    <!-- IO1 -->
                     <div id="io1Konfig" class="boxborder lightrounded grid-template">
                         <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
@@ -348,10 +374,10 @@
                     </div>
 
                     <div id="io2Konfig" class="boxborder lightrounded grid-template">
-                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO2</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
-                            <textarea name="io2Adress" id="io2Adress" class="boxborder lightrounded textareaFontSize" style="resize: none; text-align:right;">0000</textarea>
+                            <textarea name="io2Adress" id="io2Adress" class="boxborder lightrounded textareaFontSize" style="resize: none; text-align:right;">0001</textarea>
                         </div>
                         
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
@@ -371,10 +397,10 @@
                     </div>
 
                     <div id="io3Konfig" class="boxborder lightrounded grid-template">
-                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO3</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
-                            <textarea name="io3Adress" id="io3Adress" class="boxborder lightrounded textareaFontSize" style="resize: none; text-align:right;">0000</textarea>
+                            <textarea name="io3Adress" id="io3Adress" class="boxborder lightrounded textareaFontSize" style="resize: none; text-align:right;">0002</textarea>
                         </div>                        
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
 

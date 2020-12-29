@@ -286,7 +286,7 @@ const IX  = new Register_x4(document.getElementById('IX'));
 const SP  = new Register_x4(document.getElementById('SP'));
 const PC  = new Register_x4(document.getElementById('PC'));
 const ZR  = new Register_x4(document.getElementById('ZR'));
-const FLAGS = new Flags(document.getElementById('c_flag'),document.getElementById('z_flag'),document.getElementById('p_flag'),document.getElementById('s_flag'));
+const FLAGS = new Flags(document.getElementById('C_Flag'),document.getElementById('Z_Flag'),document.getElementById('P_Flag'),document.getElementById('S_Flag'));
 const ROM = new Rom();
 
 let assemblerCommand = document.getElementById('assemblerCommand');
@@ -303,21 +303,125 @@ let settings = document.getElementById('settings');
 let linkerFile = document.getElementById('linkerFile');
 let commandSelect = document.getElementById('commandSelect');
 
+/***************************************** Hover variables *********************************/
+const rom_h1 = document.getElementById('rom_h1');
+rom_h1.addEventListener('mouseover', function() {
+    document.getElementById('rom_hover').classList.toggle('toggleGrid');
+});
+rom_h1.addEventListener('mouseleave', function() {
+    document.getElementById('rom_hover').classList.toggle('toggleGrid'); 
+});
 
-commandSelect.addEventListener('input', function (){
+const ram_h1 = document.getElementById('ram_h1');
+ram_h1.addEventListener('mouseover', function() {
+    document.getElementById('ramStartAdress_hex').textContent = convertNumberToHex_4digits(startAdressRam_dec) + 'h';
+    document.getElementById('ramStartAdress_dec').textContent = String(startAdressRam_dec);
+    document.getElementById('ramEndAdress_hex').textContent = convertNumberToHex_4digits(startAdressRam_dec+8192-1) + 'h';
+    document.getElementById('ramEndAdress_dec').textContent = String(startAdressRam_dec+8192-1);
+    document.getElementById('ram_hover').classList.toggle('toggleGrid');
+});
+ram_h1.addEventListener('mouseleave', function() {
+    document.getElementById('ram_hover').classList.toggle('toggleGrid'); 
+});
+
+const io1_h1 = document.getElementById('io1_h1');
+io1_h1.addEventListener('mouseover', function() {
+    document.getElementById('io1Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
+    document.getElementById('io1Adress_hex').textContent =  document.getElementById('io1Adress').value + 'h';
+    document.getElementById('io1_hover').classList.toggle('toggleGrid');
+});
+io1_h1.addEventListener('mouseleave', function() {
+    document.getElementById('io1_hover').classList.toggle('toggleGrid'); 
+});
+
+const io2_h1 = document.getElementById('io2_h1');
+io2_h1.addEventListener('mouseover', function() {
+    document.getElementById('io2Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
+    document.getElementById('io2Adress_hex').textContent =  document.getElementById('io2Adress').value + 'h';
+    document.getElementById('io2_hover').classList.toggle('toggleGrid');
+});
+io2_h1.addEventListener('mouseleave', function() {
+    document.getElementById('io2_hover').classList.toggle('toggleGrid'); 
+});
+
+const io3_h1 = document.getElementById('io3_h1');
+io3_h1.addEventListener('mouseover', function() {
+    document.getElementById('io3Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
+    document.getElementById('io3Adress_hex').textContent =  document.getElementById('io3Adress').value + 'h';
+    document.getElementById('io3_hover').classList.toggle('toggleGrid');
+});
+io3_h1.addEventListener('mouseleave', function() {
+    document.getElementById('io3_hover').classList.toggle('toggleGrid'); 
+});
+
+/***************************************** settings functions *********************************/
+commandSelect.addEventListener('input', function() {
     switch(commandSelect.value){
         case 'own':
-            linkerFile.textContent = 'Fügen Sie hier den Inhalt der vom Linker erzeugten .OBJ-Datei ein.\n(im Intel-HEX-Format)';
+            linkerFile.value = 'Fügen Sie hier den Inhalt der vom Linker erzeugten .OBJ-Datei ein.\n(im Intel-HEX-Format)';
             break;
         case 'test':
-            linkerFile.textContent = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:020008003E05B3\n:02000A000606E8\n:00000001FF';
+            linkerFile.value = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:020008003E05B3\n:02000A000606E8\n:00000001FF';
             break;
         default:
-            linkerFile.textContent = '';
+            linkerFile.value = '';
             break;
 
     }
 })
+
+let adressRAM = document.getElementById('adressRAM');
+let startAdressRam_dec = 8192;
+adressRAM.addEventListener('input', function() {  
+    switch (adressRAM.value) {
+        case '2000h':
+            changeRamAdress('20', '3F');
+            break;
+        case '4000h':
+            changeRamAdress('40', '5F');
+            break;
+        case '6000h':
+            changeRamAdress('60', '7F');
+            break;
+        case '8000h':
+            changeRamAdress('80', '9F');
+            break;
+        case 'A000h':
+            changeRamAdress('A0', 'BF');  
+            break;
+        case 'C000h':
+            changeRamAdress('C0', 'DF');
+            break;
+        case 'E000h':
+            changeRamAdress('E0', 'FF');
+            break;
+        default:
+            break;
+    }
+
+})
+
+const changeRamAdress = (hex1_string, hex2_string) => {
+    const pEle = document.getElementsByClassName('RamAdressLabel');
+    const str = ['0','1', '2','3','4','5','6','9','A','B','C','D','E','F'];
+    startAdressRam_dec = convertHexToInt(hex1_string + '00');
+    for (let i = 0; i < pEle.length; i++) {
+        if(i<7){
+            pEle[i].textContent = hex1_string + str[i] + 'x';
+        }else{
+            pEle[i].textContent = hex2_string + str[i] + 'x';
+        }
+    }
+}
+
+
+const changeInputArrow = (radioName_String) =>{
+    if(document.querySelector(`input[name= "${radioName_String}"]:checked`).value === Out){
+        document.getElementById(id_String).classList.toggle('')
+    }
+    
+}
+
 
 /***************************************** conversion Hex/Int *********************************/
 const convertHexToInt = (hex_string) => {

@@ -811,12 +811,12 @@ textarea{
 }
 #info{
     position: absolute;
+    cursor: pointer;
     top: calc(100%/26*16);
     left: calc(100%/39*31);
     height: calc(100%/26*2);
     width: calc(100%/39*6);
     background-color: #19b2ff4d;
-    font-size: 10px;
 }
 
 #info_hover{
@@ -829,7 +829,7 @@ textarea{
     top: calc(100%/26*0);
     left: calc(100%/39*0);
     height: calc(100%/26*26);
-    width: calc(100%/39*39);
+    width: calc(100%/39*31);
     background-color: #fbfbfbec;
     font-size: 10px;
 }

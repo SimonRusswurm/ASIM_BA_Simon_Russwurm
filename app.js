@@ -298,7 +298,7 @@ let irArrow = document.getElementById('ir_arrow');
 let WR = document.getElementById('WR');
 let RD = document.getElementById('RD');
 let M = document.getElementById('M');
-let io = document.getElementById('IO');
+let IO_DEC = document.getElementById('IO');
 let settings = document.getElementById('settings');
 let linkerFile = document.getElementById('linkerFile');
 let commandSelect = document.getElementById('commandSelect');
@@ -1351,6 +1351,91 @@ const assemblerCommand_update = async() => {
     await addArrow('IR');
 }
 
+const dec_display = document.getElementById('dec_display');
+const updateDEC = async(DECValue_string) => {
+    switch (DECValue_string) {
+        case 'readROM':
+            WR.textContent = '1';
+            RD.textContent = '0';
+            M.textContent = '0';
+            IO_DEC.textContent = '1';
+            dec_display.textContent = 'Lese von Rom';
+            break;
+        
+        case 'readRAM':
+            WR.textContent = '1';
+            RD.textContent = '0';
+            M.textContent = '0';
+            IO_DEC.textContent = '1';
+            dec_display.textContent = 'Lese von Ram';
+            break;
+
+        case 'writeRAM':
+            WR.textContent = '0';
+            RD.textContent = '1';
+            M.textContent = '0';
+            IO_DEC.textContent = '1';
+            dec_display.textContent = 'Schreibe auf Ram';
+            break;
+        
+        case 'readIO1':
+            WR.textContent = '1';
+            RD.textContent = '0';
+            M.textContent = '1';
+            IO_DEC.textContent = '0';
+            dec_display.textContent = 'Lese von IO1';
+            break;
+
+        case 'readIO2':
+            WR.textContent = '1';
+            RD.textContent = '0';
+            M.textContent = '1';
+            IO_DEC.textContent = '0';
+            dec_display.textContent = 'Lese von IO2';
+            break;
+
+        case 'readIO3':
+                WR.textContent = '1';
+                RD.textContent = '0';
+                M.textContent = '1';
+                IO_DEC.textContent = '0';
+                dec_display.textContent = 'Lese von IO3';
+                break;
+        
+        case 'writeIO1':
+            WR.textContent = '0';
+            RD.textContent = '1';
+            M.textContent = '1';
+            IO_DEC.textContent = '0';
+            dec_display.textContent = 'Schreibe auf IO1';
+            break;
+        
+        case 'writeIO2':
+            WR.textContent = '0';
+            RD.textContent = '1';
+            M.textContent = '1';
+            IO_DEC.textContent = '0';
+            dec_display.textContent = 'Schreibe auf IO2';
+            break;
+
+        case 'writeIO3':
+            WR.textContent = '0';
+            RD.textContent = '1';
+            M.textContent = '1';
+            IO_DEC.textContent = '0';
+            dec_display.textContent = 'Schreibe auf IO3';
+            break;
+    
+        default:
+            WR.textContent = '0';
+            RD.textContent = '0';
+            M.textContent = '0';
+            IO_DEC.textContent = '0';
+            dec_display.textContent = '';
+            break;
+    }
+}
+
 
 /********************************** composite animations ****************************** */
 
@@ -1361,8 +1446,10 @@ const get_next_command = async() => {
     
     await description_update('Hole nächsten Befehl');
     await addArrow('PC');
+    await updateDEC('readROM');
     await transfer('PC', 'ROM2');
     await transfer(romEle.id, "SW");
+    await updateDEC();
     await updateRegister_hex2(IR, ROM.getPCValue(PC.dec));
     await description_update('Erhöhe Programmzähler um 1');
     await addArrow('PC');
@@ -1377,8 +1464,10 @@ const movAdat_8 = async() => {
     const romEle = getRomElement();
     await description_update('Hole den Parameter');
     await addArrow('PC');
+    await updateDEC('readROM');
     await transfer('PC', 'ROM2');
     await transfer(romEle.id, 'A');
+    await updateDEC();
     await updateRegister_hex2(A, ROM.getPCValue(PC.dec));
     await description_update('Erhöhe Programmzähler um 1');
     await addArrow('PC');
@@ -1391,8 +1480,10 @@ const movBdat_8 = async() => {
     const romEle = getRomElement();
     await description_update('Hole den Parameter');
     await addArrow('PC');
+    await updateDEC('readROM');
     await transfer('PC', 'ROM2');
     await transfer(romEle.id, 'B');
+    await updateDEC();
     await updateRegister_hex2(B, ROM.getPCValue(PC.dec));
     await description_update('Erhöhe Programmzähler um 1');
     await addArrow('PC');
@@ -1452,7 +1543,7 @@ const init = () => {
     WR.textContent = '0';
     RD.textContent = '0';
     M.textContent = '0';
-    io.textContent = '0';
+    IO_DEC.textContent = '0';
 
     stepNumber.textContent = '0';
     stepDescription.textContent = 'Prozessor angehalten';

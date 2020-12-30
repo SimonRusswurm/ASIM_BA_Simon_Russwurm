@@ -1091,12 +1091,14 @@ const createMovingObj = (elementId, aPath) => {
 
 /******************** basic functions ********************/
 const pausePressed = async() =>{
+    let check = false;
     while(true){
-        if(playStatus.play){
-            return true;
-        } else {
+        if(playStatus.pause){
+            check = true
             console.log('waiting for userinput');
             await Sleep(100);
+        } else {
+            return check;
         }
     }
 }
@@ -1123,6 +1125,7 @@ const check_completeExecution = () => {     //checks if completeExecution is tru
             description_update('Prozessor angehalten');
             playStatus.setPause();
             playStatus.getStatus();
+            setButtonPressed();
         }
     }
 }
@@ -1269,6 +1272,10 @@ const add_yellow_background_for_WAITTIME = async(variable_DOM) => {
         variable_DOM.classList.add('yellowBg');
         variable_DOM.style = "color: black";
         await Sleep_Waittime();
+        if(await pausePressed()){
+            if(playStatus.play)
+                await Sleep(150);
+        }
         variable_DOM.classList.remove('yellowBg');
         variable_DOM.style = "";
     }else{
@@ -1296,11 +1303,19 @@ const addArrow = async(register_string) => {
         if(register_string === 'PC'){
             registerArrow.classList.add('PC_arrow');
             await Sleep_Waittime();
+            if(await pausePressed()){
+                if(playStatus.play)
+                    await Sleep(150);
+            }
             registerArrow.classList.remove('PC_arrow');
         }
         else if(register_string === 'IR'){
             irArrow.classList.add('ir_arrow');
             await Sleep_Waittime();
+            if(await pausePressed()){
+                if(playStatus.play)
+                    await Sleep(150);
+            }
             irArrow.classList.remove('ir_arrow');
         }
     } 
@@ -1391,14 +1406,19 @@ let runningProgramm = [get_next_command];
 const run_program = async(currentTime) => {
     let i = 0;
     while(true){
-        if(runningProgramm[i] === undefined)
+        if(runningProgramm[i] === undefined){
             return false;
+        }
         try{
             await runningProgramm[i]();
         }
         catch(e){
+            if(!playStatus.stop)
+                playStatus.setPause();
+            setButtonPressed();
             console.log('In catch:');
             console.log(e);
+            return false;
         }
         i++;
     }
@@ -1442,26 +1462,82 @@ const init = () => {
 }
 
 /********************************** button functions ****************************** */
+const play_DOM = document.getElementById('play');
+const pause_DOM = document.getElementById('pause');
+const stop_DOM = document.getElementById('stop');
+const slow_DOM = document.getElementById('slow');
+const fast_DOM = document.getElementById('fast');
+const singlestep_DOM = document.getElementById('singlestep');
+const fullcomand_DOM = document.getElementById('fullcomand');
 
+const setButtonPressed = () =>{
+
+    if(playStatus.play){
+        play_DOM.classList.add('buttonPressed');
+    }else{
+        try{
+            play_DOM.classList.remove('buttonPressed');
+        }catch{}
+    }
+    if(playStatus.pause){
+        pause_DOM.classList.add('buttonPressed');
+    }else{
+        try{
+            pause_DOM.classList.remove('buttonPressed');
+        }catch{}
+    }
+    if(playStatus.stop){
+        stop_DOM.classList.add('buttonPressed');
+    }else{
+        try{
+            stop_DOM.classList.remove('buttonPressed');
+        }catch{}
+    }
+    if(playStatus.rocketSpeed){
+        fast_DOM.classList.add('buttonPressed');
+        try{
+            slow_DOM.classList.remove('buttonPressed');
+        }catch{}
+    }else{
+        slow_DOM.classList.add('buttonPressed');
+        try{
+            fast_DOM.classList.remove('buttonPressed');
+        }catch{}
+    }    
+    if(playStatus.completeExe){
+        fullcomand_DOM.classList.add('buttonPressed');
+    }else{
+        try{
+            fullcomand_DOM.classList.remove('buttonPressed');
+        }catch{}
+    }
+    if(playStatus.noAnim && !playStatus.completeExe){
+        singlestep_DOM.classList.add('buttonPressed');
+    }else{
+        try{
+            singlestep_DOM.classList.remove('buttonPressed');
+        }catch{}
+    } 
+}
+setButtonPressed();
 function play(){
 
-    if(playStatus.stop){
+    if(playStatus.stop){ //only when stop is pressed(init), the programm will be started anew  
         playStatus.setPlay();
         run_program();
     }
     playStatus.setPlay();
+    setButtonPressed();
     
-    // if(stopPressed){
-    //     stopPressed = false;
-    //     run_program();
-    // }
-    document.getElementById('play').toggleAttribute('buttonPressed');
 }
 function pause(){
-    playStatus.setPause();
+    if(!playStatus.stop)
+        playStatus.setPause();
+    setButtonPressed();
 }
 function stopBtn(){
     playStatus.setStop();
+    setButtonPressed();
     init();
 }
 
@@ -1489,19 +1565,23 @@ function toggleTheme(){
 
 const rocketSpeed_on = () => {
     playStatus.setRocketSpeed();
+    setButtonPressed();
 }
 
 const snailSpeed_on = () => {
     playStatus.setSnailSpeed();
+    setButtonPressed();
 }
 
 const runNextSingleStep = () => {
     playStatus.setNoAnimation();    
+    setButtonPressed();
     play();
 }
 
 const runCompleteExecution = () => {
     playStatus.setCompleteExecution();
+    setButtonPressed();
     play();
 }
 

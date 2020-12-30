@@ -20,7 +20,7 @@ body{display: flex; justify-content: center;}
 h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg; cursor: pointer;}
 h2{margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
 .h2mov{font-family: lato-bold;}
-h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light;}
+h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light; cursor: pointer;}
 h4{margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
 p{ margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
 
@@ -516,6 +516,10 @@ button:hover{
 
 #dec{
     top: calc(100%/32*26);
+    left: calc(100%/46*26);
+}
+#dec_display{
+    top: calc(100%/32*26);
     left: calc(100%/46*28);
 }
 
@@ -620,6 +624,9 @@ button:hover{
     height: 100%;
     width: 100%;
 }
+.settingsWindow p{
+    color: black;
+}
 #innerSettings{
     position: absolute;
     /* TODO --- remove grid*/
@@ -663,19 +670,11 @@ button:hover{
     box-sizing: border-box;  
 }
 
-#closeSettings:hover{
-    background-color: #19B2FF;
-}
+
 textarea{
     padding: 7% 0% 0% 0%;
 }
 
-/* input{  
-    height: 1vw;
-    width: 1vw;
-    min-width: 1vw;
-    min-height: 1vw;
-} */
 
 #konfigROM{
     position: absolute;
@@ -754,18 +753,80 @@ textarea{
     left: calc(100%/39*22);
 }
 
+#breakpoints_div{
+    position: absolute;
+    top: calc(100%/26*23);
+    left: calc(100%/39*2);
+    margin: 0px 0px;
+}
+.noneDisplay{
+    display: none;
+}
+#errorWindow{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr;
+    position: absolute;
+    top: calc(100%/26*19);
+    left: calc(100%/39*17);
+    height: calc(100%/26*5);
+    width: calc(100%/39*13);
+    padding: 0.5%;
+    background-color: yellow;
+}
+
 #closeSettings{
     position: absolute;
-    top: calc(100%/26*20);
-    left: calc(100%/39*32);
+    top: calc(100%/26*22);
+    left: calc(100%/39*31);
     height: calc(100%/26*2);
-    width: calc(100%/39*5);
+    width: calc(100%/39*6);
     background-color: #19b2ff4d;
     font-size: 10px;
+}
+#closeSettings:hover{
+    background-color: #19B2FF;
 }
 .toggleDisplay{
     display: unset;
 }
+
+#toAssembler{
+    position: absolute;
+    top: calc(100%/26*19);
+    left: calc(100%/39*31);
+    height: calc(100%/26*2);
+    width: calc(100%/39*6);
+    background-color: #19b2ff4d;
+    font-size: 10px;
+}
+#toAssembler:hover{
+     background-color: #19B2FF;
+}
+#info{
+    position: absolute;
+    top: calc(100%/26*16);
+    left: calc(100%/39*31);
+    height: calc(100%/26*2);
+    width: calc(100%/39*6);
+    background-color: #19b2ff4d;
+    font-size: 10px;
+}
+
+#info_hover{
+    position: absolute;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+    z-index: 11;
+    top: calc(100%/26*0);
+    left: calc(100%/39*0);
+    height: calc(100%/26*26);
+    width: calc(100%/39*39);
+    background-color: #fbfbfbec;
+    font-size: 10px;
+}
+
 
 /* ---------------------------------hoverElements--------------------------------------- */
 .hoverElement{
@@ -773,7 +834,11 @@ textarea{
     z-index: 5;
     position: absolute;
     background-color: yellow;
-    padding: 0.5%;
+    padding: 0px 0.5%;
+    align-items: center;
+}
+.hoverElement p{
+    color: black;
 }
 .toggleGrid{
     display: grid;
@@ -821,4 +886,156 @@ textarea{
     left: calc(100%/46*28);
     width: calc(100%/46*6);
     height: calc(100%/32*3);
+}
+
+#a_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3,1fr);
+    top: calc(100%/32*8);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*7);
+    height: calc(100%/32*3);
+}
+
+#b_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3,1fr);
+    top: calc(100%/32*12);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*6);
+    height: calc(100%/32*3);
+}
+
+#c_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3,1fr);
+    top: calc(100%/32*12);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*6);
+    height: calc(100%/32*3);
+}
+
+#hl_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2,1fr);
+    top: calc(100%/32*14);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*7);
+    height: calc(100%/32*2);
+}
+#ix_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2,1fr);
+    top: calc(100%/32*16);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*6);
+    height: calc(100%/32*2);
+}
+#sp_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2,1fr);
+    top: calc(100%/32*18);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*6);
+    height: calc(100%/32*2);
+}
+#pc_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2,1fr);
+    top: calc(100%/32*20);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*7);
+    height: calc(100%/32*2);
+}
+#zr_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2,1fr);
+    top: calc(100%/32*22);
+    left: calc(100%/46*12); 
+    width: calc(100%/46*7);
+    height: calc(100%/32*2);
+}
+#ir_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2,1fr);
+    top: calc(100%/32*16);
+    left: calc(100%/46*25); 
+    width: calc(100%/46*7);
+    height: calc(100%/32*2);
+}
+#dec_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr;
+    top: calc(100%/32*22);
+    left: calc(100%/46*26); 
+    width: calc(100%/46*13);
+    height: calc(100%/32*4);
+}
+#cFlag_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    top: calc(100%/32*5);
+    left: calc(100%/46*15); 
+    width: calc(100%/46*4.5);
+    height: calc(100%/32*1);
+}
+#zFlag_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    top: calc(100%/32*5);
+    left: calc(100%/46*15); 
+    width: calc(100%/46*4.3);
+    height: calc(100%/32*1);
+}
+#pFlag_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    top: calc(100%/32*5);
+    left: calc(100%/46*15); 
+    width: calc(100%/46*8.1);
+    height: calc(100%/32*1);
+}
+#sFlag_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    top: calc(100%/32*5);
+    left: calc(100%/46*15); 
+    width: calc(100%/46*4);
+    height: calc(100%/32*1);
+}
+
+#wr_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr;
+    top: calc(100%/32*21);
+    left: calc(100%/46*22); 
+    width: calc(100%/46*12);
+    height: calc(100%/32*5);
+}
+
+#rd_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr;
+    top: calc(100%/32*21);
+    left: calc(100%/46*22); 
+    width: calc(100%/46*12);
+    height: calc(100%/32*5);
+}
+
+#m_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr;
+    top: calc(100%/32*21);
+    left: calc(100%/46*22); 
+    width: calc(100%/46*12);
+    height: calc(100%/32*5);
+}
+
+#io_hover{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr;
+    top: calc(100%/32*21);
+    left: calc(100%/46*22); 
+    width: calc(100%/46*12);
+    height: calc(100%/32*5);
 }

@@ -254,6 +254,11 @@
             <!-- ************************** akku/flags **************************  -->
             <h1 id="a" class="rectangle1x2 boxborder topLeft bottomLeft">A</h1>
             <h2 id="A" class="square2x2 boxborder">00</h2>
+            <div id="a_hover" class="hoverElement boxborder rounded">
+                <p>A - Akkumulator</p>
+                <p id="a_dec"></p>
+                <p id="a_bin"></p>
+            </div>
             <div id="flags" class="rectangle4x2 boxborder topRight bottomRight">
                 <h1 id="c_flag">C</h1>
                 <h1 id="z_flag">Z</h1>
@@ -264,22 +269,65 @@
                 <p id="P_Flag">0</p>
                 <p id="S_Flag">0</p>
             </div>
-
+            <div id="cFlag_hover" class="hoverElement boxborder rounded">
+                <p>C - Carry Flag</p>
+            </div>
+            <div id="zFlag_hover" class="hoverElement boxborder rounded">
+                <p>Z - Zero Flag</p>
+            </div>
+            <div id="pFlag_hover" class="hoverElement boxborder rounded">
+                <p>P/O - Parity/Overflow Flag</p>
+            </div>
+            <div id="sFlag_hover" class="hoverElement boxborder rounded">
+                <p>S - Sign Flag</p>
+            </div>
             <!-- ************************** register **************************  -->
             <h1 id="b" class="rectangle1x2 boxborder topLeft">B</h1>
             <h2 id="B" class="square2x2 boxborder">00</h2>
+            <div id="b_hover" class="hoverElement boxborder rounded">
+                <p>B - Datenregister</p>
+                <p id="b_dec"></p>
+                <p id="b_bin"></p>
+            </div>
             <h1 id="c" class="rectangle1x2 boxborder topRight">C</h1>
             <h2 id="C" class="square2x2 boxborder">00</h2>
+            <div id="c_hover" class="hoverElement boxborder rounded">
+                <p>C - Datenregister</p>
+                <p id="c_dec"></p>
+                <p id="c_bin"></p>
+            </div>
             <h1 id="hl" class="square2x2 boxborder">HL</h1>
             <h2 id="HL" class="rectangle4x2 boxborder">0000</h2>
+            <div id="hl_hover" class="hoverElement boxborder rounded">
+                <p>HL - Universalregister</p>
+                <p id="hl_dec"></p>
+            </div>
             <h1 id="ix" class="square2x2 boxborder">IX</h1>
             <h2 id="IX" class="rectangle4x2 boxborder">0000</h2>
+            <div id="ix_hover" class="hoverElement boxborder rounded">
+                <p>IX - Indexregister</p>
+                <p id="ix_dec"></p>
+            </div>
             <h1 id="sp" class="square2x2 boxborder">SP</h1>
             <h2 id="SP" class="rectangle4x2 boxborder">0000</h2>
+            <div id="sp_hover" class="hoverElement boxborder rounded">
+                <p>SP - Stackpointer</p>
+                <p id="sp_dec"></p>
+            </div>
             <h1 id="pc" class="square2x2 boxborder">PC</h1>
             <h2 id="PC" class="rectangle4x2 boxborder">0000</h2>
+            <div id="pc_hover" class="hoverElement boxborder rounded">
+                <p>PC - Program Counter</p>
+                <p id="pc_dec"></p>
+            </div>
             <h1 id="zr" class="square2x2 boxborder bottomLeft">ZR</h1>
             <h2 id="ZR" class="rectangle4x2 boxborder bottomRight">0000</h2>
+            <div id="zr_hover" class="hoverElement boxborder rounded">
+                <p>ZR - Zwischenregister</p>
+                <p id="zr_dec"></p>
+            </div>
+
+
 
             <!-- ************************** ALU **************************  -->
             <div class="ALU">
@@ -290,6 +338,10 @@
             <p id="controlunit" class="rectangle8x2 boxborder topLeft">Steuerwerk</p>
             <h1 id="ir" class="square2x2 boxborder">IR</h1>
             <h2 id="IR" class="square2x2 boxborder topRight">00</h2>
+            <div id="ir_hover" class="hoverElement boxborder rounded">
+                <p>IR - Befehlsregister</p>
+                <p id="ir_bin"></p>
+            </div>
             
             <div id="SW1" class="rectangle12x2 boxborder">
                 <p id="assemblerCommand"></p>
@@ -316,10 +368,33 @@
                     </div>
                 </div>
             </div>
+            
 
             <div id="registerArrow"></div>
-
-            <h1 id="dec" class="rectangle6x2 boxborder rounded">DEC</h1>
+            
+            <div id="wr_hover" class="hoverElement boxborder rounded">
+                <p>WR - Write (0 -> aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU Daten für die Speicherung an der aktuellen Speicher- oder IO-Adresse bereit.</p>
+            </div>
+            <div id="rd_hover" class="hoverElement boxborder rounded">
+                <p>RD - Read (0 -> aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, erwartet die CPU Daten von der adressierten Speicher- oder IO-Einheit.</p>
+            </div>
+            <div id="m_hover" class="hoverElement boxborder rounded">
+                <p>MREQ - Meomory Required  (0 -> aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige Adresse für einen Speicherzugriff bereit.</p>
+            </div>
+            <div id="io_hover" class="hoverElement boxborder rounded">
+                <p>IORQ - IO Request (0 -> aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige 8-Bit Adresse für einen IO-Zugriff bereit<p>
+            </div>
+            <!-- ************************** DEC **************************  -->
+            <h1 id="dec" class="square2x2 boxborder topLeft bottomLeft">DEC</h1>
+            <p id="dec_display" class="rectangle6x2 boxborder topRight bottomRight"></p>
+            <div id="dec_hover" class="hoverElement boxborder rounded">
+                <p>DEC - Adressdecoder</p>
+                <p>Ermittelt aus den Steuerleitungen und den Adressleitungen welcher Baustein (ROM, RAM, oder I/O) angesprochen werden soll.</p>
+            </div>
             
             <!-- ************************************************** Settings *************************************************  -->
             <div id="settings" class="settingsWindow boxborder rounded">
@@ -328,10 +403,27 @@
                     <p id="linkerDatei">Linker-Datei:</p>
                     <select name="commandSelect" class="lightrounded boxborder textareaFontSize" id="commandSelect">
                         <option value="" disabled selected hidden>Wählen Sie ein Programm</option>
-                        <option value="own">Eigenes Programm</option>
                         <option value="test">Testprogramm</option>
-                        <option value="fetch">Eklärung FETCH-Phase</option>
-                        <option value="Bsp11">Bsp 11 -Memory mapped Ein- und Ausgabe</option>
+                        <option value="own">Eigenes Programm</option>
+                        <option value="bsp1">Bsp 01 - Erklärung FETCH-Phase</option>
+                        <option value="bsp2">Bsp 02 - Erklärung Ausführungsphase</option>
+                        <option value="bsp3">Bsp 03 - Transportbefehle</option>
+                        <option value="bsp4">Bsp 04 - 2-Byte Befehle</option>
+                        <option value="bsp5">Bsp 05 - Verwendung RAM</option>
+                        <option value="bsp6">Bsp 06 - Registerindirekte Adressierung</option>
+                        <option value="bsp7">Bsp 07 - Verwendung Stack</option>
+                        <option value="bsp8">Bsp 08 - Logische Operation</option>
+                        <option value="bsp9">Bsp 09 - Vergleiche und Verzweigungen</option>
+                        <option value="bsp10">Bsp 10 - I/O mapped Ein-/Ausgabe</option>
+                        <option value="bsp11">Bsp 11 - Memory mapped Ein-/Ausgabe</option>
+                        <option value="bsp12">Bsp 12 - Unterprogramme</option>
+                        <option value="bsp13">Bsp 13 - Multiplikation</option>
+                        <option value="bsp14">Bsp 14 - Reihe</option>
+                        <option value="bsp15">Bsp 15 - Fehlerprogramm 1</option>
+                        <option value="bsp16">Bsp 16 - Fehlerprogramm 2</option>
+                        <option value="bsp17">Bsp 17 - Fehlerprogramm 3</option>
+                        <option value="bsp18">Bsp 18 - Fehlerprogramm 4</option>
+                        <option value="bsp19">Bsp 19 - Beispielprogramm</option>
                     </select>
                     <textarea name="linkerFile" class="lightrounded boxborder textareaFontSize" id="linkerFile"></textarea>
                     
@@ -422,15 +514,28 @@
                     <h4 id="konfigRAM">Konfiguration RAM:</h4>
                     <p id="Adressbereich">Adressbereich:</p>
                     <select name="adressRAM" class="lightrounded boxborder textareaFontSize" id="adressRAM">
-                        <option value="2000h">2000h - 3FFFh</option>
-                        <option value="4000h">4000h - 5FFFh</option>
-                        <option value="6000h">6000h - 7FFFh</option>
-                        <option value="8000h">8000h - 9FFFh</option>
-                        <option value="A000h">A000h - BFFFh</option>
-                        <option value="C000h">C000h - DFFFh</option>
-                        <option value="E000h">E000h - FFFFh</option>
+                        <option value="2000">2000h - 3FFFh</option>
+                        <option value="4000">4000h - 5FFFh</option>
+                        <option value="6000">6000h - 7FFFh</option>
+                        <option value="8000">8000h - 9FFFh</option>
+                        <option value="A000">A000h - BFFFh</option>
+                        <option value="C000">C000h - DFFFh</option>
+                        <option value="E000">E000h - FFFFh</option>
                     </select>
+                    <div id="breakpoints_div">
+                        <input type="checkbox" id="breakpoints">
+                    </div>                    
+                    <p style="position: absolute;top: calc(100%/26*23); left: calc(100%/39*3);">Breakpoints</p>
+                    <div id="errorWindow" class="lightrounded boxborder noneDisplay">
+                        <p>Fehler in der Konfiguration:</p>
+                        <p id="errorMessage"></p>
+                    </div>
 
+                    <button id="info" class="lightrounded boxborder" type="button" onclick="openInfo()"><p>Info</p></button>
+                    <div id="info_hover" class="rounded noneDisplay">
+                        <p>INFO</p>
+                    </div>
+                    <button id="toAssembler"   class="lightrounded boxborder" type="button" onclick="openAssembler()"><p>Zum Assembler</p></button>
                     <button id="closeSettings" class="lightrounded boxborder" type="button" onclick="saveSettings()"><p>Speichern</p></button>
                 </div>
             </div>

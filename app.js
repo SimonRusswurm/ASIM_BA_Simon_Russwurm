@@ -132,7 +132,7 @@ class Rom {
     update() {
 		let buf_string = '';
         let linker_string = linkerFile.value.replace(/\r\n|\n|\r/gm, '');
-		
+		this.dec_array = this.init_dec();
 		//update dec_arr
 		for (let i = 0; i < linker_string.length; i++) {
         	if(linker_string[i] === ':'){
@@ -140,7 +140,7 @@ class Rom {
                 	break;
                 let length = Number(linker_string[i+2]);
                 let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
-
+                
             	for (let j = 0; j < length; j++) {
                     this.dec_array[adress+j] = convertHexToInt(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
             	}   
@@ -150,7 +150,7 @@ class Rom {
 		//update DOM
 		for(let i = 0; i<224; i++){
         	buf_string = this.dec_array[i].toString(16).toUpperCase();
-        	if(buf_string.length === 1)
+        	if(buf_string.length === 1) //if number is smaller than 10 -->Bsp(0F) 
             	buf_string = '0' + buf_string;
         	document.getElementById("romElement" + String(i)).textContent = buf_string;
 		}
@@ -185,7 +185,7 @@ class IO{
 class Register_x2 {
 	constructor(register_DOM){
 		this.DOM = register_DOM;
-		this.dec = 255;
+		this.dec = 0;
 	}
 	
 	update(decimal_number){
@@ -303,7 +303,11 @@ let settings = document.getElementById('settings');
 let linkerFile = document.getElementById('linkerFile');
 let commandSelect = document.getElementById('commandSelect');
 
-/***************************************** Hover variables *********************************/
+const io1Adress = document.getElementById('io1Adress');
+const io2Adress = document.getElementById('io2Adress');
+const io3Adress = document.getElementById('io3Adress');
+
+/***************************************** Hover popups *********************************/
 const rom_h1 = document.getElementById('rom_h1');
 rom_h1.addEventListener('mouseover', function() {
     document.getElementById('rom_hover').classList.toggle('toggleGrid');
@@ -327,7 +331,7 @@ ram_h1.addEventListener('mouseleave', function() {
 const io1_h1 = document.getElementById('io1_h1');
 io1_h1.addEventListener('mouseover', function() {
     document.getElementById('io1Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
-    document.getElementById('io1Adress_hex').textContent =  document.getElementById('io1Adress').value + 'h';
+    document.getElementById('io1Adress_hex').textContent = io1Adress.value + 'h';
     document.getElementById('io1_hover').classList.toggle('toggleGrid');
 });
 io1_h1.addEventListener('mouseleave', function() {
@@ -354,14 +358,257 @@ io3_h1.addEventListener('mouseleave', function() {
     document.getElementById('io3_hover').classList.toggle('toggleGrid'); 
 });
 
+const a_h1 = document.getElementById('a');
+a_h1.addEventListener('mouseover', function() {
+    document.getElementById('a_dec').textContent = 'Decimal: ' + A.dec;
+    document.getElementById('a_bin').textContent =  'Binär: ' + convertNumberToBinaery_2digits(A.dec);
+    document.getElementById('a_hover').classList.toggle('toggleGrid');
+});
+a_h1.addEventListener('mouseleave', function() {
+    document.getElementById('a_hover').classList.toggle('toggleGrid');
+});
+
+const b_h1 = document.getElementById('b');
+b_h1.addEventListener('mouseover', function() {
+    document.getElementById('b_dec').textContent = 'Decimal: ' + B.dec;
+    document.getElementById('b_bin').textContent =  'Binär: ' + convertNumberToBinaery_2digits(B.dec);
+    document.getElementById('b_hover').classList.toggle('toggleGrid');
+});
+b_h1.addEventListener('mouseleave', function() {
+    document.getElementById('b_hover').classList.toggle('toggleGrid');
+});
+
+const c_h1 = document.getElementById('c');
+c_h1.addEventListener('mouseover', function() {
+    document.getElementById('c_dec').textContent = 'Decimal: ' + C.dec;
+    document.getElementById('c_bin').textContent =  'Binär: ' + convertNumberToBinaery_2digits(C.dec);
+    document.getElementById('c_hover').classList.toggle('toggleGrid');
+});
+c_h1.addEventListener('mouseleave', function() {
+    document.getElementById('c_hover').classList.toggle('toggleGrid');
+});
+
+const hl_h1 = document.getElementById('hl');
+hl_h1.addEventListener('mouseover', function() {
+    document.getElementById('hl_dec').textContent = 'Decimal: ' + HL.dec;
+    document.getElementById('hl_hover').classList.toggle('toggleGrid');
+});
+hl_h1.addEventListener('mouseleave', function() {
+    document.getElementById('hl_hover').classList.toggle('toggleGrid');
+});
+
+const ix_h1 = document.getElementById('ix');
+ix_h1.addEventListener('mouseover', function() {
+    document.getElementById('ix_dec').textContent = 'Decimal: ' + IX.dec;
+    document.getElementById('ix_hover').classList.toggle('toggleGrid');
+});
+ix_h1.addEventListener('mouseleave', function() {
+    document.getElementById('ix_hover').classList.toggle('toggleGrid');
+});
+
+const sp_h1 = document.getElementById('sp');
+sp_h1.addEventListener('mouseover', function() {
+    document.getElementById('sp_dec').textContent = 'Decimal: ' + SP.dec;
+    document.getElementById('sp_hover').classList.toggle('toggleGrid');
+});
+sp_h1.addEventListener('mouseleave', function() {
+    document.getElementById('sp_hover').classList.toggle('toggleGrid');
+});
+
+const pc_h1 = document.getElementById('pc');
+pc_h1.addEventListener('mouseover', function() {
+    document.getElementById('pc_dec').textContent = 'Decimal: ' + PC.dec;
+    document.getElementById('pc_hover').classList.toggle('toggleGrid');
+});
+pc_h1.addEventListener('mouseleave', function() {
+    document.getElementById('pc_hover').classList.toggle('toggleGrid');
+});
+
+const zr_h1 = document.getElementById('zr');
+zr_h1.addEventListener('mouseover', function() {
+    document.getElementById('zr_dec').textContent = 'Decimal: ' + ZR.dec;
+    document.getElementById('zr_hover').classList.toggle('toggleGrid');
+});
+zr_h1.addEventListener('mouseleave', function() {
+    document.getElementById('zr_hover').classList.toggle('toggleGrid');
+});
+
+const ir_h1 = document.getElementById('ir');
+ir_h1.addEventListener('mouseover', function() {
+    document.getElementById('ir_bin').textContent =  'Binär: ' + convertNumberToBinaery_2digits(IR.dec);
+    document.getElementById('ir_hover').classList.toggle('toggleGrid');
+});
+ir_h1.addEventListener('mouseleave', function() {
+    document.getElementById('ir_hover').classList.toggle('toggleGrid');
+});
+
+const dec_h1 = document.getElementById('dec');
+dec_h1.addEventListener('mouseover', function() {
+    document.getElementById('dec_hover').classList.toggle('toggleGrid');
+});
+dec_h1.addEventListener('mouseleave', function() {
+    document.getElementById('dec_hover').classList.toggle('toggleGrid');
+});
+
+const c_flag = document.getElementById('c_flag');
+c_flag.addEventListener('mouseover', function() {
+    document.getElementById('cFlag_hover').classList.toggle('toggleGrid');
+});
+c_flag.addEventListener('mouseleave', function() {
+    document.getElementById('cFlag_hover').classList.toggle('toggleGrid');
+});
+
+const z_flag = document.getElementById('z_flag');
+z_flag.addEventListener('mouseover', function() {
+    document.getElementById('zFlag_hover').classList.toggle('toggleGrid');
+});
+z_flag.addEventListener('mouseleave', function() {
+    document.getElementById('zFlag_hover').classList.toggle('toggleGrid');
+});
+
+const p_flag = document.getElementById('p_flag');
+p_flag.addEventListener('mouseover', function() {
+    document.getElementById('pFlag_hover').classList.toggle('toggleGrid');
+});
+p_flag.addEventListener('mouseleave', function() {
+    document.getElementById('pFlag_hover').classList.toggle('toggleGrid');
+});
+
+const s_flag = document.getElementById('s_flag');
+s_flag.addEventListener('mouseover', function() {
+    document.getElementById('sFlag_hover').classList.toggle('toggleGrid');
+});
+s_flag.addEventListener('mouseleave', function() {
+    document.getElementById('sFlag_hover').classList.toggle('toggleGrid');
+});
+
+const wr_h3 = document.getElementById('wr');
+wr_h3.addEventListener('mouseover', function() {
+    document.getElementById('wr_hover').classList.toggle('toggleGrid');
+});
+wr_h3.addEventListener('mouseleave', function() {
+    document.getElementById('wr_hover').classList.toggle('toggleGrid');
+});
+
+const rd_h3 = document.getElementById('rd');
+rd_h3.addEventListener('mouseover', function() {
+    document.getElementById('rd_hover').classList.toggle('toggleGrid');
+});
+rd_h3.addEventListener('mouseleave', function() {
+    document.getElementById('rd_hover').classList.toggle('toggleGrid');
+});
+
+const m_h3 = document.getElementById('m');
+m_h3.addEventListener('mouseover', function() {
+    document.getElementById('m_hover').classList.toggle('toggleGrid');
+});
+m_h3.addEventListener('mouseleave', function() {
+    document.getElementById('m_hover').classList.toggle('toggleGrid');
+});
+
+const io_h3 = document.getElementById('io');
+io_h3.addEventListener('mouseover', function() {
+    document.getElementById('io_hover').classList.toggle('toggleGrid');
+});
+io_h3.addEventListener('mouseleave', function() {
+    document.getElementById('io_hover').classList.toggle('toggleGrid');
+});
+
+const info = document.getElementById('info');
+info.addEventListener('mouseover', function() {
+    document.getElementById('info_hover').classList.toggle('toggleGrid');
+});
+info.addEventListener('mouseleave', function() {
+    document.getElementById('info_hover').classList.toggle('toggleGrid');
+});
+ 
+
 /***************************************** settings functions *********************************/
 commandSelect.addEventListener('input', function() {
     switch(commandSelect.value){
         case 'own':
             linkerFile.value = 'Fügen Sie hier den Inhalt der vom Linker erzeugten .OBJ-Datei ein.\n(im Intel-HEX-Format)';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'test':
             linkerFile.value = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:020008003E05B3\n:02000A000606E8\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
+            break;
+        case 'bsp1':
+            linkerFile.value = ':0100000000ff\n:0100010000fe\n:0100020000fd\n:0100030000fc\n:0100040000fb\n:0100050000fa\n:0100060000f9\n:0100070000f8\n:0100080000f7\n:0100090000f6\n:01000a0000d5\n:01000b0000d4\n:01000c0000d3\n:01000d0000d2\n:01000e0000d1\n:01000f0000d0\n:0100100000ef\n:0100110000ee\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
+            break;
+        case 'bsp2':
+            linkerFile.value = ':010000003Cc3\n:010001003Cc2\n:010002003Cc1\n:0100030004f8\n:0100040004f7\n:010005000Cee\n:0100060023d6\n:010007008771\n:010008008770\n:010009008076\n:01000a008055\n:01000b008153\n:01000c008152\n:01000d003D95\n:01000e003D94\n:01000f0005cb\n:010010000De2\n:01001100905e\n:01001200905d\n:01001300915b\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
+            break;
+        case 'bsp3':
+            linkerFile.value = ':020000003E11af\n:020002000622d4\n:020004000E33b9\n:030006002155443d\n:01000900787e\n:01000a004194\n:01000b004F85\n:02000c003E662e\n:01000e00478a\n:02000f003E771a\n:010011004F9f\n:020012003E8826\n:010014007675\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
+            break;
+        case 'bsp4':
+            linkerFile.value = ':04000000DD212211cb\n:02000400DD23fa\n:02000600DD23f8\n:02000800DD2Bee\n:03000a002144333b\n:01000d0023af\n:01000e0023ae\n:03000f003103009a\n:010012007677\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
+            break;
+        case 'bsp5':
+            linkerFile.value = ':020000003E11af\n:030002003200E0e9\n:0300050021332282\n:030008002201E0f2\n:04000b00DD2155443a\n:04000f00DD2203E0eb\n:010013003Cb0\n:0100140023c8\n:02001500DD23e9\n:0100170047a1\n:030018003A00E0cb\n:03001b002A03E0b5\n:04001e00DD2A01E0d6\n:01e00000001f\n:01e00100001e\n:01e00200001d\n:01e00300001c\n:01e00400001b\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','E000');
+            break;
+        case 'bsp6':
+            linkerFile.value = ':020000003E12ae\n:030002002150E0aa\n:0100050047b3\n:03000600324FE096\n:01000900876f\n:01000a004F86\n:03000b003250E070\n:01000e00874a\n:01000f007759\n:030010003A4FE084\n:0100130047a5\n:030014003A50E07f\n:010017004F99\n:010018007E69\n:010019007670\n:01e04f0000b0\n:01e0500000cf\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','E000');
+            break;
+        case 'bsp7':
+            linkerFile.value = ':0300000031FFFFce\n:020003003EEEcf\n:020005000622d1\n:020007000E8861\n:010009008076\n:01000a00F5e0\n:01000b009143\n:01000c00478c\n:01000d00F1e1\n:01000e008051\n:01000f00F5db\n:01001000915e\n:0100110047a7\n:01001200F1fc\n:010013007676\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','E000');
+            break;
+        case 'bsp8':
+            linkerFile.value = ':020000003E0Cb4\n:0100020047b6\n:020003003EC0fd\n:010005004Fab\n:01000600A059\n:030007003200E0e4\n:01000a00795c\n:01000b00B024\n:03000c003201E0be\n:02000f003E177a\n:0100110047a7\n:020012003E713d\n:01001400A843\n:0100150047a3\n:02001600CB27f6\n:02001800CB27f4\n:02001a00CB27d2\n:01001c00784b\n:01001d0007bb\n:01001e0007ba\n:01001f0007b9\n:010020007867\n:0100210017c7\n:0100220017c6\n:0100230017c5\n:010024007665\n:01e00000001f\n:01e00100001e\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','E000');
+            break;
+        case 'bsp9':
+            linkerFile.value = ':020000003E20a0\n:020002000610e6\n:020004000E30bc\n:01000600BF3a\n:03000700CA0B0021\n:01000a003C99\n:01000b00B81c\n:03000c00F21000cf\n:01000f003C94\n:01001000B936\n:03001100FA1500dd\n:010014003Caf\n:010015008169\n:010016008762\n:03001700DA2300e9\n:01001a00873e\n:03001b00DA2300c5\n:01001e00873a\n:03001f00DA2300c1\n:010022008756\n:03002300C3000017\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
+            break;
+        case 'bsp10':
+            linkerFile.value = ':0300000031FFFFce\n:0300030021700069\n:010006007E7b\n:02000700D30321\n:0100090047af\n:01000a0023b2\n:02000b00DB01f7\n:01000d004F83\n:01000e00B819\n:03000f00C2060006\n:010012007677\n:01007000008f\n:01007100107e\n:01007200206d\n:01007300305c\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,false,'0001','0003','0005','E000');
+            break;
+        case 'bsp11':
+            linkerFile.value = ':0300000031FFFFce\n:030003003A00A020\n:0100060047b2\n:03000700CD4000e9\n:03000a003A00A0f9\n:01000d00B81a\n:03000e00CA030002\n:020040003E037d\n:010042003D80\n:03004300C24200b6\n:01004600C9f0\n:01a00000005f\n:01a00100005e\n:00000001FF';
+            setSettingsDependingOnProgramm(false,true,false,true,'A000','A001','A002','E000');
+            break;
+        case 'bsp12':
+            linkerFile.value = ':0300000031FFFFce\n:020003000E7776\n:02000500DB011d\n:01000700B93f\n:03000800CA1A0011\n:03000b00D21400ec\n:03000e00CD3200d0\n:03001100C3170012\n:03001400CD3B00e1\n:03001700C305001e\n:03001a00CD4400b2\n:03001d00C31700e6\n:020032003E008e\n:02003400D303f4\n:020036003E99f1\n:02003800D305ee\n:01003a00C9dc\n:02003b003E0065\n:02003d00D305c9\n:02003f003E99c8\n:02004100D303e7\n:01004300C9f3\n:020044003E007c\n:02004600D305e0\n:020048003E0078\n:02004a00D303be\n:01004c00C9ca\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,false,false,'0001','0003','0005','E000');
+            break;
+        case 'bsp13':
+            linkerFile.value = ':0300000031FF3F8e\n:02000300DB0020\n:0100050047b3\n:02000600DB011c\n:03000800CD100018\n:02000b00D302fe\n:03000d00C303000a\n:020010000E04dc\n:02001200CB27fa\n:010014000Dde\n:03001500C2120014\n:020018000E04d4\n:02001a00CB27d2\n:03001c00D22000cf\n:01001f008040\n:010020000Dd2\n:03002100C21A0000\n:01002400C912\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,true,false,'0000','0001','0002','2000');
+            break;
+        case 'bsp14':
+            linkerFile.value = ':0300000031FF3F8e\n:02000300DB0020\n:020005000600f3\n:03000700CD0E001b\n:01000a00785d\n:02000b00D302fe\n:01000d00765c\n:01000e00F5dc\n:01000f003D93\n:03001000CA16000d\n:03001300CD0E000f\n:01001600F1f8\n:010017008068\n:0100180047a0\n:01001900C91d\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,true,false,'0000','0001','0002','2000');
+            break;
+        case 'bsp15':
+            linkerFile.value = ':02000000DB0023\n:0300020032D007f2\n:02000500DB011d\n:0300070032D107ec\n:03000a00CDD60729\n:03000d003AD307bc\n:02001000D30219\n:03001200C3000028\n:0107d0000028\n:0107d1000027\n:0107d2000026\n:0107d3000025\n:0107d4000024\n:0107d5000023\n:0307d6003AD0070f\n:0107d90047d8\n:0307da003AD107ea\n:0107dd00807b\n:0307de0032D307ec\n:0107e100C94e\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,true,false,'0000','0001','0002','2000');
+            break;
+        case 'bsp16':
+            linkerFile.value = ':02000000DB0122\n:02000200FE0Fef\n:03000400C2000037\n:030007003A1600a6\n:01000a00478e\n:03000b002117009a\n:01000e007E53\n:02000f00D302fa\n:0100110023cb\n:0100120005e8\n:03001300C20E001a\n:0100160004e5\n:0100170007e1\n:010018000Dda\n:010019000Fd7\n:01001a00764f\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,true,false,'0000','0001','0002','2000');
+            break;
+        case 'bsp17':
+            linkerFile.value = ':02000000DB0122\n:02000200FE0Fef\n:03000400C2000037\n:030007002A1A00b2\n:01000a007E57\n:01000b00478d\n:03000c002A1B008c\n:01000f007E52\n:02001000D30219\n:0100120023ca\n:0100130005e7\n:03001400C20F0018\n:03001700C3000023\n:01001a0009bc\n:01001b0001c3\n:01001c0003c0\n:01001d0005bd\n:01001e0007ba\n:01001f000Bb5\n:010020000Dd2\n:0100210011cd\n:0100220013ca\n:0100230017c5\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,true,false,'0000','0001','0002','2000');
+            break;
+        case 'bsp18':
+            linkerFile.value = ':0300000031FF3F8e\n:020003000E02eb\n:02000500DB001e\n:03000700320020a4\n:01000a00795c\n:03000b00CD5000b5\n:02000e00DB00f5\n:030010003201209a\n:03001300CD4400d9\n:030016003A02208b\n:02001900FE00e7\n:03001b00CA31007\n:02001e003EABd7\n:02002000D30209\n:010022007964\n:03002300CD5000bd\n:020026003E0199\n:02002800D30201\n:01002a00793c\n:03002b00CD500095\n:03002e00C30500e7\n:020031003E7619\n:02003300D302f6\n:010035007951\n:03003600CD5000aa\n:020039003E2364\n:02003b00D302ce\n:01003d007929\n:03003e00CD500082\n:03004100C30500f4\n:030044003A00205f\n:010047004F69\n:030048003A01205a\n:01004b009103\n:03004c003202203d\n:01004f00C9c7\n:020050000605a3\n:0100520005a8\n:03005300C2520096\n:010056003D6c\n:03005700C2500094\n:01005a00C9bc\n:0120000000df\n:0120010000de\n:0120020000dd\n:0120030000dc\n:0120040000db\n:00000001FF';
+            setSettingsDependingOnProgramm(true,true,true,false,'0000','0001','0002','2000');
+            break;
+        case 'bsp19':
+            linkerFile.value = ':020000003E00c0\n:020002000600f6\n:03000400211500c3\n:020007000E0Ddc\n:010009007E78\n:01000a008055\n:01000b00478d\n:01000c0023b0\n:01000d000Dc5\n:03000e00C2090004\n:010011007876\n:02001200D30019\n:010014007675\n:0100150001e9\n:0100160002e7\n:0100170001e7\n:0100180002e5\n:0100190001e5\n:01001a0001c4\n:01001b0001c3\n:01001c0001c2\n:01001d0002c0\n:01001e0002bf\n:01001f0001bf\n:0100200002dd\n:0100210001dd\n:00000001FF';
+            setSettingsDependingOnProgramm(true,false,false,true,'0000','0001','0002','2000');
             break;
         default:
             linkerFile.value = '';
@@ -369,39 +616,61 @@ commandSelect.addEventListener('input', function() {
 
     }
 })
+const setIoInArrow = (arrowID_string) => {
+    try{
+        if(arrowID_string.includes(1)){
+            document.getElementById('IO1In').checked = true;
+        } else if(arrowID_string.includes(2)){
+            document.getElementById('IO2In').checked = true;
+        } else {
+            document.getElementById('IO3In').checked = true;
+        }
+        document.getElementById(arrowID_string).classList.remove('ioArrowOUT');    
+    }catch{}
+}
+const setIoOutArrow = (arrowID_string) => {
+    document.getElementById(arrowID_string).classList.add('ioArrowOUT');
+    if(arrowID_string.includes(1)){
+        document.getElementById('IO1Out').checked = true;
+    } else if(arrowID_string.includes(2)){
+        document.getElementById('IO2Out').checked = true;
+    } else {
+        document.getElementById('IO3Out').checked = true;
+    }
+}
 
+const setSettingsDependingOnProgramm = (IOmapped_boolean, io1IN_boolean, io2IN_boolean, io3IN_boolean, io1Adress_hex, io2Adress_hex, io3Adress_hex, RAMstartingAdress_hex) => {
+    if(IOmapped_boolean){
+        document.getElementById('radioIOmapped').checked = true;
+    }
+    else{
+        document.getElementById('radioMemoryMap').checked = true;
+    }
+    if(io1IN_boolean){
+        setIoInArrow('io1_arrow');
+    } else {
+        setIoOutArrow('io1_arrow');
+    }
+    if(io2IN_boolean){
+        setIoInArrow('io2_arrow');
+    } else {
+        setIoOutArrow('io2_arrow');
+    }
+    if(io3IN_boolean){
+        setIoInArrow('io3_arrow');
+    } else {
+        setIoOutArrow('io3_arrow');
+    }
+    io1Adress.value = io1Adress_hex;
+    io2Adress.value = io2Adress_hex;
+    io3Adress.value = io3Adress_hex;
+
+    document.getElementById('adressRAM').value = RAMstartingAdress_hex;
+    changeRamAdress();
+}
 let adressRAM = document.getElementById('adressRAM');
 let startAdressRam_dec = 8192;
-adressRAM.addEventListener('input', function() {  
-    switch (adressRAM.value) {
-        case '2000h':
-            changeRamAdress('20', '3F');
-            break;
-        case '4000h':
-            changeRamAdress('40', '5F');
-            break;
-        case '6000h':
-            changeRamAdress('60', '7F');
-            break;
-        case '8000h':
-            changeRamAdress('80', '9F');
-            break;
-        case 'A000h':
-            changeRamAdress('A0', 'BF');  
-            break;
-        case 'C000h':
-            changeRamAdress('C0', 'DF');
-            break;
-        case 'E000h':
-            changeRamAdress('E0', 'FF');
-            break;
-        default:
-            break;
-    }
-
-})
-
-const changeRamAdress = (hex1_string, hex2_string) => {
+const changeRamAdress_DOM = (hex1_string, hex2_string) => {
     const pEle = document.getElementsByClassName('RamAdressLabel');
     const str = ['0','1', '2','3','4','5','6','9','A','B','C','D','E','F'];
     startAdressRam_dec = convertHexToInt(hex1_string + '00');
@@ -414,15 +683,125 @@ const changeRamAdress = (hex1_string, hex2_string) => {
     }
 }
 
-
-const changeInputArrow = (radioName_String) =>{
-    if(document.querySelector(`input[name= "${radioName_String}"]:checked`).value === Out){
-        document.getElementById(id_String).classList.toggle('')
+const changeRamAdress = () => {
+    switch (adressRAM.value) {
+        case '2000':
+            changeRamAdress_DOM('20', '3F');
+            break;
+        case '4000':
+            changeRamAdress_DOM('40', '5F');
+            break;
+        case '6000':
+            changeRamAdress_DOM('60', '7F');
+            break;
+        case '8000':
+            changeRamAdress_DOM('80', '9F');
+            break;
+        case 'A000':
+            changeRamAdress_DOM('A0', 'BF');  
+            break;
+        case 'C000':
+            changeRamAdress_DOM('C0', 'DF');
+            break;
+        case 'E000':
+            changeRamAdress_DOM('E0', 'FF');
+            break;
+        default:
+            break;
     }
-    
 }
+adressRAM.addEventListener('input', changeRamAdress);
 
+// *****************************IO radioButton changes*****************************
+const IO1In = document.getElementById('IO1In');
+const IO1Out = document.getElementById('IO1Out');
+const IO1_arrow = document.getElementById('io1_arrow');
+IO1In.addEventListener('change', function(){
+    try{
+        IO1_arrow.classList.remove('ioArrowOUT');
+    }catch{
 
+    }
+});
+IO1Out.addEventListener('change', function(){
+    IO1_arrow.classList.add('ioArrowOUT');
+});
+
+const IO2In = document.getElementById('IO2In');
+const IO2Out = document.getElementById('IO2Out');
+const IO2_arrow = document.getElementById('io2_arrow');
+IO2In.addEventListener('input', function(){
+    try{
+        IO2_arrow.classList.remove('ioArrowOUT');
+    }catch{
+
+    }
+});
+IO2Out.addEventListener('input', function(){
+    IO2_arrow.classList.add('ioArrowOUT');
+});
+
+const IO3In = document.getElementById('IO3In');
+const IO3Out = document.getElementById('IO3Out');
+const IO3_arrow = document.getElementById('io3_arrow');
+IO3In.addEventListener('input', function(){
+    try{
+        IO3_arrow.classList.remove('ioArrowOUT');
+    }catch{
+
+    }
+});
+IO3Out.addEventListener('input', function(){
+    IO3_arrow.classList.add('ioArrowOUT');
+});
+// *****************************errorWindow*****************************
+const errorWindow = document.getElementById('errorWindow');
+const errorMessage = document.getElementById('errorMessage');
+const checkSettings = () => {
+    if((convertHexToInt(io1Adress.value) === convertHexToInt(io2Adress.value)) && (IO1In.checked === IO2In.checked)){
+        errorMessage.textContent =  'IO1 und IO2 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
+        errorWindow.classList.add('toggleGrid');
+        return false;
+    }else if((convertHexToInt(io1Adress.value) === convertHexToInt(io3Adress.value)) && (IO1In.checked === IO3In.checked)){
+        errorMessage.textContent =  'IO1 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
+        errorWindow.classList.add('toggleGrid');
+        return false;
+    }else if((convertHexToInt(io2Adress.value) === convertHexToInt(io3Adress.value)) && (IO2In.checked === IO3In.checked)){
+        errorMessage.textContent =  'IO2 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
+        errorWindow.classList.add('toggleGrid');
+        return false;
+    }
+    if(document.getElementById('radioMemoryMap').checked){ //meomory-mapped
+        if(convertHexToInt(io1Adress.value) < convertHexToInt('2000')){
+            errorMessage.textContent =  `Die Adresse ${io1Adress.value}h von IO1 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
+            errorWindow.classList.add('toggleGrid');
+            return false;
+        } else if(convertHexToInt(io2Adress.value) < convertHexToInt('2000')){
+            errorMessage.textContent =  `Die Adresse ${io2Adress.value}h von IO2 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
+            errorWindow.classList.add('toggleGrid');
+            return false;
+        } else if(convertHexToInt(io3Adress.value) < convertHexToInt('2000')){
+            errorMessage.textContent =  `Die Adresse ${io3Adress.value}h von IO3 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
+            errorWindow.classList.add('toggleGrid');
+            return false;
+        }
+
+        if(convertHexToInt(io1Adress.value) >= startAdressRam_dec && convertHexToInt(io1Adress.value) < (startAdressRam_dec+ 8192)){
+            errorMessage.textContent =  `Die Adresse ${io1Adress.value}h von IO1 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
+            errorWindow.classList.add('toggleGrid');
+            return false;
+        } else if(convertHexToInt(io2Adress.value) >= startAdressRam_dec && convertHexToInt(io2Adress.value) < (startAdressRam_dec+ 8192)){
+            errorMessage.textContent =  `Die Adresse ${io2Adress.value}h von IO2 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
+            errorWindow.classList.add('toggleGrid');
+            return false;
+        } else if(convertHexToInt(io3Adress.value) >= startAdressRam_dec && convertHexToInt(io3Adress.value) < (startAdressRam_dec+ 8192)){
+            errorMessage.textContent =  `Die Adresse ${io3Adress.value}h von IO3 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
+            errorWindow.classList.add('toggleGrid');
+            return false;
+        }
+    }
+    return true;
+};
 /***************************************** conversion Hex/Int *********************************/
 const convertHexToInt = (hex_string) => {
     return parseInt(hex_string, 16);
@@ -446,6 +825,18 @@ const convertNumberToHex_2digits = (number_dec) => {
         number_dec = '0' + number_dec;
     }
     return number_dec;
+}
+
+const convertNumberToBinaery_2digits = (number_dec) => {
+    let str = (number_dec).toString(2);
+    const len = str.length;
+    if(len != 8){
+        for (let i = 0; i < 8-len; i++) {
+            str = '0' + str;
+        }
+    }
+    str = str[0] +str[1] +str[2]+str[3]+ ' ' +str[4]+str[5]+str[6]+str[7];
+    return str;
 }
 
 
@@ -845,6 +1236,11 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
             await Sleep_Waittime();
         } else {
             for (let i = 0; i < movingObjectCoordinates[0].length; i++) {  //iterate through Coordinates
+                if(playStatus.noAnim){      //noAnim
+                    movingObject.aDiv.remove();
+                    movingObject = 0;
+                    return true;
+                }
                 await conditionalPositionupdate(xCoord[i], yCoord[i], ANIMATION_SPEED, movingObject)
             }
         }       
@@ -998,16 +1394,12 @@ const run_program = async(currentTime) => {
         if(runningProgramm[i] === undefined)
             return false;
         try{
-            await runningProgramm[i]()
-            // if(!await runningProgramm[i]()){
-            //     return false;
-            // } 
+            await runningProgramm[i]();
         }
         catch(e){
             console.log('In catch:');
             console.log(e);
         }
-        
         i++;
     }
 }
@@ -1140,15 +1532,25 @@ const toggleFullscreen = () => {
 }
 
 const saveSettings = () => {
-    stopBtn(); //init
-    ROM.update();
-    updateRedRectangle(0);
-    toggleSettings();
+    if (checkSettings()) {
+        stopBtn(); //init
+        ROM.update();
+        updateRedRectangle(0);
+        toggleSettings();
+        errorWindow.classList.remove('toggleGrid');
+    }
+    
 }
 
+const openAssembler = () => {
+    window.open('https://simonrusswurm.github.io/ASIM_Simulator/', '_blank');
+}
+
+const openInfo = () => {
+    
+}
 
 /******************************* mc8_commands *********************************** */
-
 const mc8_commands_array = [
     movAdat_8_command = new mc8_command('MOV A, dat_8', 62, '3E', 2, [0,0,0,0], movAdat_8),
     movBdat_8_command = new mc8_command('MOV B, dat_8',  6, '06', 2, [0,0,0,0], movBdat_8)

@@ -225,8 +225,10 @@
             <!-- ************************** IOs **************************  -->
             <div id="io1_hover" class="hoverElement boxborder rounded">
                 <p>IO1</p><p></p>
-                <p>Adresse:</p><p id="io1Adress_hex" style="text-align: end;">0000h</p>
                 <p id="io1Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io1Adress_hex" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io1_dec" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io1_bin" style="text-align: end;">1111 1111</p>
             </div>
             <h1 id="io1_h1" class="square2x2 boxborder topLeft bottomLeft">IO1</h1>
             <div id="io1_arrow" class="square2x2 boxborder ioArrow"></div>
@@ -234,8 +236,10 @@
 
             <div id="io2_hover" class="hoverElement boxborder rounded">
                 <p>IO2</p><p></p>
-                <p>Adresse:</p><p id="io2Adress_hex" style="text-align: end;">0000h</p>
                 <p id="io2Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io2Adress_hex" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io2_dec" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io2_bin" style="text-align: end;">1111 1111</p>
             </div>
             <h1 id="io2_h1" class="square2x2 boxborder topLeft bottomLeft">IO2</h1>
             <div id="io2_arrow" class="square2x2 boxborder ioArrow ioArrowOUT"></div>
@@ -243,8 +247,10 @@
 
             <div id="io3_hover" class="hoverElement boxborder rounded" >
                 <p>IO3</p><p></p>
-                <p>Adresse:</p><p id="io3Adress_hex" style="text-align: end;">0000h</p>
                 <p id="io3Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io3Adress_hex" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io3_dec" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io3_bin" style="text-align: end;">1111 1111</p>                
             </div>
             <h1 id="io3_h1" class="square2x2 boxborder topLeft bottomLeft">IO3</h1>
             <div id="io3_arrow" class="square2x2 boxborder ioArrow "></div>
@@ -548,13 +554,66 @@
                 <button id="fast" type="button" class="borderRight" onclick="rocketSpeed_on()"></button>
                 <button id="increase" type="button" class="borderRight" onclick="increaseSpeed()"></button>
                 <button id="decrease" type="button" class="borderRight" onclick="decreaseSpeed()"></button>
+                <button id="oneComand" type="button" class="borderRight" onclick="runOneComand()"></button>
                 <button id="singlestep" type="button" class="borderRight" onclick="runNextSingleStep()"></button>
                 <button id="fullcomand" type="button" class="borderRight" onclick="runCompleteExecution()"></button>
                 <button id="settingsButton" type="button" class="borderRight" onclick="toggleSettings()"></button>
                 <button id="fullscreenButton" type="button" class="borderRight" onclick="toggleFullscreen()"></button>
                 <!-- <a id="settings"href="gridTest/gridTest.html" class="grid-template"></a> -->
                 <button id="toggleTheme" type="button" class="topRight bottomRight" onclick="toggleTheme()"></button>
-            </div> 
+            </div>
+            <div id="play_hover" class="hoverElement boxborder rounded">
+                <p>Start:</Button></p>
+                <p>Startet den Programmablauf.</p>
+            </div>
+            <div id="pause_hover" class="hoverElement boxborder rounded">
+                <p>Pause:</Button></p>
+                <p>Pausiert den Programmablauf.</p>
+            </div>
+            <div id="stop_hover" class="hoverElement boxborder rounded">
+                <p>Reset:</Button></p>
+                <p>Setzt die CPU zurück.</p>
+            </div>
+            <div id="slow_hover" class="hoverElement boxborder rounded">
+                <p>Langsame Animation:</Button></p>
+                <p>Animation mit Bewegung.</p>
+            </div>
+            <div id="fast_hover" class="hoverElement boxborder rounded">
+                <p>Schnelle Animation:</Button></p>
+                <p>Animation mit Pfeilen.</p>
+            </div>
+            <div id="increase_hover" class="hoverElement boxborder rounded">
+                <p>Schneller:</Button></p>
+                <p>Erhöht Animationsgeschwindigkeit.</p>
+            </div>
+            <div id="decrease_hover" class="hoverElement boxborder rounded">
+                <p>Langsamer:</Button></p>
+                <p>Verringert Animationsgeschwindigkeit..</p>
+            </div>
+            <div id="oneComand_hover" class="hoverElement boxborder rounded">
+                <p>Einzelschritt:</Button></p>
+                <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
+            </div>
+            <div id="singlestep_hover" class="hoverElement boxborder rounded">
+                <p>Einzelschritt ohne Animation:</Button></p>
+                <p>Führt einen Befehl ohne Animation aus.</p>
+            </div>
+            <div id="fullcomand_hover" class="hoverElement boxborder rounded">
+                <p>Schneller Ablauf:</Button></p>
+                <p>Führt die gesamte Simulation ohne Animation aus.</p>
+            </div>
+            <div id="settingsButton_hover" class="hoverElement boxborder rounded">
+                <p>Einstellungen:</Button></p>
+                <p>Konfiguration von ROM, RAM und IO.</p>
+            </div>
+            <div id="fullscreenButton_hover" class="hoverElement boxborder rounded">
+                <p>Vollbild:</Button></p>
+                <p>Bei Smartphones verwenden :).</p>
+            </div>
+            <div id="toggleTheme_hover" class="hoverElement boxborder rounded">
+                <p>Dunkler Modus:</Button></p>
+                <p>Wechselt das Design.</p>
+            </div>
         </div>
     </div>
     

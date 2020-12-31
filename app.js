@@ -27,6 +27,42 @@ window.addEventListener('resize', function () {
 });
 }
 
+/***************************************** conversion Hex/Int *********************************/
+const convertHexToInt = (hex_string) => {
+    return parseInt(hex_string, 16);
+}
+
+const convertNumberToHex_4digits = (number_dec) => {
+    number_dec = number_dec.toString(16);
+    number_dec = number_dec.toUpperCase();
+    let len = number_dec.length;
+    for(i=4; i>len;i--){
+        number_dec = '0' +number_dec;
+    }
+    return number_dec;
+}
+
+const convertNumberToHex_2digits = (number_dec) => {
+    number_dec = number_dec.toString(16);
+    number_dec = number_dec.toUpperCase();
+    let len = number_dec.length;
+    for(i=2; i>len;i--){
+        number_dec = '0' + number_dec;
+    }
+    return number_dec;
+}
+
+const convertNumberToBinaery_2digits = (number_dec) => {
+    let str = (number_dec).toString(2);
+    const len = str.length;
+    if(len != 8){
+        for (let i = 0; i < 8-len; i++) {
+            str = '0' + str;
+        }
+    }
+    str = str[0] +str[1] +str[2]+str[3]+ ' ' +str[4]+str[5]+str[6]+str[7];
+    return str;
+}
 
 
 /*************************************************************** Classes ***************************************************************/
@@ -35,6 +71,7 @@ class PlayStatus{
         this.play = false;
         this.stop = true;
         this.pause = false;
+        this.oneComand = false;
         this.noAnim = false;
         this.completeExe = false;
         this.rocketSpeed = false;
@@ -67,9 +104,13 @@ class PlayStatus{
         this.play = false;
         this.stop = true;
         this.pause = false;
+        this.oneComand = false;
         this.noAnim = false;
         this.completeExe = false;
         this.rocketSpeed = false;
+    }
+    setOneComand(){
+        this.oneComand = true;
     }
 
     setCompleteExecution(){
@@ -332,6 +373,8 @@ const io1_h1 = document.getElementById('io1_h1');
 io1_h1.addEventListener('mouseover', function() {
     document.getElementById('io1Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io1Adress_hex').textContent = io1Adress.value + 'h';
+    document.getElementById('io1_dec').textContent = IO1.dec;
+    document.getElementById('io1_bin').textContent = convertNumberToBinaery_2digits(IO1.dec);
     document.getElementById('io1_hover').classList.toggle('toggleGrid');
 });
 io1_h1.addEventListener('mouseleave', function() {
@@ -342,6 +385,8 @@ const io2_h1 = document.getElementById('io2_h1');
 io2_h1.addEventListener('mouseover', function() {
     document.getElementById('io2Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io2Adress_hex').textContent =  document.getElementById('io2Adress').value + 'h';
+    document.getElementById('io2_dec').textContent = IO2.dec;
+    document.getElementById('io2_bin').textContent = convertNumberToBinaery_2digits(IO2.dec);
     document.getElementById('io2_hover').classList.toggle('toggleGrid');
 });
 io2_h1.addEventListener('mouseleave', function() {
@@ -352,6 +397,8 @@ const io3_h1 = document.getElementById('io3_h1');
 io3_h1.addEventListener('mouseover', function() {
     document.getElementById('io3Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io3Adress_hex').textContent =  document.getElementById('io3Adress').value + 'h';
+    document.getElementById('io3_dec').textContent = IO3.dec;
+    document.getElementById('io3_bin').textContent = convertNumberToBinaery_2digits(IO3.dec);
     document.getElementById('io3_hover').classList.toggle('toggleGrid');
 });
 io3_h1.addEventListener('mouseleave', function() {
@@ -523,6 +570,109 @@ info.addEventListener('mouseleave', function() {
 });
  
 
+const play_button = document.getElementById('play');
+play_button.addEventListener('mouseover', function() {
+    document.getElementById('play_hover').classList.toggle('toggleGrid');
+});
+play_button.addEventListener('mouseleave', function() {
+    document.getElementById('play_hover').classList.toggle('toggleGrid');
+});
+
+const pause_button = document.getElementById('pause');
+pause_button.addEventListener('mouseover', function() {
+    document.getElementById('pause_hover').classList.toggle('toggleGrid');
+});
+pause_button.addEventListener('mouseleave', function() {
+    document.getElementById('pause_hover').classList.toggle('toggleGrid');
+});
+
+const stop_button = document.getElementById('stop');
+stop_button.addEventListener('mouseover', function() {
+    document.getElementById('stop_hover').classList.toggle('toggleGrid');
+});
+stop_button.addEventListener('mouseleave', function() {
+    document.getElementById('stop_hover').classList.toggle('toggleGrid');
+});
+
+const slow_button = document.getElementById('slow');
+slow_button.addEventListener('mouseover', function() {
+    document.getElementById('slow_hover').classList.toggle('toggleGrid');
+});
+slow_button.addEventListener('mouseleave', function() {
+    document.getElementById('slow_hover').classList.toggle('toggleGrid');
+});
+
+const fast_button = document.getElementById('fast');
+fast_button.addEventListener('mouseover', function() {
+    document.getElementById('fast_hover').classList.toggle('toggleGrid');
+});
+fast_button.addEventListener('mouseleave', function() {
+    document.getElementById('fast_hover').classList.toggle('toggleGrid');
+});
+
+const decrease_button = document.getElementById('decrease');
+decrease_button.addEventListener('mouseover', function() {
+    document.getElementById('decrease_hover').classList.toggle('toggleGrid');
+});
+decrease_button.addEventListener('mouseleave', function() {
+    document.getElementById('decrease_hover').classList.toggle('toggleGrid');
+});
+
+const increase_button = document.getElementById('increase');
+increase_button.addEventListener('mouseover', function() {
+    document.getElementById('increase_hover').classList.toggle('toggleGrid');
+});
+increase_button.addEventListener('mouseleave', function() {
+    document.getElementById('increase_hover').classList.toggle('toggleGrid');
+});
+
+const oneComand_button = document.getElementById('oneComand');
+oneComand_button.addEventListener('mouseover', function() {
+    document.getElementById('oneComand_hover').classList.toggle('toggleGrid');
+});
+oneComand_button.addEventListener('mouseleave', function() {
+    document.getElementById('oneComand_hover').classList.toggle('toggleGrid');
+});
+
+const singlestep_button = document.getElementById('singlestep');
+singlestep_button.addEventListener('mouseover', function() {
+    document.getElementById('singlestep_hover').classList.toggle('toggleGrid');
+});
+singlestep_button.addEventListener('mouseleave', function() {
+    document.getElementById('singlestep_hover').classList.toggle('toggleGrid');
+});
+
+const fullcomand_button = document.getElementById('fullcomand');
+fullcomand_button.addEventListener('mouseover', function() {
+    document.getElementById('fullcomand_hover').classList.toggle('toggleGrid');
+});
+fullcomand_button.addEventListener('mouseleave', function() {
+    document.getElementById('fullcomand_hover').classList.toggle('toggleGrid');
+});
+
+const settings_button = document.getElementById('settingsButton');
+settings_button.addEventListener('mouseover', function() {
+    document.getElementById('settingsButton_hover').classList.toggle('toggleGrid');
+});
+settings_button.addEventListener('mouseleave', function() {
+    document.getElementById('settingsButton_hover').classList.toggle('toggleGrid');
+});
+
+const fullscreen_button = document.getElementById('fullscreenButton');
+fullscreen_button.addEventListener('mouseover', function() {
+    document.getElementById('fullscreenButton_hover').classList.toggle('toggleGrid');
+});
+fullscreen_button.addEventListener('mouseleave', function() {
+    document.getElementById('fullscreenButton_hover').classList.toggle('toggleGrid');
+});
+
+const toggleTheme_button = document.getElementById('toggleTheme');
+toggleTheme_button.addEventListener('mouseover', function() {
+    document.getElementById('toggleTheme_hover').classList.toggle('toggleGrid');
+});
+toggleTheme_button.addEventListener('mouseleave', function() {
+    document.getElementById('toggleTheme_hover').classList.toggle('toggleGrid');
+});
 /***************************************** settings functions *********************************/
 commandSelect.addEventListener('input', function() {
     switch(commandSelect.value){
@@ -802,42 +952,7 @@ const checkSettings = () => {
     }
     return true;
 };
-/***************************************** conversion Hex/Int *********************************/
-const convertHexToInt = (hex_string) => {
-    return parseInt(hex_string, 16);
-}
 
-const convertNumberToHex_4digits = (number_dec) => {
-    number_dec = number_dec.toString(16);
-    number_dec = number_dec.toUpperCase();
-    let len = number_dec.length;
-    for(i=4; i>len;i--){
-        number_dec = '0' +number_dec;
-    }
-    return number_dec;
-}
-
-const convertNumberToHex_2digits = (number_dec) => {
-    number_dec = number_dec.toString(16);
-    number_dec = number_dec.toUpperCase();
-    let len = number_dec.length;
-    for(i=2; i>len;i--){
-        number_dec = '0' + number_dec;
-    }
-    return number_dec;
-}
-
-const convertNumberToBinaery_2digits = (number_dec) => {
-    let str = (number_dec).toString(2);
-    const len = str.length;
-    if(len != 8){
-        for (let i = 0; i < 8-len; i++) {
-            str = '0' + str;
-        }
-    }
-    str = str[0] +str[1] +str[2]+str[3]+ ' ' +str[4]+str[5]+str[6]+str[7];
-    return str;
-}
 
 
 const initRam = () => {
@@ -1119,9 +1234,9 @@ const Sleep_Waittime = () => Sleep(WAITTIME);
 
 const Sleep_NoAnimationTime = () => Sleep(NOANIMATIONTIME);
 
-const check_completeExecution = () => {     //checks if completeExecution is true
+const check_completeExecution = () => {     //checks if completeExecution is true 
     if(!playStatus.completeExe){
-        if(playStatus.noAnim){
+        if(playStatus.noAnim || playStatus.oneComand){
             description_update('Prozessor angehalten');
             playStatus.setPause();
             playStatus.getStatus();
@@ -1548,6 +1663,7 @@ const init = () => {
     stepNumber.textContent = '0';
     stepDescription.textContent = 'Prozessor angehalten';
     assemblerCommand.textContent = '';
+    dec_display.textContent = '';
     
     updateRedRectangle(convertHexToInt(PC.dec));
 }
@@ -1558,6 +1674,7 @@ const pause_DOM = document.getElementById('pause');
 const stop_DOM = document.getElementById('stop');
 const slow_DOM = document.getElementById('slow');
 const fast_DOM = document.getElementById('fast');
+const oneComand_DOM = document.getElementById('oneComand');
 const singlestep_DOM = document.getElementById('singlestep');
 const fullcomand_DOM = document.getElementById('fullcomand');
 
@@ -1594,7 +1711,14 @@ const setButtonPressed = () =>{
         try{
             fast_DOM.classList.remove('buttonPressed');
         }catch{}
-    }    
+    }
+    if(playStatus.oneComand){
+        oneComand_DOM.classList.add('buttonPressed');
+    }else{
+        try{
+            oneComand_DOM.classList.remove('buttonPressed');
+        }catch{}
+    }   
     if(playStatus.completeExe){
         fullcomand_DOM.classList.add('buttonPressed');
     }else{
@@ -1608,7 +1732,7 @@ const setButtonPressed = () =>{
         try{
             singlestep_DOM.classList.remove('buttonPressed');
         }catch{}
-    } 
+    }
 }
 setButtonPressed();
 function play(){
@@ -1663,7 +1787,16 @@ const snailSpeed_on = () => {
     playStatus.setSnailSpeed();
     setButtonPressed();
 }
-
+const runOneComand = () => {
+    if(playStatus.oneComand){
+        playStatus.oneComand = false;
+        setButtonPressed();      
+    }else{
+        playStatus.setOneComand();
+        setButtonPressed();
+        // play();
+    }
+}
 const runNextSingleStep = () => {
     playStatus.setNoAnimation();    
     setButtonPressed();

@@ -1675,37 +1675,43 @@ const assemblerCommand_update = async() => {
 // console.log(yellowBgElement.top)
 
 const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
-    const xCoord1 = [24];
-    const xCoord2 = [30];
-    const yCoord =  [6];
-    for (let j = 0; j < 30; j++) {
-        xCoord1.push(xCoord1[j]+0.1);
-        xCoord2.push(xCoord2[j]-0.1);
-        yCoord.push(yCoord[j]+1/7.5);
-    }
-    // await isRunning();
-    const movAlu1 = createMovingAluElement('ALU1');
-    const movAlu2 = createMovingAluElement('ALU2');
-    await Sleep_Waittime();
-    ALU1.DOM.textContent = '';
-    ALU2.DOM.textContent = '';
-
-    for (let i = 0; i < xCoord1.length; i++) {
-        try{
-            await isRunning();
-        } catch(e) {
-            movAlu1.remove();
-            movAlu2.remove();
-            throw Error('Stop pressed');
+    if(!playStatus.noAnim){
+        const xCoord1 = [24];
+        const xCoord2 = [30];
+        const yCoord =  [6];
+        for (let j = 0; j < 30; j++) {
+            xCoord1.push(xCoord1[j]+0.1);
+            xCoord2.push(xCoord2[j]-0.1);
+            yCoord.push(yCoord[j]+1/7.5);
         }
-        await Sleep(1000/FRAMES);
-        updatePosition(movAlu1, xCoord1[i],yCoord[i]);
-        updatePosition(movAlu2, xCoord2[i],yCoord[i]);    
+        // await isRunning();
+        const movAlu1 = createMovingAluElement('ALU1');
+        const movAlu2 = createMovingAluElement('ALU2');
+        await Sleep_Waittime();
+        ALU1.DOM.textContent = '';
+        ALU2.DOM.textContent = '';
+
+        for (let i = 0; i < xCoord1.length; i++) {
+            try{
+                await isRunning();
+            } catch(e) {
+                movAlu1.remove();
+                movAlu2.remove();
+                throw Error('Stop pressed');
+            }
+            await Sleep(1000/FRAMES);
+            updatePosition(movAlu1, xCoord1[i],yCoord[i]);
+            updatePosition(movAlu2, xCoord2[i],yCoord[i]);    
+        }
+        movAlu1.remove();
+        movAlu2.remove();
+        await updateRegister_hex(ALUOUT, aluOUT_dec);
+        ALUOUT.DOM.classList.add('yellowBg');
+    } else {
+        await updateRegister_hex(ALUOUT, aluOUT_dec);
+        ALU1.DOM.textContent = '';
+        ALU2.DOM.textContent = '';
     }
-    movAlu1.remove();
-    movAlu2.remove();
-    await updateRegister_hex(ALUOUT, aluOUT_dec);
-    ALUOUT.DOM.classList.add('yellowBg');
     await description_update('Setze die Flags');
     try {
         await setFlags(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec);
@@ -1721,35 +1727,37 @@ const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec
 }
 
 const setFlags = async(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
-    await addArrow('FLAGS');
-    movingFlags.children[0].textContent = cFlag_dec;
-    movingFlags.children[1].textContent = zFlag_dec;
-    movingFlags.children[2].textContent = pFlag_dec;
-    movingFlags.children[3].textContent = sFlag_dec;
-    movingFlags.classList.add('toggleGrid');
-    await Sleep_Waittime();
-    for (let i = 0; i < 21; i++) {
-        try{
+    if (!playStatus.noAnim) {
+        await addArrow('FLAGS');
+        movingFlags.children[0].textContent = cFlag_dec;
+        movingFlags.children[1].textContent = zFlag_dec;
+        movingFlags.children[2].textContent = pFlag_dec;
+        movingFlags.children[3].textContent = sFlag_dec;
+        movingFlags.classList.add('toggleGrid');
+        await Sleep_Waittime();
+        for (let i = 0; i < 21; i++) {
+            try{
+                await isRunning();
+            } catch (e) {
+                movingFlags.classList.remove('toggleGrid');
+                movingFlags.style.top = String(100/32*8) + '%';
+                throw Error('Stop pressed');
+            }
+            movingFlags.style.top = String(100/32*(8-i/20)) + '%';
+            await Sleep(1000/FRAMES);  
+        }
+        await Sleep_Waittime();
+        try {
             await isRunning();
         } catch (e) {
             movingFlags.classList.remove('toggleGrid');
             movingFlags.style.top = String(100/32*8) + '%';
             throw Error('Stop pressed');
-        }
-        movingFlags.style.top = String(100/32*(8-i/20)) + '%';
-        await Sleep(1000/FRAMES);  
+        }    
+        movingFlags.classList.remove('toggleGrid');
+        movingFlags.style.top = String(100/32*8) + '%'
     }
     FLAGS.update(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec);
-    await Sleep_Waittime();
-    try {
-        await isRunning();
-    } catch (e) {
-        movingFlags.classList.remove('toggleGrid');
-        movingFlags.style.top = String(100/32*8) + '%';
-        throw Error('Stop pressed');
-    }    
-    movingFlags.classList.remove('toggleGrid');
-    movingFlags.style.top = String(100/32*8) + '%';
 }
 
 const dec_display = document.getElementById('dec_display');

@@ -92,6 +92,11 @@ const convertNumberToBinaery_2digits = (number_dec) => {
     return str;
 }
 
+const convertBinaeryToNumber = (binary_dec) => {
+    let str = '0b' + String(binary_dec);
+    return Number(str);    
+}
+
 
 /*************************************************************** Classes ***************************************************************/
 class PlayStatus{
@@ -733,7 +738,7 @@ commandSelect.addEventListener('input', function() {
             setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'test':
-            linkerFile.value = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:020008003E05B3\n:02000A000606E8\n:00000001FF';
+            linkerFile.value = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:010008008778\n:00000001FF';
             setSettingsDependingOnProgramm(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp1':
@@ -1350,6 +1355,9 @@ const pushNextCommand = () => {
         case 6: //06
             runningProgramm.push(movBdat_8);
             break;
+        case 135:
+            runningProgramm.push(addA);
+            break;
         case 118: //76
             return;
         default:
@@ -1698,6 +1706,7 @@ const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec
     movAlu2.remove();
     await updateRegister_hex(ALUOUT, aluOUT_dec);
     ALUOUT.DOM.classList.add('yellowBg');
+    await description_update('Setze die Flags');
     try {
         await setFlags(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec);
     } catch (e) {
@@ -1705,7 +1714,7 @@ const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec
         ALUOUT.DOM.textContent = '';
         throw Error('Stop pressed');
     }
-    
+    await description_update('Speichere das Ergebnis');
     ALUOUT.DOM.classList.remove('yellowBg');
     ALUOUT.DOM.textContent = '';
 
@@ -1893,6 +1902,21 @@ const movBdat_8 = async() => {
     await updatePC();
     check_completeExecution();
     return true;
+}
+
+const addA = async() => {
+    await description_update('Hole den 1. Operator'); 
+    await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
+    await updateRegister_hex(ALU1, A.dec);
+    await description_update('Hole den 2. Operator');
+    await transfer('A', 'ALU2',convertNumberToHex_2digits(A.dec));
+    await updateRegister_hex(ALU2, A.dec);
+    //TODO: flags
+    await description_update('Addiere die Operanden');
+    await aluAnimation(A.dec+A.dec,0,0,0,0);
+    await transfer('ALUOUT','A',convertNumberToHex_2digits(A.dec+A.dec));
+    await updateRegister_hex(A, A.dec+A.dec);
+
 }
 
 let runningProgramm = [get_next_command];
@@ -2135,7 +2159,9 @@ const openInfo = () => {
 
 /******************************* mc8_commands *********************************** */
 const mc8_commands_array = [
-    movAdat_8_command = new mc8_command('MOV A, dat_8', 62, '3E', 2, [0,0,0,0], movAdat_8),
-    movBdat_8_command = new mc8_command('MOV B, dat_8',  6, '06', 2, [0,0,0,0], movBdat_8)
+    movAdat_8_command   = new mc8_command('MOV A, dat_8', 62, '3E', 2, [0,0,0,0], movAdat_8),
+    movBdat_8_command   = new mc8_command('MOV B, dat_8',  6, '06', 2, [0,0,0,0], movBdat_8),
+    addA_command        = new mc8_command('ADD A',0b10000111,convertNumberToHex_2digits(0b10000111), 1, [1,1,1,1], addA)
 
 ];
+

@@ -27,8 +27,37 @@ window.addEventListener('resize', function () {
 });
 }
 
+/***************************************** DOM_Selectors *********************************/
+let assemblerCommand = document.getElementById('assemblerCommand');
+let stepNumber = document.getElementById('stepNumber');
+let stepDescription = document.getElementById('stepDescription');
+let stepNumberBackground = document.getElementsByClassName('sNum')[0];
+let registerArrow = document.getElementById('registerArrow');
+let irArrow = document.getElementById('ir_arrow');
+let WR = document.getElementById('WR');
+let RD = document.getElementById('RD');
+let M = document.getElementById('M');
+let IO_DEC = document.getElementById('IO');
+let settings = document.getElementById('settings');
+let linkerFile = document.getElementById('linkerFile');
+let commandSelect = document.getElementById('commandSelect');
+const movingFlags = document.getElementById('movingFlags');
+const grid = document.querySelector(".gridcontainer");
+const yellowBgElement = document.getElementById('yellowBgElement');
+const IO1_input_window = document.getElementById('IO1_input_window');
+const IO2_input_window = document.getElementById('IO2_input_window');
+const IO3_input_window = document.getElementById('IO3_input_window');
+const IO1_input = document.getElementById('IO1_input');
+const IO2_input = document.getElementById('IO2_input');
+const IO3_input = document.getElementById('IO3_input');
+
+const io1Adress = document.getElementById('io1Adress');
+const io2Adress = document.getElementById('io2Adress');
+const io3Adress = document.getElementById('io3Adress');
+const movingObject_new = document.getElementById('movingObject');
+
 /***************************************** conversion Hex/Int *********************************/
-const convertHexToInt = (hex_string) => {
+const convertHexToNumber = (hex_string) => {
     return parseInt(hex_string, 16);
 }
 
@@ -41,7 +70,6 @@ const convertNumberToHex_4digits = (number_dec) => {
     }
     return number_dec;
 }
-
 const convertNumberToHex_2digits = (number_dec) => {
     number_dec = number_dec.toString(16);
     number_dec = number_dec.toUpperCase();
@@ -107,7 +135,6 @@ class PlayStatus{
         this.oneComand = false;
         this.noAnim = false;
         this.completeExe = false;
-        this.rocketSpeed = false;
     }
     setOneComand(){
         this.oneComand = true;
@@ -132,7 +159,7 @@ class PlayStatus{
 
 }
 
-/******************************* ROM *********************************** */
+/******************************* ROM/RAM *********************************** */
 class Rom {
 	constructor() {
 		this.dec_array = this.init_dec();
@@ -141,7 +168,7 @@ class Rom {
 	
 	init_dec() {
 		let buf_arr = [];
-		for (let i = 0; i < 224; i++)
+		for (let i = 0; i < 8192; i++)
         	buf_arr.push(255);
 		return buf_arr;	
     }
@@ -165,7 +192,7 @@ class Rom {
 	        romElement.style.left = String(100/46*((i%8)+2)) + "%";
 	
 	        //add romElement to body
-	        document.querySelector(".gridcontainer").appendChild(romElement);    
+	        grid.appendChild(romElement);    
 	    }
 	    return true;
     }
@@ -180,10 +207,10 @@ class Rom {
             	if(linker_string[i+8] === '1')
                 	break;
                 let length = Number(linker_string[i+2]);
-                let adress = convertHexToInt(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
+                let adress = convertHexToNumber(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
                 
             	for (let j = 0; j < length; j++) {
-                    this.dec_array[adress+j] = convertHexToInt(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
+                    this.dec_array[adress+j] = convertHexToNumber(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
             	}   
         	}
     	}
@@ -202,23 +229,66 @@ class Rom {
     }
 }
 
-/******************************* RedRactangle *********************************** */
-class RedRactangle {
+class Ram {
+    constructor() {
+        this.startAdressRam_dec = 8192;
+		this.dec_array = this.init_dec();
+		this.init_DOM();		
+	}
+	
+	init_dec() {
+		let buf_arr = [];
+		for (let i = 0; i < 8192; i++)
+        	buf_arr.push(255);
+		return buf_arr;	
+    }
+	
+	init_DOM = () => {
+        let j = 0;
+        for(var i = 0; i<224; i++){
+            //create a ramElement (same CSS as romElement)
+            let ramElement = document.createElement('p');
+            ramElement.classList.add('romElement', 'grid-template');
+            if(i<112)
+                ramElement.id = 'ramElement' + String(i);
+            else
+                ramElement.id = 'ramElement' + String(i+8192-224);
+    
+            //after every 8th romElement -> new line should be filled
+            if(!(i%8) && i !== 0)
+                j++;
+            if(j === 14)
+                j += 2;
+    
+            //define textContent of ramElement
+            ramElement.textContent = 'FF';
+    
+            //define Position of romElement
+            ramElement.style.top = String(100/32*(j+2)) + "%";
+            ramElement.style.left = String(100/46*((i%8)+36)) + "%";
+    
+            //add romElement to body
+            grid.appendChild(ramElement);    
+        }
+        return true;
+    }
+    
+    getHexValue(adress_dec) {
+        return convertNumberToHex_2digits(this.dec_array[adress_dec]);
+    }
+
+    update(adress_dec, number_dec){
+        this.dec_array[adress_dec] = number_dec;
+        if(adress_dec < 112 || adress_dec > 8191-112){
+            document.getElementById('ramElement' + String(adress_dec)).textContent = convertNumberToHex_2digits(number_dec);
+        }
+    }
 
 }
 
-/******************************* IOs *********************************** */
+/******************************* RedRactangle *********************************** */
+class RedRactangle {
 
-class IO{
-	constructor(IO_DOM){
-		this.dec = 255;
-		this.DOM = IO_DOM;
-	}
-	
-	update(decimal_number){
-		this.dec = decimal_number;
-		this.DOM.textcontent = convertNumberToHex_2digits(decimal_number);
-	}
 }
 
 /******************************* Register *********************************** */
@@ -252,13 +322,14 @@ class Register_x4 {
 	update_low(decimal_number){
 		let buf_string = this.DOM.textContent;
 		this.low_dec = decimal_number;
-		this.DOM.textContent = buf_string[0] + buf_string[1] + convertIntToHex(decimal_number);
+		this.DOM.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
 	}
 	
 	update_hi(decimal_number){
 		let buf_string = this.DOM.textContent;
 		this.hi_dec = decimal_number;
-		this.DOM.textContent = convertIntToHex(decimal_number) + buf_string[2] + buf_string[3];
+        this.DOM.textContent = convertNumberToHex_2digits(decimal_number) + buf_string[2] + buf_string[3];
+        this.dec = convertNumberToHex_4digits(this.DOM.textContent);
 	}
 }
 
@@ -314,14 +385,17 @@ const NOANIMATIONTIME = 30;
 const FRAMES = 60;
 
 
-//variables DOM
-const IO1 = new IO(document.getElementById('IO1'));
-const IO2 = new IO(document.getElementById('IO2'));
-const IO3 = new IO(document.getElementById('IO3'));
+//class variables
+const IO1 = new Register_x2(document.getElementById('IO1'));
+const IO2 = new Register_x2(document.getElementById('IO2'));
+const IO3 = new Register_x2(document.getElementById('IO3'));
 const A   = new Register_x2(document.getElementById('A'));
 const B   = new Register_x2(document.getElementById('B'));
 const C   = new Register_x2(document.getElementById('C'));
 const IR  = new Register_x2(document.getElementById('IR'));
+const ALU1 = new Register_x2(document.getElementById('ALU1'));
+const ALU2 = new Register_x2(document.getElementById('ALU2'));
+const ALUOUT = new Register_x2(document.getElementById('ALUOUT'));
 const HL  = new Register_x4(document.getElementById('HL'));
 const IX  = new Register_x4(document.getElementById('IX'));
 const SP  = new Register_x4(document.getElementById('SP'));
@@ -329,24 +403,8 @@ const PC  = new Register_x4(document.getElementById('PC'));
 const ZR  = new Register_x4(document.getElementById('ZR'));
 const FLAGS = new Flags(document.getElementById('C_Flag'),document.getElementById('Z_Flag'),document.getElementById('P_Flag'),document.getElementById('S_Flag'));
 const ROM = new Rom();
+const RAM = new Ram();
 
-let assemblerCommand = document.getElementById('assemblerCommand');
-let stepNumber = document.getElementById('stepNumber');
-let stepDescription = document.getElementById('stepDescription');
-let stepNumberBackground = document.getElementsByClassName('sNum')[0];
-let registerArrow = document.getElementById('registerArrow');
-let irArrow = document.getElementById('ir_arrow');
-let WR = document.getElementById('WR');
-let RD = document.getElementById('RD');
-let M = document.getElementById('M');
-let IO_DEC = document.getElementById('IO');
-let settings = document.getElementById('settings');
-let linkerFile = document.getElementById('linkerFile');
-let commandSelect = document.getElementById('commandSelect');
-
-const io1Adress = document.getElementById('io1Adress');
-const io2Adress = document.getElementById('io2Adress');
-const io3Adress = document.getElementById('io3Adress');
 
 /***************************************** Hover popups *********************************/
 const rom_h1 = document.getElementById('rom_h1');
@@ -359,10 +417,10 @@ rom_h1.addEventListener('mouseleave', function() {
 
 const ram_h1 = document.getElementById('ram_h1');
 ram_h1.addEventListener('mouseover', function() {
-    document.getElementById('ramStartAdress_hex').textContent = convertNumberToHex_4digits(startAdressRam_dec) + 'h';
-    document.getElementById('ramStartAdress_dec').textContent = String(startAdressRam_dec);
-    document.getElementById('ramEndAdress_hex').textContent = convertNumberToHex_4digits(startAdressRam_dec+8192-1) + 'h';
-    document.getElementById('ramEndAdress_dec').textContent = String(startAdressRam_dec+8192-1);
+    document.getElementById('ramStartAdress_hex').textContent = convertNumberToHex_4digits(RAM.startAdressRam_dec) + 'h';
+    document.getElementById('ramStartAdress_dec').textContent = String(RAM.startAdressRam_dec);
+    document.getElementById('ramEndAdress_hex').textContent = convertNumberToHex_4digits(RAM.startAdressRam_dec+8192-1) + 'h';
+    document.getElementById('ramEndAdress_dec').textContent = String(RAM.startAdressRam_dec+8192-1);
     document.getElementById('ram_hover').classList.toggle('toggleGrid');
 });
 ram_h1.addEventListener('mouseleave', function() {
@@ -561,15 +619,6 @@ io_h3.addEventListener('mouseleave', function() {
     document.getElementById('io_hover').classList.toggle('toggleGrid');
 });
 
-const info = document.getElementById('info');
-info.addEventListener('mouseover', function() {
-    document.getElementById('info_hover').classList.toggle('toggleGrid');
-});
-info.addEventListener('mouseleave', function() {
-    document.getElementById('info_hover').classList.toggle('toggleGrid');
-});
- 
-
 const play_button = document.getElementById('play');
 play_button.addEventListener('mouseover', function() {
     document.getElementById('play_hover').classList.toggle('toggleGrid');
@@ -673,6 +722,9 @@ toggleTheme_button.addEventListener('mouseover', function() {
 toggleTheme_button.addEventListener('mouseleave', function() {
     document.getElementById('toggleTheme_hover').classList.toggle('toggleGrid');
 });
+
+
+
 /***************************************** settings functions *********************************/
 commandSelect.addEventListener('input', function() {
     switch(commandSelect.value){
@@ -818,12 +870,12 @@ const setSettingsDependingOnProgramm = (IOmapped_boolean, io1IN_boolean, io2IN_b
     document.getElementById('adressRAM').value = RAMstartingAdress_hex;
     changeRamAdress();
 }
-let adressRAM = document.getElementById('adressRAM');
-let startAdressRam_dec = 8192;
+
+const adressRAM = document.getElementById('adressRAM');
 const changeRamAdress_DOM = (hex1_string, hex2_string) => {
     const pEle = document.getElementsByClassName('RamAdressLabel');
     const str = ['0','1', '2','3','4','5','6','9','A','B','C','D','E','F'];
-    startAdressRam_dec = convertHexToInt(hex1_string + '00');
+    RAM.startAdressRam_dec = convertHexToNumber(hex1_string + '00');
     for (let i = 0; i < pEle.length; i++) {
         if(i<7){
             pEle[i].textContent = hex1_string + str[i] + 'x';
@@ -908,43 +960,43 @@ IO3Out.addEventListener('input', function(){
 const errorWindow = document.getElementById('errorWindow');
 const errorMessage = document.getElementById('errorMessage');
 const checkSettings = () => {
-    if((convertHexToInt(io1Adress.value) === convertHexToInt(io2Adress.value)) && (IO1In.checked === IO2In.checked)){
+    if((convertHexToNumber(io1Adress.value) === convertHexToNumber(io2Adress.value)) && (IO1In.checked === IO2In.checked)){
         errorMessage.textContent =  'IO1 und IO2 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
         errorWindow.classList.add('toggleGrid');
         return false;
-    }else if((convertHexToInt(io1Adress.value) === convertHexToInt(io3Adress.value)) && (IO1In.checked === IO3In.checked)){
+    }else if((convertHexToNumber(io1Adress.value) === convertHexToNumber(io3Adress.value)) && (IO1In.checked === IO3In.checked)){
         errorMessage.textContent =  'IO1 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
         errorWindow.classList.add('toggleGrid');
         return false;
-    }else if((convertHexToInt(io2Adress.value) === convertHexToInt(io3Adress.value)) && (IO2In.checked === IO3In.checked)){
+    }else if((convertHexToNumber(io2Adress.value) === convertHexToNumber(io3Adress.value)) && (IO2In.checked === IO3In.checked)){
         errorMessage.textContent =  'IO2 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
         errorWindow.classList.add('toggleGrid');
         return false;
     }
     if(document.getElementById('radioMemoryMap').checked){ //meomory-mapped
-        if(convertHexToInt(io1Adress.value) < convertHexToInt('2000')){
+        if(convertHexToNumber(io1Adress.value) < convertHexToNumber('2000')){
             errorMessage.textContent =  `Die Adresse ${io1Adress.value}h von IO1 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
             errorWindow.classList.add('toggleGrid');
             return false;
-        } else if(convertHexToInt(io2Adress.value) < convertHexToInt('2000')){
+        } else if(convertHexToNumber(io2Adress.value) < convertHexToNumber('2000')){
             errorMessage.textContent =  `Die Adresse ${io2Adress.value}h von IO2 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
             errorWindow.classList.add('toggleGrid');
             return false;
-        } else if(convertHexToInt(io3Adress.value) < convertHexToInt('2000')){
+        } else if(convertHexToNumber(io3Adress.value) < convertHexToNumber('2000')){
             errorMessage.textContent =  `Die Adresse ${io3Adress.value}h von IO3 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
             errorWindow.classList.add('toggleGrid');
             return false;
         }
 
-        if(convertHexToInt(io1Adress.value) >= startAdressRam_dec && convertHexToInt(io1Adress.value) < (startAdressRam_dec+ 8192)){
+        if(convertHexToNumber(io1Adress.value) >= RAM.startAdressRam_dec && convertHexToNumber(io1Adress.value) < (RAM.startAdressRam_dec+ 8192)){
             errorMessage.textContent =  `Die Adresse ${io1Adress.value}h von IO1 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
             errorWindow.classList.add('toggleGrid');
             return false;
-        } else if(convertHexToInt(io2Adress.value) >= startAdressRam_dec && convertHexToInt(io2Adress.value) < (startAdressRam_dec+ 8192)){
+        } else if(convertHexToNumber(io2Adress.value) >= RAM.startAdressRam_dec && convertHexToNumber(io2Adress.value) < (RAM.startAdressRam_dec+ 8192)){
             errorMessage.textContent =  `Die Adresse ${io2Adress.value}h von IO2 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
             errorWindow.classList.add('toggleGrid');
             return false;
-        } else if(convertHexToInt(io3Adress.value) >= startAdressRam_dec && convertHexToInt(io3Adress.value) < (startAdressRam_dec+ 8192)){
+        } else if(convertHexToNumber(io3Adress.value) >= RAM.startAdressRam_dec && convertHexToNumber(io3Adress.value) < (RAM.startAdressRam_dec+ 8192)){
             errorMessage.textContent =  `Die Adresse ${io3Adress.value}h von IO3 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
             errorWindow.classList.add('toggleGrid');
             return false;
@@ -953,38 +1005,26 @@ const checkSettings = () => {
     return true;
 };
 
-
-
-const initRam = () => {
-    let j = 0;
-    for(var i = 0; i<224; i++){
-        //create a ramElement (same CSS as romElement)
-        let ramElement = document.createElement('p');
-        ramElement.classList.add('romElement', 'grid-template');
-        ramElement.id = "ramElement" + String(i);
-
-        //after every 8th romElement -> new line should be filled
-        if(!(i%8) && i !== 0)
-            j++;
-        if(j === 14)
-            j += 2;
-
-        //define textContent of ramElement
-        ramElement.textContent = 'FF';
-
-        //define Position of romElement
-        ramElement.style.top = String(100/32*(j+2)) + "%";
-        ramElement.style.left = String(100/46*((i%8)+36)) + "%";
-
-        //add romElement to body
-        document.querySelector(".gridcontainer").appendChild(ramElement);    
+const getRomElement = (position_dec = PC.dec) => {
+    if (position_dec > 223) {
+        const romElementLast = document.getElementById('romElementLast');
+        romElementLast.style.top = String(100/32*30) +'%';
+        romElementLast.style.left = String(100/46*4) + '%';
+        return romElementLast;
     }
-    return true;
+    return document.getElementById('romElement' + String(position_dec));
+} 
+
+const getRamElement = (position_dec = 0) =>{
+    if(position_dec > 111 && position_dec < 8191-111){
+        const ramElementBetween = document.getElementById('ramElementBetween');
+        ramElementBetween.style.top = String(100/32*16) +'%';
+        ramElementBetween.style.left = String(100/46*40) + '%';
+        return ramElementBetween;
+    }   
+    else
+        return document.getElementById('ramElement' + String(position_dec));
 }
-initRam();
-
-
-const getRomElement = (position_dec = PC.dec) => document.getElementById('romElement' + String(position_dec));
 
 /*********************************** bussystem and pathlogic ************************************/
 class Point{
@@ -1036,7 +1076,7 @@ const fixPoints = [
     point17 = new Point(17,34,4,'',15,[18]),
     point18 = new Point(18,34,12,'',17,[19,21]),
     point19 = new Point(19,27,12,'',18,[20]),
-    aluout  = new Point(20,27,10,'',19,[]),
+    aluout  = new Point(20,27,10,'ALUOUT',19,[]),
     point21 = new Point(21,34,14,'',18,[22]),
     sw      = new Point(22,32,14,'SW',21,[]),
     point23 = new Point(23,13,4,'',12,[24,25]),
@@ -1056,7 +1096,8 @@ const fixPoints = [
     rom2    = new Point(37,10,24,'ROM2',36,[]),
     point38 = new Point(38,28,24,'',36,[39,40]),
     dec     = new Point(39,28,26,'DEC',38,[]),
-    ram2    = new Point(40,34,24,'RAM2',38,[])
+    ram2    = new Point(40,34,24,'RAM2',38,[]),
+    ix_lo   = new Point(41,16,14,'IX_lo',28,[])
 ];
 
 //TODO: comment functions
@@ -1133,6 +1174,38 @@ const romElementToROM1 = (romElementID_string) =>{
     return toROM1;
 }
 
+const ramElementToRAM1 = (ramElementID_string) =>{
+    let toRAM1 = [];
+    let ramElement = document.getElementById(ramElementID_string);
+    let rEx = ramElement.style.left.replace('%','');
+    let rEy = ramElement.style.top.replace('%','');
+    rEx = Math.round(Number(rEx) *46/100);
+    rEy = Math.round(Number(rEy)*32/100);
+
+    let romBetweenPoint = new Point(-1,rEx,2,'',0,[]);
+    let romPoint = new Point(-1,rEx,rEy,'',0,[]);
+
+    toRAM1.push(romPoint);
+    toRAM1.push(romBetweenPoint);
+    return toRAM1;
+}
+
+const RAM2ToRamElement = (ramElementID_string) => {    
+    let toRamELement = [];
+    const ramElement = document.getElementById(ramElementID_string);
+    let rEx = ramElement.style.left.replace('%','');
+    let rEy = ramElement.style.top.replace('%','');
+    rEx = Math.round(Number(rEx) *46/100);
+    rEy = Math.round(Number(rEy)*32/100);
+
+    let ramBetweenPoint = new Point(-1,rEx,2,'',0,[]);
+    let ramPoint = new Point(-1,rEx,rEy,'',0,[]);
+
+    toRamELement.push(ramBetweenPoint);
+    toRamELement.push(ramPoint);
+    return toRamELement;
+}
+
 const getPointsAtoB = (fixPointLabel_A_string, fixPointLabel_B_string) => {
     let pointsAtoB = [];
     let pointA = 0;
@@ -1143,6 +1216,17 @@ const getPointsAtoB = (fixPointLabel_A_string, fixPointLabel_B_string) => {
         pointsAtoB = romElementToROM1(fixPointLabel_A_string).concat(pointsAtoB);
         return pointsAtoB;
     }
+    if(fixPointLabel_A_string.includes('ramElement')){
+        pointsAtoB = getPointsAtoB('RAM1',fixPointLabel_B_string);
+        pointsAtoB = ramElementToRAM1(fixPointLabel_A_string).concat(pointsAtoB);
+        return pointsAtoB;
+    }
+    if(fixPointLabel_B_string.includes('ramElement')){
+        pointsAtoB = getPointsAtoB(fixPointLabel_A_string,'RAM1');
+        pointsAtoB = pointsAtoB.concat(RAM2ToRamElement(fixPointLabel_B_string));
+        return pointsAtoB;
+    }
+
     
     pointA = convertlabelToPoint(fixPointLabel_A_string);
     pointB = convertlabelToPoint(fixPointLabel_B_string);
@@ -1166,7 +1250,7 @@ const create_RedRectangle = () => {
     redRectangle.style.borderColor = "#FF1930";
     redRectangle.style.background = "#FCDEE1";
     redRectangle.style.color = "Black";
-    document.querySelector(".gridcontainer").appendChild(redRectangle);
+    grid.appendChild(redRectangle);
 }
 create_RedRectangle();
 
@@ -1180,26 +1264,39 @@ const updateRedRectangle = (PC_IntValue) =>{
 }
 
 /*********************************** moving object ************************************/
-const createMovingObj = (elementId, aPath) => {
-    // select the div which should be moved
-    let clone = document.getElementById(elementId).cloneNode(true);
+const updateMovingObj = (aPath, hexValue_string) => {
+    movingObject_new.style.top = String(100/32*aPath[0].y) +"%";
+    movingObject_new.style.left = String(100/46*aPath[0].x) +"%";
+    movingObject_new.textContent = hexValue_string;
+    movingObject_new.classList.add('toggleGrid');
+    if(aPath[0].x === 14)
+        movingObject_new.classList.add('rectangle4x2');
+    else{
+        try{
+            movingObject_new.classList.remove('rectangle4x2');
+        }catch{}
+    }
+    return movingObject_new;
+}
+
+const createMovingAluElement = (aluId_string) => {
+    let clone = document.getElementById(aluId_string).cloneNode(true);
     clone.classList.add("boxborder" ,"rounded");
     clone.style.zIndex = "5";
-    clone.id = "movingObject";
+    clone.id = "moving" + aluId_string;
     clone.style.background = "yellow";
     clone.style.color = "#222222";
-    clone.style.top = String(100/32*aPath[0].y) +"%";
-    clone.style.left = String(100/46*aPath[0].x) +"%";
-
-    if(elementId.includes('romElement')){
-        clone.id = "movingRomElement";
-        clone.classList.add('square2x2' , 'h2mov');
+    if(aluId_string.includes('1')){
+        clone.style.top = String(100/32*6) +"%";
+        clone.style.left = String(100/46*24) +"%";
+    } else {
+        clone.style.top = String(100/32*6) +"%";
+        clone.style.left = String(100/46*30) +"%";
     }
-
-    document.querySelector(".gridcontainer").appendChild(clone);
-    let  movObj = {aDiv: clone, path: aPath};
-    return movObj;
+    grid.appendChild(clone);
+    return clone;   
 }
+
 
 
 /******************************* ANIMATION IMPLIMENTATION *************************************** */
@@ -1280,13 +1377,13 @@ const change_assemblerCommand = () =>{      //throws Error
 }
 
 //*********************************Moving Anmiations*********************************
-const calcIntermediatePositions = (path) => {
+const calcIntermediatePositions = (path, interPointsQuantity) => {
     let xPositions = [];
     let yPositions = [];
     let bufferX = [];
     let bufferY = [];
     let posDiff = 0;
-    const interPointsQuantity = 12; //max Speed = 12
+    // const interPointsQuantity = 12; //max Speed = 12
     const reciprocal = 1/interPointsQuantity;
     
     
@@ -1332,73 +1429,142 @@ const calcIntermediatePositions = (path) => {
 }
 
 const updatePosition = (movingObject, x, y) => {
-    movingObject.aDiv.style.top = String(100/32*y) +"%";
-    movingObject.aDiv.style.left = String(100/46*x) +"%";
+    movingObject.style.top = String(100/32*y) +"%";
+    movingObject.style.left = String(100/46*x) +"%";
 }
 
-const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string) => {
+const createGreyElement = (i, xCoord,yCoord) =>{
+    ele = document.createElement('div');
+    ele.style.position = 'absolute';
+    ele.style.left = String(100/46*(xCoord[i]+0.5)) + '%';
+    ele.style.top = String(100/32*(yCoord[i]+0.5)) +'%';
+    ele.style.height = String(100/32*1) + '%';
+    ele.style.width = String(100/46*1) + '%';
+    ele.classList.add('greyBg' ,'rounded');
+    return ele;
+}
+
+const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_string, startElement_DOM) => {
+    let pathElements = [];
+    const coords = calcIntermediatePositions(path,2);
+    const xCoord = coords[0].flat(2);
+    const yCoord = coords[1].flat(2);
+   
+    //fixpoints of PC,ZR,... are too far to the left due to the size of 4x2 --> Painted path has to be moved right by 1
+    if(fixPointLabel_A_string === 'PC' || fixPointLabel_A_string === 'ZR' || fixPointLabel_A_string === 'HL' || fixPointLabel_A_string === 'SP' || fixPointLabel_A_string === 'IX'){
+        for (let i = 0; i < xCoord.length; i++) {
+            xCoord[i] += 1;
+        }
+        if(fixPointLabel_B_string === 'ROM2'){
+            xCoord.push(xCoord[xCoord.length-1]-1);
+            yCoord.push(yCoord[yCoord.length-1]);
+        } else {
+            xCoord.push(xCoord[xCoord.length-1]+1);
+            yCoord.push(yCoord[yCoord.length-1]);
+        }
+    }
+
+    //create all PathElements
+    for (let i = 0; i < xCoord.length; i++) {
+        ele = createGreyElement(i, xCoord, yCoord);
+        pathElements.push(ele);
+    }
+
+    //create last PathElement (hex-number)
+    let reg = document.createElement('h2');
+    reg.style.position = 'absolute';
+    reg.style.left = String(100/46*(xCoord[xCoord.length-1])) + '%';
+    reg.style.top = String(100/32*(yCoord[xCoord.length-1])) +'%';
+    reg.textContent = startElement_DOM.textContent;
+    reg.style.color = "#222222";
+    reg.classList.add('yellowBg', 'boxborder', 'square2x2', 'rounded', );
+    if(fixPointLabel_A_string === 'PC' || fixPointLabel_A_string === 'ZR' || fixPointLabel_A_string === 'HL' || fixPointLabel_A_string === 'SP' || fixPointLabel_A_string === 'IX')
+        reg.classList.add('rectangle4x2');
+    
+    pathElements.push(reg);
+
+    //add Elements to grid
+    for (let i = 0; i < pathElements.length; i++) {
+        grid.appendChild(pathElements[i]);
+    }
+
+    await Sleep(2000/ANIMATION_SPEED);
+    
+    //remove Elements
+    try{
+        await isRunning();
+    } catch(e) {
+        for (let i = 0; i < pathElements.length; i++) {
+            pathElements[i].remove();
+        }
+        startElement_DOM.classList.remove('toggleGrid');
+        throw Error('Stop pressed');
+    }
+
+    for (let i = 0; i < pathElements.length; i++) {
+        pathElements[i].remove();
+    }
+    startElement_DOM.classList.remove('toggleGrid');
+}
+
+const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, hexValue_string = 'ÄÄ') => {
     await isRunning();
-    if(!playStatus.noAnim){
+    if(!playStatus.noAnim){     //only execute when Animation is demanded
         const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
-        let movingObject = createMovingObj(fixPointLabel_A_string, path);
-        const movingObjectCoordinates = calcIntermediatePositions(path);
+        updateMovingObj(path,hexValue_string);
+        const movingObjectCoordinates = calcIntermediatePositions(path, 12);
         const xCoord = movingObjectCoordinates[0];
         const yCoord = movingObjectCoordinates[1];
-        //await Sleep_Waittime(); //intended pause to reduce lag
         
-        //TODO: arrows
+        //fast Animation
         if(playStatus.rocketSpeed){
-            document.querySelector(".gridcontainer").classList.add('bussystem_yellow');
-            await Sleep_Waittime();
-            document.querySelector(".gridcontainer").classList.remove('bussystem_yellow');
-            await Sleep_Waittime();
-        } else {
+            await createPaintedPath(path,fixPointLabel_A_string, fixPointLabel_B_string, movingObject_new); 
+        } else { //slow Animation
             for (let i = 0; i < movingObjectCoordinates[0].length; i++) {  //iterate through Coordinates
                 if(playStatus.noAnim){      //noAnim
-                    movingObject.aDiv.remove();
-                    movingObject = 0;
+                    movingObject_new.classList.remove('toggleGrid');
                     return true;
                 }
-                await conditionalPositionupdate(xCoord[i], yCoord[i], ANIMATION_SPEED, movingObject)
+                await conditionalPositionupdate(xCoord[i], yCoord[i], ANIMATION_SPEED, movingObject_new);
             }
         }       
-
-        movingObject.aDiv.remove();
-        movingObject = 0;  
+        movingObject_new.classList.remove('toggleGrid'); 
     }
-    
-    return true;
 }
 
 const conditionalPositionupdate = async(xCoord, yCoord, speed, movingObject) => {
     for (let j = 0; j < xCoord.length/speed; j++) {
-        await isRunning()
+        try{
+            await isRunning();
+        }catch(e){
+            movingObject.classList.remove('toggleGrid');
+            throw Error('Stop pressed');
+        }
         updatePosition(movingObject, xCoord[j*speed], yCoord[j*speed]);
         await Sleep(1000/FRAMES);
     }
     return true;
-}
-
+}  
+           
 /********************************** single animations ****************************** */
 const add_yellow_background_for_WAITTIME = async(variable_DOM) => {
     await isRunning()
     
     if(!playStatus.noAnim){
         variable_DOM.classList.add('yellowBg');
-        variable_DOM.style = "color: black";
+        variable_DOM.style.color = 'black';
         await Sleep_Waittime();
         if(await pausePressed()){
             if(playStatus.play)
                 await Sleep(150);
         }
         variable_DOM.classList.remove('yellowBg');
-        variable_DOM.style = "";
+        variable_DOM.style.color = '';
     }else{
         await Sleep_NoAnimationTime();
     }
     return true;
 }
-
 const description_update = async(description_string) => {
     if(!await isRunning()){
         return false;
@@ -1433,6 +1599,15 @@ const addArrow = async(register_string) => {
             }
             irArrow.classList.remove('ir_arrow');
         }
+        else if(register_string === 'FLAGS'){
+            flagsArrow.classList.add('flags_arrow');
+            await Sleep_Waittime();
+            if(await pausePressed()){
+                if(playStatus.play)
+                    await Sleep(150);
+            }
+            flagsArrow.classList.remove('flags_arrow');
+        }
     } 
     return true;
 }
@@ -1447,14 +1622,38 @@ const updatePC = async() => {
     return true;
 }
 
-const updateRegister_hex2 = async(register_class, hex2_dec) => {
+const updateRegister_hex = async(register_class, hex_dec) => {
     if(!await isRunning())
         return false;
-    register_class.update(hex2_dec);
+    register_class.update(hex_dec);
     await add_yellow_background_for_WAITTIME(register_class.DOM);
     return true;
 }
+const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
+    if(!await isRunning())
+        return false;
+    
+    register_class.update_hi(hex2_dec);
+    
+    yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
+    yellowBgElement.style.left = String(100/46*14) + '%';
+    yellowBgElement.classList.add('toggleGrid');
+    await Sleep_Waittime();
+    yellowBgElement.classList.remove('toggleGrid');
+    return true;
+}
+const updateRegister_hex4_lo = async(register_class, hex2_dec) => {
+    if(!await isRunning())
+        return false;
+    register_class.update_low(hex2_dec);
 
+    yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
+    yellowBgElement.style.left = String(100/46*16) + '%';
+    yellowBgElement.classList.add('toggleGrid');
+    await Sleep_Waittime();
+    yellowBgElement.classList.remove('toggleGrid');
+    return true;
+}
 const assemblerCommand_update = async() => {
     if(!await isRunning())
         return false;
@@ -1464,6 +1663,84 @@ const assemblerCommand_update = async() => {
         throw Error('Unknown command');
     }
     await addArrow('IR');
+}
+// console.log(yellowBgElement.top)
+
+const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
+    const xCoord1 = [24];
+    const xCoord2 = [30];
+    const yCoord =  [6];
+    for (let j = 0; j < 30; j++) {
+        xCoord1.push(xCoord1[j]+0.1);
+        xCoord2.push(xCoord2[j]-0.1);
+        yCoord.push(yCoord[j]+1/7.5);
+    }
+    // await isRunning();
+    const movAlu1 = createMovingAluElement('ALU1');
+    const movAlu2 = createMovingAluElement('ALU2');
+    await Sleep_Waittime();
+    ALU1.DOM.textContent = '';
+    ALU2.DOM.textContent = '';
+
+    for (let i = 0; i < xCoord1.length; i++) {
+        try{
+            await isRunning();
+        } catch(e) {
+            movAlu1.remove();
+            movAlu2.remove();
+            throw Error('Stop pressed');
+        }
+        await Sleep(1000/FRAMES);
+        updatePosition(movAlu1, xCoord1[i],yCoord[i]);
+        updatePosition(movAlu2, xCoord2[i],yCoord[i]);    
+    }
+    movAlu1.remove();
+    movAlu2.remove();
+    await updateRegister_hex(ALUOUT, aluOUT_dec);
+    ALUOUT.DOM.classList.add('yellowBg');
+    try {
+        await setFlags(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec);
+    } catch (e) {
+        ALUOUT.DOM.classList.remove('yellowBg');
+        ALUOUT.DOM.textContent = '';
+        throw Error('Stop pressed');
+    }
+    
+    ALUOUT.DOM.classList.remove('yellowBg');
+    ALUOUT.DOM.textContent = '';
+
+}
+
+const setFlags = async(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
+    await addArrow('FLAGS');
+    movingFlags.children[0].textContent = cFlag_dec;
+    movingFlags.children[1].textContent = zFlag_dec;
+    movingFlags.children[2].textContent = pFlag_dec;
+    movingFlags.children[3].textContent = sFlag_dec;
+    movingFlags.classList.add('toggleGrid');
+    await Sleep_Waittime();
+    for (let i = 0; i < 21; i++) {
+        try{
+            await isRunning();
+        } catch (e) {
+            movingFlags.classList.remove('toggleGrid');
+            movingFlags.style.top = String(100/32*8) + '%';
+            throw Error('Stop pressed');
+        }
+        movingFlags.style.top = String(100/32*(8-i/20)) + '%';
+        await Sleep(1000/FRAMES);  
+    }
+    FLAGS.update(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec);
+    await Sleep_Waittime();
+    try {
+        await isRunning();
+    } catch (e) {
+        movingFlags.classList.remove('toggleGrid');
+        movingFlags.style.top = String(100/32*8) + '%';
+        throw Error('Stop pressed');
+    }    
+    movingFlags.classList.remove('toggleGrid');
+    movingFlags.style.top = String(100/32*8) + '%';
 }
 
 const dec_display = document.getElementById('dec_display');
@@ -1551,6 +1828,17 @@ const updateDEC = async(DECValue_string) => {
     }
 }
 
+const changeIO = async(IO_DOM, IO_input_window_DOM, IO_input_DOM) =>{
+    pause();    
+    IO_input_window_DOM.classList.add('toggleGrid');
+    await isRunning();
+    IO_input_window_DOM.classList.remove('toggleGrid');
+    if(IO_input_DOM.value === '')
+        IO_input_DOM.value = 'FF';
+    await updateRegister_hex(IO_DOM,convertHexToNumber(IO_input_DOM.value));
+    IO_input_DOM.value = '';    
+}
+
 
 /********************************** composite animations ****************************** */
 
@@ -1558,14 +1846,14 @@ const get_next_command = async() => {
     stepNumber.textContent = '0';
     assemblerCommand.textContent = '';
     const romEle = getRomElement();
-    
+
     await description_update('Hole nächsten Befehl');
     await addArrow('PC');
     await updateDEC('readROM');
-    await transfer('PC', 'ROM2');
-    await transfer(romEle.id, "SW");
+    await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
+    await transfer(romEle.id, "SW", convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
     await updateDEC();
-    await updateRegister_hex2(IR, ROM.getPCValue(PC.dec));
+    await updateRegister_hex(IR, ROM.getPCValue(PC.dec));
     await description_update('Erhöhe Programmzähler um 1');
     await addArrow('PC');
     await updatePC();
@@ -1580,10 +1868,10 @@ const movAdat_8 = async() => {
     await description_update('Hole den Parameter');
     await addArrow('PC');
     await updateDEC('readROM');
-    await transfer('PC', 'ROM2');
-    await transfer(romEle.id, 'A');
+    await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
+    await transfer(romEle.id, 'A', convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
     await updateDEC();
-    await updateRegister_hex2(A, ROM.getPCValue(PC.dec));
+    await updateRegister_hex(A, ROM.getPCValue(PC.dec));
     await description_update('Erhöhe Programmzähler um 1');
     await addArrow('PC');
     await updatePC();
@@ -1596,10 +1884,10 @@ const movBdat_8 = async() => {
     await description_update('Hole den Parameter');
     await addArrow('PC');
     await updateDEC('readROM');
-    await transfer('PC', 'ROM2');
-    await transfer(romEle.id, 'B');
+    await transfer('PC', 'ROM2',convertNumberToHex_4digits(PC.dec));
+    await transfer(romEle.id, 'B',convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
     await updateDEC();
-    await updateRegister_hex2(B, ROM.getPCValue(PC.dec));
+    await updateRegister_hex(B, ROM.getPCValue(PC.dec));
     await description_update('Erhöhe Programmzähler um 1');
     await addArrow('PC');
     await updatePC();
@@ -1632,16 +1920,7 @@ const run_program = async(currentTime) => {
 
 const init = () => {
     runningProgramm = [get_next_command];
-    try {
-        document.querySelector(".gridcontainer").removeChild(document.getElementById('movingObject'));
-    } catch (error) {
-        
-    }
-    try {
-        document.querySelector(".gridcontainer").removeChild(document.getElementById('movingRomElement'));
-    } catch (error) {
-        
-    }
+
     IO1.update(255);
     IO2.update(255);
     IO3.update(255);
@@ -1665,7 +1944,7 @@ const init = () => {
     assemblerCommand.textContent = '';
     dec_display.textContent = '';
     
-    updateRedRectangle(convertHexToInt(PC.dec));
+    updateRedRectangle(convertHexToNumber(PC.dec));
 }
 
 /********************************** button functions ****************************** */
@@ -1851,7 +2130,7 @@ const openAssembler = () => {
 }
 
 const openInfo = () => {
-    
+    document.getElementById('info_hover').classList.toggle('toggleGrid');
 }
 
 /******************************* mc8_commands *********************************** */

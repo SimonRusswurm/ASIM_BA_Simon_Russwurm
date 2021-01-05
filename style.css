@@ -36,7 +36,7 @@ button{
 }
 
 button:hover{
-    background-color: rgba(25, 178, 255, 0.7);
+    background-color:#19B2FF;
     transition: all 0.1s linear;    
 }
 
@@ -103,7 +103,17 @@ button:hover{
 }
 .yellowBg , .yellowBg p{
     background-color: yellow;
-    color: black;
+    color: #222222;
+}
+
+.greyBg{
+    background-color:  #6A6A6A;
+}
+.whiteBg{
+    background-color:  #FBFBFB;
+}
+.lightBlueBg{
+    background-color:  #96dafc;
 }
 
 
@@ -204,6 +214,12 @@ button:hover{
     width: calc(100%/46*12);
 }
 
+#movingObject{
+    position: absolute;
+    z-index: 5;
+    color: #222222;
+}
+
 /* ******************************* ROM ******************************* */
 
 .ROM{
@@ -295,6 +311,18 @@ button:hover{
     left: calc(100%/46*16);
 }
 
+#IO1_input_window{
+    position: absolute;
+    top: calc(100%/32*0);
+    left: calc(100%/46*12);
+    width: calc(100%/46*6);
+    height: calc(100%/32*6);
+    z-index: 7;
+    
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 4fr;  
+}
+
 #io2_h1{
     top: calc(100%/32*0);
     left: calc(100%/46*20);
@@ -306,6 +334,17 @@ button:hover{
 #IO2{
     top: calc(100%/32*0);
     left: calc(100%/46*24);
+}
+#IO2_input_window{
+    position: absolute;
+    top: calc(100%/32*0);
+    left: calc(100%/46*20);
+    width: calc(100%/46*6);
+    height: calc(100%/32*6);
+    z-index: 7;
+    
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 4fr;  
 }
 
 #io3_h1{
@@ -319,6 +358,17 @@ button:hover{
 #IO3{
     top: calc(100%/32*0);
     left: calc(100%/46*32);
+}
+#IO3_input_window{
+    position: absolute;
+    top: calc(100%/32*0);
+    left: calc(100%/46*28);
+    width: calc(100%/46*6);
+    height: calc(100%/32*6);
+    z-index: 7;
+    
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 4fr;  
 }
 
 /* ******************************* AKKU/FLAGS ******************************* */
@@ -339,6 +389,19 @@ button:hover{
     align-items: center;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: repeat(4, 1fr);
+}
+
+#movingFlags{
+    position: absolute;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(4, 1fr);
+    width: calc(100%/46*4);
+    height: calc(100%/32 * 1);
+    top: calc(100%/32*8);
+    left: calc(100%/46*15);
+    justify-items: center;
+    align-items: center;
+    
 }
 
 /* ******************************* REGISTER ******************************* */
@@ -419,6 +482,25 @@ button:hover{
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
+    z-index: 4;
+}
+
+#ALU1{
+    position: absolute;
+    top: calc(100%/32*6);
+    left: calc(100%/46*24);
+}
+
+#ALU2{
+    position: absolute;
+    top: calc(100%/32*6);
+    left: calc(100%/46*30);
+}
+
+#ALUOUT{
+    position: absolute;
+    top: calc(100%/32*10);
+    left: calc(100%/46*27);
 }
 
 /* ******************************* CONTROLUNIT ******************************* */
@@ -474,14 +556,7 @@ button:hover{
 #stepDescription{
     justify-self: start;
 }
-.ir_arrow{
-    width: 100%;
-    height: 100%;
-    background-image: url(images/IRArrow.svg);
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
-}
+
 #SW4{
     display: grid;
     justify-items: center;
@@ -502,6 +577,27 @@ button:hover{
     grid-template-columns: repeat(4, 1fr);
 }
 
+
+
+#dec{
+    top: calc(100%/32*26);
+    left: calc(100%/46*26);
+}
+#dec_display{
+    top: calc(100%/32*26);
+    left: calc(100%/46*28);
+}
+
+/* ******************************* yellow Arrows ******************************* */
+.ir_arrow{
+    width: 100%;
+    height: 100%;
+    background-image: url(images/IRArrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 #registerArrow{
     position: absolute;
     top: calc(100%/32*10);
@@ -516,13 +612,29 @@ button:hover{
     background-repeat: no-repeat;
 }
 
-#dec{
-    top: calc(100%/32*26);
-    left: calc(100%/46*26);
+.flags_arrow{
+    position:absolute;
+    z-index: 1;
+    top: calc(100%/32*8);
+    left: calc(100%/46*19);
+    height: calc(100%/32*1);
+    width: calc(100%/46*6);
+    background-image: url(images/flags_arrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
-#dec_display{
-    top: calc(100%/32*26);
-    left: calc(100%/46*28);
+
+.movArrow{
+    position:absolute;
+    top: 0%;
+    left: 0%;
+    height: 100%;
+    width: 100%;
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    /* background-image: url(images/ROM_A_arrow.svg); */
 }
 
 /* ******************************* CONTROLPANEL ******************************* */
@@ -824,6 +936,9 @@ textarea{
     width: calc(100%/39*6);
     background-color: #19b2ff4d;
 }
+#info:hover{
+    background-color: #19B2FF;
+}
 
 #info_hover{
     position: absolute;
@@ -853,9 +968,7 @@ textarea{
 .hoverElement p{
     color: black;
 }
-.toggleGrid{
-    display: grid;
-}
+
 #rom_hover{
     grid-template-columns: 4fr 2fr 2fr;
     grid-template-rows: repeat(4,1fr);
@@ -1159,4 +1272,8 @@ textarea{
     left: calc(100%/46*24); 
     width: calc(100%/46*12);
     height: calc(100%/32*2);
+}
+
+.toggleGrid{
+    display: grid;
 }

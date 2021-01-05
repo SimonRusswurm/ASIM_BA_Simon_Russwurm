@@ -112,7 +112,7 @@
                 <div class="Adresse-000x-1FFx grid-template boxborder">
                     
                 </div>
-                <div class="points1 grid-template boxborder bottomLeft bottomRight">
+                <div id="romElementLast" class="points1 grid-template boxborder bottomLeft bottomRight">
 
                 </div>
             </div>
@@ -175,7 +175,7 @@
                     <p class="RamAdressLabel">206x</p>
                 </div>
 
-                <div class="points2 grid-template boxborder"></div>
+                <div id="ramElementBetween" class="points2 grid-template boxborder"></div>
 
                 <div class="Adresse-200x-3FFx grid-template boxborder">
                     
@@ -221,6 +221,8 @@
                 </div>       
             </div>
            
+            <!-- ************************** MovingObject **************************  -->
+            <h2 id="movingObject" class="square2x2 boxborder yellowBg rounded noneDisplay"></h2>
 
             <!-- ************************** IOs **************************  -->
             <div id="io1_hover" class="hoverElement boxborder rounded">
@@ -233,6 +235,13 @@
             <h1 id="io1_h1" class="square2x2 boxborder topLeft bottomLeft">IO1</h1>
             <div id="io1_arrow" class="square2x2 boxborder ioArrow"></div>
             <h2 id="IO1" class="square2x2 boxborder topRight bottom bottomRight">FF</h2>
+            <div id="IO1_input_window" class="noneDisplay">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
+                    <button class="boxborder topLeft bottomLeft lightBlueBg" onclick="play()" >Speichern</button>
+                    <input id="IO1_input" type="text" class="boxborder topRight bottomRight yellowBg" style="width: 100%; height: 100%; text-align: center; font-size: 200%;" placeholder="FF">  
+                </div>
+                <p class="yellowBg boxborder rounded" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+            </div>
 
             <div id="io2_hover" class="hoverElement boxborder rounded">
                 <p>IO2</p><p></p>
@@ -244,6 +253,13 @@
             <h1 id="io2_h1" class="square2x2 boxborder topLeft bottomLeft">IO2</h1>
             <div id="io2_arrow" class="square2x2 boxborder ioArrow ioArrowOUT"></div>
             <h2 id="IO2" class="square2x2 boxborder topRight bottom bottomRight">FF</h2>
+            <div id="IO2_input_window" class="noneDisplay">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
+                    <button class="boxborder topLeft bottomLeft lightBlueBg" onclick="play()" >Speichern</button>
+                    <input id="IO2_input" type="text" class="boxborder topRight bottomRight yellowBg" style="width: 100%; height: 100%; text-align: center; font-size: 200%;" placeholder="FF">  
+                </div>
+                <p class="yellowBg boxborder rounded" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+            </div>
 
             <div id="io3_hover" class="hoverElement boxborder rounded" >
                 <p>IO3</p><p></p>
@@ -255,6 +271,13 @@
             <h1 id="io3_h1" class="square2x2 boxborder topLeft bottomLeft">IO3</h1>
             <div id="io3_arrow" class="square2x2 boxborder ioArrow "></div>
             <h2 id="IO3" class="square2x2 boxborder topRight bottom bottomRight">FF</h2>
+            <div id="IO3_input_window" class="noneDisplay">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
+                    <button class="boxborder topLeft bottomLeft lightBlueBg" onclick="play()" >Speichern</button>
+                    <input id="IO3_input" type="text" class="boxborder topRight bottomRight yellowBg" style="width: 100%; height: 100%; text-align: center; font-size: 200%;" placeholder="FF">  
+                </div>
+                <p class="yellowBg boxborder rounded" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+            </div>
 
 
             <!-- ************************** akku/flags **************************  -->
@@ -287,7 +310,18 @@
             <div id="sFlag_hover" class="hoverElement boxborder rounded">
                 <p>S - Sign Flag</p>
             </div>
+
+
+            <div id="movingFlags" class="boxborder rounded yellowBg noneDisplay">
+                <p>0</p>
+                <p>0</p>
+                <p>0</p>
+                <p>0</p>
+            </div>
+            <div id="flagsArrow"></div>
+
             <!-- ************************** register **************************  -->
+            <div id="yellowBgElement" class="square2x2 yellowBg noneDisplay" style="position: absolute;"></div>
             <h1 id="b" class="rectangle1x2 boxborder topLeft">B</h1>
             <h2 id="B" class="square2x2 boxborder">00</h2>
             <div id="b_hover" class="hoverElement boxborder rounded">
@@ -339,6 +373,11 @@
             <div class="ALU">
                 <p>ALU</p>
             </div>
+            <h2 id="ALU1" class="square2x2 boxborder rounded"></h2>
+            <h2 id="ALU2" class="square2x2 boxborder rounded"></h2>
+            <h2 id="ALUOUT" class="square2x2 boxborder rounded"></h2>
+
+
 
 			<!-- ************************** controlunit **************************  -->
             <p id="controlunit" class="rectangle8x2 boxborder topLeft">Steuerwerk</p>
@@ -537,10 +576,11 @@
                         <p id="errorMessage"></p>
                     </div>
 
-                    <p id="info" class="lightrounded boxborder centered">Info</p>
+                    <!-- <p id="info" class="lightrounded boxborder centered">Info</p> -->
                     <div id="info_hover" class="rounded noneDisplay">
                         <p>INFO</p>
                     </div>
+                    <button id="info" class="lightrounded boxborder" type="button" onclick="openInfo()"><p>INFO</p></button>
                     <button id="toAssembler"   class="lightrounded boxborder" type="button" onclick="openAssembler()"><p>Zum Assembler</p></button>
                     <button id="closeSettings" class="lightrounded boxborder" type="button" onclick="saveSettings()"><p>Speichern</p></button>
                 </div>
@@ -580,7 +620,7 @@
             </div>
             <div id="fast_hover" class="hoverElement boxborder rounded">
                 <p>Schnelle Animation:</Button></p>
-                <p>Animation mit Pfeilen.</p>
+                <p>Animation ohne Bewegung.</p>
             </div>
             <div id="increase_hover" class="hoverElement boxborder rounded">
                 <p>Schneller:</Button></p>

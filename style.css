@@ -69,7 +69,7 @@ button:hover{
     width: calc(100%/39*1);
 }
 
-.boxborder{
+.borderBox{
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;
@@ -128,7 +128,7 @@ button:hover{
     height: 100vh; 
 }
 
-.gridcontainer{
+.gridContainer{
     width: 98%;
     height: 98%;
     position: relative;
@@ -214,7 +214,7 @@ button:hover{
     width: calc(100%/46*12);
 }
 
-#movingObject{
+.movingObject{
     position: absolute;
     z-index: 5;
     color: #222222;
@@ -243,7 +243,7 @@ button:hover{
 }
 .Label-000x-1FFx{
 }
-.Adresse-000x-1FFx{
+.address-000x-1FFx{
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(2, 1fr);
 }
@@ -283,7 +283,7 @@ button:hover{
 }
 
 
-.Adresse-200x-3FFx{
+.address-200x-3FFx{
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: 1fr 1fr;
 }
@@ -583,7 +583,7 @@ button:hover{
     top: calc(100%/32*26);
     left: calc(100%/46*26);
 }
-#dec_display{
+#decDisplay{
     top: calc(100%/32*26);
     left: calc(100%/46*28);
 }
@@ -696,14 +696,14 @@ button:hover{
     background-position: center center;
     background-repeat: no-repeat;
 }
-#oneComand{
-    background-image: url(images/oneComand_button.svg);
+#oneCommand{
+    background-image: url(images/oneCommand_button.svg);
     background-size: 80%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#singlestep{
-    background-image: url(images/singlestep_button.svg);
+#singleStep{
+    background-image: url(images/singleStep_button.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
@@ -714,8 +714,8 @@ button:hover{
     background-position: center center;
     background-repeat: no-repeat;
 }
-#fullcomand{
-    background-image: url(images/fullcomand.svg);
+#fullCommand{
+    background-image: url(images/fullCommand.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
@@ -818,21 +818,21 @@ textarea{
     left: calc(100%/39*17);
 }
 
-.adressInput{
+.addressInput{
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 90%;
 }
-#io1Adress{
+#io1Address{
     width: 100%;
     height: 100%;  
 }
-#io2Adress{
+#io2Address{
     width: 100%;
     height: 100%;  
 }
-#io3Adress{
+#io3Address{
     width: 100%;
     height: 100%;  
 }
@@ -866,13 +866,13 @@ textarea{
     left: calc(100%/39*17);
 }
 
-#Adressbereich{
+#addressRange{
     position: absolute;
     top: calc(100%/26*17);
     left: calc(100%/39*17);
 }
 
-#adressRAM{
+#addressRAM{
     position: absolute;
     top: calc(100%/26*17);
     left: calc(100%/39*22);
@@ -1225,7 +1225,7 @@ textarea{
     width: calc(100%/46*12);
     height: calc(100%/32*2);
 }
-#oneComand_hover{
+#oneCommand_hover{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 2fr;
     top: calc(100%/32*27);
@@ -1233,7 +1233,7 @@ textarea{
     width: calc(100%/46*12);
     height: calc(100%/32*3);
 }
-#singlestep_hover{
+#singleStep_hover{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     top: calc(100%/32*28);
@@ -1241,7 +1241,7 @@ textarea{
     width: calc(100%/46*12);
     height: calc(100%/32*2);
 }
-#fullcomand_hover{
+#fullCommand_hover{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 2fr;
     top: calc(100%/32*27);

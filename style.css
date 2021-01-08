@@ -17,12 +17,22 @@ body{display: flex; justify-content: center;}
     src:url(fonts/Lato-Light.ttf);
     font-family: lato-light;
 }
-h1{margin: 0; padding: 0; color: #19B2FF; font-family: lato-reg; cursor: pointer;}
-h2{margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
-.h2mov{font-family: lato-bold;}
-h3{margin: 0; padding: 0; color: #19B2FF; font-family: lato-light; cursor: pointer;}
-h4{margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
-p{ margin: 0; padding: 0; color: #222222; font-family: lato-reg;}
+@font-face{
+    src:url(fonts/DroidSansMono-enMp.ttf);
+    font-family: roboto-reg;
+}
+@font-face{
+    src:url(fonts/DroidSansMono-enMp.ttf);
+    font-family: roboto-bold;
+    
+}
+
+h1{margin: 0; padding: 0; color: #19B2FF; font-family: roboto-reg; cursor: pointer;}
+h2{margin: 0; padding: 0; color: #222222; font-family: roboto-bold;}
+.h2mov{font-family: roboto-bold;}
+h3{margin: 0; padding: 0; color: #19B2FF; font-family: roboto-reg; cursor: pointer;}
+h4{margin: 0; padding: 0; color: #222222; font-family: roboto-reg;}
+p{ margin: 0; padding: 0; color: #222222; font-family: roboto-reg;}
 
 button{
     width: 100%;
@@ -1046,7 +1056,7 @@ textarea{
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*14);
     left: calc(100%/46*12); 
-    width: calc(100%/46*7);
+    width: calc(100%/46*7.5);
     height: calc(100%/32*2);
 }
 #ix_hover{
@@ -1086,15 +1096,15 @@ textarea{
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*16);
     left: calc(100%/46*30); 
-    width: calc(100%/46*7);
+    width: calc(100%/46*8);
     height: calc(100%/32*2);
 }
 #dec_hover{
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 3fr;
+    grid-template-rows: 1fr 4fr;
     top: calc(100%/32*22);
     left: calc(100%/46*26); 
-    width: calc(100%/46*13);
+    width: calc(100%/46*12);
     height: calc(100%/32*4);
 }
 #cFlag_hover{
@@ -1102,7 +1112,7 @@ textarea{
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
     left: calc(100%/46*15); 
-    width: calc(100%/46*4.5);
+    width: calc(100%/46*5);
     height: calc(100%/32*1);
 }
 #zFlag_hover{
@@ -1110,7 +1120,7 @@ textarea{
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
     left: calc(100%/46*15); 
-    width: calc(100%/46*4.3);
+    width: calc(100%/46*5);
     height: calc(100%/32*1);
 }
 #pFlag_hover{
@@ -1118,7 +1128,7 @@ textarea{
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
     left: calc(100%/46*15); 
-    width: calc(100%/46*8.1);
+    width: calc(100%/46*9);
     height: calc(100%/32*1);
 }
 #sFlag_hover{
@@ -1126,7 +1136,7 @@ textarea{
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
     left: calc(100%/46*15); 
-    width: calc(100%/46*4);
+    width: calc(100%/46*5);
     height: calc(100%/32*1);
 }
 
@@ -1150,7 +1160,7 @@ textarea{
 
 #m_hover{
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 4fr;
+    grid-template-rows: 2fr 3fr;
     top: calc(100%/32*21);
     left: calc(100%/46*22); 
     width: calc(100%/46*12);
@@ -1221,24 +1231,24 @@ textarea{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     top: calc(100%/32*28);
-    left: calc(100%/46*18); 
-    width: calc(100%/46*12);
+    left: calc(100%/46*16); 
+    width: calc(100%/46*14);
     height: calc(100%/32*2);
 }
 #oneCommand_hover{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 2fr;
     top: calc(100%/32*27);
-    left: calc(100%/46*20); 
-    width: calc(100%/46*12);
+    left: calc(100%/46*18); 
+    width: calc(100%/46*14);
     height: calc(100%/32*3);
 }
 #singleStep_hover{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     top: calc(100%/32*28);
-    left: calc(100%/46*22); 
-    width: calc(100%/46*12);
+    left: calc(100%/46*20); 
+    width: calc(100%/46*14);
     height: calc(100%/32*2);
 }
 #fullCommand_hover{
@@ -1253,8 +1263,8 @@ textarea{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     top: calc(100%/32*28);
-    left: calc(100%/46*24); 
-    width: calc(100%/46*12);
+    left: calc(100%/46*22); 
+    width: calc(100%/46*14);
     height: calc(100%/32*2);
 }
 #fullscreenButton_hover{
@@ -1269,8 +1279,8 @@ textarea{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 2fr;
     top: calc(100%/32*28);
-    left: calc(100%/46*24); 
-    width: calc(100%/46*12);
+    left: calc(100%/46*28); 
+    width: calc(100%/46*8);
     height: calc(100%/32*2);
 }
 

@@ -8,12 +8,12 @@ const resizeWindow = () => {
 	if(window.innerHeight*1.4375 > window.innerWidth){
         mc8.style.width = String(window.innerWidth) + "px";
         mc8.style.height = String(window.innerWidth/1.4375) + "px";
-        style.innerHTML = "h1{font-size: 1.46666vw;} p{font-size: 1.3913vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}";
+        style.innerHTML = "h1{font-size: 1.6vw;} p{font-size: 1.2vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}";
         
     } else {
         mc8.style.width = String(window.innerHeight*1.4375) + "px";
         mc8.style.height = String(window.innerHeight) + "px";
-        style.innerHTML = "h1{font-size: 2.2vh;} p{font-size: 2vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
+        style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
     }
 }
 
@@ -723,7 +723,7 @@ fullCommand_button.addEventListener('mouseover', function() {
     document.getElementById('fullCommand_hover').classList.toggle('toggleGrid');
 });
 fullCommand_button.addEventListener('mouseleave', function() {
-    document.getElementById('full-command_hover').classList.toggle('toggleGrid');
+    document.getElementById('fullCommand_hover').classList.toggle('toggleGrid');
 });
 
 const settings_button = document.getElementById('settingsButton');
@@ -760,7 +760,7 @@ commandSelect.addEventListener('input', function() {
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'test':
-            linkerFile.value = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:010008008778\n:00000001FF';
+            linkerFile.value = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:010008008778\n:04000900DD210001FD\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp1':
@@ -1319,7 +1319,8 @@ const sleepForNOANIMATIONIDLETIME = () => sleep(NOANIMATIONIDLETIME);
 const check_completeExecution = () => {
     if(!playStatus.completeExe){ //skip if true
         if(playStatus.noAnim || playStatus.oneCommand){  //after completing animation check if program should be paused
-            description_update('Prozessor angehalten');
+            change_stepDescription('Prozessor angehalten');
+            stepNumber.textContent = '0';
             playStatus.setPause();
             setButtonPressed();
         }
@@ -1332,6 +1333,7 @@ const pushNextCommand = () => {
         if(mc8_commands_array[i].machineCommand_dec === IR.dec)
             runningProgram.push(mc8_commands_array[i].animationFunction);
     }
+    
     runningProgram.push(get_next_command);
     return;
 }
@@ -1641,24 +1643,26 @@ const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
         return false;
     
     register_class.update_hi(hex2_dec);
-    
-    yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
-    yellowBgElement.style.left = String(100/46*14) + '%';
-    yellowBgElement.classList.add('toggleGrid');
-    await sleepForIDLETIME();
-    yellowBgElement.classList.remove('toggleGrid');
+    if(!playStatus.noAnim){
+        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement.style.left = String(100/46*14) + '%';
+        yellowBgElement.classList.add('toggleGrid');
+        await sleepForIDLETIME();
+        yellowBgElement.classList.remove('toggleGrid');
+    }
     return true;
 }
 const updateRegister_hex4_lo = async(register_class, hex2_dec) => {
     if(!await checkPlayPressed())
         return false;
     register_class.update_low(hex2_dec);
-
-    yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
-    yellowBgElement.style.left = String(100/46*16) + '%';
-    yellowBgElement.classList.add('toggleGrid');
-    await sleepForIDLETIME();
-    yellowBgElement.classList.remove('toggleGrid');
+    if(!playStatus.noAnim){
+        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement.style.left = String(100/46*16) + '%';
+        yellowBgElement.classList.add('toggleGrid');
+        await sleepForIDLETIME();
+        yellowBgElement.classList.remove('toggleGrid');
+    }
     return true;
 }
 const assemblerCommand_update = async() => {
@@ -1874,7 +1878,7 @@ const changeIO = async(IO_DOM, IO_input_window_DOM, IO_input_DOM) =>{
 }
 
 
-/********************************** composite animations ****************************** */
+/********************************** command animations ****************************** */
 
 const get_next_command = async() => {
     stepNumber.textContent = '0';
@@ -1892,7 +1896,7 @@ const get_next_command = async() => {
     await addArrow('PC');
     await updatePC();
     await description_update('Erkenne den Befehl');
-    await assemblerCommand_update()
+    await assemblerCommand_update();
     pushNextCommand();
     return true;
 }
@@ -1911,6 +1915,7 @@ const movAdat_8 = async() => {
     await updatePC();
     check_completeExecution();
     return true;
+    
 }
 
 const movBdat_8 = async() => {
@@ -1929,6 +1934,84 @@ const movBdat_8 = async() => {
     return true;
 }
 
+const movCdat_8 = async() => {
+    const romEle = ROM.getRomElement();
+    await description_update('Hole den Parameter');
+    await addArrow('PC');
+    await updateDEC('readROM');
+    await transfer('PC', 'ROM2',convertNumberToHex_4digits(PC.dec));
+    await transfer(romEle.id, 'C',convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
+    await updateDEC();
+    await updateRegister_hex(C, ROM.getPCValue(PC.dec));
+    await description_update('Erhöhe Programmzähler um 1');
+    await addArrow('PC');
+    await updatePC();
+    check_completeExecution();
+    return true;
+}
+
+const twoByteIX = async() => {
+    await description_update('Hole das 2. Byte des Befehls');
+    await addArrow('PC');
+    await updateDEC('readROM');
+    await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
+    await transfer(ROM.getRomElement(PC.dec).id, "SW", convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
+    await updateDEC();
+    await updateRegister_hex(IR, ROM.getPCValue(PC.dec));
+    await description_update('Erhöhe Programmzähler um 1');
+    await addArrow('PC');
+    await updatePC();
+    await description_update('Erkenne den Befehl');
+    add_yellow_background_for_IDLETIME(IR.DOM);
+    
+
+    if(IR.dec === 0b00100001){
+        assemblerCommand.textContent = 'MOV IX, dat_16';
+        await addArrow('IR');
+        await description_update('Hole das niederwerige Byte');
+        await addArrow('PC');
+        await updateDEC('readROM');
+        await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
+        await transfer(ROM.getRomElement(PC.dec).id, 'IX_lo', convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
+        await updateRegister_hex4_lo(IX, convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
+        await description_update('Erhöhe Programmzähler um 1');
+        await addArrow('PC');
+        await updatePC();
+        await description_update('Hole das höherwertige Byte');
+        await addArrow('PC');
+        await updateDEC('readROM');
+        await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
+        await transfer(ROM.getRomElement(PC.dec).id, 'IX', convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
+        await updateRegister_hex4_hi(IX, convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
+        await description_update('Erhöhe Programmzähler um 1');
+        await addArrow('PC');
+        await updatePC();
+    }
+    else if(IR.dec === 0b00101010){
+        assemblerCommand.textContent = 'MOV IX, label';
+         
+    }
+    else if(IR.dec === 0b00100010 ){
+        assemblerCommand.textContent = 'MOV label, IX';
+         
+    }
+    else if(IR.dec === 0b00100011){
+        assemblerCommand.textContent = 'INC IX';
+         
+    }
+    else if(IR.dec === 0b00101011){
+        assemblerCommand.textContent = 'DEC IX';
+         
+    }
+    else if(IR.dec === 0b11101001){
+        assemblerCommand.textContent = 'JP [IX]';
+         
+    }
+    
+    check_completeExecution();
+    return true;
+}
+
 const addA = async() => {
     await description_update('Hole den 1. Operator'); 
     await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
@@ -1941,8 +2024,14 @@ const addA = async() => {
     await aluAnimation(A.dec+A.dec,0,0,0,0);
     await transfer('ALUOUT','A',convertNumberToHex_2digits(A.dec+A.dec));
     await updateRegister_hex(A, A.dec+A.dec);
-
+    check_completeExecution();
 }
+
+
+
+
+
+
 
 let runningProgram = [get_next_command];
 
@@ -1953,6 +2042,7 @@ const run_program = async(currentTime) => {
             return false;
         }
         try{
+            await checkPlayPressed();
             await runningProgram[i]();
         }
         catch(e){
@@ -1960,7 +2050,7 @@ const run_program = async(currentTime) => {
                 playStatus.setPause();
             setButtonPressed();
             console.log('In catch:');
-            console.log(e);
+            console.error(e);
             return false;
         }
         i++;
@@ -2004,7 +2094,7 @@ const slow_DOM = document.getElementById('slow');
 const fast_DOM = document.getElementById('fast');
 const oneCommand_DOM = document.getElementById('oneCommand');
 const singleStep_DOM = document.getElementById('singleStep');
-const fullcommand_DOM = document.getElementById('fullcommand');
+const fullCommand_DOM = document.getElementById('fullCommand');
 
 const setButtonPressed = () =>{
 
@@ -2048,10 +2138,10 @@ const setButtonPressed = () =>{
         }catch{}
     }   
     if(playStatus.completeExe){
-        fullcommand_DOM.classList.add('buttonPressed');
+        fullCommand_DOM.classList.add('buttonPressed');
     }else{
         try{
-            fullcommand_DOM.classList.remove('buttonPressed');
+            fullCommand_DOM.classList.remove('buttonPressed');
         }catch{}
     }
     if(playStatus.noAnim && !playStatus.completeExe){
@@ -2184,9 +2274,12 @@ const openInfo = () => {
 
 /******************************* mc8_commands *********************************** */
 const mc8_commands_array = [
-    movAdat_8_command   = new mc8_command('MOV A, dat_8', 62, 2, [0,0,0,0], movAdat_8),
-    movBdat_8_command   = new mc8_command('MOV B, dat_8',  6, 2, [0,0,0,0], movBdat_8),
-    addA_command        = new mc8_command('ADD A',0b10000111, 1, [1,1,1,1], addA)
+    movAdat_8_command   = new mc8_command('MOV A, dat_8', 0b00111110, 2, [0,0,0,0], movAdat_8),
+    movBdat_8_command   = new mc8_command('MOV B, dat_8', 0b00000110, 2, [0,0,0,0], movBdat_8),
+    movCdat_8_command   = new mc8_command('MOV C, dat_8', 0b00001110, 2, [0,0,0,0], movCdat_8),
+    addA_command        = new mc8_command('ADD A',0b10000111, 4, [1,1,1,1], addA),
+    twoByteIX_command   = new mc8_command('2-Byte Befehl', 0b11011101, 4, [0,0,0,0], twoByteIX)
+    
 
 ];
 

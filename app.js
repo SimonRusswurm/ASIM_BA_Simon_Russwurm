@@ -1568,6 +1568,10 @@ const getRegisterByName = (register_string) => {
         return PC;
 }
 
+const incRegister = (register_string) => {
+
+}
+
 /********************************* instant changes/update changes *********************************/
 //displays the description of the current Animation
 const change_stepDescription = (StringDescription) => stepDescription.textContent = StringDescription;
@@ -2220,13 +2224,13 @@ const get_next_command = async() => {
     assemblerCommand.textContent = '';
     IR.DOM.textContent = '';
 
-    await description_update('Hole 1. Operand');
-    await transfer('A', 'ALU1', 2);
-    await updateRegister_hex('ALU1', 2)
-    await description_update('Hole 2. Operand');
-    await transfer('A', 'ALU2', 4);
-    await updateRegister_hex('ALU2',4);
-    await aluAnimation(6,0,0,0,0);
+    // await description_update('Hole 1. Operand');
+    // await transfer('A', 'ALU1', 2);
+    // await updateRegister_hex('ALU1', 2)
+    // await description_update('Hole 2. Operand');
+    // await transfer('A', 'ALU2', 4);
+    // await updateRegister_hex('ALU2',4);
+    // await aluAnimation(6,0,0,0,0);
 
     await description_update('Hole den nächsten Befehl');
     await readFromMemoryInRegister('PC', 'IR');
@@ -2423,6 +2427,14 @@ const addA = async() => {
     await transfer('ALUOUT','A',convertNumberToHex_2digits(A.dec+A.dec));
     await updateRegister_hex('A', A.dec+A.dec);
     check_completeExecution();
+}
+
+const incA = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Erhöhe den Operanden um 1');
+    await aluAnimation(A.dec+1,0,0,0,0);
 }
 
 
@@ -2678,6 +2690,7 @@ const openInfo = () => {
 }
 
 /******************************* mc8_commands *********************************** */
+//overflowflag = 1, parityflag = 2;
 const mc8_commands_array = [
     nop_command         = new mc8_command('NOP', 0b00000000, 1, [0,0,0,0], nop),
     halt_command        = new mc8_command('HALT', 0b01110110, 1, [0,0,0,0], halt),
@@ -2694,6 +2707,7 @@ const mc8_commands_array = [
     movCA_command   	= new mc8_command('MOV C, A', 0b01001111, 1, [0,0,0,0], movCA),
     movCB_command   	= new mc8_command('MOV C, B', 0b01001000, 1, [0,0,0,0], movCB),
     movALabel_command   = new mc8_command('MOV A, label', 0b00111010, 3, [0,0,0,0], movALabel),
+    incA_command        = new mc8_command('INC A', 0b00111100, 1, [0,1,1,1], incA),
 
 
 

@@ -79,7 +79,7 @@ const convertNumberToHex_2digits = (number_dec) => {
     return number_dec;
 }
 
-const convertNumberToBinary_2digits = (number_dec) => {
+const convertNumberToBinary_8digits = (number_dec) => {
     let str = (number_dec).toString(2);
     const len = str.length;
     if(len != 8){
@@ -90,6 +90,9 @@ const convertNumberToBinary_2digits = (number_dec) => {
     str = str[0] +str[1] +str[2]+str[3]+ ' ' +str[4]+str[5]+str[6]+str[7];
     return str;
 }
+
+const convertNumberToBinary = (number_dec) => (number_dec).toString(2);
+
 
 const convertBinaryToNumber = (binary_dec) => {
     let str = '0b' + String(binary_dec);
@@ -625,7 +628,7 @@ io1_h1.addEventListener('mouseover', function() {
     document.getElementById('io1Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io1Address_hex').textContent = io1Address.value + 'h';
     document.getElementById('io1_dec').textContent = IO1.dec;
-    document.getElementById('io1_bin').textContent = convertNumberToBinary_2digits(IO1.dec);
+    document.getElementById('io1_bin').textContent = convertNumberToBinary_8digits(IO1.dec);
     document.getElementById('io1_hover').classList.toggle('toggleGrid');
 });
 io1_h1.addEventListener('mouseleave', function() {
@@ -637,7 +640,7 @@ io2_h1.addEventListener('mouseover', function() {
     document.getElementById('io2Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io2Address_hex').textContent =  document.getElementById('io2Address').value + 'h';
     document.getElementById('io2_dec').textContent = IO2.dec;
-    document.getElementById('io2_bin').textContent = convertNumberToBinary_2digits(IO2.dec);
+    document.getElementById('io2_bin').textContent = convertNumberToBinary_8digits(IO2.dec);
     document.getElementById('io2_hover').classList.toggle('toggleGrid');
 });
 io2_h1.addEventListener('mouseleave', function() {
@@ -649,7 +652,7 @@ io3_h1.addEventListener('mouseover', function() {
     document.getElementById('io3Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io3Address_hex').textContent =  document.getElementById('io3Address').value + 'h';
     document.getElementById('io3_dec').textContent = IO3.dec;
-    document.getElementById('io3_bin').textContent = convertNumberToBinary_2digits(IO3.dec);
+    document.getElementById('io3_bin').textContent = convertNumberToBinary_8digits(IO3.dec);
     document.getElementById('io3_hover').classList.toggle('toggleGrid');
 });
 io3_h1.addEventListener('mouseleave', function() {
@@ -659,7 +662,7 @@ io3_h1.addEventListener('mouseleave', function() {
 const a_h1 = document.getElementById('a');
 a_h1.addEventListener('mouseover', function() {
     document.getElementById('a_dec').textContent = 'Dezimal: ' + A.dec;
-    document.getElementById('a_bin').textContent =  'Binär: ' + convertNumberToBinary_2digits(A.dec);
+    document.getElementById('a_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(A.dec);
     document.getElementById('a_hover').classList.toggle('toggleGrid');
 });
 a_h1.addEventListener('mouseleave', function() {
@@ -669,7 +672,7 @@ a_h1.addEventListener('mouseleave', function() {
 const b_h1 = document.getElementById('b');
 b_h1.addEventListener('mouseover', function() {
     document.getElementById('b_dec').textContent = 'Dezimal: ' + B.dec;
-    document.getElementById('b_bin').textContent =  'Binär: ' + convertNumberToBinary_2digits(B.dec);
+    document.getElementById('b_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(B.dec);
     document.getElementById('b_hover').classList.toggle('toggleGrid');
 });
 b_h1.addEventListener('mouseleave', function() {
@@ -679,7 +682,7 @@ b_h1.addEventListener('mouseleave', function() {
 const c_h1 = document.getElementById('c');
 c_h1.addEventListener('mouseover', function() {
     document.getElementById('c_dec').textContent = 'Dezimal: ' + C.dec;
-    document.getElementById('c_bin').textContent =  'Binär: ' + convertNumberToBinary_2digits(C.dec);
+    document.getElementById('c_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(C.dec);
     document.getElementById('c_hover').classList.toggle('toggleGrid');
 });
 c_h1.addEventListener('mouseleave', function() {
@@ -733,7 +736,7 @@ zr_h1.addEventListener('mouseleave', function() {
 
 const ir_h1 = document.getElementById('ir');
 ir_h1.addEventListener('mouseover', function() {
-    document.getElementById('ir_bin').textContent =  'Binär: ' + convertNumberToBinary_2digits(IR.dec);
+    document.getElementById('ir_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(IR.dec);
     document.getElementById('ir_hover').classList.toggle('toggleGrid');
 });
 ir_h1.addEventListener('mouseleave', function() {
@@ -1568,8 +1571,28 @@ const getRegisterByName = (register_string) => {
         return PC;
 }
 
-const incRegister = (register_string) => {
+/******************** ALU operations ********************/
 
+const incRegister = (register_string) => {
+    const register = getRegisterByName(register_string);
+    let registerValue = register.dec;
+    let flags = [0,0,0,0];
+    
+
+    if(register instanceof Register_x2){
+        registerValue = register.dec + 1;
+        console.log(convertNumberToBinary(registerValue))
+        if(registerValue === 256){
+            registerValue = 0;
+            flags[1] = 1;
+        }
+        if(registerValue < 0){
+
+        }
+    }
+    else{
+
+    }
 }
 
 /********************************* instant changes/update changes *********************************/
@@ -1636,7 +1659,7 @@ const addArrow = async(register_string) => {
                 await sleepForIDLETIME();
             }
             finally{
-                registerArrow.classList.remove('ir_arrow');
+                irArrow.classList.remove('ir_arrow');
             }
         }
         else if(register_string === 'FLAGS'){
@@ -2006,11 +2029,12 @@ const conditionalPositionUpdate = async(xCoordinate_x12array, yCoordinate_x12arr
 /************************************ALU animation**************************************/
 
 //set text content of movingAluElements and display them
-const setMovingAluElements = () => {
+const setMovingAluElements = (twoMovingAluElements_boolean) => {
     movingAlu1.textContent = ALU1.DOM.textContent;
     movingAlu2.textContent = ALU2.DOM.textContent;    
     movingAlu1.classList.add('toggleGrid');
-    movingAlu2.classList.add('toggleGrid');
+    if(twoMovingAluElements_boolean)
+        movingAlu2.classList.add('toggleGrid');
 }
 
 //reset position of movingAluElements
@@ -2028,7 +2052,7 @@ const resetMovingAluElements = () => {
 resetMovingAluElements();
 
 //animation of ALU-usage
-const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
+const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec, twoMovingAluElements_boolean) => {
     if(!playStatus.noAnim){
         const xCoordinateAlu1 = [24];
         const xCoordinateAlu2 = [30];
@@ -2039,7 +2063,7 @@ const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec
             yCoordinate.push(yCoordinate[j]+1/7.5);
         }
 
-        setMovingAluElements();
+        setMovingAluElements(twoMovingAluElements_boolean);
         ALU1.DOM.textContent = '';
         ALU2.DOM.textContent = '';
         try{
@@ -2423,7 +2447,7 @@ const addA = async() => {
     await updateRegister_hex('ALU2', A.dec);
     //TODO: flags
     await description_update('Addiere die Operanden');
-    await aluAnimation(A.dec+A.dec,0,0,0,0);
+    await aluAnimation(A.dec+A.dec,0,0,0,0,true);
     await transfer('ALUOUT','A',convertNumberToHex_2digits(A.dec+A.dec));
     await updateRegister_hex('A', A.dec+A.dec);
     check_completeExecution();
@@ -2434,7 +2458,8 @@ const incA = async() => {
     await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Erhöhe den Operanden um 1');
-    await aluAnimation(A.dec+1,0,0,0,0);
+    const result = incRegister('A');
+    await aluAnimation(A.dec+1,0,0,0,0,false);
 }
 
 
@@ -2646,6 +2671,7 @@ const runCompleteExecution = () => {
 const toggleSettings = () => {
     settings.classList.toggle('toggleDisplay');
 }
+toggleSettings();
 
 const toggleFullscreen = () => {
     if(!isFullscreen){

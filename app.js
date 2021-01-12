@@ -91,13 +91,118 @@ const convertNumberToBinary_8digits = (number_dec) => {
     return str;
 }
 
-const convertNumberToBinary = (number_dec) => (number_dec).toString(2);
-
+const convertNumberToBinaryArray = (number_dec) => {
+    let bin = convertNumberToBinary_8digits(number_dec).replace(' ', '');
+    let buf = [];
+    for (let i = 0; i < bin.length; i++) {
+       buf.push(Number(bin[i]));
+    }
+    return buf;
+}
 
 const convertBinaryToNumber = (binary_dec) => {
     let str = '0b' + String(binary_dec);
     return Number(str);    
 }
+
+const addBinary = (value1_dec, value2_dec, ersatzAddition_boolean) => {
+    let value1_bin = convertNumberToBinaryArray(value1_dec);
+    let value2_bin = convertNumberToBinaryArray(value2_dec);
+    let carry_bin = [0,0,0,0,0,0,0,0,0];
+   
+    if(ersatzAddition_boolean){
+        carry_bin[8] = 1;
+        for (let i = 0; i < value2_bin.length; i++) {
+            if(value2_bin[i] === 0)
+                value2_bin[i] = 1;
+            else
+                value2_bin[i] = 0;
+        }
+    }
+        
+    let sum_bin =   [0,0,0,0,0,0,0,0];
+    let sum_dec = 0;
+    let carryFlag = 0;
+    let zeroFlag = 0;
+    let overflowFlag = 0;
+    let signFlag = 0;
+
+    for (let i = 8; i > 0; i--) {
+        if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 1){
+            carry_bin[i-1] = 0;
+            sum_bin[i-1] = 1;
+        }
+        else if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 2){
+            carry_bin[i-1] = 1;
+            sum_bin[i-1] = 0;
+        }
+        else if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 3){
+            carry_bin[i-1] = 1;
+            sum_bin[i-1] = 1;
+        }
+    }
+
+
+    sum_dec = convertBinaryToNumber(sum_bin.join(''));
+     
+    //set Flags
+    if(ersatzAddition_boolean){
+        if(carry_bin[0] === 1)
+            carryFlag = 0;
+        else
+            carryFlag = 1;
+    }
+    else
+        carryFlag = carry_bin[0];   
+   
+    signFlag = sum_bin[0];
+    if(sum_dec  === 0)
+        zeroFlag = 1;
+    if((carry_bin[0] === 1 && carry_bin[1] === 0) || (carry_bin[0] === 0 && carry_bin[1] === 1))
+        overflowFlag = 1;
+
+    return [sum_dec, carryFlag, zeroFlag, overflowFlag, signFlag];
+}
+
+const andBinary = (value1_dec, value2_dec) => {
+    let value1_bin = convertNumberToBinaryArray(value1_dec);
+    let value2_bin = convertNumberToBinaryArray(value2_dec);
+    let result_bin =   [0,0,0,0,0,0,0,0];
+    let result_dec = 0;
+    let carryFlag = 0;
+    let zeroFlag = 0;
+    let parityFlag = 0;
+    let signFlag = 0;
+
+    for (let i = 8; i > 0; i--) {
+        if(value1_bin[i-1] + value2_bin[i-1] === 2){
+            result_bin[i-1] = 1;
+        }
+        else{
+            result_bin[i-1] = 0;
+        }
+    }
+
+    result_dec = convertBinaryToNumber(result_bin.join(''));
+
+    //set flags
+    signFlag = result_bin[0];
+
+    if(result_dec  === 0)
+        zeroFlag = 1;
+    
+    let cnt = 0;
+    for (let i = 0; i < result_bin.length; i++) {
+        if(result_bin[i] === 1)
+            cnt += 1;        
+    }
+
+    if(cnt%2 === 0)
+        parityFlag = 1;
+
+    return [result_dec, carryFlag, zeroFlag, parityFlag, signFlag];
+}
+
 
 /*************************************************************** Classes ***************************************************************/
 class PlayStatus{
@@ -1571,30 +1676,6 @@ const getRegisterByName = (register_string) => {
         return PC;
 }
 
-/******************** ALU operations ********************/
-
-const incRegister = (register_string) => {
-    const register = getRegisterByName(register_string);
-    let registerValue = register.dec;
-    let flags = [0,0,0,0];
-    
-
-    if(register instanceof Register_x2){
-        registerValue = register.dec + 1;
-        console.log(convertNumberToBinary(registerValue))
-        if(registerValue === 256){
-            registerValue = 0;
-            flags[1] = 1;
-        }
-        if(registerValue < 0){
-
-        }
-    }
-    else{
-
-    }
-}
-
 /********************************* instant changes/update changes *********************************/
 //displays the description of the current Animation
 const change_stepDescription = (StringDescription) => stepDescription.textContent = StringDescription;
@@ -1624,7 +1705,7 @@ const add_yellow_background_for_IDLETIME = async(variable_DOM) => {
     //checking if an animation is required
     if(!playStatus.noAnim){
         variable_DOM.classList.add('yellowBg');
-        variable_DOM.style.color = 'black';
+        variable_DOM.style.color = '#222222';
 
         try{
             await sleepForIDLETIME();
@@ -2445,11 +2526,10 @@ const addA = async() => {
     await description_update('Hole den 2. Operator');
     await transfer('A', 'ALU2',convertNumberToHex_2digits(A.dec));
     await updateRegister_hex('ALU2', A.dec);
-    //TODO: flags
     await description_update('Addiere die Operanden');
-    await aluAnimation(A.dec+A.dec,0,0,0,0,true);
-    await transfer('ALUOUT','A',convertNumberToHex_2digits(A.dec+A.dec));
-    await updateRegister_hex('A', A.dec+A.dec);
+
+    const result = addBinary(A.dec, A.dec, false);
+    await aluAnimation(result[0],result[1],result[2],result[3],result[4],true);
     check_completeExecution();
 }
 
@@ -2458,8 +2538,37 @@ const incA = async() => {
     await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Erhöhe den Operanden um 1');
-    const result = incRegister('A');
-    await aluAnimation(A.dec+1,0,0,0,0,false);
+    const result = addBinary(A.dec, 1, false);
+    await aluAnimation(result[0],result[1],result[2],result[3],result[4],false);
+    check_completeExecution();
+}
+
+const subA = async() => {
+    await description_update('Hole den 1. Operator'); 
+    await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Hole den 2. Operator');
+    await transfer('A', 'ALU2',convertNumberToHex_2digits(A.dec));
+    await updateRegister_hex('ALU2', A.dec);
+    await description_update('Subtrahiere die Operanden');
+
+    const result = addBinary(A.dec, A.dec, true);
+    await aluAnimation(result[0],result[1],result[2],result[3],result[4],true);
+    check_completeExecution();
+}
+
+const andB = async() => {
+    await description_update('Hole den 1. Operanden'); 
+    await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Hole den 2. Operanden');
+    await transfer('B', 'ALU2',convertNumberToHex_2digits(B.dec));
+    await updateRegister_hex('ALU2', B.dec);
+    await description_update('OP1 AND OP2');
+
+    const result = andBinary(A.dec, B.dec);
+    await aluAnimation(result[0],result[1],result[2],result[3],result[4],true);
+    check_completeExecution();
 }
 
 
@@ -2722,8 +2831,8 @@ const mc8_commands_array = [
     halt_command        = new mc8_command('HALT', 0b01110110, 1, [0,0,0,0], halt),
     movAdat_8_command   = new mc8_command('MOV A, dat_8', 0b00111110, 2, [0,0,0,0], movAdat_8),
     movBdat_8_command   = new mc8_command('MOV B, dat_8', 0b00000110, 2, [0,0,0,0], movBdat_8),
-    movCdat_8_command   = new mc8_command('MOV C, dat_8', 0b00001110, 2, [0,0,0,0], movCdat_8),
-    addA_command        = new mc8_command('ADD A',0b10000111, 4, [1,1,1,1], addA),
+    movCdat_8_command   = new mc8_command('MOV C, dat_8', 0b00001110, 2, [0,0,0,0], movCdat_8),    
+
     movHLdat_16_command = new mc8_command('MOV HL, dat_16', 0b00100001, 3, [0,0,0,0], movHLdat_16),
     movSPdat_16_command = new mc8_command('MOV SP, dat_16', 0b00110001, 3, [0,0,0,0], movSPdat_16),
     movAB_command   	= new mc8_command('MOV A, B', 0b01111000, 1, [0,0,0,0], movAB),
@@ -2734,6 +2843,11 @@ const mc8_commands_array = [
     movCB_command   	= new mc8_command('MOV C, B', 0b01001000, 1, [0,0,0,0], movCB),
     movALabel_command   = new mc8_command('MOV A, label', 0b00111010, 3, [0,0,0,0], movALabel),
     incA_command        = new mc8_command('INC A', 0b00111100, 1, [0,1,1,1], incA),
+
+    addA_command        = new mc8_command('ADD A', 0b10000111, 4, [1,1,1,1], addA),
+    subA_command        = new mc8_command('SUB A', 0b10010111, 1, [1,1,1,1], subA),
+
+    andB_command        = new mc8_command('AND B', 0b10100000, 1, [0,1,2,1], andB),
 
 
 

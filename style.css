@@ -107,10 +107,12 @@ button:hover{
 .black h2, .black p{
     color: white;
 }
+
 .yellowBg , .yellowBg p{
     background-color: yellow;
     color: #222222;
 }
+
 .greyBg{
     background-color:  yellow;
     background-image: url(images/greyElementBg.svg);
@@ -235,6 +237,11 @@ button:hover{
 .movingObject{
     position: absolute;
     z-index: 5;
+}
+#movingObject{
+    color: #222222;
+}
+#movingAlu1, #movingAlu2, #ALUOUT{
     color: #222222;
 }
 
@@ -777,7 +784,7 @@ button:hover{
     
 }
 .settingsWindow p{
-    color: black;
+    color: #222222;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -809,6 +816,7 @@ button:hover{
     letter-spacing: 0.2px;
     padding: 0px 0.7%;
     resize: none;
+    font-family: droid-mono;
 }
 #linkerDatei{
     position: absolute;
@@ -991,7 +999,7 @@ textarea{
 /* ---------------------------------hoverElements--------------------------------------- */
 .hoverElement{
     display: none;
-    z-index: 5;
+    z-index: 20;
     position: absolute;
     background-color: yellow;
     padding: 0px 0.5%;
@@ -999,7 +1007,7 @@ textarea{
     
 }
 .hoverElement p{
-    color: black;
+    color: #222222;
     font-family: Arial, Helvetica, sans-serif;
 }
 

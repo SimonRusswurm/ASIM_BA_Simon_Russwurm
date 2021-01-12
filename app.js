@@ -34,10 +34,6 @@ let stepDescription = document.getElementById('stepDescription');
 let stepNumberBackground = document.getElementsByClassName('sNum')[0];
 let registerArrow = document.getElementById('registerArrow');
 let irArrow = document.getElementById('ir_arrow');
-let WR = document.getElementById('WR');
-let RD = document.getElementById('RD');
-let M = document.getElementById('M');
-let IO_DEC = document.getElementById('IO');
 let settings = document.getElementById('settings');
 let linkerFile = document.getElementById('linkerFile');
 let commandSelect = document.getElementById('commandSelect');
@@ -170,7 +166,9 @@ class PlayStatus{
 class Rom {
 	constructor() {
 		this.dec_array = this.init_dec();
-		this.init_DOM();		
+        this.init_DOM();	
+        this.startAddressRom_dec = 0;
+        this.size_dec = 8192;
 	}
 	
 	init_dec() {
@@ -231,26 +229,27 @@ class Rom {
 		}
     }
     
-    getPCValue(PC_dec) {
-        return this.dec_array[PC_dec];
+    getValue(address_dec) {
+        return this.dec_array[address_dec];
     }
 
-    getRomElement = (position_dec = PC.dec) => {
+    getElementId = (position_dec = PC.dec) => {
         if (position_dec > 223) {
             const romElementLast = document.getElementById('romElementLast');
             romElementLast.style.top = String(100/32*30) +'%';
             romElementLast.style.left = String(100/46*4) + '%';
-            return romElementLast;
+            return romElementLast.id;
         }
-        return document.getElementById('romElement' + String(position_dec));
+        return document.getElementById('romElement' + String(position_dec)).id;
     } 
 }
 
 class Ram {
     constructor() {
         this.startAddressRam_dec = 8192;
+        this.size_dec = 8192;
 		this.dec_array = this.init_dec();
-		this.init_DOM();		
+        this.init_DOM();	
 	}
 	
 	init_dec() {
@@ -289,27 +288,57 @@ class Ram {
         }
         return true;
     }
+
+    reset(){
+        for (let i = 0; i < this.dec_array.length; i++) {
+            this.dec_array[i] = 255;
+            if(i<112){
+                document.getElementById('ramElement' + String(i)).textContent = 'FF';
+            }
+            if(i>8192-113){
+                document.getElementById('ramElement' + String(i)).textContent ='FF';
+            }
+                
+            
+        }
+    }
+
+    getValue(address_dec) {
+        if(address_dec > 8191){
+            let x = Math.floor(address_dec/8192);
+            address_dec = address_dec - x*8192;
+        }
+        return this.dec_array[address_dec];
+    }
     
     getHexValue(address_dec) {
         return convertNumberToHex_2digits(this.dec_array[address_dec]);
     }
 
     update(address_dec, number_dec){
+        if(address_dec > 8191){
+            let x = Math.floor(address_dec/8192);
+            address_dec = address_dec - x*8192;
+        }
         this.dec_array[address_dec] = number_dec;
         if(address_dec < 112 || address_dec > 8191-112){
             document.getElementById('ramElement' + String(address_dec)).textContent = convertNumberToHex_2digits(number_dec);
         }
     }
 
-    getRamElement = (position_dec = 0) =>{
+    getRamElementId = (position_dec = 0) =>{
+        if(position_dec > 8191){
+            let x = Math.floor(position_dec/8192);
+            position_dec = position_dec - x*8192;
+        }
         if(position_dec > 111 && position_dec < 8191-111){
             const ramElementBetween = document.getElementById('ramElementBetween');
             ramElementBetween.style.top = String(100/32*16) +'%';
             ramElementBetween.style.left = String(100/46*40) + '%';
-            return ramElementBetween;
-        }   
+            return ramElementBetween.id;
+        }
         else
-            return document.getElementById('ramElement' + String(position_dec));
+            return document.getElementById('ramElement' + String(position_dec)).id;
     }
 
 }
@@ -327,9 +356,9 @@ class Register_x2 {
 		this.dec = 0;
 	}
 	
-	update(decimal_number){
-		this.dec = decimal_number;
-		this.DOM.textContent = convertNumberToHex_2digits(decimal_number);		
+	update(value_dec){
+		this.dec = value_dec;
+		this.DOM.textContent = convertNumberToHex_2digits(value_dec);		
 	}
 	
 }
@@ -337,28 +366,164 @@ class Register_x2 {
 class Register_x4 {
 	constructor(register_DOM){
 		this.dec = 0;
-		this.DOM = register_DOM;
+        this.DOM = register_DOM;
 		this.hi_dec = 0;
 		this.low_dec = 0;
 	}
 	
 	update(decimal_number){
-		this.dec = decimal_number;
-		this.DOM.textContent = convertNumberToHex_4digits(decimal_number);
+        this.dec = decimal_number;
+        this.DOM.textContent = convertNumberToHex_4digits(decimal_number);
+        this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
+        this.low_dec = convertHexToNumber(this.DOM.textContent[1] + this.DOM.textContent[2]);
 	}	
 	
-	update_low(decimal_number){
+	update_lo(decimal_number){
 		let buf_string = this.DOM.textContent;
 		this.low_dec = decimal_number;
-		this.DOM.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
+        this.DOM.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
+        this.dec = convertHexToNumber(this.DOM.textContent);
 	}
 	
 	update_hi(decimal_number){
 		let buf_string = this.DOM.textContent;
 		this.hi_dec = decimal_number;
         this.DOM.textContent = convertNumberToHex_2digits(decimal_number) + buf_string[2] + buf_string[3];
-        this.dec = convertNumberToHex_4digits(this.DOM.textContent);
+        this.dec = convertHexToNumber(this.DOM.textContent);
 	}
+}
+
+class IO extends Register_x2{
+    constructor(register_DOM, address_dec){
+		super(register_DOM);
+        this.address_dec = address_dec;
+        this.ioMapped = true;
+    }
+    
+    updateAddress(address_dec, ioMapped_boolean){
+        this.address = address_dec;
+        this.ioMapped = ioMapped_boolean;
+    }
+}
+
+class Decoder {
+    constructor(wr_DOM, rd_DOM, m_DOM, io_DOM, decDisplay_DOM){
+        this.wr_DOM = wr_DOM;
+        this.rd_DOM = rd_DOM;
+        this.m_DOM = m_DOM;
+        this.io_DOM = io_DOM;
+        this.WR = 1;
+        this.RD = 1;
+        this.M = 1;
+        this.IO = 1;
+        this.display_DOM = decDisplay_DOM;
+        this.text_string = '';
+        this.error = false;
+        this.ramAccess = false;
+        this.ioAccess = false;
+    }
+	
+	update(wr_dec, rd_dec, m_dec, io_dec, address_dec){
+        this.WR = wr_dec;
+        this.RD = rd_dec;
+        this.M = m_dec;
+        this.IO = io_dec;
+
+        //read from memory
+        if(rd_dec === 0 && m_dec === 0){
+            if(address_dec < 8192){
+                this.text_string = 'Lese von ROM';
+                this.ramAccess = false;
+            }   
+            else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+                this.ramAccess = true;
+                this.text_string = 'Lese von RAM';
+            }    
+            else{
+                this.ramAccess = false;
+                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            }
+                
+        }
+        //write to memory
+        else if (wr_dec === 0 && m_dec === 0){
+            if(address_dec < 8192){
+                this.ramAccess = false;
+                this.text_string = 'Schreibe auf ROM';
+                this.error = true;
+            } 
+            else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+                this.ramAccess = true;
+                this.text_string = 'Schreibe auf RAM';
+            } 
+            else{
+                this.ramAccess = false;
+                this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            } 
+        }
+        //read IO
+        else if(rd_dec === 0 && io_dec === 0){
+            if(address_dec === IO1.address_dec){
+                this.text_string = 'Lese von IO1';
+            }
+            else if (address_dec === IO2.address_dec){
+                this.text_string = 'Lese von IO2';
+            }
+            else if (address_dec === IO3.address_dec){
+                this.text_string = 'Lese von IO3';
+            }
+            else{
+                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            }
+        }
+        //write IO
+        else if(wr_dec === 0 && io_dec === 0){
+            if(address_dec === IO1.address_dec){
+                this.text_string = 'Schreibe auf IO1';
+            }
+            else if (address_dec === IO2.address_dec){
+                this.text_string = 'Schreibe auf IO2';
+            }
+            else if (address_dec === IO3.address_dec){
+                this.text_string = 'Schreibe auf IO3';
+            }
+            else{
+                this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            }
+        }
+    }
+    
+    updateDOM(){
+        this.wr_DOM.textContent = this.WR;
+        this.rd_DOM.textContent = this.RD;
+        this.m_DOM.textContent = this.M;
+        this.io_DOM.textContent = this.IO;
+        this.display_DOM.textContent = this.text_string;
+        if(this.ramAccess)
+            this.display_DOM.classList.add('yellowBg');
+        if(this.error){
+            this.display_DOM.classList.add('redBg');
+            throw Error('Decoder error');
+        }
+    }
+
+    resetDOM() {
+        this.wr_DOM.textContent = '';
+        this.rd_DOM.textContent = '';
+        this.m_DOM.textContent = '';
+        this.io_DOM.textContent = '';
+        this.display_DOM.textContent = '';
+        try{
+            this.display_DOM.classList.remove('yellowBg');
+        }catch{}
+        try{
+            this.display_DOM.classList.remove('redBg');
+        }catch{}
+    }
 }
 
 /******************************* Flags *********************************** */
@@ -413,9 +578,9 @@ const FRAMES = 60;
 
 
 //class variables
-const IO1 = new Register_x2(document.getElementById('IO1'));
-const IO2 = new Register_x2(document.getElementById('IO2'));
-const IO3 = new Register_x2(document.getElementById('IO3'));
+const IO1 = new IO(document.getElementById('IO1'), 0);
+const IO2 = new IO(document.getElementById('IO2'), 1);
+const IO3 = new IO(document.getElementById('IO3'), 2);
 const A   = new Register_x2(document.getElementById('A'));
 const B   = new Register_x2(document.getElementById('B'));
 const C   = new Register_x2(document.getElementById('C'));
@@ -431,6 +596,7 @@ const ZR  = new Register_x4(document.getElementById('ZR'));
 const FLAGS = new Flags(document.getElementById('C_Flag'),document.getElementById('Z_Flag'),document.getElementById('P_Flag'),document.getElementById('S_Flag'));
 const ROM = new Rom();
 const RAM = new Ram();
+const DECODER = new Decoder(document.getElementById('WR'),document.getElementById('RD'), document.getElementById('M'), document.getElementById('IO'),document.getElementById('decDisplay'));
 
 
 /***************************************** Hover popups *********************************/
@@ -1088,7 +1254,7 @@ const fixPoints = [
     point19 = new Point(19,27,12,'',18,[20]),
     aluOut  = new Point(20,27,10,'ALUOUT',19,[]),
     point21 = new Point(21,34,14,'',18,[22]),
-    sw      = new Point(22,32,14,'SW',21,[]),
+    ir      = new Point(22,32,14,'IR',21,[]),
     point23 = new Point(23,13,4,'',12,[24,25]),
     a	    = new Point(24,13,6,'A',23,[]),
     point25 = new Point(25,10,4,'',23,[26]),
@@ -1098,7 +1264,7 @@ const fixPoints = [
     hl      = new Point(29,14,12,'HL',28,[30]),
     point30 = new Point(30,14,10,'',29,[31,32]),
     b       = new Point(31,13,10,'B',30,[]),
-    b       = new Point(32,15,10,'C',30,[]),
+    c       = new Point(32,15,10,'C',30,[]),
     sp      = new Point(33,14,16,'SP',27,[34]),
     pc      = new Point(34,14,18,'PC',33,[35]),
     zr      = new Point(35,14,20,'ZR',34,[36]),
@@ -1106,12 +1272,17 @@ const fixPoints = [
     rom2    = new Point(37,10,24,'ROM2',36,[]),
     point38 = new Point(38,28,24,'',36,[39,40]),
     dec     = new Point(39,28,26,'DEC',38,[]),
-    ram2    = new Point(40,34,24,'RAM2',38,[]),
+    ram2    = new Point(40,32,24,'RAM2',38,[]),
     hl_lo   = new Point(41,16,12,'HL_lo',29,[]),
     ix_lo   = new Point(42,16,14,'IX_lo',28,[]),
     sp_lo   = new Point(43,16,16,'SP_lo',33,[]),
     pc_lo   = new Point(44,16,18,'SP_lo',34,[]),
-    zr_lo   = new Point(45,16,20,'ZR_lo',35,[])
+    zr_lo   = new Point(45,16,20,'ZR_lo',35,[]),
+    hl_hi   = new Point(46,14,12,'HL_hi',29,[]),
+    ix_hi   = new Point(47,14,14,'IX_hi',28,[]),
+    sp_hi   = new Point(48,14,16,'SP_hi',33,[]),
+    pc_hi   = new Point(49,14,18,'SP_hi',34,[]),
+    zr_hi   = new Point(50,14,20,'ZR_hi',35,[])
 ];
 
 //returns the index/position of a fixPoint in the fixPoint-array
@@ -1123,7 +1294,7 @@ const getPointIndex = (pointID_string) => {
      return -1;
 }
 
-//returns the indices from Zero(ROM1) to the given Point. 
+//returns the indices from Zero(ROM1) to the passed point index. 
 const getIndexArrayZeroToPoint = (pointIndex_dec) => {
     let atoZero = [];
 
@@ -1275,50 +1446,55 @@ const updateRedRectangle = (PC_dec) =>{
 }
 
 
-
-/******************************* ANIMATION IMPLEMENTATION *************************************** */
+/******************************************************* ANIMATION IMPLEMENTATION ********************************************************* */
+/****************************************************************************************************************************************** */
 
 /******************** basic functions ********************/
 
-// function checks if play/pause/stop is pressed
-const checkPlayPressed = async() => {
-    while(true) {
-        if(playStatus.play)
-            return true;
-        if(playStatus.stop)
-            throw Error('Stop Pressed');
-        
-        console.log('waiting for user input'); //if pause is pressed user will be caught in this loop till pressing play or stop
-        await sleep(100);
-    }
-}
+//Sleep functions for pausing Animation for a certain time
+const sleepForMs = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-//checks if pause is pressed and returns true if so
-const pausePressed = async() =>{
-    let check = false;
+//throws 'Stop pressed' error
+const sleep = async (milliseconds) => {
+    count = milliseconds;
     while(true){
-        if(playStatus.pause){
-            check = true
-            console.log('waiting for user input');
-            await sleep(100);
-        } else {
-            return check;
+        if(count < 10){
+            return true;
+        }
+        else{
+            await sleepForMs(10);
+            await checkPlayPressed();
+            
+            count -= 10;
         }
     }
 }
-
-//Sleep functions for pausing Animation for a certain time
-const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 const sleepForIDLETIME = () => sleep(IDLETIME);
 
 const sleepForNOANIMATIONIDLETIME = () => sleep(NOANIMATIONIDLETIME);
 
 
+// function checks if play/pause/stop is pressed
+const checkPlayPressed = async() => {
+    //if pause is pressed user will be caught in this loop till pressing play or stop
+    while(true) {
+        if(playStatus.play)
+            return true;
+        if(playStatus.stop)
+            throw Error('Stop Pressed');
+        
+        console.log('waiting for user input'); 
+        await sleepForMs(100);
+    }
+}
+
 //checks if completeExecution is true
 const check_completeExecution = () => {
-    if(!playStatus.completeExe){ //skip if true
-        if(playStatus.noAnim || playStatus.oneCommand){  //after completing animation check if program should be paused
+    //if playStatus.completeExe is not true, pause program when demanded. 
+    if(!playStatus.completeExe){
+        //after the completion of an animation, check if program should be paused
+        if(playStatus.noAnim || playStatus.oneCommand){  
             change_stepDescription('Prozessor angehalten');
             stepNumber.textContent = '0';
             playStatus.setPause();
@@ -1338,16 +1514,68 @@ const pushNextCommand = () => {
     return;
 }
 
+//returns a register class, depending on the passed name
+const getRegisterByName = (register_string) => {
+    if(register_string === 'IO1')
+        return IO1;
+    else if(register_string === 'IO2')
+        return IO2;
+    else if(register_string === 'IO3')
+        return IO3;  
+    else if(register_string === 'A')
+        return A;  
+    else if(register_string === 'B')
+        return B;  
+    else if(register_string === 'C')
+        return C;
+    else if(register_string === 'IR')
+        return IR;
+    else if(register_string === 'ALU1')
+        return ALU1;
+    else if(register_string === 'ALU2')
+        return ALU2;
+    else if(register_string === 'ALUOUT')
+        return ALUOUT;
+    else if(register_string === 'HL')
+        return HL;
+    else if(register_string === 'IX')
+        return IX;
+    else if(register_string === 'SP')
+        return SP;
+    else if(register_string === 'PC')
+        return PC;
+    else if(register_string === 'ZR')
+        return ZR;
+    else if(register_string === 'HL_lo')
+        return HL;
+    else if(register_string === 'HL_hi')
+        return HL;
+    else if(register_string === 'IX_lo')
+        return IX;
+    else if(register_string === 'IX_hi')
+        return IX;
+    else if(register_string === 'ZR_lo')
+        return ZR;
+    else if(register_string === 'ZR_hi')
+        return ZR;
+    else if(register_string === 'SP_lo')
+        return SP;
+    else if(register_string === 'SP_hi')
+        return SP;
+    else if(register_string === 'PC_lo')
+        return PC;
+    else if(register_string === 'PC_hi')
+        return PC;
+}
 
-
-/********************************* instant changes *********************************/
+/********************************* instant changes/update changes *********************************/
 //displays the description of the current Animation
 const change_stepDescription = (StringDescription) => stepDescription.textContent = StringDescription;
 
 //increases the step number by 1
 const increaseStepNumber = () => stepNumber.textContent = String(Number(stepNumber.textContent)+1);
 
-//displays the the assembler notation. If the register IR contains a command which is not valid, the function throws an error.
+//displays the the assembler notation. If the register IR contains a command which is not valid, the function returns false.
 const change_assemblerCommand = () =>{
     for(i=0; i<mc8_commands_array.length; i++){
         if(mc8_commands_array[i].machineCommand_dec === IR.dec){
@@ -1358,10 +1586,173 @@ const change_assemblerCommand = () =>{
     assemblerCommand.textContent = 'Befehl unbekannt';
     return false;
 }
+        
+/********************************************************* simple animations ************************************************************** */
+/****************************************************************************************************************************************** */
+
+//adds a yellow background to the passed DOM_Element
+const add_yellow_background_for_IDLETIME = async(variable_DOM) => {
+    await checkPlayPressed();
+    
+    //checking if an animation is required
+    if(!playStatus.noAnim){
+        variable_DOM.classList.add('yellowBg');
+        variable_DOM.style.color = 'black';
+
+        try{
+            await sleepForIDLETIME();
+        }
+        finally {
+            variable_DOM.classList.remove('yellowBg');
+            variable_DOM.style.color = '';
+        }   
+    }else{
+        await sleepForNOANIMATIONIDLETIME();
+    }
+}
+
+//animation of all arrows
+const addArrow = async(register_string) => {
+    if(!await checkPlayPressed()){
+        return false;
+    }
+    if(!playStatus.noAnim){
+        if(register_string === 'PC'){
+            registerArrow.classList.add('PC_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow.classList.remove('PC_arrow');
+            }
+        }
+        else if(register_string === 'IR'){
+            irArrow.classList.add('ir_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow.classList.remove('ir_arrow');
+            }
+        }
+        else if(register_string === 'FLAGS'){
+            flagsArrow.classList.add('flags_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                flagsArrow.classList.remove('flags_arrow');
+            }
+        }
+        else if(register_string === 'ZR'){
+            registerArrow.classList.add('ZR_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow.classList.remove('ZR_arrow');
+            }
+        }
+    } 
+    return true;
+}
+
+//animation of updating the description
+const description_update = async(description_string) => {
+    await checkPlayPressed();
+
+    change_stepDescription(description_string);
+    increaseStepNumber();
+    await add_yellow_background_for_IDLETIME(stepNumberBackground);
+}
+
+//animates the update of the assembler command, if the command is unknown the function throws an error and the execution gets terminated
+const assemblerCommand_update = async() => {
+    await checkPlayPressed();
+    await add_yellow_background_for_IDLETIME(IR.DOM);
+    await addArrow('IR');
+    if(!change_assemblerCommand()){
+        throw Error('Unknown command');
+    }
+    if(!playStatus.noAnim)
+        await sleepForIDLETIME();
+}
+
+//increases PC by one and animates it
+const updatePC = async() => {
+    await checkPlayPressed()
+
+    PC.update(PC.dec + 1);
+    updateRedRectangle(PC.dec);
+    await add_yellow_background_for_IDLETIME(PC.DOM);
+}
+
+//updates and animates register/io with the passed value
+const updateRegister_hex = async(registerName_string, value_dec) => {
+    await checkPlayPressed();
+
+    if(registerName_string.includes('hi')){
+       await updateRegister_hex4_hi(getRegisterByName(registerName_string), value_dec);
+    }
+    else if(registerName_string.includes('lo')){
+        await updateRegister_hex4_lo(getRegisterByName(registerName_string), value_dec);
+    }
+    else{
+        //update register
+        reg = getRegisterByName(registerName_string);
+        reg.update(value_dec);
+
+        //animate register update
+        await add_yellow_background_for_IDLETIME(reg.DOM);
+    }
+}
+
+const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
+    await checkPlayPressed();
+
+    //update register
+    register_class.update_hi(hex2_dec);
+
+    //animate register update
+    if(!playStatus.noAnim){
+        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement.style.left = String(100/46*14) + '%';
+        yellowBgElement.classList.add('toggleGrid');
+        try{
+            await sleepForIDLETIME();
+        }
+        finally{
+            yellowBgElement.classList.remove('toggleGrid');
+        }
+    }
+}
+
+const updateRegister_hex4_lo = async(register_class, hex2_dec) => {
+    await checkPlayPressed();
+
+    //update register
+    register_class.update_lo(hex2_dec);
+
+    //animate register update if Animation is required
+    if(!playStatus.noAnim){
+        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement.style.left = String(100/46*16) + '%';
+        yellowBgElement.classList.add('toggleGrid');
+        try{
+            await sleepForIDLETIME();
+        }
+        finally{
+            yellowBgElement.classList.remove('toggleGrid');
+        }
+    }
+}
 
 
+/******************************************************** complex animations ************************************************************** */
+/****************************************************************************************************************************************** */
 
-//*********************************Moving Animations*********************************
+
+/************************************Moving Animations**************************************/
 
 //calculates the coordinates between the fixPoints.
 //At Speed 1, the movingObject updates every single coordinate
@@ -1420,7 +1811,7 @@ const calcIntermediatePositions = (path, interPointsQuantity=12) => {
     return [bufferX, bufferY];
 }
 
-//updates the position of the given DOM_Object
+//updates the position of the passed DOM_Object
 const updatePosition = (movingObject, x, y) => {
     movingObject.style.top = String(100/32*y) +"%";
     movingObject.style.left = String(100/46*x) +"%";
@@ -1432,7 +1823,8 @@ const updateMovingObj = (aPath, hexValue_string) => {
     updatePosition(movingObject,aPath[0].x,aPath[0].y);
     movingObject.textContent = hexValue_string;
     movingObject.classList.add('toggleGrid');
-    if(aPath[0].x === 14)
+
+    if(aPath[0].label === 'PC'|| aPath[0].label === 'ZR' ||aPath[0].label === 'IX' || aPath[0].label ==='HL' ||aPath[0].label === 'SP')
         movingObject.classList.add('rectangle4x2');
     else{
         try{
@@ -1453,6 +1845,7 @@ const createGreyElement = (i, xCoordinate,yCoordinate) =>{
     return ele;
 }
 
+//animation without a movingObject
 const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_string, startElement_DOM) => {
     let pathElements = [];
     const coords = calcIntermediatePositions(path,2);
@@ -1468,13 +1861,13 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
             xCoordinate.push(xCoordinate[xCoordinate.length-1]-1);
             yCoordinate.push(yCoordinate[yCoordinate.length-1]);
         } else {
-            xCoordinate.push(xCoordinate[xCoordinate.length-1]+1);
+            xCoordinate.push(xCoordinate[xCoordinate.length-1]-1);
             yCoordinate.push(yCoordinate[yCoordinate.length-1]);
         }
     }
 
     //create all PathElements
-    for (let i = 0; i < xCoordinate.length; i++) {
+    for (let i = xCoordinate.length-1; i >=0 ; i--) {
         ele = createGreyElement(i, xCoordinate, yCoordinate);
         pathElements.push(ele);
     }
@@ -1497,186 +1890,118 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
         grid.appendChild(pathElements[i]);
     }
 
-    await sleep(2000/ANIMATION_SPEED);
-    
-    //remove Elements
+    //animate for certain time
     try{
-        await checkPlayPressed();
-    } catch(e) {
+        await sleep(2000/ANIMATION_SPEED);
+    }
+    catch(e) {
+        throw Error('Stop pressed');
+    }
+    finally {
+        //remove 
         for (let i = 0; i < pathElements.length; i++) {
             pathElements[i].remove();
         }
         startElement_DOM.classList.remove('toggleGrid');
-        throw Error('Stop pressed');
     }
-
-    for (let i = 0; i < pathElements.length; i++) {
-        pathElements[i].remove();
-    }
-    startElement_DOM.classList.remove('toggleGrid');
 }
 
-const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, hexValue_string = 'ÄÄ') => {
+//animates the movement from on fixPoint to another one
+const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec = 0) => {
     await checkPlayPressed();
-    if(!playStatus.noAnim){     //only execute when Animation is demanded
+    
+    //only execute when Animation is required
+    if(!playStatus.noAnim){  
         const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
-        updateMovingObj(path,hexValue_string);
+        let inCPU = false;
+
+        //convert value_dec to hex_4digits if required
+        if(value_dec > 255 || fixPointLabel_B_string === 'ROM2' || fixPointLabel_B_string === 'RAM2')
+            value_dec = convertNumberToHex_4digits(value_dec);
+        else
+            value_dec = convertNumberToHex_2digits(value_dec);
+        
+        //update the moving object
+        updateMovingObj(path,value_dec);
         const movingObjectCoordinates = calcIntermediatePositions(path, 12);
+
+        //xCoordinate is a 2-dimensional-array which contains 12 coordinates per index
+        //[Array(12), ..., Array(12)]
         const xCoordinate = movingObjectCoordinates[0];
         const yCoordinate = movingObjectCoordinates[1];
-        
+
+        //check if starting point is inside CPU
+        if(yCoordinate[0][0] < 24 && yCoordinate[0][0]>3 && xCoordinate[0][0] > 9 && xCoordinate[0][0]){
+            inCPU = true;
+        }
+
         //fast Animation
         if(playStatus.rocketSpeed){
-            await createPaintedPath(path,fixPointLabel_A_string, fixPointLabel_B_string, movingObject); 
-        } else { //slow Animation
-            for (let i = 0; i < movingObjectCoordinates[0].length; i++) {  //iterate through Coordinates
-                if(playStatus.noAnim){      //noAnim
+            DECODER.updateDOM();
+            await createPaintedPath(path,fixPointLabel_A_string, fixPointLabel_B_string, movingObject);
+            DECODER.resetDOM();
+        }
+        //slow Animation
+        else{
+            //iterate through Coordinates
+            for (let i = 0; i < movingObjectCoordinates[0].length; i++) {  
+                
+                //if singleStep is pressed during the animation, remove movingObject and jump out of function
+                if(playStatus.noAnim){
                     movingObject.classList.remove('toggleGrid');
                     return true;
                 }
+                
+                //display decoder
+                if(inCPU && (yCoordinate[i][0] > 23 || yCoordinate[i][0] < 3)){
+                    inCPU = false;
+                    DECODER.updateDOM();
+                    
+                }
+                if(!inCPU && (yCoordinate[i][0] < 23 && yCoordinate[i][0] > 3)){
+                    inCPU = true;
+                    if(!DECODER.ramAccess)
+                        DECODER.resetDOM();
+                }
+
+                //update position of the movingObject depending on the speed
                 await conditionalPositionUpdate(xCoordinate[i], yCoordinate[i], ANIMATION_SPEED, movingObject);
             }
-        }       
-        movingObject.classList.remove('toggleGrid'); 
+        }
+        //remove object when transfer was successful 
+        movingObject.classList.remove('toggleGrid');
+    }
+    //noAnim
+    else {
+        DECODER.updateDOM();
+        await sleepForNOANIMATIONIDLETIME();
+        DECODER.resetDOM();
     }
 }
 
-const conditionalPositionUpdate = async(xCoordinate_dec, yCoordinate_dec, speed_dec, movingObject_DOM) => {
-    for (let j = 0; j < xCoordinate_dec.length/speed_dec; j++) {
+//updates the position of the movingObject depending on the speed(values: 1,2,3,4,6,12) => 12/values is always an integer
+//e.g.  if the speed is 12 the position is only updated once(last coordinate of x12array)
+//      if the speed is 3 the position is updated with every third coordinate,... 
+const conditionalPositionUpdate = async(xCoordinate_x12array, yCoordinate_x12array, speed_dec, movingObject_DOM) => {
+    for (let j = 0; j < xCoordinate_x12array.length/speed_dec; j++) {
+        updatePosition(movingObject_DOM, xCoordinate_x12array[j*speed_dec], yCoordinate_x12array[j*speed_dec]);
+        
+        //animate for certain time before entering next iteration
         try{
-            await checkPlayPressed();
-        }catch(e){
+            await sleep(1000/FRAMES);
+        }
+        catch (e) {
+            //remove movingObject if 
             movingObject_DOM.classList.remove('toggleGrid');
             throw Error('Stop pressed');
         }
-        updatePosition(movingObject_DOM, xCoordinate_dec[j*speed_dec], yCoordinate_dec[j*speed_dec]);
-        await sleep(1000/FRAMES);
     }
     return true;
 }  
-           
-/********************************** single animations ****************************** */
-const add_yellow_background_for_IDLETIME = async(variable_DOM) => {
-    await checkPlayPressed()
-    
-    if(!playStatus.noAnim){
-        variable_DOM.classList.add('yellowBg');
-        variable_DOM.style.color = 'black';
-        await sleepForIDLETIME();
-        if(await pausePressed()){
-            if(playStatus.play)
-                await sleep(150);
-        }
-        variable_DOM.classList.remove('yellowBg');
-        variable_DOM.style.color = '';
-    }else{
-        await sleepForNOANIMATIONIDLETIME();
-    }
-    return true;
-}
-const description_update = async(description_string) => {
-    if(!await checkPlayPressed()){
-        return false;
-    }
-    change_stepDescription(description_string);
-    increaseStepNumber();
-    await add_yellow_background_for_IDLETIME(stepNumberBackground);
-    
-    return true;
-}
+   
+/************************************ALU animation**************************************/
 
-const addArrow = async(register_string) => {
-    if(!await checkPlayPressed()){
-        return false;
-    }
-    if(!playStatus.noAnim){
-        if(register_string === 'PC'){
-            registerArrow.classList.add('PC_arrow');
-            await sleepForIDLETIME();
-            if(await pausePressed()){
-                if(playStatus.play)
-                    await sleep(150);
-            }
-            registerArrow.classList.remove('PC_arrow');
-        }
-        else if(register_string === 'IR'){
-            irArrow.classList.add('ir_arrow');
-            await sleepForIDLETIME();
-            if(await pausePressed()){
-                if(playStatus.play)
-                    await sleep(150);
-            }
-            irArrow.classList.remove('ir_arrow');
-        }
-        else if(register_string === 'FLAGS'){
-            flagsArrow.classList.add('flags_arrow');
-            await sleepForIDLETIME();
-            if(await pausePressed()){
-                if(playStatus.play)
-                    await sleep(150);
-            }
-            flagsArrow.classList.remove('flags_arrow');
-        }
-    } 
-    return true;
-}
-
-const updatePC = async() => {
-    if(!await checkPlayPressed())
-        return false;
-    //PC.DOM.textContent = convertNumberToHex_4digits(convertHexToInt(PC.DOM.textContent)+1);
-    PC.update(PC.dec + 1);
-    updateRedRectangle(PC.dec);
-    await add_yellow_background_for_IDLETIME(PC.DOM);
-    return true;
-}
-
-const updateRegister_hex = async(register_class, hex_dec) => {
-    if(!await checkPlayPressed())
-        return false;
-    register_class.update(hex_dec);
-    await add_yellow_background_for_IDLETIME(register_class.DOM);
-    return true;
-}
-const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
-    if(!await checkPlayPressed())
-        return false;
-    
-    register_class.update_hi(hex2_dec);
-    if(!playStatus.noAnim){
-        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
-        yellowBgElement.style.left = String(100/46*14) + '%';
-        yellowBgElement.classList.add('toggleGrid');
-        await sleepForIDLETIME();
-        yellowBgElement.classList.remove('toggleGrid');
-    }
-    return true;
-}
-const updateRegister_hex4_lo = async(register_class, hex2_dec) => {
-    if(!await checkPlayPressed())
-        return false;
-    register_class.update_low(hex2_dec);
-    if(!playStatus.noAnim){
-        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
-        yellowBgElement.style.left = String(100/46*16) + '%';
-        yellowBgElement.classList.add('toggleGrid');
-        await sleepForIDLETIME();
-        yellowBgElement.classList.remove('toggleGrid');
-    }
-    return true;
-}
-const assemblerCommand_update = async() => {
-    if(!await checkPlayPressed())
-        return false;
-    add_yellow_background_for_IDLETIME(IR.DOM);
-    if(!change_assemblerCommand()){
-        await addArrow('IR');
-        throw Error('Unknown command');
-    }
-    await addArrow('IR');
-}
-// console.log(yellowBgElement.top)
-
+//set text content of movingAluElements and display them
 const setMovingAluElements = () => {
     movingAlu1.textContent = ALU1.DOM.textContent;
     movingAlu2.textContent = ALU2.DOM.textContent;    
@@ -1684,6 +2009,7 @@ const setMovingAluElements = () => {
     movingAlu2.classList.add('toggleGrid');
 }
 
+//reset position of movingAluElements
 const resetMovingAluElements = () => {
     try{
         movingAlu1.classList.remove('toggleGrid');
@@ -1697,6 +2023,7 @@ const resetMovingAluElements = () => {
 }
 resetMovingAluElements();
 
+//animation of ALU-usage
 const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
     if(!playStatus.noAnim){
         const xCoordinateAlu1 = [24];
@@ -1707,46 +2034,46 @@ const aluAnimation = async(aluOUT_dec,cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec
             xCoordinateAlu2.push(xCoordinateAlu2[j]-0.1);
             yCoordinate.push(yCoordinate[j]+1/7.5);
         }
-        
+
         setMovingAluElements();
-        
-        await sleepForIDLETIME();
         ALU1.DOM.textContent = '';
         ALU2.DOM.textContent = '';
-
-        for (let i = 0; i < xCoordinateAlu1.length; i++) {
-            try{
-                await checkPlayPressed();
-            } catch(e) {
-                resetMovingAluElements();
-                throw Error('Stop pressed');
+        try{
+            await sleepForIDLETIME();
+            
+            for (let i = 0; i < xCoordinateAlu1.length; i++) {
+                updatePosition(movingAlu1, xCoordinateAlu1[i],yCoordinate[i]);
+                updatePosition(movingAlu2, xCoordinateAlu2[i],yCoordinate[i]);
+                await sleep(1000/FRAMES);  
             }
-            await sleep(1000/FRAMES);
-            updatePosition(movingAlu1, xCoordinateAlu1[i],yCoordinate[i]);
-            updatePosition(movingAlu2, xCoordinateAlu2[i],yCoordinate[i]);    
+            resetMovingAluElements();
+            await updateRegister_hex('ALUOUT', aluOUT_dec);
         }
-        resetMovingAluElements();
-        await updateRegister_hex(ALUOUT, aluOUT_dec);
+        finally{
+            resetMovingAluElements();
+        }
         ALUOUT.DOM.classList.add('yellowBg');
-    } else { //noAnim
-        await updateRegister_hex(ALUOUT, aluOUT_dec);
+    }
+    else{ //noAnim
+        await updateRegister_hex('ALUOUT', aluOUT_dec);
         ALU1.DOM.textContent = '';
         ALU2.DOM.textContent = '';
     }
-    await description_update('Setze die Flags');
+    
     try {
+        await description_update('Setze die Flags');
         await setFlags(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec);
-    } catch (e) {
+        await description_update('Speichere das Ergebnis');
+    } 
+    finally{
         ALUOUT.DOM.classList.remove('yellowBg');
         ALUOUT.DOM.textContent = '';
-        throw Error('Stop pressed');
     }
-    await description_update('Speichere das Ergebnis');
-    ALUOUT.DOM.classList.remove('yellowBg');
-    ALUOUT.DOM.textContent = '';
-
+    await transfer('ALUOUT', 'A', aluOUT_dec);
+    await updateRegister_hex('A', aluOUT_dec);
 }
 
+//animation of setting flags
 const setFlags = async(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
     if (!playStatus.noAnim) {
         await addArrow('FLAGS');
@@ -1755,126 +2082,134 @@ const setFlags = async(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) => {
         movingFlags.children[2].textContent = pFlag_dec;
         movingFlags.children[3].textContent = sFlag_dec;
         movingFlags.classList.add('toggleGrid');
-        await sleepForIDLETIME();
-        for (let i = 0; i < 21; i++) {
-            try{
-                await checkPlayPressed();
-            } catch (e) {
-                movingFlags.classList.remove('toggleGrid');
-                movingFlags.style.top = String(100/32*8) + '%';
-                throw Error('Stop pressed');
+        try{
+            await sleepForIDLETIME();
+            for (let i = 0; i < 21; i++) {
+                movingFlags.style.top = String(100/32*(8-i/20)) + '%';
+                await sleep(1000/FRAMES);  
             }
-            movingFlags.style.top = String(100/32*(8-i/20)) + '%';
-            await sleep(1000/FRAMES);  
+            await sleepForIDLETIME();
         }
-        await sleepForIDLETIME();
-        try {
-            await checkPlayPressed();
-        } catch (e) {
+        finally{
             movingFlags.classList.remove('toggleGrid');
             movingFlags.style.top = String(100/32*8) + '%';
-            throw Error('Stop pressed');
-        }    
-        movingFlags.classList.remove('toggleGrid');
-        movingFlags.style.top = String(100/32*8) + '%'
+        }
     }
     FLAGS.update(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec);
 }
 
-const decDisplay = document.getElementById('decDisplay');
-const updateDEC = async(DECValue_string) => {
-    switch (DECValue_string) {
-        case 'readROM':
-            WR.textContent = '1';
-            RD.textContent = '0';
-            M.textContent = '0';
-            IO_DEC.textContent = '1';
-            decDisplay.textContent = 'Lese von Rom';
+//animation of IO-input
+const changeIO = async(IOName_string) =>{
+    let IO_input_window_DOM = 0;
+    let IO_input_DOM = 0;
+    switch (IOName_string) {
+        case IO1:
+            IO_input_window_DOM = IO1_input_window;
+            IO_input_DOM = IO1_input;
             break;
-        
-        case 'readRAM':
-            WR.textContent = '1';
-            RD.textContent = '0';
-            M.textContent = '0';
-            IO_DEC.textContent = '1';
-            decDisplay.textContent = 'Lese von Ram';
+        case IO2:
+            IO_input_window_DOM = IO2_input_window;
+            IO_input_DOM = IO2_input;
             break;
 
-        case 'writeRAM':
-            WR.textContent = '0';
-            RD.textContent = '1';
-            M.textContent = '0';
-            IO_DEC.textContent = '1';
-            decDisplay.textContent = 'Schreibe auf Ram';
-            break;
-        
-        case 'readIO1':
-            WR.textContent = '1';
-            RD.textContent = '0';
-            M.textContent = '1';
-            IO_DEC.textContent = '0';
-            decDisplay.textContent = 'Lese von IO1';
-            break;
-
-        case 'readIO2':
-            WR.textContent = '1';
-            RD.textContent = '0';
-            M.textContent = '1';
-            IO_DEC.textContent = '0';
-            decDisplay.textContent = 'Lese von IO2';
-            break;
-
-        case 'readIO3':
-                WR.textContent = '1';
-                RD.textContent = '0';
-                M.textContent = '1';
-                IO_DEC.textContent = '0';
-                decDisplay.textContent = 'Lese von IO3';
-                break;
-        
-        case 'writeIO1':
-            WR.textContent = '0';
-            RD.textContent = '1';
-            M.textContent = '1';
-            IO_DEC.textContent = '0';
-            decDisplay.textContent = 'Schreibe auf IO1';
-            break;
-        
-        case 'writeIO2':
-            WR.textContent = '0';
-            RD.textContent = '1';
-            M.textContent = '1';
-            IO_DEC.textContent = '0';
-            decDisplay.textContent = 'Schreibe auf IO2';
-            break;
-
-        case 'writeIO3':
-            WR.textContent = '0';
-            RD.textContent = '1';
-            M.textContent = '1';
-            IO_DEC.textContent = '0';
-            decDisplay.textContent = 'Schreibe auf IO3';
+        case IO3:
+            IO_input_window_DOM = IO3_input_window;
+            IO_input_DOM = IO3_input;
             break;
     
         default:
-            WR.textContent = '0';
-            RD.textContent = '0';
-            M.textContent = '0';
-            IO_DEC.textContent = '0';
-            decDisplay.textContent = '';
-            break;
+            throw Error('Unknown IO');
     }
-}
 
-const changeIO = async(IO_DOM, IO_input_window_DOM, IO_input_DOM) =>{
     pause();    
     IO_input_window_DOM.classList.add('toggleGrid');
     await checkPlayPressed();
     IO_input_window_DOM.classList.remove('toggleGrid');
     if(IO_input_DOM.value === '')
         IO_input_DOM.value = 'FF';
-    await updateRegister_hex(IO_DOM,convertHexToNumber(IO_input_DOM.value));
+    await updateRegister_hex(IOName_string,convertHexToNumber(IO_input_DOM.value));
     IO_input_DOM.value = '';    
+}
+
+//reads a byte from the ROM or RAM. The addressRegister 
+const readFromMemoryInRegister = async(addressRegister_x4_string, targetRegister_x2_string) =>{
+    //get the address
+    let address_dec = getRegisterByName(addressRegister_x4_string).dec;
+
+    //update decoder without displaying  
+    DECODER.update(1,0,0,1,address_dec);
+    
+    await addArrow(addressRegister_x4_string);
+    
+    //determine ROM or RAM
+    if(address_dec < 8192){
+        await transfer(addressRegister_x4_string, 'ROM2', address_dec);
+        await transfer(ROM.getElementId(address_dec.dec),targetRegister_x2_string, ROM.getValue(address_dec));
+        await updateRegister_hex(targetRegister_x2_string, ROM.getValue(address_dec));
+    }
+    else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+        await transfer(addressRegister_x4_string, 'RAM2', address_dec.dec);
+        await transfer(RAM.getRamElementId(address_dec),targetRegister_x2_string, RAM.getValue(address_dec));
+        await updateRegister_hex(targetRegister_x2_string,RAM.getValue(address_dec));
+    } 
+    //Neither ROM or RAM  
+    else{
+        //The address of the addressRegister is unknown.
+        //the following code wont be executed completely, because the decoder will interrupt execution
+        await transfer(addressRegister_x4_string, 'RAM2', address_dec);
+    }
+    DECODER.resetDOM();
+}
+
+const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_x2_string) => {
+    //get address
+    let address_dec = getRegisterByName(addressRegister_x4_string).dec;
+
+    //get data
+    let register_x2_class = getRegisterByName(DataRegister_x2_string);
+    let data_dec = register_x2_class.dec;
+    if(DataRegister_x2_string.includes('hi'))
+        data_dec = register_x2_class.hi_dec;
+    if(DataRegister_x2_string.includes('lo'))
+        data_dec = register_x2_class.low_dec;
+
+    //update decoder, without displaying it
+    DECODER.update(0,1,0,1,address_dec);
+
+    await addArrow(addressRegister_x4_string);
+
+    //determine ROM or RAM
+    if(address_dec < 8192){
+        //wont be executed completely, because the decoder will interrupt execution 
+        await transfer(addressRegister_x4_string, 'ROM2', address_dec);
+    }
+    else if (address_dec >= RAM.startAddressRam_dec && address_dec< RAM.startAddressRam_dec+RAM.size_dec){
+        await transfer(addressRegister_x4_string, 'RAM2', address_dec);
+        if(!playStatus.noAnim)
+            document.getElementById(RAM.getRamElementId(address_dec)).classList.add('yellowBg');
+        try{
+            await transfer(DataRegister_x2_string, RAM.getRamElementId(address_dec), data_dec);
+        } catch (e) {
+            document.getElementById(RAM.getRamElementId(address_dec)).classList.remove('yellowBg');
+            throw e;
+        }
+
+    }
+    //Neither ROM or RAM
+    else{
+        //wont be executed completely, because the decoder will interrupt execution 
+        await transfer(addressRegister_x4_string, 'RAM2', address_dec);
+    }
+    RAM.update(address_dec,data_dec);
+    await add_yellow_background_for_IDLETIME(document.getElementById(RAM.getRamElementId(address_dec)));
+    DECODER.resetDOM();
+}
+
+//composition of animation which occurs often
+const increasePC = async() => {
+    await description_update('Erhöhe Programmzähler um 1');
+    await addArrow('PC');
+    await updatePC();
 }
 
 
@@ -1883,117 +2218,179 @@ const changeIO = async(IO_DOM, IO_input_window_DOM, IO_input_DOM) =>{
 const get_next_command = async() => {
     stepNumber.textContent = '0';
     assemblerCommand.textContent = '';
-    const romEle = ROM.getRomElement();
+    IR.DOM.textContent = '';
 
-    await description_update('Hole nächsten Befehl');
-    await addArrow('PC');
-    await updateDEC('readROM');
-    await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
-    await transfer(romEle.id, "SW", convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-    await updateDEC();
-    await updateRegister_hex(IR, ROM.getPCValue(PC.dec));
-    await description_update('Erhöhe Programmzähler um 1');
-    await addArrow('PC');
-    await updatePC();
+    await description_update('Hole 1. Operand');
+    await transfer('A', 'ALU1', 2);
+    await updateRegister_hex('ALU1', 2)
+    await description_update('Hole 2. Operand');
+    await transfer('A', 'ALU2', 4);
+    await updateRegister_hex('ALU2',4);
+    await aluAnimation(6,0,0,0,0);
+
+    await description_update('Hole den nächsten Befehl');
+    await readFromMemoryInRegister('PC', 'IR');
+    await increasePC();
     await description_update('Erkenne den Befehl');
     await assemblerCommand_update();
     pushNextCommand();
     return true;
+
+}
+
+const nop = async() => {
+    if(playStatus.noAnim)
+        await sleepForNOANIMATIONIDLETIME();
+    else
+        await sleepForIDLETIME();
+    check_completeExecution();
+}
+
+const halt = async() => {
+    await description_update('Prozessor angehalten');
+    pause();
+    check_completeExecution();
 }
 
 const movAdat_8 = async() => {
-    const romEle = ROM.getRomElement();
     await description_update('Hole den Parameter');
-    await addArrow('PC');
-    await updateDEC('readROM');
-    await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
-    await transfer(romEle.id, 'A', convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-    await updateDEC();
-    await updateRegister_hex(A, ROM.getPCValue(PC.dec));
-    await description_update('Erhöhe Programmzähler um 1');
-    await addArrow('PC');
-    await updatePC();
+    await readFromMemoryInRegister('PC', 'A');
+    await increasePC();
     check_completeExecution();
     return true;
     
 }
 
 const movBdat_8 = async() => {
-    const romEle = ROM.getRomElement();
     await description_update('Hole den Parameter');
-    await addArrow('PC');
-    await updateDEC('readROM');
-    await transfer('PC', 'ROM2',convertNumberToHex_4digits(PC.dec));
-    await transfer(romEle.id, 'B',convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-    await updateDEC();
-    await updateRegister_hex(B, ROM.getPCValue(PC.dec));
-    await description_update('Erhöhe Programmzähler um 1');
-    await addArrow('PC');
-    await updatePC();
+    await readFromMemoryInRegister('PC', 'B');
+    await increasePC();
     check_completeExecution();
     return true;
 }
 
 const movCdat_8 = async() => {
-    const romEle = ROM.getRomElement();
     await description_update('Hole den Parameter');
-    await addArrow('PC');
-    await updateDEC('readROM');
-    await transfer('PC', 'ROM2',convertNumberToHex_4digits(PC.dec));
-    await transfer(romEle.id, 'C',convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-    await updateDEC();
-    await updateRegister_hex(C, ROM.getPCValue(PC.dec));
-    await description_update('Erhöhe Programmzähler um 1');
-    await addArrow('PC');
-    await updatePC();
+    await readFromMemoryInRegister('PC', 'C');
+    await increasePC();
     check_completeExecution();
     return true;
 }
 
+const movHLdat_16 = async() => {
+    await description_update('Hole das niederwertige Byte');
+    await readFromMemoryInRegister('PC', 'HL_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Byte');
+    await readFromMemoryInRegister('PC', 'HL_hi');
+    await increasePC();
+    check_completeExecution();
+}
+
+const movSPdat_16 = async() => {
+    await description_update('Hole das niederwertige Byte');
+    await readFromMemoryInRegister('PC', 'SP_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Byte');
+    await readFromMemoryInRegister('PC', 'SP_hi');
+    await increasePC();
+    check_completeExecution();
+}
+
+const movAB = async() => {
+    await description_update('Kopiere die Daten');
+    await transfer('B', 'A', B.dec);
+    await updateRegister_hex('A', B.dec);
+    check_completeExecution();
+}
+
+const movAC = async() => {
+    await description_update('Kopiere die Daten');
+    await transfer('C', 'A', C.dec);
+    await updateRegister_hex('A', C.dec);
+    check_completeExecution();
+}
+
+const movBA = async() => {
+    await description_update('Kopiere die Daten');
+    await transfer('A', 'B', A.dec);
+    await updateRegister_hex('B', A.dec);
+    check_completeExecution();
+}
+
+const movBC = async() => {
+    await description_update('Kopiere die Daten');
+    await transfer('C', 'B', C.dec);
+    await updateRegister_hex('B', C.dec);
+    check_completeExecution();
+}
+
+const movCA = async() => {
+    await description_update('Kopiere die Daten');
+    await transfer('A', 'C', A.dec);
+    await updateRegister_hex('C', A.dec);
+    check_completeExecution();
+}
+
+const movCB = async() => {
+    await description_update('Kopiere die Daten');
+    await transfer('B', 'C', B.dec);
+    await updateRegister_hex('C', B.dec);
+    check_completeExecution();
+} 
+
+const movALabel = async() => {
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Hole die Daten');
+    await readFromMemoryInRegister('ZR', 'A');
+    check_completeExecution();
+}
+
 const twoByteIX = async() => {
     await description_update('Hole das 2. Byte des Befehls');
-    await addArrow('PC');
-    await updateDEC('readROM');
-    await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
-    await transfer(ROM.getRomElement(PC.dec).id, "SW", convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-    await updateDEC();
-    await updateRegister_hex(IR, ROM.getPCValue(PC.dec));
-    await description_update('Erhöhe Programmzähler um 1');
-    await addArrow('PC');
-    await updatePC();
+    await readFromMemoryInRegister('PC', 'IR');
+    await increasePC();
     await description_update('Erkenne den Befehl');
-    add_yellow_background_for_IDLETIME(IR.DOM);
+    await add_yellow_background_for_IDLETIME(IR.DOM);
     
 
     if(IR.dec === 0b00100001){
-        assemblerCommand.textContent = 'MOV IX, dat_16';
         await addArrow('IR');
-        await description_update('Hole das niederwerige Byte');
-        await addArrow('PC');
-        await updateDEC('readROM');
-        await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
-        await transfer(ROM.getRomElement(PC.dec).id, 'IX_lo', convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-        await updateRegister_hex4_lo(IX, convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-        await description_update('Erhöhe Programmzähler um 1');
-        await addArrow('PC');
-        await updatePC();
+        assemblerCommand.textContent = 'MOV IX, dat_16';
+        if(!playStatus.noAnim)
+            sleepForIDLETIME();
+        await description_update('Hole das niederwertige Byte');
+        await readFromMemoryInRegister('PC', 'IX_lo');
+        await increasePC();
         await description_update('Hole das höherwertige Byte');
-        await addArrow('PC');
-        await updateDEC('readROM');
-        await transfer('PC', 'ROM2', convertNumberToHex_4digits(PC.dec));
-        await transfer(ROM.getRomElement(PC.dec).id, 'IX', convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-        await updateRegister_hex4_hi(IX, convertNumberToHex_2digits(ROM.getPCValue(PC.dec)));
-        await description_update('Erhöhe Programmzähler um 1');
-        await addArrow('PC');
-        await updatePC();
+        await readFromMemoryInRegister('PC', 'IX_hi');
+        await increasePC();
     }
     else if(IR.dec === 0b00101010){
         assemblerCommand.textContent = 'MOV IX, label';
-         
+        await addArrow('IR');
+        await description_update('Hole das niederwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_lo');
+        await increasePC();
+        await description_update('Hole das höherwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_hi');
+        await increasePC();
+        await description_update('Hole das niederwertige Byte');
+        await readFromMemoryInRegister('ZR', 'IX_lo');
+        await description_update('Erhöhe die Adresse um 1');
+        await addArrow('ZR');
+        await updateRegister_hex('ZR', ZR.dec+1);
+        await description_update('Hole das höherwertige Byte');
+        await readFromMemoryInRegister('ZR', 'IX_hi');
     }
     else if(IR.dec === 0b00100010 ){
         assemblerCommand.textContent = 'MOV label, IX';
-         
+
     }
     else if(IR.dec === 0b00100011){
         assemblerCommand.textContent = 'INC IX';
@@ -2012,18 +2409,19 @@ const twoByteIX = async() => {
     return true;
 }
 
+
 const addA = async() => {
     await description_update('Hole den 1. Operator'); 
     await transfer('A','ALU1',convertNumberToHex_2digits(A.dec));
-    await updateRegister_hex(ALU1, A.dec);
+    await updateRegister_hex('ALU1', A.dec);
     await description_update('Hole den 2. Operator');
     await transfer('A', 'ALU2',convertNumberToHex_2digits(A.dec));
-    await updateRegister_hex(ALU2, A.dec);
+    await updateRegister_hex('ALU2', A.dec);
     //TODO: flags
     await description_update('Addiere die Operanden');
     await aluAnimation(A.dec+A.dec,0,0,0,0);
     await transfer('ALUOUT','A',convertNumberToHex_2digits(A.dec+A.dec));
-    await updateRegister_hex(A, A.dec+A.dec);
+    await updateRegister_hex('A', A.dec+A.dec);
     check_completeExecution();
 }
 
@@ -2046,8 +2444,10 @@ const run_program = async(currentTime) => {
             await runningProgram[i]();
         }
         catch(e){
-            if(!playStatus.stop)
+            if(!playStatus.stop){
                 playStatus.setPause();
+            }
+                
             setButtonPressed();
             console.log('In catch:');
             console.error(e);
@@ -2073,10 +2473,14 @@ const init = () => {
     ZR.update(0);
     IR.update(0);
     FLAGS.update(0,0,0,0);
-    WR.textContent = '0';
-    RD.textContent = '0';
-    M.textContent = '0';
-    IO_DEC.textContent = '0';
+    DECODER.resetDOM();
+    DECODER.error = false;
+    ALUOUT.DOM.textContent = '';
+    ALU1.DOM.textContent = '';
+    ALU2.DOM.textContent = '';
+    try{
+        movingObject.classList.remove('toggleGrid');
+    }catch{}
 
     stepNumber.textContent = '0';
     stepDescription.textContent = 'Prozessor angehalten';
@@ -2257,6 +2661,7 @@ const saveSettings = () => {
     if (checkSettings()) {
         stopBtn(); //init
         ROM.update();
+        RAM.reset();
         updateRedRectangle(0);
         toggleSettings();
         errorWindow.classList.remove('toggleGrid');
@@ -2274,12 +2679,27 @@ const openInfo = () => {
 
 /******************************* mc8_commands *********************************** */
 const mc8_commands_array = [
+    nop_command         = new mc8_command('NOP', 0b00000000, 1, [0,0,0,0], nop),
+    halt_command        = new mc8_command('HALT', 0b01110110, 1, [0,0,0,0], halt),
     movAdat_8_command   = new mc8_command('MOV A, dat_8', 0b00111110, 2, [0,0,0,0], movAdat_8),
     movBdat_8_command   = new mc8_command('MOV B, dat_8', 0b00000110, 2, [0,0,0,0], movBdat_8),
     movCdat_8_command   = new mc8_command('MOV C, dat_8', 0b00001110, 2, [0,0,0,0], movCdat_8),
     addA_command        = new mc8_command('ADD A',0b10000111, 4, [1,1,1,1], addA),
-    twoByteIX_command   = new mc8_command('2-Byte Befehl', 0b11011101, 4, [0,0,0,0], twoByteIX)
-    
+    movHLdat_16_command = new mc8_command('MOV HL, dat_16', 0b00100001, 3, [0,0,0,0], movHLdat_16),
+    movSPdat_16_command = new mc8_command('MOV SP, dat_16', 0b00110001, 3, [0,0,0,0], movSPdat_16),
+    movAB_command   	= new mc8_command('MOV A, B', 0b01111000, 1, [0,0,0,0], movAB),
+    movAC_command   	= new mc8_command('MOV A, C', 0b01111001, 1, [0,0,0,0], movAC),
+    movBA_command   	= new mc8_command('MOV B, A', 0b01000111, 1, [0,0,0,0], movBA),
+    movBC_command   	= new mc8_command('MOV B, C', 0b01000001, 1, [0,0,0,0], movBC),
+    movCA_command   	= new mc8_command('MOV C, A', 0b01001111, 1, [0,0,0,0], movCA),
+    movCB_command   	= new mc8_command('MOV C, B', 0b01001000, 1, [0,0,0,0], movCB),
+    movALabel_command   = new mc8_command('MOV A, label', 0b00111010, 3, [0,0,0,0], movALabel),
+
+
+
+
+
+    twoByteIX_command   = new mc8_command('2-Byte Befehl', 0b11011101, 4, [0,0,0,0], twoByteIX),
+
 
 ];
-

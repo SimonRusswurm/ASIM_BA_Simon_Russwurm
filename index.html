@@ -242,7 +242,7 @@
                     <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p>Speichern</p></button>
                     <input id="IO1_input" type="text" class="borderBox topRight bottomRight yellowBg" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
-                <p class="yellowBg borderBox rounded" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+                <p id="io1Input_info" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
 
             <div id="io2_hover" class="hoverElement borderBox rounded">
@@ -260,7 +260,7 @@
                     <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p>Speichern</p></button>
                     <input id="IO2_input" type="text" class="borderBox topRight bottomRight yellowBg" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
-                <p class="yellowBg borderBox rounded" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+                <p  id="io2Input_info" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
 
             <div id="io3_hover" class="hoverElement borderBox rounded" >
@@ -278,7 +278,7 @@
                     <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p>Speichern</p></button>
                     <input id="IO3_input" type="text" class="borderBox topRight bottomRight yellowBg" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
-                <p class="yellowBg borderBox rounded" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+                <p id="io3Input_info" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
 
 
@@ -295,11 +295,12 @@
                 <h1 id="z_flag">Z</h1>
                 <h1 id="p_flag">P</h1>
                 <h1 id="s_flag">S</h1>
-                <p id="C_Flag">0</p>
-                <p id="Z_Flag">0</p>
-                <p id="P_Flag">0</p>
-                <p id="S_Flag">0</p>
+                <p id="C_Flag" class="grid-template">0</p>
+                <p id="Z_Flag" class="grid-template">0</p>
+                <p id="P_Flag" class="grid-template">0</p>
+                <p id="S_Flag" class="grid-template">0</p>
             </div>
+
             <div id="cFlag_hover" class="hoverElement borderBox rounded">
                 <p>C - Carry Flag</p>
             </div>
@@ -321,6 +322,8 @@
                 <p>0</p>
             </div>
             <div id="flagsArrow"></div>
+            <div id="cFlag_arrow"></div>
+            <div id="jump_arrow"></div>
 
             <!-- ************************** register **************************  -->
             <div id="yellowBgElement" class="square2x2 yellowBg noneDisplay" style="position: absolute;"></div>
@@ -448,7 +451,7 @@
                 <div id="innerSettings" class="borderBox rounded">
                     <h4 id="konfigROM">Konfiguration ROM:</h4>
                     <p id="linkerDatei">Linker-Datei:</p>
-                    <select name="commandSelect" class="lightrounded borderBox textareaFontSize" id="commandSelect">
+                    <select name="commandSelectName" class="lightrounded borderBox textareaFontSize" id="commandSelect">
                         <option value="" disabled selected hidden>Wählen Sie ein Programm</option>
                         <option value="test">Testprogramm</option>
                         <option value="own">Eigenes Programm</option>

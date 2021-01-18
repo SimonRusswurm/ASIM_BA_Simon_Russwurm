@@ -13,12 +13,7 @@
         <div class="gridContainer">
             
             <!-- ************************** ROM **************************  -->
-            <div id="rom_hover" class="hoverElement borderBox rounded">
-                <p>ROM</p><p></p><p></p>
-                <p>Anfangsadresse: </p><p style="text-align: end;">0000h</p><p style="text-align: end;">0</p>
-                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
-                <p>Endadresse: </p><p style="text-align: end;">1FFFh</p><p style="text-align: end;">8191</p>
-            </div>
+           
             <div class="ROM">
                 <div class="label grid-template borderBox topLeft">
                     <h1 id="rom_h1">ROM</h1>
@@ -118,12 +113,7 @@
             </div>
 			
 			<!-- ************************** RAM **************************  -->
-            <div id="ram_hover" class="hoverElement borderBox rounded">
-                <p>RAM</p><p></p><p></p>
-                <p>Anfangsadresse: </p><p id="ramStartAddress_hex" style="text-align: end;">2000h</p><p id="ramStartAddress_dec" style="text-align: end;">8192</p>
-                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
-                <p>Endadresse: </p><p id="ramEndAddress_hex"style="text-align: end;">3FFFh</p><p id="ramEndAddress_dec"style="text-align: end;">16383</p>
-            </div>
+            
             <div class="RAM">
                 <div class="Label-1-F grid-template borderBox topLeft">
                     <p>0</p><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p>
@@ -605,56 +595,73 @@
                 <button id="fullscreenButton" type="button" class="borderRight" onclick="toggleFullscreen()"></button>
                 <button id="toggleTheme" type="button" class="topRight bottomRight" onclick="toggleTheme()"></button>
             </div>
-            <div id="play_hover" class="hoverElement borderBox rounded">
-                <p>Start:</Button></p>
+
+            <!-- ************************************************** hover pop ups *************************************************  -->
+
+            <div id="rom_hover" class="hoverElement borderBox rounded">
+                <p>ROM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p style="text-align: end;">0000h</p><p style="text-align: end;">0</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p style="text-align: end;">1FFFh</p><p style="text-align: end;">8191</p>
+            </div>
+
+            <div id="ram_hover" class="hoverElement borderBox rounded">
+                <p>RAM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p id="ramStartAddress_hex" style="text-align: end;">2000h</p><p id="ramStartAddress_dec" style="text-align: end;">8192</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p id="ramEndAddress_hex"style="text-align: end;">3FFFh</p><p id="ramEndAddress_dec"style="text-align: end;">16383</p>
+            </div>
+
+            <div id="play_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Start</Button></p>
                 <p>Startet den Programmablauf.</p>
             </div>
-            <div id="pause_hover" class="hoverElement borderBox rounded">
-                <p>Pause:</Button></p>
+            <div id="pause_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Pause</Button></p>
                 <p>Pausiert den Programmablauf.</p>
             </div>
-            <div id="stop_hover" class="hoverElement borderBox rounded">
-                <p>Reset:</Button></p>
+            <div id="stop_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Reset</Button></p>
                 <p>Setzt die CPU zurück.</p>
             </div>
-            <div id="slow_hover" class="hoverElement borderBox rounded">
-                <p>Langsame Animation:</Button></p>
+            <div id="slow_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Langsame Animation</Button></p>
                 <p>Animation mit Bewegung.</p>
             </div>
-            <div id="fast_hover" class="hoverElement borderBox rounded">
-                <p>Schnelle Animation:</Button></p>
+            <div id="fast_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Schnelle Animation</Button></p>
                 <p>Animation ohne Bewegung.</p>
             </div>
-            <div id="increase_hover" class="hoverElement borderBox rounded">
-                <p>Schneller:</Button></p>
-                <p>Erhöht Animationsgeschwindigkeit.</p>
+            <div id="increase_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Schneller</Button></p>
+                <p>Erhöht die Animationsgeschwindigkeit.</p>
             </div>
-            <div id="decrease_hover" class="hoverElement borderBox rounded">
-                <p>Langsamer:</Button></p>
-                <p>Verringert Animationsgeschwindigkeit.</p>
+            <div id="decrease_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Langsamer</Button></p>
+                <p>Verringert  die Animationsgeschwindigkeit.</p>
             </div>
-            <div id="oneCommand_hover" class="hoverElement borderBox rounded">
-                <p>Einzelschritt:</Button></p>
+            <div id="oneCommand_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einzelschritt</Button></p>
                 <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
             </div>
-            <div id="singleStep_hover" class="hoverElement borderBox rounded">
-                <p>Einzelschritt ohne Animation:</Button></p>
+            <div id="singleStep_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einzelschritt ohne Animation</Button></p>
                 <p>Führt einen Befehl ohne Animation aus.</p>
             </div>
-            <div id="fullCommand_hover" class="hoverElement borderBox rounded">
-                <p>Schneller Ablauf:</Button></p>
+            <div id="fullCommand_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Schneller Ablauf</Button></p>
                 <p>Führt die gesamte Simulation ohne Animation aus.</p>
             </div>
-            <div id="settingsButton_hover" class="hoverElement borderBox rounded">
-                <p>Einstellungen:</Button></p>
+            <div id="settingsButton_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einstellungen</Button></p>
                 <p>Konfiguration von ROM, RAM und IO.</p>
             </div>
-            <div id="fullscreenButton_hover" class="hoverElement borderBox rounded">
-                <p>Vollbild:</Button></p>
-                <p>Bei Smartphones verwenden :).</p>
+            <div id="fullscreenButton_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Vollbild</Button></p>
+                <p>Tipp: Bei Smartphones verwenden!</p>
             </div>
-            <div id="toggleTheme_hover" class="hoverElement borderBox rounded">
-                <p>Dunkler Modus:</Button></p>
+            <div id="toggleTheme_hover" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Dunkler Modus</Button></p>
                 <p>Wechselt das Design.</p>
             </div>
         </div>

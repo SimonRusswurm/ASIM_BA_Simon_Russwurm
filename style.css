@@ -101,7 +101,7 @@ button:hover{
 }
 
 .black{
-    background-color: black;
+    background-color: #111111;
 }
 
 .black h2, .black p{
@@ -138,6 +138,10 @@ button:hover{
 
 .arial{
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.bold{
+    font-weight: bold;
 }
 
 /* ******************************* ACTUAL DESIGN ******************************* */
@@ -1064,6 +1068,7 @@ textarea{
     align-items: center;
     
 }
+
 .hoverElement p{
     color: #222222;
     font-family: Arial, Helvetica, sans-serif;
@@ -1266,112 +1271,56 @@ textarea{
     height: calc(100%/32*5);
 }
 
-#play_hover{
+.button_hover{
+    padding: 0.5%;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*10); 
+    grid-template-rows: 1fr 2fr;
     width: calc(100%/46*10);
-    height: calc(100%/32*2);
+    height: calc(100%/32*3);
+    top: calc(100%/32*27);
+}
+
+#play_hover{
+    left: calc(100%/46*10);
 }
 #pause_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*10); 
-    width: calc(100%/46*10);
-    height: calc(100%/32*2);
+    left: calc(100%/46*10);
 }
 #stop_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*10); 
-    width: calc(100%/46*10);
-    height: calc(100%/32*2);
+    left: calc(100%/46*10);
 }
 
 #slow_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*12); 
-    width: calc(100%/46*10);
-    height: calc(100%/32*2);
+    left: calc(100%/46*12);
 }
 
 #fast_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*14); 
-    width: calc(100%/46*10);
-    height: calc(100%/32*2);
+    left: calc(100%/46*14);
 }
 
 #increase_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*16); 
-    width: calc(100%/46*12);
-    height: calc(100%/32*2);
+    left: calc(100%/46*16);
 }
 #decrease_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*16); 
-    width: calc(100%/46*14);
-    height: calc(100%/32*2);
+    left: calc(100%/46*18);
 }
 #oneCommand_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr;
-    top: calc(100%/32*27);
-    left: calc(100%/46*18); 
-    width: calc(100%/46*14);
-    height: calc(100%/32*3);
+    left: calc(100%/46*20);
 }
 #singleStep_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*20); 
-    width: calc(100%/46*14);
-    height: calc(100%/32*2);
+    left: calc(100%/46*22);
 }
 #fullCommand_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr;
-    top: calc(100%/32*27);
-    left: calc(100%/46*24); 
-    width: calc(100%/46*12);
-    height: calc(100%/32*3);
+    left: calc(100%/46*24);
 }
 #settingsButton_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*22); 
-    width: calc(100%/46*14);
-    height: calc(100%/32*2);
+    left: calc(100%/46*24);
 }
-#fullscreenButton_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*24); 
-    width: calc(100%/46*12);
-    height: calc(100%/32*2);
+#fullscreenButton_hover{  
+    left: calc(100%/46*26); 
 }
 #toggleTheme_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr;
-    top: calc(100%/32*28);
-    left: calc(100%/46*28); 
-    width: calc(100%/46*8);
-    height: calc(100%/32*2);
+    left: calc(100%/46*26); 
 }
 
 .toggleGrid{

@@ -662,6 +662,20 @@ button:hover{
     background-repeat: no-repeat;
 }
 
+.HL_arrow{
+    background-image: url(images/HL_arrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.IX_arrow{
+    background-image: url(images/IX_arrow.svg);
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 .SP_arrow{
     background-image: url(images/SP_arrow.svg);
     background-position: center center;
@@ -846,10 +860,10 @@ button:hover{
     grid-template-rows: repeat(26, 1fr);
     background-color: #FBFBFB;
     border: 2px solid #19B2FF;
-    height: 90%;
-    width: 90%;
-    top: 5%;
-    left: 5%;
+    height: calc(100%/32*28);
+    width: calc(100%/46*42);
+    top: calc(100%/32*2);
+    left: calc(100%/46*2);
 }
 #linkerFile{
     position: absolute;

@@ -104,6 +104,16 @@ const convertBinaryToNumber = (binary_dec) => {
     return Number(str);    
 }
 
+const convertNumberToComplementOnTwo = (number_dec) => {
+    if(number_dec>127){
+        number_dec = number_dec-256;
+    }
+    return number_dec;
+}
+
+
+/***************************************** ALU operations *********************************/
+
 //sets the flags, 0 == don't set flag, 1 == setFlag
 const setFlags = (value_dec, result_bin_array, carry_bin_array, cFlag_dec, zFlag_dec, pFlag_dec,vFlag_dec, sFlag_dec) => {
     
@@ -946,10 +956,10 @@ class mc8_command {
 
 //variables
 let isFullscreen = false;
-let ANIMATION_SPEED = 2;
+let ANIMATION_SPEED = 3;
 const playStatus = new PlayStatus();
-const IDLETIME = 500;
-const NOANIMATIONIDLETIME = 30;
+let IDLETIME = 400;
+let NOANIMATIONIDLETIME = 30;
 const FRAMES = 60;
 
 
@@ -1000,7 +1010,7 @@ const io1_h1 = document.getElementById('io1_h1');
 io1_h1.addEventListener('mouseover', function() {
     document.getElementById('io1Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io1Address_hex').textContent = io1Address.value + 'h';
-    document.getElementById('io1_dec').textContent = IO1.dec;
+    document.getElementById('io1_dec').textContent = IO1.dec + ' (' + convertNumberToComplementOnTwo(IO1.dec) + ')';
     document.getElementById('io1_bin').textContent = convertNumberToBinary_8digits(IO1.dec);
     document.getElementById('io1_hover').classList.toggle('toggleGrid');
 });
@@ -1012,7 +1022,7 @@ const io2_h1 = document.getElementById('io2_h1');
 io2_h1.addEventListener('mouseover', function() {
     document.getElementById('io2Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io2Address_hex').textContent =  document.getElementById('io2Address').value + 'h';
-    document.getElementById('io2_dec').textContent = IO2.dec;
+    document.getElementById('io2_dec').textContent = IO2.dec + ' (' + convertNumberToComplementOnTwo(IO2.dec) + ')';
     document.getElementById('io2_bin').textContent = convertNumberToBinary_8digits(IO2.dec);
     document.getElementById('io2_hover').classList.toggle('toggleGrid');
 });
@@ -1024,7 +1034,7 @@ const io3_h1 = document.getElementById('io3_h1');
 io3_h1.addEventListener('mouseover', function() {
     document.getElementById('io3Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
     document.getElementById('io3Address_hex').textContent =  document.getElementById('io3Address').value + 'h';
-    document.getElementById('io3_dec').textContent = IO3.dec;
+    document.getElementById('io3_dec').textContent = IO3.dec + ' (' + convertNumberToComplementOnTwo(IO3.dec) + ')';
     document.getElementById('io3_bin').textContent = convertNumberToBinary_8digits(IO3.dec);
     document.getElementById('io3_hover').classList.toggle('toggleGrid');
 });
@@ -1034,7 +1044,7 @@ io3_h1.addEventListener('mouseleave', function() {
 
 const a_h1 = document.getElementById('a');
 a_h1.addEventListener('mouseover', function() {
-    document.getElementById('a_dec').textContent = 'Dezimal: ' + A.dec;
+    document.getElementById('a_dec').textContent = 'Dezimal: ' + A.dec + ' (' + convertNumberToComplementOnTwo(A.dec) + ')';
     document.getElementById('a_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(A.dec);
     document.getElementById('a_hover').classList.toggle('toggleGrid');
 });
@@ -1044,7 +1054,7 @@ a_h1.addEventListener('mouseleave', function() {
 
 const b_h1 = document.getElementById('b');
 b_h1.addEventListener('mouseover', function() {
-    document.getElementById('b_dec').textContent = 'Dezimal: ' + B.dec;
+    document.getElementById('b_dec').textContent = 'Dezimal: ' + B.dec + ' (' + convertNumberToComplementOnTwo(B.dec) + ')';
     document.getElementById('b_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(B.dec);
     document.getElementById('b_hover').classList.toggle('toggleGrid');
 });
@@ -1054,7 +1064,7 @@ b_h1.addEventListener('mouseleave', function() {
 
 const c_h1 = document.getElementById('c');
 c_h1.addEventListener('mouseover', function() {
-    document.getElementById('c_dec').textContent = 'Dezimal: ' + C.dec;
+    document.getElementById('c_dec').textContent = 'Dezimal: ' + C.dec + ' (' + convertNumberToComplementOnTwo(C.dec) + ')';
     document.getElementById('c_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(C.dec);
     document.getElementById('c_hover').classList.toggle('toggleGrid');
 });
@@ -1390,16 +1400,13 @@ const setSettingsDependingOnProgram = (ioMapped_boolean, io1IN_boolean, io2IN_bo
     io2Address.value = io2Address_hex;
     io3Address.value = io3Address_hex;
     ramAddress.value = ramStartingAddress_hex;
+    changeRamAddress();
 }
 
 const updateProgram = () => {
     switch(programSelect.value){
         case 'own':
             linkerFile.value = 'Fügen Sie hier den Inhalt der vom Linker erzeugten .OBJ-Datei ein.\n(im Intel-HEX-Format)';
-            setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
-            break;
-        case 'test':
-            linkerFile.value = ':020000003E01BF\n:020002000602F4\n:020004003E03B9\n:020006000604EE\n:010008008778\n:04000900DD210001FD\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp1':
@@ -1851,12 +1858,59 @@ const create_RedRectangle = () => {
 const redRectangle = create_RedRectangle();
 
 const updateRedRectangle = (PC_dec) =>{
-    //should always be on the position the PC is pointing at
-    let xPos = PC_dec%8 +2;
-    let yPos = Math.floor(PC_dec/8) + 2;
-    redRectangle.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
-    redRectangle.style.left = String(100/46*(xPos)) + "%";
-    redRectangle.style.top = String(100/32*(yPos)) + "%";
+    redRectangle.style.display = '';
+    if(PC_dec < 224){
+        //should always be on the position the PC is pointing at
+        let xPos = PC_dec%8 +2;
+        let yPos = Math.floor(PC_dec/8) + 2;
+        redRectangle.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
+        redRectangle.style.left = String(100/46*(xPos)) + "%";
+        redRectangle.style.top = String(100/32*(yPos)) + "%";
+        redRectangle.style.width = String(100/46*1) + "%";
+        redRectangle.style.height = String(100/32*1) + "%";
+    }
+    else if(PC_dec < 8192) {
+        redRectangle.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
+        redRectangle.style.left = String(100/46*4) + "%";
+        redRectangle.style.top = String(100/32*30) + "%";
+        redRectangle.style.width = String(100/46*2) + "%";
+        redRectangle.style.height = String(100/32*2) + "%";
+    }
+    else if(PC_dec >= RAM.startAddressRam_dec && PC_dec < RAM.startAddressRam_dec+112){
+        PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
+
+        let xPos = PC_dec%8 +36;
+        let yPos = Math.floor(PC_dec/8) + 2;
+        redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        redRectangle.style.left = String(100/46*(xPos)) + "%";
+        redRectangle.style.top = String(100/32*(yPos)) + "%";
+        redRectangle.style.width = String(100/46*1) + "%";
+        redRectangle.style.height = String(100/32*1) + "%";
+    }
+    else if(PC_dec >= RAM.startAddressRam_dec+112 && PC_dec < RAM.startAddressRam_dec+8080){
+        PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
+        redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+
+        redRectangle.style.left = String(100/46*40) + "%";
+        redRectangle.style.top = String(100/32*16) + "%";
+        redRectangle.style.width = String(100/46*2) + "%";
+        redRectangle.style.height = String(100/32*2) + "%";
+    }
+    else if(PC_dec >= RAM.startAddressRam_dec+8080 && PC_dec < RAM.startAddressRam_dec+8192){
+        PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
+        console.log(PC_dec)
+
+        let xPos = PC_dec%8 +36;
+        let yPos = Math.floor((PC_dec-7952)/8) + 2;
+        redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        redRectangle.style.left = String(100/46*(xPos)) + "%";
+        redRectangle.style.top = String(100/32*(yPos)) + "%";
+        redRectangle.style.width = String(100/46*1) + "%";
+        redRectangle.style.height = String(100/32*1) + "%";
+    }
+    else{
+        redRectangle.style.display = 'none';
+    }
 }
 
 
@@ -2052,6 +2106,24 @@ const addArrow = async(register_string) => {
                 registerArrow.classList.remove('ZR_arrow');
             }
         }
+        else if(register_string === 'HL'){
+            registerArrow.classList.add('HL_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow.classList.remove('HL_arrow');
+            }
+        }
+        else if(register_string === 'IX'){
+            registerArrow.classList.add('IX_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow.classList.remove('IX_arrow');
+            }
+        }
         
         else if(register_string === 'SP'){
             registerArrow.classList.add('SP_arrow');
@@ -2101,6 +2173,39 @@ const addArrow = async(register_string) => {
             finally{
                 jump_arrow.classList.remove('jump_arrow');
                 FLAGS.z_DOM.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+        else if(register_string === 'jumpC'){
+            jump_arrow.classList.add('jump_arrow');
+            FLAGS.c_DOM.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                jump_arrow.classList.remove('jump_arrow');
+                FLAGS.c_DOM.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+        else if(register_string === 'jumpS'){
+            jump_arrow.classList.add('jump_arrow');
+            FLAGS.s_DOM.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                jump_arrow.classList.remove('jump_arrow');
+                FLAGS.s_DOM.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+        else if(register_string === 'jumpP'){
+            jump_arrow.classList.add('jump_arrow');
+            FLAGS.p_DOM.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                jump_arrow.classList.remove('jump_arrow');
+                FLAGS.p_DOM.classList.remove('yellowBg', 'borderBox');
             }
         }
     } 
@@ -2481,7 +2586,7 @@ const resetMovingAluElements = () => {
 resetMovingAluElements();
 
 //animation of ALU-usage
-const aluAnimation = async(aluOUT_dec, twoMovingAluElements_boolean, cFlag_boolean, saveToAccumulator_boolean) => {
+const aluAnimation = async(aluOUT_dec, twoMovingAluElements_boolean, cFlag_boolean, saveToRegister_string=false) => {
     if(!playStatus.noAnim){
         const xCoordinateAlu1 = [24];
         const xCoordinateAlu2 = [30];
@@ -2522,16 +2627,89 @@ const aluAnimation = async(aluOUT_dec, twoMovingAluElements_boolean, cFlag_boole
     try {
         await description_update('Setze die Flags');
         await setFlagsAnimation();
-        await description_update('Speichere das Ergebnis');
+        if(saveToRegister_string)
+            await description_update('Speichere das Ergebnis');
     } 
     finally{
         ALUOUT.DOM.classList.remove('yellowBg');
         ALUOUT.DOM.textContent = '';
     }
-    if(saveToAccumulator_boolean){
-        await transfer('ALUOUT', 'A', aluOUT_dec);
-        await updateRegister_hex('A', aluOUT_dec);
+    if(saveToRegister_string){
+        await transfer('ALUOUT', saveToRegister_string, aluOUT_dec);
+        await updateRegister_hex(saveToRegister_string, aluOUT_dec);
     }    
+}
+
+const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
+    if(!playStatus.noAnim){
+        const xCoordinateAlu1 = [24];
+        const xCoordinateAlu2 = [30];
+        const yCoordinate =  [6];
+        for (let j = 0; j < 30; j++) {
+            xCoordinateAlu1.push(xCoordinateAlu1[j]+0.1);
+            xCoordinateAlu2.push(xCoordinateAlu2[j]-0.1);
+            yCoordinate.push(yCoordinate[j]+1/7.5);
+        }
+
+        setMovingAluElements(true);
+        ALU1.DOM.textContent = '';
+        ALU2.DOM.textContent = '';
+        if(!stepOne_boolean)
+            await addArrow('cFlag');
+        try{
+            await sleepForIDLETIME();
+            
+            for (let i = 0; i < xCoordinateAlu1.length; i++) {
+                updatePosition(movingAlu1, xCoordinateAlu1[i],yCoordinate[i]);
+                updatePosition(movingAlu2, xCoordinateAlu2[i],yCoordinate[i]);
+                await sleep(1000/FRAMES);  
+            }
+            resetMovingAluElements();
+            await updateRegister_hex('ALUOUT', aluOUT_dec);
+        }
+        finally{
+            resetMovingAluElements();
+        }
+        ALUOUT.DOM.classList.add('yellowBg');
+    }
+    else{ //noAnim
+        await updateRegister_hex('ALUOUT', aluOUT_dec);
+        ALU1.DOM.textContent = '';
+        ALU2.DOM.textContent = '';
+    }
+    
+    if(stepOne_boolean){
+        try {
+            await description_update('Setze Carry-Flag');
+            FLAGS.z_dec = '-';
+            FLAGS.s_dec = '-';
+            FLAGS.p_dec = '-';
+            await setFlagsAnimation();
+            await description_update('Speichere das Ergebnis in L');
+        } 
+        finally{
+            ALUOUT.DOM.classList.remove('yellowBg');
+            ALUOUT.DOM.textContent = '';
+        }
+        await transfer('ALUOUT', 'HL_lo', aluOUT_dec);
+        await updateRegister_hex('HL_lo', aluOUT_dec);
+    }
+    else{
+        try {
+            await description_update('Setze Carry-Flag');
+            FLAGS.z_dec = '-';
+            FLAGS.s_dec = '-';
+            FLAGS.p_dec = '-';
+            await setFlagsAnimation();
+            await description_update('Speichere das Ergebnis in H');
+        } 
+        finally{
+            ALUOUT.DOM.classList.remove('yellowBg');
+            ALUOUT.DOM.textContent = '';
+        }
+        await transfer('ALUOUT', 'HL_hi', aluOUT_dec);
+        await updateRegister_hex('HL_hi', aluOUT_dec);
+    }
 }
 
 //animation of setting flags
@@ -2563,6 +2741,18 @@ const checkJumpAnimation = async(flag_string) => {
     switch (flag_string) {
         case 'zFlag':
             await addArrow('jumpZ');
+            break;
+        
+        case 'cFlag':
+            await addArrow('jumpC');
+            break;
+
+        case 'sFlag':
+            await addArrow('jumpS');
+            break;
+
+        case 'pFlag':
+            await addArrow('jumpP');
             break;
     
         default:
@@ -2782,11 +2972,33 @@ const writeToIo = async() =>{
     DECODER.resetDOM();
 }
 
-//composition of animation which occurs often
+//composition of animations which occurs often
 const increasePC = async() => {
     await description_update('Erhöhe Programmzähler um 1');
     await addArrow('PC');
     await updatePC();
+}
+
+const loadOperands = async(register1_string, register2_string) => {
+    const reg1_class = getRegisterByName(register1_string);
+    const reg2_class = getRegisterByName(register2_string);
+
+    await description_update('Hole den 1. Operanden'); 
+    await transfer(register1_string,'ALU1',reg1_class.dec);
+    await updateRegister_hex('ALU1', reg1_class.dec);
+    await description_update('Hole den 2. Operanden');
+    await transfer(register2_string, 'ALU2',reg2_class.dec);
+    await updateRegister_hex('ALU2', reg2_class.dec);
+
+}
+
+const loadAddressBytesInZr = async() => {
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
 }
 
 
@@ -2796,14 +3008,6 @@ const get_next_command = async() => {
     stepNumber.textContent = '0';
     assemblerCommand.textContent = '';
     IR.DOM.textContent = '';
-
-    // await description_update('Hole 1. Operand');
-    // await transfer('A', 'ALU1', 2);
-    // await updateRegister_hex('ALU1', 2)
-    // await description_update('Hole 2. Operand');
-    // await transfer('A', 'ALU2', 4);
-    // await updateRegister_hex('ALU2',4);
-    // await aluAnimation(6,0,0,0,0);
 
     await description_update('Hole den nächsten Befehl');
     await readFromMemoryInRegister('PC', 'IR');
@@ -2850,6 +3054,80 @@ const movCdat_8 = async() => {
     await description_update('Hole den Parameter');
     await readFromMemoryInRegister('PC', 'C');
     await increasePC();
+    check_completeExecution();
+    return true;
+}
+
+const twoByteIX = async() => {
+    await description_update('Hole das 2. Byte des Befehls');
+    await readFromMemoryInRegister('PC', 'IR');
+    await increasePC();
+    await description_update('Erkenne den Befehl');
+    await add_yellow_background_for_IDLETIME(IR.DOM);
+    await addArrow('IR');
+    
+
+    if(IR.dec === 0b00100001){
+        assemblerCommand.textContent = 'MOV IX, dat_16';
+        if(!playStatus.noAnim)
+            await sleepForIDLETIME();
+        await description_update('Hole das niederwertige Byte');
+        await readFromMemoryInRegister('PC', 'IX_lo');
+        await increasePC();
+        await description_update('Hole das höherwertige Byte');
+        await readFromMemoryInRegister('PC', 'IX_hi');
+        await increasePC();
+    }
+    else if(IR.dec === 0b00101010){
+        assemblerCommand.textContent = 'MOV IX, label';
+        await description_update('Hole das niederwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_lo');
+        await increasePC();
+        await description_update('Hole das höherwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_hi');
+        await increasePC();
+        await description_update('Hole das niederwertige Byte');
+        await readFromMemoryInRegister('ZR', 'IX_lo');
+        await description_update('Erhöhe die Adresse um 1');
+        await addArrow('ZR');
+        await updateRegister_hex('ZR', ZR.dec+1);
+        await description_update('Hole das höherwertige Byte');
+        await readFromMemoryInRegister('ZR', 'IX_hi');
+    }
+    else if(IR.dec === 0b00100010 ){
+        assemblerCommand.textContent = 'MOV label, IX';
+        await description_update('Hole das niederwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_lo');
+        await increasePC();
+        await description_update('Hole das höherwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_hi');
+        await increasePC();
+        await description_update('Schreibe das niederwertige Byte');
+        await writeToMemoryFromRegister('ZR', 'IX_lo');
+        await description_update('Erhöhe die Adresse um 1');
+        await addArrow('ZR');
+        await updateRegister_hex('ZR', ZR.dec+1);
+        await description_update('Schreibe das höherwertige Byte');
+        await writeToMemoryFromRegister('ZR', 'IX_hi');
+
+    }
+    else if(IR.dec === 0b00100011){
+        assemblerCommand.textContent = 'INC IX';
+        await description_update('Erhöhe die Adresse um 1');
+        await addArrow('IX');
+        await updateRegister_hex('IX', IX.dec+1);
+    }
+    else if(IR.dec === 0b00101011){
+        assemblerCommand.textContent = 'DEC IX';
+        await description_update('Verringere die Adresse um 1');
+        await addArrow('IX');
+        await updateRegister_hex('IX', IX.dec-1);
+    }
+    else if(IR.dec === 0b11101001){
+        assemblerCommand.textContent = 'JP [IX]';
+         
+    }
+    
     check_completeExecution();
     return true;
 }
@@ -2928,62 +3206,64 @@ const movALabel = async() => {
     check_completeExecution();
 }
 
-const twoByteIX = async() => {
-    await description_update('Hole das 2. Byte des Befehls');
-    await readFromMemoryInRegister('PC', 'IR');
+const movLabelA = async() => {
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
     await increasePC();
-    await description_update('Erkenne den Befehl');
-    await add_yellow_background_for_IDLETIME(IR.DOM);
-    
-
-    if(IR.dec === 0b00100001){
-        await addArrow('IR');
-        assemblerCommand.textContent = 'MOV IX, dat_16';
-        if(!playStatus.noAnim)
-            await sleepForIDLETIME();
-        await description_update('Hole das niederwertige Byte');
-        await readFromMemoryInRegister('PC', 'IX_lo');
-        await increasePC();
-        await description_update('Hole das höherwertige Byte');
-        await readFromMemoryInRegister('PC', 'IX_hi');
-        await increasePC();
-    }
-    else if(IR.dec === 0b00101010){
-        assemblerCommand.textContent = 'MOV IX, label';
-        await addArrow('IR');
-        await description_update('Hole das niederwertige Adressbyte');
-        await readFromMemoryInRegister('PC', 'ZR_lo');
-        await increasePC();
-        await description_update('Hole das höherwertige Adressbyte');
-        await readFromMemoryInRegister('PC', 'ZR_hi');
-        await increasePC();
-        await description_update('Hole das niederwertige Byte');
-        await readFromMemoryInRegister('ZR', 'IX_lo');
-        await description_update('Erhöhe die Adresse um 1');
-        await addArrow('ZR');
-        await updateRegister_hex('ZR', ZR.dec+1);
-        await description_update('Hole das höherwertige Byte');
-        await readFromMemoryInRegister('ZR', 'IX_hi');
-    }
-    else if(IR.dec === 0b00100010 ){
-        assemblerCommand.textContent = 'MOV label, IX';
-
-    }
-    else if(IR.dec === 0b00100011){
-        assemblerCommand.textContent = 'INC IX';
-         
-    }
-    else if(IR.dec === 0b00101011){
-        assemblerCommand.textContent = 'DEC IX';
-         
-    }
-    else if(IR.dec === 0b11101001){
-        assemblerCommand.textContent = 'JP [IX]';
-         
-    }
-    
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Schreibe die Daten');
+    await writeToMemoryFromRegister('ZR', 'A');
     check_completeExecution();
-    return true;
+}
+
+const movHlLabel = async() => {
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Hole das niederwertige Byte');
+    await readFromMemoryInRegister('ZR', 'HL_lo');
+
+    await description_update('Erhöhe die Adresse um 1');
+    await addArrow('ZR');
+    await updateRegister_hex('ZR', ZR.dec+1);
+    await description_update('Hole das höherwertige Byte');
+    await readFromMemoryInRegister('ZR', 'HL_hi');
+    check_completeExecution();
+}
+
+const movLabelHl = async() => {
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Schreibe das niederwertige Byte');
+    await writeToMemoryFromRegister('ZR', 'HL_lo');
+
+    await description_update('Erhöhe die Adresse um 1');
+    await addArrow('ZR');
+    await updateRegister_hex('ZR', ZR.dec+1);
+    await description_update('Schreibe das höherwertige Byte');
+    await writeToMemoryFromRegister('ZR', 'HL_hi');
+    check_completeExecution();
+}
+
+const movAHl = async() => {
+    await description_update('Hole die Daten');
+    await readFromMemoryInRegister('HL', 'A');
+    check_completeExecution();
+}
+
+const movHlA = async() => {
+    await description_update('Schreibe die Daten');
+    await writeToMemoryFromRegister('HL', 'A');
+    check_completeExecution();
 }
 
 const push = async() => {
@@ -3032,83 +3312,308 @@ const outA = async() => {
     check_completeExecution();
 }
 
-const addA = async() => {
-    await description_update('Hole den 1. Operator'); 
-    await transfer('A','ALU1',A.dec);
-    await updateRegister_hex('ALU1', A.dec);
-    await description_update('Hole den 2. Operator');
-    await transfer('A', 'ALU2',A.dec);
-    await updateRegister_hex('ALU2', A.dec);
-    await description_update('Addiere die Operanden');
-
-    const result = addBinary(A.dec, A.dec, false);
-    await aluAnimation(result,true,false, true);
-    check_completeExecution();
-}
-
 const incA = async() => {
     await description_update('Hole den Operanden');
     await transfer('A','ALU1',A.dec);
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Erhöhe den Operanden um 1');
     const result = incBinary(A.dec);
-    await aluAnimation(result,false,false, true);
+    await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
-const subA = async() => {
+const incB = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('B','ALU1',B.dec);
+    await updateRegister_hex('ALU1', B.dec);
+    await description_update('Erhöhe den Operanden um 1');
+    const result = incBinary(B.dec);
+    await aluAnimation(result,false,false, 'B');
+    check_completeExecution();
+}
+
+const incC = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('C','ALU1',C.dec);
+    await updateRegister_hex('ALU1', C.dec);
+    await description_update('Erhöhe den Operanden um 1');
+    const result = incBinary(C.dec);
+    await aluAnimation(result,false,false, 'C');
+    check_completeExecution();
+}
+
+const incHl = async() =>{
+    await description_update('Erhöhe die Adresse um 1');
+    await addArrow('HL');
+    await updateRegister_hex('HL', HL.dec+1);
+    check_completeExecution();
+}
+//incIX see twoByteIx
+
+const decA = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.dec);
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Verringere den Operanden um 1');
+    const result = decBinary(A.dec);
+    await aluAnimation(result,false,false, 'A');
+    check_completeExecution();
+}
+
+const decB = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('B','ALU1',B.dec);
+    await updateRegister_hex('ALU1', B.dec);
+    await description_update('Verringere den Operanden um 1');
+    const result = decBinary(B.dec);
+    await aluAnimation(result,false,false, 'B');
+    check_completeExecution();
+}
+
+const decC = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('C','ALU1',C.dec);
+    await updateRegister_hex('ALU1', C.dec);
+    await description_update('Verringere den Operanden um 1');
+    const result = decBinary(C.dec);
+    await aluAnimation(result,false,false, 'C');
+    check_completeExecution();
+}
+
+const decHl = async() => {
+    await description_update('Verringere die Adresse um 1');
+    await addArrow('HL');
+    await updateRegister_hex('HL', HL.dec-1);
+    check_completeExecution();
+}
+
+const addA = async() => {
+    await loadOperands('A','A');
+    await description_update('Addiere die Operanden');
+
+    const result = addBinary(A.dec, A.dec, false);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const addB = async() => {
+    await loadOperands('A','B');
+    await description_update('Addiere die Operanden');
+
+    const result = addBinary(A.dec, B.dec, false);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const addC = async() => {
+    await loadOperands('A','C');
+    await description_update('Addiere die Operanden');
+
+    const result = addBinary(A.dec, C.dec, false);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const addDat_8 = async() => {
     await description_update('Hole den 1. Operator'); 
     await transfer('A','ALU1',A.dec);
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Hole den 2. Operator');
-    await transfer('A', 'ALU2',A.dec);
-    await updateRegister_hex('ALU2', A.dec);
+    await readFromMemoryInRegister('PC','ALU2');
+    await increasePC();
+    await description_update('Addiere die Operanden');
+
+    const result = addBinary(A.dec, ALU2.dec, false);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const addHlBc = async() => {
+    await description_update('Hole das L-Register (HL_LO');
+    await transfer('HL_lo','ALU1',HL.lo_dec);
+    await updateRegister_hex('ALU1', HL.lo_dec);
+    await description_update('Hole das C-Register');
+    await transfer('C','ALU2',C.dec);
+    await updateRegister_hex('ALU2', C.dec);
+    await description_update('Addiere die Operanden');
+
+    let result = addBinary(HL.lo_dec,C.dec,false);
+    await hlBcAnimation(result,true);
+
+    await description_update('Hole das H-Register (HL_HI');
+    await transfer('HL_hi','ALU1',HL.hi_dec);
+    await updateRegister_hex('ALU1', HL.hi_dec);
+    await description_update('Hole das B-Register');
+    await transfer('B','ALU2',B.dec);
+    await updateRegister_hex('ALU2', B.dec);
+    await description_update('Addiere die Operanden');
+    result = addBinary(HL.hi_dec,B.dec+FLAGS.c_dec, false);
+    await hlBcAnimation(result,false);
+
+    check_completeExecution();
+}
+
+const subA = async() => {
+    await loadOperands('A','A');
     await description_update('Subtrahiere die Operanden');
 
     const result = addBinary(A.dec, A.dec, true);
-    await aluAnimation(result,true,false, true);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const subB = async() => {
+    await loadOperands('A','B');
+    await description_update('Subtrahiere die Operanden');
+
+    const result = addBinary(A.dec, B.dec, true);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const subC = async() => {
+    await loadOperands('A','C');
+    await description_update('Subtrahiere die Operanden');
+
+    const result = addBinary(A.dec, C.dec, true);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const subDat_8 = async() => {
+    await description_update('Hole den 1. Operator'); 
+    await transfer('A','ALU1',A.dec);
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Hole den 2. Operator');
+    await readFromMemoryInRegister('PC', 'ALU2');
+    await increasePC();
+    await description_update('Subtrahiere die Operanden');
+
+    const result = addBinary(A.dec, ALU2.dec, true);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const andA = async() => {
+    await loadOperands('A','A');
+    await description_update('OP1 AND OP2');
+
+    const result = andBinary(A.dec, A.dec);
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const andB = async() => {
+    await loadOperands('A','B');
+    await description_update('OP1 AND OP2');
+
+    const result = andBinary(A.dec, B.dec);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const andC = async() => {
+    await loadOperands('A','C');
+    await description_update('OP1 AND OP2');
+
+    const result = andBinary(A.dec, C.dec);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const andDat_8 = async() => {
     await description_update('Hole den 1. Operanden'); 
     await transfer('A','ALU1',A.dec);
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Hole den 2. Operanden');
-    await transfer('B', 'ALU2',B.dec);
-    await updateRegister_hex('ALU2', B.dec);
+    await readFromMemoryInRegister('PC' ,'ALU2');
+    await increasePC()
     await description_update('OP1 AND OP2');
 
-    const result = andBinary(A.dec, B.dec);
-    await aluAnimation(result,true,false, true);
+    const result = andBinary(A.dec, ALU2.dec);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const orA = async() => {
+    await loadOperands('A','A');
+    await description_update('OP1 OR OP2');
+
+    const result = orBinary(ALU1.dec, ALU2.dec);
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const orB = async() => {
+    await loadOperands('A','B');
+    await description_update('OP1 OR OP2');
+
+    const result = orBinary(ALU1.dec, ALU2.dec);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const orC = async() => {
+    await loadOperands('A','C');
+    await description_update('OP1 OR OP2');
+
+    const result = orBinary(ALU1.dec, ALU2.dec);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const orDat_8 = async() => {
     await description_update('Hole den 1. Operanden'); 
     await transfer('A','ALU1',A.dec);
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Hole den 2. Operanden');
-    await transfer('B', 'ALU2',B.dec);
-    await updateRegister_hex('ALU2', B.dec);
+    await readFromMemoryInRegister('PC' , 'ALU2');
+    await increasePC();
     await description_update('OP1 OR OP2');
 
-    const result = orBinary(A.dec, B.dec);
-    await aluAnimation(result,true,false, true);
+    const result = orBinary(ALU1.dec, ALU2.dec);
+    await aluAnimation(result,true,false, 'A');
+    check_completeExecution();
+}
+
+const xorA = async() => {
+    await loadOperands('A','A');
+    await description_update('OP1 XOR OP2');
+
+    const result = xorBinary(A.dec, A.dec);
+    await aluAnimation(result,true,false , 'A');
     check_completeExecution();
 }
 
 const xorB = async() => {
+    await loadOperands('A','B');
+    await description_update('OP1 XOR OP2');
+
+    const result = xorBinary(A.dec, B.dec);
+    await aluAnimation(result,true,false , 'A');
+    check_completeExecution();
+}
+
+const xorC = async() => {
+    await loadOperands('A','C');
+    await description_update('OP1 XOR OP2');
+
+    const result = xorBinary(A.dec, C.dec);
+    await aluAnimation(result,true,false , 'A');
+    check_completeExecution();
+}
+
+const xorDat_8 = async() => {
     await description_update('Hole den 1. Operanden'); 
     await transfer('A','ALU1',A.dec);
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Hole den 2. Operanden');
-    await transfer('B', 'ALU2',B.dec);
-    await updateRegister_hex('ALU2', B.dec);
-    await description_update('OP1 XOR OP2');
+    await readFromMemoryInRegister('PC' , 'ALU2');
+    await increasePC();
+    await description_update('OP1 OR OP2');
 
-    const result = xorBinary(A.dec, B.dec);
-    await aluAnimation(result,true,false , true);
+    const result = xorBinary(ALU1.dec, ALU2.dec);
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
@@ -3130,7 +3635,7 @@ const twoByteShift = async() => {
         await updateRegister_hex('ALU1', A.dec);
         await description_update('Schiebe Operanden nach links');
         const result = shlBinary(A.dec);
-        await aluAnimation(result, false,false, true);
+        await aluAnimation(result, false,false, 'A');
     }
     else if(IR.dec === 0b00111111){
         await addArrow('IR');
@@ -3142,7 +3647,7 @@ const twoByteShift = async() => {
         await updateRegister_hex('ALU1', A.dec);
         await description_update('Schiebe Operanden nach rechts');
         const result = shrBinary(A.dec);
-        await aluAnimation(result, false,false, true);
+        await aluAnimation(result, false,false, 'A');
     }
     check_completeExecution();
 }
@@ -3153,7 +3658,7 @@ const rcl = async() => {
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Rotiere Operand mit Carry-Flag nach links');
     const result = rclBinary(A.dec);
-    await aluAnimation(result,false,true, true);
+    await aluAnimation(result,false,true, 'A');
     check_completeExecution();
 }
 
@@ -3163,17 +3668,41 @@ const rol = async() => {
     await updateRegister_hex('ALU1', A.dec);
     await description_update('Rotiere Operand ohne Carry-Flag nach links');
     const result = rolBinary(A.dec);
-    await aluAnimation(result,false,false, true);
+    await aluAnimation(result,false,false, 'A');
+    check_completeExecution();
+}
+
+const rcr = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.dec);
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Rotiere Operand mit Carry-Flag nach rechts');
+    const result = rcrBinary(A.dec);
+    await aluAnimation(result,false,true, 'A');
+    check_completeExecution();
+}
+
+const ror = async() => {
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.dec);
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Rotiere Operand ohne Carry-Flag nach rechts');
+    const result = rorBinary(A.dec);
+    await aluAnimation(result,false,false, 'A');
+    check_completeExecution();
+}
+
+const cpA = async() => {
+    await loadOperands('A','A');
+    await description_update('Vergleiche die Operanden');
+
+    const result = addBinary(A.dec, A.dec, true);
+    await aluAnimation(result,true,false, false);
     check_completeExecution();
 }
 
 const cpB = async() => {
-    await description_update('Hole den 1. Operator'); 
-    await transfer('A','ALU1',A.dec);
-    await updateRegister_hex('ALU1', A.dec);
-    await description_update('Hole den 2. Operator');
-    await transfer('B', 'ALU2',B.dec);
-    await updateRegister_hex('ALU2', B.dec);
+    await loadOperands('A','B');
     await description_update('Vergleiche die Operanden');
 
     const result = addBinary(A.dec, B.dec, true);
@@ -3181,12 +3710,31 @@ const cpB = async() => {
     check_completeExecution();
 }
 
-const jpnzLabel = async() => {
-    await description_update('Hole das niederwertige Adressbyte');
-    await readFromMemoryInRegister('PC', 'ZR_lo');
+const cpC = async() => {
+    await loadOperands('A','C');
+    await description_update('Vergleiche die Operanden');
+
+    const result = addBinary(A.dec, C.dec, true);
+    await aluAnimation(result,true,false, false);
+    check_completeExecution();
+}
+
+const cpDat_8 = async() => {
+    await description_update('Hole den 1. Operanden'); 
+    await transfer('A','ALU1',A.dec);
+    await updateRegister_hex('ALU1', A.dec);
+    await description_update('Hole den 2. Operanden');
+    await readFromMemoryInRegister('PC' , 'ALU2');
     await increasePC();
-    await description_update('Hole das höherwertige Adressbyte');
-    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await description_update('Vergleiche die Operanden');
+
+    const result = addBinary(A.dec, ALU2.dec, true);
+    await aluAnimation(result,true,false, false);
+    check_completeExecution();
+}
+
+const jpnzLabel = async() => {
+    await loadAddressBytesInZr();
     await description_update('Prüfe die Sprungbedingung');
     await checkJumpAnimation('zFlag');
 
@@ -3195,8 +3743,132 @@ const jpnzLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
+        await updateRegister_hex('PC', ZR.dec);
+        
+    }
+    check_completeExecution();
+}
+
+const jpzLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('zFlag');
+
+    //jump
+    if(FLAGS.z_dec === 1){
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
+    check_completeExecution();
+}
+
+const jpncLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('cFlag');
+
+    //jump
+    if(FLAGS.c_dec === 0){
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
+        await updateRegister_hex('PC', ZR.dec);
+    }
+    check_completeExecution();
+}
+
+const jpcLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('cFlag');
+
+    //jump
+    if(FLAGS.c_dec === 1){
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
+        await updateRegister_hex('PC', ZR.dec);
+    }
+    check_completeExecution();
+}
+
+const jpnoLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('pFlag');
+
+    //jump
+    if(FLAGS.p_dec === 0){
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
+        await updateRegister_hex('PC', ZR.dec);
+    }
+    check_completeExecution();
+}
+
+const jpoLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('pFlag');
+
+    //jump
+    if(FLAGS.p_dec === 1){
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
+        await updateRegister_hex('PC', ZR.dec);
+    }
+    check_completeExecution();
+}
+
+const jpnsLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('sFlag');
+
+    //jump
+    if(FLAGS.s_dec === 0){
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
+        await updateRegister_hex('PC', ZR.dec);
+    }
+    check_completeExecution();
+}
+
+const jpsLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('sFlag');
+
+    //jump
+    if(FLAGS.s_dec === 1){
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.dec);
+        updateRedRectangle(ZR.dec);
+        await updateRegister_hex('PC', ZR.dec);
+    }
+    check_completeExecution();
+}
+
+const jpLabel = async() => {
+    await loadAddressBytesInZr();
+    await description_update('Lade den Programmzähler');
+    await addArrow('ZR');
+    await transfer('ZR', 'PC', ZR.dec);
+    updateRedRectangle(ZR.dec);
+    await updateRegister_hex('PC', ZR.dec);
     check_completeExecution();
 }
 
@@ -3399,8 +4071,11 @@ function stopBtn(){
 }
 
 function increaseSpeed(){
-    if(ANIMATION_SPEED < 12)
+    if(ANIMATION_SPEED < 12){
         ANIMATION_SPEED += 1;
+        IDLETIME -= 50;
+        NOANIMATIONIDLETIME -= 5;
+    }
     if(ANIMATION_SPEED === 5)
         ANIMATION_SPEED = 6;
     if(ANIMATION_SPEED === 7)
@@ -3408,8 +4083,11 @@ function increaseSpeed(){
 }
 
 function decreaseSpeed(){
-    if(ANIMATION_SPEED > 1)
+    if(ANIMATION_SPEED > 1){
         ANIMATION_SPEED -= 1;
+        IDLETIME += 50;
+        NOANIMATIONIDLETIME += 5;
+    }
     if(ANIMATION_SPEED === 11)
         ANIMATION_SPEED = 6;
     if(ANIMATION_SPEED === 5)
@@ -3489,51 +4167,104 @@ const openInfo = () => {
 /******************************* mc8_commands *********************************** */
 //overflowflag = 1, parityflag = 2;
 const mc8_commands_array = [
-    nop_command         = new mc8_command('NOP', 0b00000000, 1, [0,0,0,0], nop),
-    halt_command        = new mc8_command('HALT', 0b01110110, 1, [0,0,0,0], halt),
+    
     movAdat_8_command   = new mc8_command('MOV A, dat_8', 0b00111110, 2, [0,0,0,0], movAdat_8),
     movBdat_8_command   = new mc8_command('MOV B, dat_8', 0b00000110, 2, [0,0,0,0], movBdat_8),
     movCdat_8_command   = new mc8_command('MOV C, dat_8', 0b00001110, 2, [0,0,0,0], movCdat_8),    
 
+    twoByteIX_command   = new mc8_command('2-Byte Befehl', 0b11011101, 4, [0,0,0,0], twoByteIX),
     movHLdat_16_command = new mc8_command('MOV HL, dat_16', 0b00100001, 3, [0,0,0,0], movHLdat_16),
     movSPdat_16_command = new mc8_command('MOV SP, dat_16', 0b00110001, 3, [0,0,0,0], movSPdat_16),
+
     movAB_command   	= new mc8_command('MOV A, B', 0b01111000, 1, [0,0,0,0], movAB),
     movAC_command   	= new mc8_command('MOV A, C', 0b01111001, 1, [0,0,0,0], movAC),
     movBA_command   	= new mc8_command('MOV B, A', 0b01000111, 1, [0,0,0,0], movBA),
     movBC_command   	= new mc8_command('MOV B, C', 0b01000001, 1, [0,0,0,0], movBC),
     movCA_command   	= new mc8_command('MOV C, A', 0b01001111, 1, [0,0,0,0], movCA),
     movCB_command   	= new mc8_command('MOV C, B', 0b01001000, 1, [0,0,0,0], movCB),
+
     movALabel_command   = new mc8_command('MOV A, label', 0b00111010, 3, [0,0,0,0], movALabel),
-    
+    movLabelA_command   = new mc8_command('MOV label, A', 0b00110010, 3, [0,0,0,0], movLabelA),
+    movHlLabel_command  = new mc8_command('MOV HL, label', 0b00101010, 3, [0,0,0,0], movHlLabel),
+    movLabelHl_command  = new mc8_command('MOV label, HL', 0b00100010, 3, [0,0,0,0], movLabelHl),
+    movAHl_command      = new mc8_command('MOV A, [HL]', 0b01111110, 1, [0,0,0,0], movAHl),
+    movHlA_command      = new mc8_command('MOV [HL], A', 0b01110111, 1, [0,0,0,0], movHlA),
+
     push_command        = new mc8_command('PUSH', 0b11110101, 1, [0,0,0,0], push),
     pop_command         = new mc8_command('POP', 0b11110001, 1, [0,0,0,0], pop),
     inAport_command     = new mc8_command('IN A, port', 0b11011011, 2, [0,0,0,0], inA),
     outPortA_command    = new mc8_command('OUT port, A', 0b11010011, 2, [0,0,0,0], outA),
 
     incA_command        = new mc8_command('INC A', 0b00111100, 1, [0,1,1,1], incA),
+    incB_command        = new mc8_command('INC B', 0b00000100, 1, [0,1,1,1], incB),
+    incC_command        = new mc8_command('INC C', 0b00001100, 1, [0,1,1,1], incC),
+    incHl_command       = new mc8_command('INC HL', 0b00100011, 1, [0,0,0,0], incHl),
 
-    addA_command        = new mc8_command('ADD A', 0b10000111, 4, [1,1,1,1], addA),
+    decA_command        = new mc8_command('DEC A', 0b00111101, 1, [0,1,1,1], decA),
+    decB_command        = new mc8_command('DEC B', 0b00000101, 1, [0,1,1,1], decB),
+    decC_command        = new mc8_command('DEC C', 0b00001101, 1, [0,1,1,1], decC),
+    decHL_command       = new mc8_command('DEC HL', 0b00101011, 1, [0,0,0,0], decHl),
+
+    addA_command        = new mc8_command('ADD A', 0b10000111, 1, [1,1,1,1], addA),
+    addB_command        = new mc8_command('ADD B', 0b10000000, 1, [1,1,1,1], addB),
+    addC_command        = new mc8_command('ADD C', 0b10000001, 1, [1,1,1,1], addC),
+    addDat_8_command    = new mc8_command('ADD dat_8', 0b11000110, 2, [1,1,1,1], addDat_8),
+    addHlBc_command     = new mc8_command('ADD HL, BC', 0b00001001, 1, [1,0,0,0], addHlBc),
+
     subA_command        = new mc8_command('SUB A', 0b10010111, 1, [1,1,1,1], subA),
+    subB_command        = new mc8_command('SUB B', 0b10010000, 1, [1,1,1,1], subB),
+    subC_command        = new mc8_command('SUB C', 0b10010001, 1, [1,1,1,1], subC),
+    subDat_8_command    = new mc8_command('SUB dat_8', 0b11010110, 2, [1,1,1,1], subDat_8),     
 
+    andA_command        = new mc8_command('AND A', 0b10100111, 1, [1,1,2,1], andA),
     andB_command        = new mc8_command('AND B', 0b10100000, 1, [1,1,2,1], andB),
+    andC_command        = new mc8_command('AND C', 0b10100001, 1, [1,1,2,1], andC),
+    andDat_8_command    = new mc8_command('AND dat_8', 0b11100110, 2, [1,1,2,1], andDat_8),
     
+    orA_command         = new mc8_command('OR A', 0b10110111, 1, [1,1,2,1], orA),
     orB_command         = new mc8_command('OR B', 0b10110000, 1, [1,1,2,1], orB),
+    orC_command         = new mc8_command('OR C', 0b10110001, 1, [1,1,2,1], orC),
+    orDat_8_command     = new mc8_command('OR dat_8', 0b11110110, 2, [1,1,2,1], orDat_8),
+
+    xorA_command        = new mc8_command('XOR A', 0b10101111, 1, [1,1,2,1], xorA),
     xorB_command        = new mc8_command('XOR B', 0b10101000, 1, [1,1,2,1], xorB),
+    xorC_command        = new mc8_command('XOR C', 0b10101001, 1, [1,1,2,1], xorC),
+    xorDat_8_command    = new mc8_command('XOR dat_8', 0b11101110, 2, [1,1,2,1], xorDat_8),
 
     twoByteShift_command= new mc8_command('2-Byte-Befehl', 0b11001011, 2, [1,1,2,1], twoByteShift),
 
     rcl_command         = new mc8_command('RCL', 0b00010111, 1, [1,0,0,0], rcl),
     rol_command         = new mc8_command('ROL', 0b00000111, 1, [1,0,0,0], rol),
-    
-    cpB_command         = new mc8_command('CP B', 0b10111000 , 1, [1,1,1,1], cpB),
+    rcr_command         = new mc8_command('RCR', 0b00011111, 1, [1,0,0,0], rcr),
+    ror_command         = new mc8_command('ROR', 0b00001111, 1, [1,0,0,0], ror),
+
+    cpA_command         = new mc8_command('CP A', 0b10111111, 1, [1,1,1,1], cpA),
+    cpB_command         = new mc8_command('CP B', 0b10111000, 1, [1,1,1,1], cpB),
+    cpC_command         = new mc8_command('CP C', 0b10111001, 1, [1,1,1,1], cpC),
+    cpDat_8_command     = new mc8_command('CP dat_8', 0b11111110 , 2, [1,1,1,1], cpDat_8),
     
     jpnzLabel_command   = new mc8_command('JPNZ label', 0b11000010, 3, [0,0,0,0], jpnzLabel),
+    jpzLabel_command    = new mc8_command('JPZ label', 0b11001010, 3, [0,0,0,0], jpzLabel),
+
+    jpncLabel_command   = new mc8_command('JPNC label', 0b11010010, 3, [0,0,0,0], jpncLabel),
+    jpcLabel_command    = new mc8_command('JPC label', 0b11011010, 3, [0,0,0,0], jpcLabel),
+
+    jpnoLabel_command   = new mc8_command('JPNO label', 0b11100010, 3, [0,0,0,0], jpnoLabel),
+    jpoLabel_command    = new mc8_command('JPO label', 0b11101010, 3, [0,0,0,0], jpoLabel),
+
+    jpnsLabel_command   = new mc8_command('JPNS label', 0b11110010, 3, [0,0,0,0], jpnsLabel),
+    jpsLabel_command    = new mc8_command('JPS label', 0b11111010, 3, [0,0,0,0], jpsLabel),
+
+    jpLabel_command     = new mc8_command('JP label', 0b11000011, 3, [0,0,0,0], jpLabel),
 
     callLabel_command   = new mc8_command('CALL label', 0b11001101, 3, [0,0,0,0], callLabel),
     ret_command         = new mc8_command('RET', 0b11001001, 3, [0,0,0,0], ret),
 
+    nop_command         = new mc8_command('NOP', 0b00000000, 1, [0,0,0,0], nop),
+    halt_command        = new mc8_command('HALT', 0b01110110, 1, [0,0,0,0], halt),
 
-    twoByteIX_command   = new mc8_command('2-Byte Befehl', 0b11011101, 4, [0,0,0,0], twoByteIX),
+
+   
 
 
 ];

@@ -217,13 +217,7 @@
             <h2 id='movingAlu2'   class="movingObject square2x2 borderBox yellowBg rounded noneDisplay"></h2>
 
             <!-- ************************** IOs **************************  -->
-            <div id="io1_hover" class="hoverElement borderBox rounded">
-                <p>IO1</p><p></p>
-                <p id="io1Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
-                <p>Adresse:</p><p id="io1Address_hex" style="text-align: end;">0000h</p>
-                <p>Dezimal:</p><p id="io1_dec" style="text-align: end;">255</p>
-                <p>Binär:</p><p id="io1_bin" style="text-align: end;">1111 1111</p>
-            </div>
+           
             <h1 id="io1_h1" class="square2x2 borderBox topLeft bottomLeft">IO1</h1>
             <div id="io1_arrow" class="square2x2 borderBox ioArrow"></div>
             <h2 id="IO1" class="square2x2 borderBox topRight bottom bottomRight">FF</h2>
@@ -235,13 +229,7 @@
                 <p id="io1Input_info" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
 
-            <div id="io2_hover" class="hoverElement borderBox rounded">
-                <p>IO2</p><p></p>
-                <p id="io2Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
-                <p>Adresse:</p><p id="io2Address_hex" style="text-align: end;">0000h</p>
-                <p>Dezimal:</p><p id="io2_dec" style="text-align: end;">255</p>
-                <p>Binär:</p><p id="io2_bin" style="text-align: end;">1111 1111</p>
-            </div>
+            
             <h1 id="io2_h1" class="square2x2 borderBox topLeft bottomLeft">IO2</h1>
             <div id="io2_arrow" class="square2x2 borderBox ioArrow ioArrowOUT"></div>
             <h2 id="IO2" class="square2x2 borderBox topRight bottom bottomRight">FF</h2>
@@ -253,13 +241,7 @@
                 <p  id="io2Input_info" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
 
-            <div id="io3_hover" class="hoverElement borderBox rounded" >
-                <p>IO3</p><p></p>
-                <p id="io3Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
-                <p>Adresse:</p><p id="io3Address_hex" style="text-align: end;">0000h</p>
-                <p>Dezimal:</p><p id="io3_dec" style="text-align: end;">255</p>
-                <p>Binär:</p><p id="io3_bin" style="text-align: end;">1111 1111</p>                
-            </div>
+           
             <h1 id="io3_h1" class="square2x2 borderBox topLeft bottomLeft">IO3</h1>
             <div id="io3_arrow" class="square2x2 borderBox ioArrow "></div>
             <h2 id="IO3" class="square2x2 borderBox topRight bottom bottomRight">FF</h2>
@@ -275,11 +257,7 @@
             <!-- ************************** akku/flags **************************  -->
             <h1 id="a" class="rectangle1x2 borderBox topLeft bottomLeft">A</h1>
             <h2 id="A" class="square2x2 borderBox">00</h2>
-            <div id="a_hover" class="hoverElement borderBox rounded">
-                <p>A - Akkumulator</p>
-                <p id="a_dec"></p>
-                <p id="a_bin"></p>
-            </div>
+            
             <div id="flags" class="rectangle4x2 borderBox topRight bottomRight">
                 <h1 id="c_flag">C</h1>
                 <h1 id="z_flag">Z</h1>
@@ -290,20 +268,6 @@
                 <p id="P_Flag" class="grid-template">0</p>
                 <p id="S_Flag" class="grid-template">0</p>
             </div>
-
-            <div id="cFlag_hover" class="hoverElement borderBox rounded">
-                <p>C - Carry Flag</p>
-            </div>
-            <div id="zFlag_hover" class="hoverElement borderBox rounded">
-                <p>Z - Zero Flag</p>
-            </div>
-            <div id="pFlag_hover" class="hoverElement borderBox rounded">
-                <p>P/O - Parity/Overflow Flag</p>
-            </div>
-            <div id="sFlag_hover" class="hoverElement borderBox rounded">
-                <p>S - Sign Flag</p>
-            </div>
-
 
             <div id="movingFlags" class="borderBox rounded yellowBg noneDisplay">
                 <p>0</p>
@@ -319,48 +283,25 @@
             <div id="yellowBgElement" class="square2x2 yellowBg noneDisplay" style="position: absolute;"></div>
             <h1 id="b" class="rectangle1x2 borderBox topLeft">B</h1>
             <h2 id="B" class="square2x2 borderBox">00</h2>
-            <div id="b_hover" class="hoverElement borderBox rounded">
-                <p>B - Datenregister</p>
-                <p id="b_dec"></p>
-                <p id="b_bin"></p>
-            </div>
+            
             <h1 id="c" class="rectangle1x2 borderBox topRight">C</h1>
             <h2 id="C" class="square2x2 borderBox">00</h2>
-            <div id="c_hover" class="hoverElement borderBox rounded">
-                <p>C - Datenregister</p>
-                <p id="c_dec"></p>
-                <p id="c_bin"></p>
-            </div>
+           
             <h1 id="hl" class="square2x2 borderBox">HL</h1>
             <h2 id="HL" class="rectangle4x2 borderBox">0000</h2>
-            <div id="hl_hover" class="hoverElement borderBox rounded">
-                <p>HL - Universalregister</p>
-                <p id="hl_dec"></p>
-            </div>
+            
             <h1 id="ix" class="square2x2 borderBox">IX</h1>
             <h2 id="IX" class="rectangle4x2 borderBox">0000</h2>
-            <div id="ix_hover" class="hoverElement borderBox rounded">
-                <p>IX - Indexregister</p>
-                <p id="ix_dec"></p>
-            </div>
+           
             <h1 id="sp" class="square2x2 borderBox">SP</h1>
             <h2 id="SP" class="rectangle4x2 borderBox">0000</h2>
-            <div id="sp_hover" class="hoverElement borderBox rounded">
-                <p>SP - Stackpointer</p>
-                <p id="sp_dec"></p>
-            </div>
+           
             <h1 id="pc" class="square2x2 borderBox">PC</h1>
             <h2 id="PC" class="rectangle4x2 borderBox">0000</h2>
-            <div id="pc_hover" class="hoverElement borderBox rounded">
-                <p>PC - Program Counter</p>
-                <p id="pc_dec"></p>
-            </div>
+            
             <h1 id="zr" class="square2x2 borderBox bottomLeft">ZR</h1>
             <h2 id="ZR" class="rectangle4x2 borderBox bottomRight">0000</h2>
-            <div id="zr_hover" class="hoverElement borderBox rounded">
-                <p>ZR - Zwischenregister</p>
-                <p id="zr_dec"></p>
-            </div>
+            
 
 
 
@@ -378,10 +319,7 @@
             <p id="controlunit" class="rectangle8x2 borderBox topLeft">Steuerwerk</p>
             <h1 id="ir" class="square2x2 borderBox">IR</h1>
             <h2 id="IR" class="square2x2 borderBox topRight">00</h2>
-            <div id="ir_hover" class="hoverElement borderBox rounded">
-                <p>IR - Befehlsregister</p>
-                <p id="ir_bin"></p>
-            </div>
+            
             
             <div id="SW1" class="rectangle12x2 borderBox">
                 <p id="assemblerCommand" class="textareaFontSize"></p>
@@ -412,36 +350,16 @@
 
             <div id="registerArrow"></div>
             
-            <div id="wr_hover" class="hoverElement borderBox rounded">
-                <p>WR - Write (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, hält die CPU Daten für die Speicherung an der aktuellen Speicher- oder IO-Adresse bereit.</p>
-            </div>
-            <div id="rd_hover" class="hoverElement borderBox rounded">
-                <p>RD - Read (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, erwartet die CPU Daten von der adressierten Speicher- oder IO-Einheit.</p>
-            </div>
-            <div id="m_hover" class="hoverElement borderBox rounded">
-                <p>MREQ - Meomory Required  (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige Adresse für einen Speicherzugriff bereit.</p>
-            </div>
-            <div id="io_hover" class="hoverElement borderBox rounded">
-                <p>IORQ - IO Request (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige 8-Bit Adresse für einen IO-Zugriff bereit<p>
-            </div>
             <!-- ************************** DEC **************************  -->
             <h1 id="dec" class="square2x2 borderBox topLeft bottomLeft">DEC</h1>
             <p id="decDisplay" class="rectangle6x2 borderBox topRight bottomRight textareaFontSize"></p>
-            <div id="dec_hover" class="hoverElement borderBox rounded">
-                <p>DEC - Adressdecoder</p>
-                <p>Ermittelt aus den Steuerleitungen und den Adressleitungen welcher Baustein (ROM, RAM, oder I/O) angesprochen werden soll.</p>
-            </div>
+
             
             <!-- ************************************************** Settings *************************************************  -->
             <div id="settings" class="settingsWindow borderBox rounded">
                 <div id="innerSettings" class="borderBox rounded">
-                    <h4 id="konfigROM">Konfiguration ROM:</h4>
-                    <p id="linkerDatei">Linker-Datei:</p>
-                    <select name="commandSelectName" class="lightrounded borderBox textareaFontSize" id="commandSelect">
+                    <h4 id="configurationRomHeader">Konfiguration ROM:</h4>
+                    <select id="commandSelect" name="commandSelectName" class="lightrounded borderBox textareaFontSize">
                         <option value="" disabled selected hidden>Wählen Sie ein Programm</option>
                         <option value="own">Eigenes Programm</option>
                         <option value="bsp1">Bsp 01 - Erklärung FETCH-Phase</option>
@@ -464,18 +382,25 @@
                         <option value="bsp18">Bsp 18 - Fehlerprogramm 4</option>
                         <option value="bsp19">Bsp 19 - Beispielprogramm</option>
                     </select>
-                    <textarea name="linkerFile" class="lightrounded borderBox textareaFontSize" id="linkerFile"></textarea>
+
+                    <p id="linkerFileHeader">Linker-Datei:</p>                    
+                    <textarea id="linkerFile" name="linkerFile" class="lightrounded borderBox textareaFontSize"></textarea>
                     
 
-                    <h4 id="konfigIO">Konfiguration IO-Bausteine:</h4>
-                    <div class="singleSettingUnit centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*17);">
-                        <input type="radio" id="radioIoMapped" class="radiostyle" name="radioMap" value="IO-mapped" checked="checked">
+                    <h4 id="configurationIoHeader">Konfiguration IO-Bausteine:</h4>
+
+
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*17);">
+                        <input id="radioIoMapped" type="radio" class="radiostyle" name="radioMap" value="IO-mapped" checked="checked">
+                        <span class="checkmark"></span>
                     </div>
                     <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>IO mapped</p>
                     </div>
-                    <div class="singleSettingUnit centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*17);">
+
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*17);">
                         <input type="radio" id="radioMemoryMap" class="radiostyle" name="radioMap" value="Memory-mapped">
+                        <span class="checkmark"></span>
                     </div>
                     <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>Memory map</p>
@@ -489,20 +414,22 @@
                             <textarea name="io1Address" id="io1Address" class="borderBox lightrounded textareaFontSize" style="resize: none; text-align:right;">0000</textarea>
                         </div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
-
-                        <div class="centered" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
-                            <input type="radio" class="radio" id="IO1In" name="IO1In" value="In" checked="checked">
-                        </div>
                         <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Eingang</p>
-                        </div>
-                        <div class="centered" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
-                            <input type="radio" id="IO1Out" name="IO1In" value="Out">
                         </div>
                         <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Ausgang</p>
                         </div>
                     </div>
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*18);">
+                        <input type="radio" class="radio" id="IO1In" name="IO1In" value="In" checked="checked">
+                        <span class="checkmark"></span>
+                    </div>
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*18);">
+                        <input type="radio" id="IO1Out" name="IO1In" value="Out">
+                        <span class="checkmark"></span>
+                    </div>
+
 
                     <div id="io2Konfig" class="borderBox lightrounded grid-template">
                         <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO2</p></div>
@@ -513,19 +440,23 @@
                         
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
 
-                        <div class="centered" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
-                            <input type="radio" class="radio" id="IO2In" name="IO2In" value="In" >
-                        </div>
                         <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Eingang</p>
-                        </div>
-                        <div class="centered" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
-                            <input type="radio" id="IO2Out" name="IO2In" value="Out" checked="checked">
                         </div>
                         <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Ausgang</p>
                         </div>
                     </div>
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*25);">
+                        <input type="radio" class="radio" id="IO2In" name="IO2In" value="In" >
+                        <span class="checkmark"></span>
+                    </div>
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*25);">
+                        <input type="radio" id="IO2Out" name="IO2In" value="Out" checked="checked">
+                        <span class="checkmark"></span>
+                    </div>
+
+
 
                     <div id="io3Konfig" class="borderBox lightrounded grid-template">
                         <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO3</p></div>
@@ -535,18 +466,20 @@
                         </div>                        
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
 
-                        <div class="centered" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
-                            <input type="radio" class="radio" id="IO3In" name="IO3In" value="In" checked="checked">
-                        </div>
                         <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Eingang</p>
-                        </div>
-                        <div class="centered" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*1); width: calc(100%/6*1); height: calc(100%/6*1);">
-                            <input type="radio" id="IO3Out" name="IO3In" value="Out">
                         </div>
                         <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
                             <p>Ausgang</p>
                         </div>
+                    </div>
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*32);">
+                        <input type="radio" class="radio" id="IO3In" name="IO3In" value="In" checked="checked">
+                        <span class="checkmark"></span>
+                    </div>
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*32);">
+                        <input type="radio" id="IO3Out" name="IO3In" value="Out">
+                        <span class="checkmark"></span>
                     </div>
 
 
@@ -569,17 +502,15 @@
                         <p>Fehler in der Konfiguration:</p>
                         <p id="errorMessage"></p>
                     </div>
-
-                    <!-- <p id="info" class="lightrounded borderBox centered">Info</p> -->
-                    <div id="info_hover" class="rounded noneDisplay">
-                        <p>INFO</p>
-                    </div>
-                    <button id="info" class="lightrounded borderBox" type="button" onclick="openInfo()"><p>INFO</p></button>
-                    <button id="toAssembler"   class="lightrounded borderBox" type="button" onclick="openAssembler()"><p>Zum Assembler</p></button>
-                    <button id="closeSettings" class="lightrounded borderBox" type="button" onclick="saveSettings()"><p>Speichern</p></button>
+                    
+                    <button id="info_button"          class="lightrounded borderBox" type="button" onclick="openInfo()"><p>INFO</p></button>
+                    <button id="toAssembler_button"   class="lightrounded borderBox" type="button" onclick="openAssembler()"><p>Zum Assembler</p></button>
+                    <button id="closeSettings_button" class="lightrounded borderBox" type="button" onclick="saveSettings()"><p>Speichern</p></button>
                 </div>
             </div>
             
+
+            <!-- ************************************************** controlPanel *************************************************  -->
             <div class="controlPanel grid-template borderBox rounded">
                 <button id="play" type="button" class="topLeft bottomLeft borderRight" onclick="play()"></button>
                 <button id="pause" type="button" class="borderRight" onclick="pause()"></button>
@@ -597,21 +528,135 @@
             </div>
 
             <!-- ************************************************** hover pop ups *************************************************  -->
+            <!-- the following div blocks are the elements which appear when the mouse is hovered over the blue h1/h3 headings  -->
 
+            <!-- *****************************ROM/RAM_hover****************************  -->
             <div id="rom_hover" class="hoverElement borderBox rounded">
-                <p>ROM</p><p></p><p></p>
+                <p class="bold">ROM</p><p></p><p></p>
                 <p>Anfangsadresse: </p><p style="text-align: end;">0000h</p><p style="text-align: end;">0</p>
                 <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
                 <p>Endadresse: </p><p style="text-align: end;">1FFFh</p><p style="text-align: end;">8191</p>
             </div>
 
             <div id="ram_hover" class="hoverElement borderBox rounded">
-                <p>RAM</p><p></p><p></p>
+                <p class="bold">RAM</p><p></p><p></p>
                 <p>Anfangsadresse: </p><p id="ramStartAddress_hex" style="text-align: end;">2000h</p><p id="ramStartAddress_dec" style="text-align: end;">8192</p>
                 <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
                 <p>Endadresse: </p><p id="ramEndAddress_hex"style="text-align: end;">3FFFh</p><p id="ramEndAddress_dec"style="text-align: end;">16383</p>
             </div>
 
+            <!-- *****************************IOs_hover****************************  -->
+            <div id="io1_hover" class="hoverElement io_hover borderBox rounded">
+                <p class="bold">IO1</p><p></p>
+                <p id="io1Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io1Address_hex" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io1_dec" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io1_bin" style="text-align: end;">1111 1111</p>
+            </div>
+
+            <div id="io2_hover" class="hoverElement io_hover borderBox rounded">
+                <p class="bold">IO2</p><p></p>
+                <p id="io2Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io2Address_hex" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io2_dec" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io2_bin" style="text-align: end;">1111 1111</p>
+            </div>
+
+            <div id="io3_hover" class="hoverElement io_hover borderBox rounded" >
+                <p class="bold">IO3</p><p></p>
+                <p id="io3Map" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io3Address_hex" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io3_dec" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io3_bin" style="text-align: end;">1111 1111</p>                
+            </div>
+
+            <!-- *****************************register_hover****************************  -->
+            <div id="a_hover" class="hoverElement borderBox rounded">
+                <p class="bold">A - Akkumulator</p>
+                <p id="a_dec"></p>
+                <p id="a_bin"></p>
+            </div>
+
+            <div id="b_hover" class="hoverElement borderBox rounded">
+                <p class="bold">B - Datenregister</p>
+                <p id="b_dec"></p>
+                <p id="b_bin"></p>
+            </div>
+
+            <div id="c_hover" class="hoverElement borderBox rounded">
+                <p class="bold">C - Datenregister</p>
+                <p id="c_dec"></p>
+                <p id="c_bin"></p>
+            </div>
+
+            <div id="hl_hover" class="hoverElement borderBox rounded">
+                <p class="bold">HL - Universalregister</p>
+                <p id="hl_dec"></p>
+            </div>
+
+            <div id="ix_hover" class="hoverElement borderBox rounded">
+                <p class="bold">IX - Indexregister</p>
+                <p id="ix_dec"></p>
+            </div>
+
+            <div id="sp_hover" class="hoverElement borderBox rounded">
+                <p class="bold">SP - Stackpointer</p>
+                <p id="sp_dec"></p>
+            </div>
+
+            <div id="pc_hover" class="hoverElement borderBox rounded">
+                <p class="bold">PC - Program Counter</p>
+                <p id="pc_dec"></p>
+            </div>
+
+            <div id="zr_hover" class="hoverElement borderBox rounded">
+                <p class="bold">ZR - Zwischenregister</p>
+                <p id="zr_dec"></p>
+            </div>
+
+            <div id="ir_hover" class="hoverElement borderBox rounded">
+                <p class="bold">IR - Befehlsregister</p>
+                <p id="ir_bin"></p>
+            </div>
+
+            <!-- *****************************flags_hover****************************  -->
+            <div id="cFlag_hover" class="hoverElement borderBox rounded">
+                <p class="bold">C - Carry Flag</p>
+            </div>
+            <div id="zFlag_hover" class="hoverElement borderBox rounded">
+                <p class="bold">Z - Zero Flag</p>
+            </div>
+            <div id="pFlag_hover" class="hoverElement borderBox rounded">
+                <p class="bold">P/O - Parity/Overflow Flag</p>
+            </div>
+            <div id="sFlag_hover" class="hoverElement borderBox rounded">
+                <p class="bold">S - Sign Flag</p>
+            </div>
+
+            <!-- *****************************dec_hover****************************  -->
+            <div id="dec_hover" class="hoverElement borderBox rounded">
+                <p class="bold">DEC - Adressdecoder</p>
+                <p>Ermittelt aus den Steuerleitungen und den Adressleitungen welcher Baustein (ROM, RAM, oder I/O) angesprochen werden soll.</p>
+            </div>
+
+            <div id="wr_hover" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">WR - Write (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU Daten für die Speicherung an der aktuellen Speicher- oder IO-Adresse bereit.</p>
+            </div>
+            <div id="rd_hover" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">RD - Read (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, erwartet die CPU Daten von der adressierten Speicher- oder IO-Einheit.</p>
+            </div>
+            <div id="m_hover" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">MREQ - Meomory Required  (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige Adresse für einen Speicherzugriff bereit.</p>
+            </div>
+            <div id="io_hover" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">IORQ - IO Request (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige 8-Bit Adresse für einen IO-Zugriff bereit<p>
+            </div>
+
+            <!-- *****************************buttons_hover****************************  -->
             <div id="play_hover" class="hoverElement borderBox rounded button_hover">
                 <p class="bold">Start</Button></p>
                 <p>Startet den Programmablauf.</p>
@@ -663,6 +708,11 @@
             <div id="toggleTheme_hover" class="hoverElement borderBox rounded button_hover">
                 <p class="bold">Dunkler Modus</Button></p>
                 <p>Wechselt das Design.</p>
+            </div>
+
+            <!-- *****************************infoBox****************************  -->
+            <div id="info_hover" class="rounded noneDisplay">
+                <p>INFO</p>
             </div>
         </div>
     </div>

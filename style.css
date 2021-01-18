@@ -30,6 +30,10 @@ h3{margin: 0; padding: 0; color: #19B2FF; font-family: Arial, Helvetica, sans-se
 h4{margin: 0; padding: 0; color: #222222; font-family: Arial, Helvetica, sans-serif;}
 p{ margin: 0; padding: 0; color: #222222; font-family: droid-mono;}
 
+textarea{
+    padding: 7% 0% 0% 0%;
+}
+
 button{
     width: 100%;
     height: 100%;
@@ -851,17 +855,49 @@ button:hover{
 }
 
 .textareaFontSize{
+    /* font-size: gets changed in JS */
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.radioContainer{
+    position: absolute;
+    height: calc(100%/26*1);
+    width: calc(100%/39*1);
+    cursor: pointer;
+    display: grid;    
+    justify-items: center;
+    align-items: center;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.radioContainer input {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark{
+    height: 50%;
+    width: 50%;
+    background-color: white;
+    border-radius: 50%;
+    border: #222222 1px solid;
+}
+
+.radioContainer input:checked ~ .checkmark{
+    background-color: #96dafc;
+}
+
+
+
 #innerSettings{
     position: absolute;
-    /* TODO --- remove grid*/
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-columns: repeat(39, 1fr);
-    grid-template-rows: repeat(26, 1fr);
     background-color: #FBFBFB;
     border: 2px solid #19B2FF;
     height: calc(100%/32*28);
@@ -869,20 +905,10 @@ button:hover{
     top: calc(100%/32*2);
     left: calc(100%/46*2);
 }
-#linkerFile{
+
+#configurationRomHeader{
     position: absolute;
-    top: calc(100%/26*7);
-    left: calc(100%/39*2);
-    height: calc(100%/26*15);
-    width: calc(100%/39*13);   
-    letter-spacing: 0.2px;
-    padding: 0px 0.7%;
-    resize: none;
-    font-family: droid-mono;
-}
-#linkerDatei{
-    position: absolute;
-    top: calc(100%/26*6);
+    top: calc(100%/26*2);
     left: calc(100%/39*2);
 }
 
@@ -897,28 +923,36 @@ button:hover{
     box-sizing: border-box;  
 }
 
-
-textarea{
-    padding: 7% 0% 0% 0%;
-}
-
-
-#konfigROM{
+#linkerFileHeader{
     position: absolute;
-    top: calc(100%/26*2);
+    top: calc(100%/26*6);
     left: calc(100%/39*2);
 }
-#konfigIO{
+#linkerFile{
+    position: absolute;
+    top: calc(100%/26*7);
+    left: calc(100%/39*2);
+    height: calc(100%/26*15);
+    width: calc(100%/39*13);   
+    letter-spacing: 0.2px;
+    padding: 0.7% 0.7%;
+    resize: none;
+    line-height: 130%;
+}
+
+
+#configurationIoHeader{
     position: absolute;
     top: calc(100%/26*2);
     left: calc(100%/39*17);
 }
 
-#ioKonfig {
+.ioRectangle{
     position: absolute;
-    top: calc(100%/26*4);
-    left: calc(100%/39*17);
+    width: calc(100%/39*6);
+    height: calc(100%/26*6);
 }
+
 
 .addressInput{
     display: flex;
@@ -1001,45 +1035,30 @@ textarea{
     background-color: yellow;
 }
 
-#closeSettings{
+.settingsWindow button{
     position: absolute;
+    height: calc(100%/26*2);
+    width: calc(100%/39*6);
+    background-color: #96dafc;
+}
+.settingsWindow button:hover{
+    background-color: #19B2FF;
+}
+#closeSettings_button{
     top: calc(100%/26*22);
     left: calc(100%/39*31);
-    height: calc(100%/26*2);
-    width: calc(100%/39*6);
-    background-color: #19b2ff4d;
-    font-size: 10px;
 }
-#closeSettings:hover{
-    background-color: #19B2FF;
-}
-.toggleDisplay{
-    display: unset;
-}
-
-#toAssembler{
-    position: absolute;
+#toAssembler_button{ 
     top: calc(100%/26*19);
     left: calc(100%/39*31);
-    height: calc(100%/26*2);
-    width: calc(100%/39*6);
-    background-color: #19b2ff4d;
-    font-size: 10px;
 }
-#toAssembler:hover{
-     background-color: #19B2FF;
-}
-#info{
-    position: absolute;
-    cursor: pointer;
+#info_button{
     top: calc(100%/26*16);
     left: calc(100%/39*31);
-    height: calc(100%/26*2);
-    width: calc(100%/39*6);
-    background-color: #19b2ff4d;
 }
-#info:hover{
-    background-color: #19B2FF;
+
+.toggleDisplay{
+    display: unset;
 }
 
 #info_hover{
@@ -1048,11 +1067,11 @@ textarea{
     grid-template-rows: 1fr;
     justify-items: center;
     align-items: center;
-    z-index: 11;
-    top: calc(100%/26*0);
-    left: calc(100%/39*0);
-    height: calc(100%/26*26);
-    width: calc(100%/39*31);
+    z-index: 30;
+    top: calc(100%/26*2);
+    left: calc(100%/39*2);
+    height: calc(100%/26*22);
+    width: calc(100%/39*27.5);
     background-color: #fbfbfbec;
     font-size: 10px;
 }
@@ -1060,15 +1079,18 @@ textarea{
 
 /* ---------------------------------hoverElements--------------------------------------- */
 .hoverElement{
+    
+    display: grid;
     display: none;
     z-index: 15;
     position: absolute;
     background-color: yellow;
     padding: 0px 0.5%;
     align-items: center;
+    color: #222222;
+    font-family: Arial, Helvetica, sans-serif;
     
 }
-
 .hoverElement p{
     color: #222222;
     font-family: Arial, Helvetica, sans-serif;
@@ -1082,7 +1104,6 @@ textarea{
     width: calc(100%/46*10);
     height: calc(100%/32*4);
 }
-
 #ram_hover{
     grid-template-columns: 4fr 2fr 2fr;
     grid-template-rows: repeat(4,1fr);
@@ -1092,31 +1113,21 @@ textarea{
     height: calc(100%/32*4);
 }
 
+.io_hover{
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(5,1fr);
+    top: calc(100%/32*2);
+    width: calc(100%/46*6);
+    height: calc(100%/32*5);
+}
 #io1_hover{
-    grid-template-columns: 1fr 8fr;
-    grid-template-rows: repeat(5,1fr);
-    top: calc(100%/32*2);
-    left: calc(100%/46*11.7);
-    width: calc(100%/46*6.6);
-    height: calc(100%/32*5);
+    left: calc(100%/46*12);
 }
-
 #io2_hover{
-    grid-template-columns: 1fr 8fr;
-    grid-template-rows: repeat(5,1fr);
-    top: calc(100%/32*2);
-    left: calc(100%/46*19.7);
-    width: calc(100%/46*6.6);
-    height: calc(100%/32*5);
+    left: calc(100%/46*20);
 }
-
 #io3_hover{
-    grid-template-columns: 1fr 8fr;
-    grid-template-rows: repeat(5,1fr);
-    top: calc(100%/32*2);
-    left: calc(100%/46*27.7);
-    width: calc(100%/46*6.6);
-    height: calc(100%/32*5);
+    left: calc(100%/46*28);
 }
 
 #a_hover{
@@ -1127,7 +1138,6 @@ textarea{
     width: calc(100%/46*7);
     height: calc(100%/32*3);
 }
-
 #b_hover{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3,1fr);
@@ -1136,7 +1146,6 @@ textarea{
     width: calc(100%/46*6);
     height: calc(100%/32*3);
 }
-
 #c_hover{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3,1fr);
@@ -1145,13 +1154,12 @@ textarea{
     width: calc(100%/46*6);
     height: calc(100%/32*3);
 }
-
 #hl_hover{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*14);
     left: calc(100%/46*12); 
-    width: calc(100%/46*7.5);
+    width: calc(100%/46*7);
     height: calc(100%/32*2);
 }
 #ix_hover{
@@ -1191,17 +1199,10 @@ textarea{
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*16);
     left: calc(100%/46*30); 
-    width: calc(100%/46*8);
+    width: calc(100%/46*6);
     height: calc(100%/32*2);
 }
-#dec_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 4fr;
-    top: calc(100%/32*22);
-    left: calc(100%/46*26); 
-    width: calc(100%/46*12);
-    height: calc(100%/32*4);
-}
+
 #cFlag_hover{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
@@ -1215,7 +1216,7 @@ textarea{
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
     left: calc(100%/46*15); 
-    width: calc(100%/46*5);
+    width: calc(100%/46*4);
     height: calc(100%/32*1);
 }
 #pFlag_hover{
@@ -1223,7 +1224,7 @@ textarea{
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
     left: calc(100%/46*15); 
-    width: calc(100%/46*9);
+    width: calc(100%/46*8);
     height: calc(100%/32*1);
 }
 #sFlag_hover{
@@ -1231,44 +1232,25 @@ textarea{
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
     left: calc(100%/46*15); 
-    width: calc(100%/46*5);
+    width: calc(100%/46*4);
     height: calc(100%/32*1);
 }
 
-#wr_hover{
+#dec_hover{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 4fr;
-    top: calc(100%/32*21);
+    top: calc(100%/32*22);
     left: calc(100%/46*22); 
     width: calc(100%/46*12);
-    height: calc(100%/32*5);
+    height: calc(100%/32*4);
 }
-
-#rd_hover{
+.decoderLines_hover{
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 4fr;
+    grid-template-rows: 1fr 3fr;
     top: calc(100%/32*21);
     left: calc(100%/46*22); 
     width: calc(100%/46*12);
-    height: calc(100%/32*5);
-}
-
-#m_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 2fr 3fr;
-    top: calc(100%/32*21);
-    left: calc(100%/46*22); 
-    width: calc(100%/46*12);
-    height: calc(100%/32*5);
-}
-
-#io_hover{
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 4fr;
-    top: calc(100%/32*21);
-    left: calc(100%/46*22); 
-    width: calc(100%/46*12);
-    height: calc(100%/32*5);
+    height: calc(100%/32*4);
 }
 
 .button_hover{
@@ -1279,7 +1261,6 @@ textarea{
     height: calc(100%/32*3);
     top: calc(100%/32*27);
 }
-
 #play_hover{
     left: calc(100%/46*10);
 }
@@ -1289,15 +1270,12 @@ textarea{
 #stop_hover{
     left: calc(100%/46*10);
 }
-
 #slow_hover{
     left: calc(100%/46*12);
 }
-
 #fast_hover{
     left: calc(100%/46*14);
 }
-
 #increase_hover{
     left: calc(100%/46*16);
 }
@@ -1322,6 +1300,7 @@ textarea{
 #toggleTheme_hover{
     left: calc(100%/46*26); 
 }
+
 
 .toggleGrid{
     display: grid;

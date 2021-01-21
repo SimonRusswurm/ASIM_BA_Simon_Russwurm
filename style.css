@@ -118,14 +118,22 @@ button:hover{
     color: white;
 }
 
-.yellowBg , .yellowBg p{
+.black p.blueText{
+    color: #19B2FF;
+}
+
+.yellowBg{
     background-color: yellow;
     color: #222222;
 }
 
-.greyBg{
+h2.yellowBg, p.yellowBg, .yellowBg p{
+    color: #222222;
+}
+
+.pathElement{
     background-color:  yellow;
-    background-image: url(images/greyElementBg.svg);
+    background-image: url(images/pathElementBg.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -157,6 +165,10 @@ button:hover{
     font-weight: bold;
 }
 
+.blueText{
+    color: #19B2FF;
+}
+
 /* ******************************* ACTUAL DESIGN ******************************* */
 .mc8{
     position: fixed;
@@ -172,16 +184,13 @@ button:hover{
     width: 98%;
     height: 98%;
     position: relative;
-    background-image: url(images/Bus-System_light.svg);
+    background-image: url(images/busSystem.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
     display: grid;
     grid-template-columns: repeat(46, 1fr);
     grid-template-rows: repeat(32, 1fr);
-}
-.bussystem_yellow{
-    background-image: url(images/Bus-System_yellow.svg);
 }
 .romValues{
     width: 100%;
@@ -299,7 +308,7 @@ button:hover{
     grid-template-rows: repeat(2, 1fr);
 }
 .points{
-    background-image: url(images/points.svg);
+    background-image: url(images/ellipses.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -320,15 +329,6 @@ button:hover{
     justify-items: center;
     align-items: center;
 }
-.points2{
-    grid-column-start: 1;
-    grid-column-end: 3;
-    background-image: url(images/points.svg);
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
 
 .address-200x-3FFx{
     grid-template-columns: repeat(8, 1fr);
@@ -337,13 +337,13 @@ button:hover{
 
 /* ******************************* IOs ******************************* */
 .ioArrow{
-    background-image: url(images/IOArrow.svg);
+    background-image: url(images/ioIn_arrow.svg);
     background-position: center center;
     background-size: 37%;
     background-repeat: no-repeat;
 }
 .ioArrowOUT{
-    background-image: url(images/IOArrowUP.svg);
+    background-image: url(images/ioOut_arrow.svg);
 }
 #io1Label_h1{
     top: calc(100%/32*0);
@@ -516,22 +516,6 @@ button:hover{
 
 /* ******************************* ALU ******************************* */
 
-.ALU{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    height: calc(100%/32*6);
-    width: calc(100%/46*12);
-    top: calc(100%/32*6);
-    left: calc(100%/46*22);
-    background-image: url(images/ALUBg.svg);
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    z-index: 4;
-}
-
 #alu1RegisterValue_h2{
     position: absolute;
     top: calc(100%/32*6);
@@ -638,13 +622,14 @@ button:hover{
     top: calc(100%/32*26);
     left: calc(100%/46*28);
     font-family: Arial, Helvetica, sans-serif;
+    padding-left: 0.5%;
 }
 
 /* ******************************* yellow Arrows ******************************* */
 .ir_arrow{
     width: 100%;
     height: 100%;
-    background-image: url(images/IRArrow.svg);
+    background-image: url(images/ir_arrow.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -658,35 +643,35 @@ button:hover{
     width: calc(100%/46*4);
 }
 .PC_arrow{
-    background-image: url(images/PCArrow.svg);
+    background-image: url(images/pc_arrow.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 .ZR_arrow{
-    background-image: url(images/ZR_arrow.svg);
+    background-image: url(images/zr_arrow.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 .HL_arrow{
-    background-image: url(images/HL_arrow.svg);
+    background-image: url(images/hl_arrow.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 .IX_arrow{
-    background-image: url(images/IX_arrow.svg);
+    background-image: url(images/ix_arrow.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 .SP_arrow{
-    background-image: url(images/SP_arrow.svg);
+    background-image: url(images/sp_arrow.svg);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -727,20 +712,8 @@ button:hover{
     width: calc(100%/46*3);
     background-image: url(images/jump_arrow.svg);
     background-position: center center;
-    background-size: contain;
+    background-size: 100%;
     background-repeat: no-repeat;
-}
-
-.movArrow{
-    position:absolute;
-    top: 0%;
-    left: 0%;
-    height: 100%;
-    width: 100%;
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    /* background-image: url(images/ROM_A_arrow.svg); */
 }
 
 /* ******************************* CONTROLPANEL ******************************* */
@@ -816,7 +789,7 @@ button:hover{
     background-repeat: no-repeat;
 }
 #fullCommand_button{
-    background-image: url(images/fullCommand.svg);
+    background-image: url(images/fullCommand_button.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;

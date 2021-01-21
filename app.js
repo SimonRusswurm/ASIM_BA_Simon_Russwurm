@@ -560,7 +560,8 @@ class PlayStatus{
 /******************************* ROM/RAM *********************************** */
 class Rom {
 	constructor() {
-		this.dec_array = this.init_dec();
+        this.breakpoints_array = this.initBreakpoints();
+        this.dec_array = this.init_dec();
         this.init_DOM();	
         this.startAddressRom_dec = 0;
         this.size_dec = 8192;
@@ -568,9 +569,30 @@ class Rom {
 	
 	init_dec() {
 		let buf_arr = [];
-		for (let i = 0; i < 8192; i++)
-        	buf_arr.push(255);
+		for (let i = 0; i < 8192; i++){
+            buf_arr.push(255);
+        }
+            
 		return buf_arr;	
+    }
+    initBreakpoints(){
+        let buf_arr = [];
+		for (let i = 0; i < 8192; i++){
+            buf_arr.push(0);
+        }
+		return buf_arr;	
+    }
+    resetBreakpoints() {
+        let buf_arr = [];
+		for (let i = 0; i < 8192; i++){
+            buf_arr.push(0);
+        } 
+        this.breakpoints_array = buf_arr;
+        for(let i = 0; i<224; i++){
+            try{
+                document.getElementById("romElement" + String(i)).classList.remove('blueText');
+            }catch (e){}
+		}	
     }
 	
 	init_DOM() {
@@ -605,6 +627,7 @@ class Rom {
     }
 
     update() {
+        this.resetBreakpoints();
 		let buf_string = '';
         let linker_string = linkerFile_textarea.value.replace(/\r\n|\n|\r/gm, '');
 		this.dec_array = this.init_dec();
@@ -616,18 +639,27 @@ class Rom {
                 let length = Number(linker_string[i+2]);
                 let address = convertHexToNumber(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
                 
+                //load data
             	for (let j = 0; j < length; j++) {
+                    if(j===0)
+                        this.breakpoints_array[address+j] = 1;
                     this.dec_array[address+j] = convertHexToNumber(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
             	}   
         	}
-    	}
+        }
+        
 		
-		//update DOM
+        //update DOM        
 		for(let i = 0; i<224; i++){
         	buf_string = this.dec_array[i].toString(16).toUpperCase();
         	if(buf_string.length === 1) //if number is smaller than 10 -->Bsp(0F) 
             	buf_string = '0' + buf_string;
-        	document.getElementById("romElement" + String(i)).textContent = buf_string;
+            document.getElementById("romElement" + String(i)).textContent = buf_string;
+
+            //add blue if breakpoints is checked
+            if(breakpointsCheckbox_input.checked && this.breakpoints_array[i]){
+                document.getElementById("romElement" + String(i)).classList.add('blueText');
+            }
 		}
     }
 
@@ -871,7 +903,7 @@ class Pc_class extends Register_x4{
         this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
         this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
 
-        
+        updateRedRectangle(PC.dec);
         ROM.updateVariableElements(value_dec);
         if(this.dec > RAM.startAddressRam_dec)
             RAM.updateVariableElements(value_dec);
@@ -1006,7 +1038,7 @@ class Decoder {
             }
             else{
                 this.ramAccess = false;
-                this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.text_string = 'Schreibe auf ???\nAdresse: ' + convertNumberToHex_2digits(address_dec);
                 this.error = true;
             } 
         }
@@ -1599,6 +1631,7 @@ const io2Arrow_div = document.getElementById('io2Arrow_div');
 const io3Arrow_div = document.getElementById('io3Arrow_div');
 
 const ramAddress_select = document.getElementById('ramAddress_select');
+const breakpointsCheckbox_input = document.getElementById('breakpointsCheckbox_input');
 
 
 const changeRamAddress_DOM = (hex1_string, hex2_string) => {
@@ -2707,7 +2740,6 @@ const updatePC = async() => {
     await checkPlayPressed()
 
     PC.update(PC.dec + 1);
-    updateRedRectangle(PC.dec);
     await add_yellow_background_for_IDLETIME(PC.DOM);
 }
 
@@ -2865,7 +2897,7 @@ const createGreyElement = (i, xCoordinate,yCoordinate) =>{
     ele.style.top = String(100/32*(yCoordinate[i]+0.5)) +'%';
     ele.style.height = String(100/32*1) + '%';
     ele.style.width = String(100/46*1) + '%';
-    ele.classList.add('greyBg' ,'rounded');
+    ele.classList.add('pathElement' ,'rounded');
     return ele;
 }
 
@@ -2933,11 +2965,13 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
 //animates the movement from on fixPoint to another one
 const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec = 0) => {
     await checkPlayPressed();
+    let startPointInCPU = false;
+    let endPointInCPU = false;
     
     //only execute when Animation is required
     if(!playStatus.noAnim){  
         const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
-        let inCPU = false;
+        
 
         //convert value_dec to hex_4digits if required
         if(value_dec > 255 || fixPointLabel_B_string === 'ROM2' || fixPointLabel_B_string === 'RAM2' || fixPointLabel_B_string === 'ZR'|| fixPointLabel_B_string === 'PC'|| fixPointLabel_B_string === 'IX'|| fixPointLabel_B_string === 'HL'|| fixPointLabel_B_string === 'SP')
@@ -2956,12 +2990,18 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
 
         //check if starting point is inside CPU
         if(yCoordinate[0][0] < 24 && yCoordinate[0][0]>3 && xCoordinate[0][0] > 9 && xCoordinate[0][0]){
-            inCPU = true;
+            startPointInCPU = true;
+        }
+        console.log(yCoordinate);
+
+        if(yCoordinate[yCoordinate.length-1][11] < 24 && yCoordinate[yCoordinate.length-1][11]>3 && xCoordinate[xCoordinate.length-1][11] > 9 && xCoordinate[xCoordinate.length-1][11]){
+            endPointInCPU = true;
         }
 
         //fast Animation
         if(playStatus.rocketSpeed){
-            DECODER.updateDOM();
+            if(!startPointInCPU || !endPointInCPU)
+                DECODER.updateDOM();
             await createPaintedPath(path,fixPointLabel_A_string, fixPointLabel_B_string, movingObject);
             if(!DECODER.ramAccess && !DECODER.ioAccess){
                 DECODER.resetDOM();
@@ -2979,13 +3019,13 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
                 }
                 
                 //display decoder
-                if(inCPU && (yCoordinate[i][0] > 23 || yCoordinate[i][0] < 3)){
-                    inCPU = false;
+                if(startPointInCPU && (yCoordinate[i][0] > 23 || yCoordinate[i][0] < 3)){
+                    startPointInCPU = false;
                     DECODER.updateDOM();
                     
                 }
-                if(!inCPU && (yCoordinate[i][0] < 23 && yCoordinate[i][0] > 3)){
-                    inCPU = true;
+                if(!startPointInCPU && (yCoordinate[i][0] < 23 && yCoordinate[i][0] > 3)){
+                    startPointInCPU = true;
                     if(!DECODER.ramAccess && !DECODER.ioAccess)
                         DECODER.resetDOM();
                 }
@@ -2999,7 +3039,8 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
     }
     //noAnim
     else {
-        DECODER.updateDOM();
+        if(!startPointInCPU || !endPointInCPU)
+                DECODER.updateDOM();
         await sleepForNOANIMATIONIDLETIME();
         if(!DECODER.ramAccess && !DECODER.ioAccess){
             DECODER.resetDOM();
@@ -3403,6 +3444,7 @@ const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_
     }
     RAM.update(address_dec,data_dec);
     try{
+
         await add_yellow_background_for_IDLETIME(document.getElementById(RAM.getRamElementId(address_dec)));
 
     }
@@ -4338,7 +4380,6 @@ const jpnzLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
         
     }
@@ -4355,7 +4396,6 @@ const jpzLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
     check_completeExecution();
@@ -4371,7 +4411,6 @@ const jpncLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
     check_completeExecution();
@@ -4387,7 +4426,6 @@ const jpcLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
     check_completeExecution();
@@ -4403,7 +4441,6 @@ const jpnoLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
     check_completeExecution();
@@ -4419,7 +4456,6 @@ const jpoLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
     check_completeExecution();
@@ -4435,7 +4471,6 @@ const jpnsLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
     check_completeExecution();
@@ -4451,7 +4486,6 @@ const jpsLabel = async() => {
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
         await transfer('ZR', 'PC', ZR.dec);
-        updateRedRectangle(ZR.dec);
         await updateRegister_hex('PC', ZR.dec);
     }
     check_completeExecution();
@@ -4462,7 +4496,6 @@ const jpLabel = async() => {
     await description_update('Lade den Programmzähler');
     await addArrow('ZR');
     await transfer('ZR', 'PC', ZR.dec);
-    updateRedRectangle(ZR.dec);
     await updateRegister_hex('PC', ZR.dec);
     check_completeExecution();
 }
@@ -4508,10 +4541,6 @@ const ret = async() => {
     await updateRegister_hex('PC', ZR.dec);
     check_completeExecution();
 }
-
-
-
-
 
 let runningProgram = [get_next_command];
 
@@ -4574,8 +4603,6 @@ const init = () => {
     stepDescription_p.textContent = 'Prozessor angehalten';
     assemblerCommand_p.textContent = '';
     DECODER.display_DOM.textContent = '';
-    
-    updateRedRectangle(convertHexToNumber(PC.dec));
 }
 
 /********************************** button functions ****************************** */
@@ -4686,6 +4713,7 @@ function decreaseSpeed(){
 
 function toggleTheme(){
     document.getElementsByTagName('html')[0].classList.toggle('black');
+
 }
 
 const rocketSpeed_on = () => {

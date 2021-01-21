@@ -28,30 +28,37 @@ window.addEventListener('resize', function () {
 }
 
 /***************************************** DOM_Selectors *********************************/
-let assemblerCommand = document.getElementById('assemblerCommand');
-let stepNumber = document.getElementById('stepNumber');
-let stepDescription = document.getElementById('stepDescription');
-let stepNumberBackground = document.getElementsByClassName('sNum')[0];
-let registerArrow = document.getElementById('registerArrow');
-let irArrow = document.getElementById('ir_arrow');
-let flagsArrow = document.getElementById('flagsArrow');
-let cFlag_arrow = document.getElementById('cFlag_arrow');
-let jump_arrow = document.getElementById('jump_arrow');
-let settings = document.getElementById('settings');
-const movingFlags = document.getElementById('movingFlags');
+const assemblerCommand_p = document.getElementById('assemblerCommand_p');
+const stepNumber_p = document.getElementById('stepNumber_p');
+const stepDescription_p = document.getElementById('stepDescription_p');
+const stepNumberBackground = document.getElementsByClassName('containerStepNumber')[0];
+const registerArrow_div = document.getElementById('registerArrow_div');
+const irArrow_div = document.getElementById('irArrow_div');
+const movingFlagsArrow_div = document.getElementById('movingFlagsArrow_div');
+const cFlagArrow_div = document.getElementById('cFlagArrow_div');
+const checkJumpArrow_div = document.getElementById('checkJumpArrow_div');
+const containerSettings_div = document.getElementById('containerSettings_div');
+const movingFlags_div = document.getElementById('movingFlags_div');
 const flags_DOM = document.getElementById('flags');
 const grid = document.querySelector(".gridContainer");
-const yellowBgElement = document.getElementById('yellowBgElement');
-const IO1_input_window = document.getElementById('IO1_input_window');
-const IO2_input_window = document.getElementById('IO2_input_window');
-const IO3_input_window = document.getElementById('IO3_input_window');
-const IO1_input = document.getElementById('IO1_input');
-const IO2_input = document.getElementById('IO2_input');
-const IO3_input = document.getElementById('IO3_input');
+const yellowBgElement_div = document.getElementById('yellowBgElement_div');
+const io1InputWindow_div = document.getElementById('io1InputWindow_div');
+const io2InputWindow_div = document.getElementById('io2InputWindow_div');
+const io3InputWindow_div = document.getElementById('io3InputWindow_div');
+const io1Input_input = document.getElementById('io1Input_input');
+const io2Input_input = document.getElementById('io2Input_input');
+const io3Input_input = document.getElementById('io3Input_input');
 
-const movingObject = document.getElementById('movingObject');
-const movingAlu1 = document.getElementById('movingAlu1');
-const movingAlu2 = document.getElementById('movingAlu2');
+const movingObject = document.getElementById('movingObject_h2');
+const movingAlu1 = document.getElementById('movingAlu1_h2');
+const movingAlu2 = document.getElementById('movingAlu2_h2');
+
+const lastRomLabel_div = document.getElementById('lastRomLabel_div');
+const lastRomLabel_p = document.getElementById('lastRomLabel_p');
+
+const middleRamLabel_div = document.getElementById('middleRamLabel_div');
+const middleRamLabel_p = document.getElementById('middleRamLabel_p');
+
 
 /***************************************** conversion Hex/Int *********************************/
 const convertHexToNumber = (hex_string) => {
@@ -79,6 +86,7 @@ const convertNumberToHex_2digits = (number_dec) => {
 }
 
 const convertNumberToBinary_8digits = (number_dec) => {
+
     let str = (number_dec).toString(2);
     const len = str.length;
     if(len != 8){
@@ -111,7 +119,78 @@ const convertNumberToComplementOnTwo = (number_dec) => {
     return number_dec;
 }
 
+const checkValidHex = (input_string) => {
+    const allowedChar = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+    let check = true;
 
+    input_string = input_string.toUpperCase();
+    for (let i = 0; i < input_string.length; i++) {
+        for (let j = 0; j < allowedChar.length; j++) {
+            if(input_string[i] === allowedChar[j]){
+                check = true;
+                break;
+            }
+            else{
+                check = false;
+            }
+        }
+        if(!check)
+            return false;
+    }
+    return true;
+}
+
+
+const calculateChecksum = (intelHexFormat_string) => {
+    intelHexFormat_string = intelHexFormat_string.replace(':','');
+    let sum = 0;
+    const recordLength = convertHexToNumber(intelHexFormat_string[0] + intelHexFormat_string[1]);
+    let withoutChecksum = 0;
+
+    if(intelHexFormat_string.length > 2+4+2+recordLength*2){
+        withoutChecksum = 2;
+    }
+    
+    for (let i = 0; i < 2+4+2+recordLength*2+withoutChecksum; i= i+2) {
+        sum +=  convertHexToNumber(intelHexFormat_string[i] + intelHexFormat_string[i+1]);        
+    }
+
+    sum = convertNumberToHex_4digits(sum);
+    sum = convertHexToNumber(sum[2]+sum[3]);
+
+    let bin_array = convertNumberToBinaryArray(Math.abs(sum));
+    let one_array =   [0,0,0,0,0,0,0,1];
+    let carry_array = [0,0,0,0,0,0,0,0,0];
+    let sum_array =   [0,0,0,0,0,0,0,0];
+
+    //invert bin_array
+    for (let i = 0; i < bin_array.length; i++) {
+        if (bin_array[i] === 1) {
+            bin_array[i] = 0;         
+        }
+        else
+            bin_array[i] = 1;  
+    }
+
+    //add one to bin_array
+    for (let i = 8; i > 0; i--) {
+        if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 1){
+            carry_array[i-1] = 0;
+            sum_array[i-1] = 1;
+        }
+        else if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 2){
+            carry_array[i-1] = 1;
+            sum_array[i-1] = 0;
+        }
+        else if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 3){
+            carry_array[i-1] = 1;
+            sum_array[i-1] = 1;
+        }
+    }
+
+    sum = convertNumberToHex_2digits(convertBinaryToNumber(sum_array.join('')));
+    return sum;
+}
 /***************************************** ALU operations *********************************/
 
 //sets the flags, 0 == don't set flag, 1 == setFlag
@@ -495,19 +574,26 @@ class Rom {
     }
 	
 	init_DOM() {
-	    let j = 0;
-	    for(var i = 0; i<224; i++){
+        let j = 0;
+        //old 224
+	    for(var i = 0; i<240; i++){
 	        //create a romElement
 	        let romElement = document.createElement('p');
-	        romElement.classList.add('romElement', 'grid-template');
+	        romElement.classList.add('romElement', 'gridTemplate');
 	        romElement.id = "romElement" + String(i);
 	
 	        //after every 8th romElement -> new line should be filled
 	        if(!(i%8) && i !== 0)
 	            j++;
-	
-	        romElement.textContent = 'FF';
-	
+    
+            if(i>=224){
+                romElement.id = "romElementVariable" + String(i-224);
+                romElement.textContent = '';
+            }
+            else{
+                romElement.textContent = 'FF';
+            }
+
 	        //define Position of romElement
 	        romElement.style.top = String(100/32*(j+2)) + "%";
 	        romElement.style.left = String(100/46*((i%8)+2)) + "%";
@@ -520,7 +606,7 @@ class Rom {
 
     update() {
 		let buf_string = '';
-        let linker_string = linkerFile.value.replace(/\r\n|\n|\r/gm, '');
+        let linker_string = linkerFile_textarea.value.replace(/\r\n|\n|\r/gm, '');
 		this.dec_array = this.init_dec();
 		//update dec_arr
 		for (let i = 0; i < linker_string.length; i++) {
@@ -544,6 +630,30 @@ class Rom {
         	document.getElementById("romElement" + String(i)).textContent = buf_string;
 		}
     }
+
+    updateVariableElements(address_dec){
+        if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== lastRomLabel_p.textContent.slice(0,-1)){
+            if(address_dec > 223 && address_dec < 8192){
+                lastRomLabel_div.classList.remove('points');
+                lastRomLabel_p.textContent = convertNumberToHex_4digits(address_dec).slice(0,-1)+'x';
+                lastRomLabel_div.classList.add('lightYellowBg');
+    
+                address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
+    
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("romElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
+                }
+            }
+            else if(lastRomLabel_p.textContent !== '') {
+                lastRomLabel_div.classList.add('points');
+                lastRomLabel_div.classList.remove('lightYellowBg');
+                lastRomLabel_p.textContent = '';
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("romElementVariable" + String(i)).textContent = '';
+                }
+            } 
+        }  
+    }
     
     getValue(address_dec) {
         return this.dec_array[address_dec];
@@ -551,10 +661,9 @@ class Rom {
 
     getElementId = (position_dec = PC.dec) => {
         if (position_dec > 223) {
-            const romElementLast = document.getElementById('romElementLast');
-            romElementLast.style.top = String(100/32*30) +'%';
-            romElementLast.style.left = String(100/46*4) + '%';
-            return romElementLast.id;
+            let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
+            return document.getElementById('romElementVariable' + String(lastValue_dec)).id;
+
         }
         return document.getElementById('romElement' + String(position_dec)).id;
     } 
@@ -577,24 +686,27 @@ class Ram {
 	
 	init_DOM = () => {
         let j = 0;
-        for(var i = 0; i<224; i++){
+        for(var i = 0; i<240; i++){
             //create a ramElement (same CSS as romElement)
             let ramElement = document.createElement('p');
-            ramElement.classList.add('romElement', 'grid-template');
-            if(i<112)
+            ramElement.classList.add('romElement', 'gridTemplate');
+            if(i<112){
                 ramElement.id = 'ramElement' + String(i);
-            else
-                ramElement.id = 'ramElement' + String(i+8192-224);
+                ramElement.textContent = 'FF';
+            }
+            else if(i>127){
+                ramElement.id = 'ramElement' + String(i+8192-240);
+                ramElement.textContent = 'FF';
+            }
+            else{
+                ramElement.id = "ramElementVariable" + String(i-112);
+                ramElement.textContent = '';
+            }
     
             //after every 8th romElement -> new line should be filled
             if(!(i%8) && i !== 0)
                 j++;
-            if(j === 14)
-                j += 2;
-    
-            //define textContent of ramElement
-            ramElement.textContent = 'FF';
-    
+
             //define Position of romElement
             ramElement.style.top = String(100/32*(j+2)) + "%";
             ramElement.style.left = String(100/46*((i%8)+36)) + "%";
@@ -640,6 +752,39 @@ class Ram {
         if(address_dec < 112 || address_dec > 8191-112){
             document.getElementById('ramElement' + String(address_dec)).textContent = convertNumberToHex_2digits(number_dec);
         }
+        else{
+            let buf = convertHexToNumber(convertNumberToHex_4digits(address_dec)[3]);
+            document.getElementById("ramElementVariable" + String(buf)).textContent = convertNumberToHex_2digits(number_dec);
+        }
+    }
+
+    updateVariableElements(address_dec){
+        let x = 0;
+        if(address_dec > 8191){
+            x = Math.floor(address_dec/8192);
+            address_dec = address_dec - x*8192;
+        }
+
+        if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== middleRamLabel_p.textContent.slice(0,-1)){
+            if(address_dec > 111 && address_dec <= 8191-112){
+                middleRamLabel_div.classList.remove('points');
+                middleRamLabel_div.classList.add('lightYellowBg');
+                middleRamLabel_p.textContent = convertNumberToHex_4digits(address_dec+x*8192).slice(0,-1)+'x';
+                address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
+    
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("ramElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
+                }
+            }
+            else if(middleRamLabel_p.textContent !== '') {
+                middleRamLabel_div.classList.add('points');
+                middleRamLabel_div.classList.remove('lightYellowBg');
+                middleRamLabel_p.textContent = '';
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("ramElementVariable" + String(i)).textContent = '';
+                }
+            } 
+        }  
     }
 
     getRamElementId = (position_dec = 0) =>{
@@ -647,11 +792,10 @@ class Ram {
             let x = Math.floor(position_dec/8192);
             position_dec = position_dec - x*8192;
         }
+
         if(position_dec > 111 && position_dec < 8191-111){
-            const ramElementBetween = document.getElementById('ramElementBetween');
-            ramElementBetween.style.top = String(100/32*16) +'%';
-            ramElementBetween.style.left = String(100/46*40) + '%';
-            return ramElementBetween.id;
+            let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
+            return document.getElementById('ramElementVariable' + String(lastValue_dec)).id;
         }
         else
             return document.getElementById('ramElement' + String(position_dec)).id;
@@ -659,10 +803,6 @@ class Ram {
 
 }
 
-/******************************* RedRectangle *********************************** */
-class RedRectangle {
-
-}
 
 /******************************* Register *********************************** */
 
@@ -717,7 +857,29 @@ class Register_x4 {
 	}
 }
 
-class IO extends Register_x2{
+class Pc_class extends Register_x4{
+    constructor(register_DOM){
+		super(register_DOM);
+    }
+    update(value_dec){
+        if(value_dec > 65535)
+            value_dec -= 65536;
+        if(value_dec < 0)
+            value_dec = 65535;
+        this.dec = value_dec;
+        this.DOM.textContent = convertNumberToHex_4digits(value_dec);
+        this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
+        this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
+
+        
+        ROM.updateVariableElements(value_dec);
+        if(this.dec > RAM.startAddressRam_dec)
+            RAM.updateVariableElements(value_dec);
+    
+    }
+}
+
+class IO extends Register_x2 {
     constructor(register_DOM, address_dec, io1IN_boolean){
 		super(register_DOM);
         this.address_dec = address_dec;
@@ -764,7 +926,35 @@ class Decoder {
             else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
                 this.ramAccess = true;
                 this.text_string = 'Lese von RAM';
-            }    
+            }
+            else if(address_dec === IO1.address_dec){
+                this.ioAccess = true;
+                if(IO1.in_boolean){
+                    this.text_string = 'Lese von IN1';
+                }
+                else{
+                    this.text_string = 'Lese von OUT1';
+                    this.error = true;
+                }
+            }
+            else if (address_dec === IO2.address_dec){
+                this.ioAccess = true;
+                if(IO2.in_boolean)
+                    this.text_string = 'Lese von IN2';
+                else{
+                    this.text_string = 'Lese von OUT2';
+                    this.error = true;
+                }
+            }
+            else if (address_dec === IO3.address_dec){
+                this.ioAccess = true;
+                if(IO3.in_boolean)
+                    this.text_string = 'Lese von IN3';
+                else{
+                    this.text_string = 'Lese von OUT3';
+                    this.error = true;
+                }
+            }   
             else{
                 this.ramAccess = false;
                 this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
@@ -783,7 +973,37 @@ class Decoder {
             else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
                 this.ramAccess = true;
                 this.text_string = 'Schreibe auf RAM';
-            } 
+            }
+            else if(address_dec === IO1.address_dec){
+                this.ioAccess = true;
+                if(!IO1.in_boolean){
+                    this.text_string = 'Schreibe auf OUT1';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN1';
+                    this.error = true;
+                }                
+            }
+            else if (address_dec === IO2.address_dec){
+                this.ioAccess = true;
+                if(!IO2.in_boolean){
+                    this.text_string = 'Schreibe auf OUT2';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN2';
+                    this.error = true;
+                }   
+            }
+            else if (address_dec === IO3.address_dec){
+                this.ioAccess = true;
+                if(!IO3.in_boolean){
+                    this.text_string = 'Schreibe auf OUT3';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN3';
+                    this.error = true;
+                }   
+            }
             else{
                 this.ramAccess = false;
                 this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
@@ -793,7 +1013,33 @@ class Decoder {
         //read IO
         else if(rd_dec === 0 && io_dec === 0){
             this.ioAccess = true;
-            if(address_dec === IO1.address_dec){
+
+            if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
+                if(IO1.in_boolean){
+                    this.text_string = 'Lese von IN1';
+                }
+                else{
+                    this.text_string = 'Lese von IN2';
+                }
+            }
+            else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
+                if(IO1.in_boolean){
+                    this.text_string = 'Lese von IN1';
+                }
+                else{
+                    this.text_string = 'Lese von IN3';
+                }
+            }
+            else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
+                if(IO2.in_boolean){
+                    this.text_string = 'Lese von IN2';
+                }
+                else{
+                    this.text_string = 'Lese von IN3';
+                }
+            }
+
+            else if(address_dec === IO1.address_dec){
                 if(IO1.in_boolean){
                     this.text_string = 'Lese von IN1';
                 }
@@ -826,7 +1072,33 @@ class Decoder {
         //write IO
         else if(wr_dec === 0 && io_dec === 0){
             this.ioAccess = true;
-            if(address_dec === IO1.address_dec){
+
+            if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
+                if(!IO1.in_boolean){
+                    this.text_string = 'Schreibe auf OUT1';
+                }
+                else{
+                    this.text_string = 'Schreibe auf OUT2';
+                }
+            }
+            else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
+                if(!IO1.in_boolean){
+                    this.text_string = 'Schreibe auf OUT1';
+                }
+                else{
+                    this.text_string = 'Schreibe auf OUT3';
+                }
+            }
+            else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
+                if(!IO2.in_boolean){
+                    this.text_string = 'Schreibe auf OUT2';
+                }
+                else{
+                    this.text_string = 'Schreibe auf OUT3';
+                }
+            }
+            
+            else if(address_dec === IO1.address_dec){
                 if(!IO1.in_boolean){
                     this.text_string = 'Schreibe auf OUT1';
                 }
@@ -964,365 +1236,369 @@ const FRAMES = 60;
 
 
 //class variables
-const IO1 = new IO(document.getElementById('IO1'), 0, true);
-const IO2 = new IO(document.getElementById('IO2'), 1, false);
-const IO3 = new IO(document.getElementById('IO3'), 2, true);
-const A   = new Register_x2(document.getElementById('A'));
-const B   = new Register_x2(document.getElementById('B'));
-const C   = new Register_x2(document.getElementById('C'));
-const IR  = new Register_x2(document.getElementById('IR'));
-const ALU1 = new Register_x2(document.getElementById('ALU1'));
-const ALU2 = new Register_x2(document.getElementById('ALU2'));
-const ALUOUT = new Register_x2(document.getElementById('ALUOUT'));
-const HL  = new Register_x4(document.getElementById('HL'));
-const IX  = new Register_x4(document.getElementById('IX'));
-const SP  = new Register_x4(document.getElementById('SP'));
-const PC  = new Register_x4(document.getElementById('PC'));
-const ZR  = new Register_x4(document.getElementById('ZR'));
-const FLAGS = new Flags(document.getElementById('C_Flag'),document.getElementById('Z_Flag'),document.getElementById('P_Flag'),document.getElementById('S_Flag'));
+const IO1 = new IO(document.getElementById('io1RegisterValue_h2'), 0, true);
+const IO2 = new IO(document.getElementById('io2RegisterValue_h2'), 1, false);
+const IO3 = new IO(document.getElementById('io3RegisterValue_h2'), 2, true);
+const A   = new Register_x2(document.getElementById('aRegisterValue_h2'));
+const B   = new Register_x2(document.getElementById('bRegisterValue_h2'));
+const C   = new Register_x2(document.getElementById('cRegisterValue_h2'));
+const IR  = new Register_x2(document.getElementById('irRegisterValue_h2'));
+const ALU1 = new Register_x2(document.getElementById('alu1RegisterValue_h2'));
+const ALU2 = new Register_x2(document.getElementById('alu2RegisterValue_h2'));
+const ALUOUT = new Register_x2(document.getElementById('aluOutRegisterValue_h2'));
+const HL  = new Register_x4(document.getElementById('hlRegisterValue_h2'));
+const IX  = new Register_x4(document.getElementById('ixRegisterValue_h2'));
+const SP  = new Register_x4(document.getElementById('spRegisterValue_h2'));
+const PC  = new Pc_class(document.getElementById('pcRegisterValue_h2'));
+const ZR  = new Register_x4(document.getElementById('zrRegisterValue_h2'));
+const FLAGS = new Flags(document.getElementById('cFlagValue_p'),document.getElementById('zFlagValue_p'),document.getElementById('pFlagValue_p'),document.getElementById('sFlagValue_p'));
 const ROM = new Rom();
 const RAM = new Ram();
-const DECODER = new Decoder(document.getElementById('WR'),document.getElementById('RD'), document.getElementById('M'), document.getElementById('IO'),document.getElementById('decDisplay'));
+const DECODER = new Decoder(document.getElementById('wrValue_p'),document.getElementById('rdValue_p'), document.getElementById('mValue_p'), document.getElementById('ioValue_p'),document.getElementById('decDisplay_p'));
 
 
 /***************************************** Hover popups *********************************/
-const rom_h1 = document.getElementById('rom_h1');
-rom_h1.addEventListener('mouseover', function() {
-    document.getElementById('rom_hover').classList.toggle('toggleGrid');
+const romLabel_h1 = document.getElementById('romLabel_h1');
+romLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('romLabelHover_div').classList.toggle('toggleGrid');
 });
-rom_h1.addEventListener('mouseleave', function() {
-    document.getElementById('rom_hover').classList.toggle('toggleGrid'); 
-});
-
-const ram_h1 = document.getElementById('ram_h1');
-ram_h1.addEventListener('mouseover', function() {
-    document.getElementById('ramStartAddress_hex').textContent = convertNumberToHex_4digits(RAM.startAddressRam_dec) + 'h';
-    document.getElementById('ramStartAddress_dec').textContent = String(RAM.startAddressRam_dec);
-    document.getElementById('ramEndAddress_hex').textContent = convertNumberToHex_4digits(RAM.startAddressRam_dec+8192-1) + 'h';
-    document.getElementById('ramEndAddress_dec').textContent = String(RAM.startAddressRam_dec+8192-1);
-    document.getElementById('ram_hover').classList.toggle('toggleGrid');
-});
-ram_h1.addEventListener('mouseleave', function() {
-    document.getElementById('ram_hover').classList.toggle('toggleGrid'); 
+romLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('romLabelHover_div').classList.toggle('toggleGrid'); 
 });
 
-const io1_h1 = document.getElementById('io1_h1');
-io1_h1.addEventListener('mouseover', function() {
-    document.getElementById('io1Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
-    document.getElementById('io1Address_hex').textContent = io1Address.value + 'h';
-    document.getElementById('io1_dec').textContent = IO1.dec + ' (' + convertNumberToComplementOnTwo(IO1.dec) + ')';
-    document.getElementById('io1_bin').textContent = convertNumberToBinary_8digits(IO1.dec);
-    document.getElementById('io1_hover').classList.toggle('toggleGrid');
+const ramLabel_h1 = document.getElementById('ramLabel_h1');
+ramLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('ramStartAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_dec) + 'h';
+    document.getElementById('ramStartAddressDec_p').textContent = String(RAM.startAddressRam_dec);
+    document.getElementById('ramEndAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_dec+8192-1) + 'h';
+    document.getElementById('ramEndAddressDec_p').textContent = String(RAM.startAddressRam_dec+8192-1);
+    document.getElementById('ramLabelHover_div').classList.toggle('toggleGrid');
 });
-io1_h1.addEventListener('mouseleave', function() {
-    document.getElementById('io1_hover').classList.toggle('toggleGrid'); 
-});
-
-const io2_h1 = document.getElementById('io2_h1');
-io2_h1.addEventListener('mouseover', function() {
-    document.getElementById('io2Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
-    document.getElementById('io2Address_hex').textContent =  document.getElementById('io2Address').value + 'h';
-    document.getElementById('io2_dec').textContent = IO2.dec + ' (' + convertNumberToComplementOnTwo(IO2.dec) + ')';
-    document.getElementById('io2_bin').textContent = convertNumberToBinary_8digits(IO2.dec);
-    document.getElementById('io2_hover').classList.toggle('toggleGrid');
-});
-io2_h1.addEventListener('mouseleave', function() {
-    document.getElementById('io2_hover').classList.toggle('toggleGrid'); 
+ramLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('ramLabelHover_div').classList.toggle('toggleGrid'); 
 });
 
-const io3_h1 = document.getElementById('io3_h1');
-io3_h1.addEventListener('mouseover', function() {
-    document.getElementById('io3Map').textContent = document.querySelector('input[name="radioMap"]:checked').value;
-    document.getElementById('io3Address_hex').textContent =  document.getElementById('io3Address').value + 'h';
-    document.getElementById('io3_dec').textContent = IO3.dec + ' (' + convertNumberToComplementOnTwo(IO3.dec) + ')';
-    document.getElementById('io3_bin').textContent = convertNumberToBinary_8digits(IO3.dec);
-    document.getElementById('io3_hover').classList.toggle('toggleGrid');
+const io1Label_h1 = document.getElementById('io1Label_h1');
+io1Label_h1.addEventListener('mouseover', function() {
+    document.getElementById('io1Map_p').textContent = document.querySelector('input[name="radioIoMap"]:checked').value;
+    document.getElementById('io1AddressHover_p').textContent = convertNumberToHex_4digits(convertHexToNumber(io1Address_textarea.value)) + 'h';
+    document.getElementById('io1ValueDec_p').textContent = IO1.dec + ' (' + convertNumberToComplementOnTwo(IO1.dec) + ')';
+    document.getElementById('io1ValueBin_p').textContent = convertNumberToBinary_8digits(IO1.dec);
+    document.getElementById('io1LabelHover_div').classList.toggle('toggleGrid');
 });
-io3_h1.addEventListener('mouseleave', function() {
-    document.getElementById('io3_hover').classList.toggle('toggleGrid'); 
-});
-
-const a_h1 = document.getElementById('a');
-a_h1.addEventListener('mouseover', function() {
-    document.getElementById('a_dec').textContent = 'Dezimal: ' + A.dec + ' (' + convertNumberToComplementOnTwo(A.dec) + ')';
-    document.getElementById('a_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(A.dec);
-    document.getElementById('a_hover').classList.toggle('toggleGrid');
-});
-a_h1.addEventListener('mouseleave', function() {
-    document.getElementById('a_hover').classList.toggle('toggleGrid');
+io1Label_h1.addEventListener('mouseleave', function() {
+    document.getElementById('io1LabelHover_div').classList.toggle('toggleGrid'); 
 });
 
-const b_h1 = document.getElementById('b');
-b_h1.addEventListener('mouseover', function() {
-    document.getElementById('b_dec').textContent = 'Dezimal: ' + B.dec + ' (' + convertNumberToComplementOnTwo(B.dec) + ')';
-    document.getElementById('b_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(B.dec);
-    document.getElementById('b_hover').classList.toggle('toggleGrid');
+const io2Label_h1 = document.getElementById('io2Label_h1');
+io2Label_h1.addEventListener('mouseover', function() {
+    document.getElementById('io2Map_p').textContent = document.querySelector('input[name="radioIoMap"]:checked').value;
+    document.getElementById('io2AddressHover_p').textContent =  convertNumberToHex_4digits(convertHexToNumber(io2Address_textarea.value)) + 'h';
+    document.getElementById('io2ValueDec_p').textContent = IO2.dec + ' (' + convertNumberToComplementOnTwo(IO2.dec) + ')';
+    document.getElementById('io2ValueBin_p').textContent = convertNumberToBinary_8digits(IO2.dec);
+    document.getElementById('io2LabelHover_div').classList.toggle('toggleGrid');
 });
-b_h1.addEventListener('mouseleave', function() {
-    document.getElementById('b_hover').classList.toggle('toggleGrid');
-});
-
-const c_h1 = document.getElementById('c');
-c_h1.addEventListener('mouseover', function() {
-    document.getElementById('c_dec').textContent = 'Dezimal: ' + C.dec + ' (' + convertNumberToComplementOnTwo(C.dec) + ')';
-    document.getElementById('c_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(C.dec);
-    document.getElementById('c_hover').classList.toggle('toggleGrid');
-});
-c_h1.addEventListener('mouseleave', function() {
-    document.getElementById('c_hover').classList.toggle('toggleGrid');
+io2Label_h1.addEventListener('mouseleave', function() {
+    document.getElementById('io2LabelHover_div').classList.toggle('toggleGrid'); 
 });
 
-const hl_h1 = document.getElementById('hl');
-hl_h1.addEventListener('mouseover', function() {
-    document.getElementById('hl_dec').textContent = 'Dezimal: ' + HL.dec;
-    document.getElementById('hl_hover').classList.toggle('toggleGrid');
+const io3Label_h1 = document.getElementById('io3Label_h1');
+io3Label_h1.addEventListener('mouseover', function() {
+    document.getElementById('io3Map_p').textContent = document.querySelector('input[name="radioIoMap"]:checked').value;
+    document.getElementById('io3AddressHover_p').textContent =  convertNumberToHex_4digits(convertHexToNumber(io3Address_textarea.value)) + 'h';
+    document.getElementById('io3ValueDec_p').textContent = IO3.dec + ' (' + convertNumberToComplementOnTwo(IO3.dec) + ')';
+    document.getElementById('io3ValueBin_p').textContent = convertNumberToBinary_8digits(IO3.dec);
+    document.getElementById('io3LabelHover_div').classList.toggle('toggleGrid');
 });
-hl_h1.addEventListener('mouseleave', function() {
-    document.getElementById('hl_hover').classList.toggle('toggleGrid');
-});
-
-const ix_h1 = document.getElementById('ix');
-ix_h1.addEventListener('mouseover', function() {
-    document.getElementById('ix_dec').textContent = 'Dezimal: ' + IX.dec;
-    document.getElementById('ix_hover').classList.toggle('toggleGrid');
-});
-ix_h1.addEventListener('mouseleave', function() {
-    document.getElementById('ix_hover').classList.toggle('toggleGrid');
+io3Label_h1.addEventListener('mouseleave', function() {
+    document.getElementById('io3LabelHover_div').classList.toggle('toggleGrid'); 
 });
 
-const sp_h1 = document.getElementById('sp');
-sp_h1.addEventListener('mouseover', function() {
-    document.getElementById('sp_dec').textContent = 'Dezimal: ' + SP.dec;
-    document.getElementById('sp_hover').classList.toggle('toggleGrid');
+const aRegisterLabel_h1 = document.getElementById('aRegisterLabel_h1');
+aRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('aHoverValueDec_p').textContent = 'Dezimal: ' + A.dec + ' (' + convertNumberToComplementOnTwo(A.dec) + ')';
+    document.getElementById('aHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(A.dec);
+    document.getElementById('aLabelHover_div').classList.toggle('toggleGrid');
 });
-sp_h1.addEventListener('mouseleave', function() {
-    document.getElementById('sp_hover').classList.toggle('toggleGrid');
-});
-
-const pc_h1 = document.getElementById('pc');
-pc_h1.addEventListener('mouseover', function() {
-    document.getElementById('pc_dec').textContent = 'Dezimal: ' + PC.dec;
-    document.getElementById('pc_hover').classList.toggle('toggleGrid');
-});
-pc_h1.addEventListener('mouseleave', function() {
-    document.getElementById('pc_hover').classList.toggle('toggleGrid');
+aRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('aLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const zr_h1 = document.getElementById('zr');
-zr_h1.addEventListener('mouseover', function() {
-    document.getElementById('zr_dec').textContent = 'Dezimal: ' + ZR.dec;
-    document.getElementById('zr_hover').classList.toggle('toggleGrid');
+const bRegisterLabel_h1 = document.getElementById('bRegisterLabel_h1');
+bRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('bHoverValueDec_p').textContent = 'Dezimal: ' + B.dec + ' (' + convertNumberToComplementOnTwo(B.dec) + ')';
+    document.getElementById('bHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(B.dec);
+    document.getElementById('bLabelHover_div').classList.toggle('toggleGrid');
 });
-zr_h1.addEventListener('mouseleave', function() {
-    document.getElementById('zr_hover').classList.toggle('toggleGrid');
-});
-
-const ir_h1 = document.getElementById('ir');
-ir_h1.addEventListener('mouseover', function() {
-    document.getElementById('ir_bin').textContent =  'Binär: ' + convertNumberToBinary_8digits(IR.dec);
-    document.getElementById('ir_hover').classList.toggle('toggleGrid');
-});
-ir_h1.addEventListener('mouseleave', function() {
-    document.getElementById('ir_hover').classList.toggle('toggleGrid');
+bRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('bLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const dec_h1 = document.getElementById('dec');
-dec_h1.addEventListener('mouseover', function() {
-    document.getElementById('dec_hover').classList.toggle('toggleGrid');
+const cRegisterLabel_h1 = document.getElementById('cRegisterLabel_h1');
+cRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('cHoverValueDec_p').textContent = 'Dezimal: ' + C.dec + ' (' + convertNumberToComplementOnTwo(C.dec) + ')';
+    document.getElementById('cHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(C.dec);
+    document.getElementById('cLabelHover_div').classList.toggle('toggleGrid');
 });
-dec_h1.addEventListener('mouseleave', function() {
-    document.getElementById('dec_hover').classList.toggle('toggleGrid');
-});
-
-const c_flag = document.getElementById('c_flag');
-c_flag.addEventListener('mouseover', function() {
-    document.getElementById('cFlag_hover').classList.toggle('toggleGrid');
-});
-c_flag.addEventListener('mouseleave', function() {
-    document.getElementById('cFlag_hover').classList.toggle('toggleGrid');
+cRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('cLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const z_flag = document.getElementById('z_flag');
-z_flag.addEventListener('mouseover', function() {
-    document.getElementById('zFlag_hover').classList.toggle('toggleGrid');
+const hlRegisterLabel_h1 = document.getElementById('hlRegisterLabel_h1');
+hlRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.dec;
+    document.getElementById('hlLabelHover_div').classList.toggle('toggleGrid');
 });
-z_flag.addEventListener('mouseleave', function() {
-    document.getElementById('zFlag_hover').classList.toggle('toggleGrid');
-});
-
-const p_flag = document.getElementById('p_flag');
-p_flag.addEventListener('mouseover', function() {
-    document.getElementById('pFlag_hover').classList.toggle('toggleGrid');
-});
-p_flag.addEventListener('mouseleave', function() {
-    document.getElementById('pFlag_hover').classList.toggle('toggleGrid');
+hlRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('hlLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const s_flag = document.getElementById('s_flag');
-s_flag.addEventListener('mouseover', function() {
-    document.getElementById('sFlag_hover').classList.toggle('toggleGrid');
+const ixRegisterLabel_h1 = document.getElementById('ixRegisterLabel_h1');
+ixRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.dec;
+    document.getElementById('ixLabelHover_div').classList.toggle('toggleGrid');
 });
-s_flag.addEventListener('mouseleave', function() {
-    document.getElementById('sFlag_hover').classList.toggle('toggleGrid');
-});
-
-const wr_h3 = document.getElementById('wr');
-wr_h3.addEventListener('mouseover', function() {
-    document.getElementById('wr_hover').classList.toggle('toggleGrid');
-});
-wr_h3.addEventListener('mouseleave', function() {
-    document.getElementById('wr_hover').classList.toggle('toggleGrid');
+ixRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('ixLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const rd_h3 = document.getElementById('rd');
-rd_h3.addEventListener('mouseover', function() {
-    document.getElementById('rd_hover').classList.toggle('toggleGrid');
+const spRegisterLabel_h1 = document.getElementById('spRegisterLabel_h1');
+spRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.dec;
+    document.getElementById('spLabelHover_div').classList.toggle('toggleGrid');
 });
-rd_h3.addEventListener('mouseleave', function() {
-    document.getElementById('rd_hover').classList.toggle('toggleGrid');
-});
-
-const m_h3 = document.getElementById('m');
-m_h3.addEventListener('mouseover', function() {
-    document.getElementById('m_hover').classList.toggle('toggleGrid');
-});
-m_h3.addEventListener('mouseleave', function() {
-    document.getElementById('m_hover').classList.toggle('toggleGrid');
+spRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('spLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const io_h3 = document.getElementById('io');
-io_h3.addEventListener('mouseover', function() {
-    document.getElementById('io_hover').classList.toggle('toggleGrid');
+const pcRegisterLabel_h1 = document.getElementById('pcRegisterLabel_h1');
+pcRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.dec;
+    document.getElementById('pcLabelHover_div').classList.toggle('toggleGrid');
 });
-io_h3.addEventListener('mouseleave', function() {
-    document.getElementById('io_hover').classList.toggle('toggleGrid');
+pcRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('pcLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const play_button = document.getElementById('play');
+const zrRegisterLabel_h1 = document.getElementById('zrRegisterLabel_h1');
+zrRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.dec;
+    document.getElementById('zrLabelHover_div').classList.toggle('toggleGrid');
+});
+zrRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('zrLabelHover_div').classList.toggle('toggleGrid');
+});
+
+const irRegisterLabel_h1 = document.getElementById('irRegisterLabel_h1');
+irRegisterLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('irHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(IR.dec);
+    document.getElementById('irLabelHover_div').classList.toggle('toggleGrid');
+});
+irRegisterLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('irLabelHover_div').classList.toggle('toggleGrid');
+});
+
+const deocderLabel_h1 = document.getElementById('deocderLabel_h1');
+deocderLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('decoderHover_div').classList.toggle('toggleGrid');
+});
+deocderLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('decoderHover_div').classList.toggle('toggleGrid');
+});
+
+const cFlagLabel_h1 = document.getElementById('cFlagLabel_h1');
+cFlagLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('cFlagHover_div').classList.toggle('toggleGrid');
+});
+cFlagLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('cFlagHover_div').classList.toggle('toggleGrid');
+});
+
+const zFlagLabel_h1 = document.getElementById('zFlagLabel_h1');
+zFlagLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('zFlagHover_div').classList.toggle('toggleGrid');
+});
+zFlagLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('zFlagHover_div').classList.toggle('toggleGrid');
+});
+
+const pFlagLabel_h1 = document.getElementById('pFlagLabel_h1');
+pFlagLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('pFlagHover_div').classList.toggle('toggleGrid');
+});
+pFlagLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('pFlagHover_div').classList.toggle('toggleGrid');
+});
+
+const sFlagLabel_h1 = document.getElementById('sFlagLabel_h1');
+sFlagLabel_h1.addEventListener('mouseover', function() {
+    document.getElementById('sFlagHover_div').classList.toggle('toggleGrid');
+});
+sFlagLabel_h1.addEventListener('mouseleave', function() {
+    document.getElementById('sFlagHover_div').classList.toggle('toggleGrid');
+});
+
+const wrLabel_h3 = document.getElementById('wrLabel_h3');
+wrLabel_h3.addEventListener('mouseover', function() {
+    document.getElementById('wrHover_div').classList.toggle('toggleGrid');
+});
+wrLabel_h3.addEventListener('mouseleave', function() {
+    document.getElementById('wrHover_div').classList.toggle('toggleGrid');
+});
+
+const rdLabel_h3 = document.getElementById('rdLabel_h3');
+rdLabel_h3.addEventListener('mouseover', function() {
+    document.getElementById('rdHover_div').classList.toggle('toggleGrid');
+});
+rdLabel_h3.addEventListener('mouseleave', function() {
+    document.getElementById('rdHover_div').classList.toggle('toggleGrid');
+});
+
+const mLabel_h3 = document.getElementById('mLabel_h3');
+mLabel_h3.addEventListener('mouseover', function() {
+    document.getElementById('mHover_div').classList.toggle('toggleGrid');
+});
+mLabel_h3.addEventListener('mouseleave', function() {
+    document.getElementById('mHover_div').classList.toggle('toggleGrid');
+});
+
+const ioLabel_h3 = document.getElementById('ioLabel_h3');
+ioLabel_h3.addEventListener('mouseover', function() {
+    document.getElementById('ioHover_div').classList.toggle('toggleGrid');
+});
+ioLabel_h3.addEventListener('mouseleave', function() {
+    document.getElementById('ioHover_div').classList.toggle('toggleGrid');
+});
+
+const play_button = document.getElementById('play_button');
 play_button.addEventListener('mouseover', function() {
-    document.getElementById('play_hover').classList.toggle('toggleGrid');
+    document.getElementById('playHover_div').classList.toggle('toggleGrid');
 });
 play_button.addEventListener('mouseleave', function() {
-    document.getElementById('play_hover').classList.toggle('toggleGrid');
+    document.getElementById('playHover_div').classList.toggle('toggleGrid');
 });
 
-const pause_button = document.getElementById('pause');
+const pause_button = document.getElementById('pause_button');
 pause_button.addEventListener('mouseover', function() {
-    document.getElementById('pause_hover').classList.toggle('toggleGrid');
+    document.getElementById('pauseHover_div').classList.toggle('toggleGrid');
 });
 pause_button.addEventListener('mouseleave', function() {
-    document.getElementById('pause_hover').classList.toggle('toggleGrid');
+    document.getElementById('pauseHover_div').classList.toggle('toggleGrid');
 });
 
-const stop_button = document.getElementById('stop');
+const stop_button = document.getElementById('stop_button');
 stop_button.addEventListener('mouseover', function() {
-    document.getElementById('stop_hover').classList.toggle('toggleGrid');
+    document.getElementById('stopHover_div').classList.toggle('toggleGrid');
 });
 stop_button.addEventListener('mouseleave', function() {
-    document.getElementById('stop_hover').classList.toggle('toggleGrid');
+    document.getElementById('stopHover_div').classList.toggle('toggleGrid');
 });
 
-const slow_button = document.getElementById('slow');
+const slow_button = document.getElementById('slow_button');
 slow_button.addEventListener('mouseover', function() {
-    document.getElementById('slow_hover').classList.toggle('toggleGrid');
+    document.getElementById('slowHover_div').classList.toggle('toggleGrid');
 });
 slow_button.addEventListener('mouseleave', function() {
-    document.getElementById('slow_hover').classList.toggle('toggleGrid');
+    document.getElementById('slowHover_div').classList.toggle('toggleGrid');
 });
 
-const fast_button = document.getElementById('fast');
+const fast_button = document.getElementById('fast_button');
 fast_button.addEventListener('mouseover', function() {
-    document.getElementById('fast_hover').classList.toggle('toggleGrid');
+    document.getElementById('fastHover_div').classList.toggle('toggleGrid');
 });
 fast_button.addEventListener('mouseleave', function() {
-    document.getElementById('fast_hover').classList.toggle('toggleGrid');
+    document.getElementById('fastHover_div').classList.toggle('toggleGrid');
 });
 
-const decrease_button = document.getElementById('decrease');
+const decrease_button = document.getElementById('decrease_button');
 decrease_button.addEventListener('mouseover', function() {
-    document.getElementById('decrease_hover').classList.toggle('toggleGrid');
+    document.getElementById('decreaseHover_div').classList.toggle('toggleGrid');
 });
 decrease_button.addEventListener('mouseleave', function() {
-    document.getElementById('decrease_hover').classList.toggle('toggleGrid');
+    document.getElementById('decreaseHover_div').classList.toggle('toggleGrid');
 });
 
-const increase_button = document.getElementById('increase');
+const increase_button = document.getElementById('increase_button');
 increase_button.addEventListener('mouseover', function() {
-    document.getElementById('increase_hover').classList.toggle('toggleGrid');
+    document.getElementById('increaseHover_div').classList.toggle('toggleGrid');
 });
 increase_button.addEventListener('mouseleave', function() {
-    document.getElementById('increase_hover').classList.toggle('toggleGrid');
+    document.getElementById('increaseHover_div').classList.toggle('toggleGrid');
 });
 
-const oneCommand_button = document.getElementById('oneCommand');
+const oneCommand_button = document.getElementById('oneCommand_button');
 oneCommand_button.addEventListener('mouseover', function() {
-    document.getElementById('oneCommand_hover').classList.toggle('toggleGrid');
+    document.getElementById('oneCommandHover_div').classList.toggle('toggleGrid');
 });
 oneCommand_button.addEventListener('mouseleave', function() {
-    document.getElementById('oneCommand_hover').classList.toggle('toggleGrid');
+    document.getElementById('oneCommandHover_div').classList.toggle('toggleGrid');
 });
 
-const singleStep_button = document.getElementById('singleStep');
+const singleStep_button = document.getElementById('singleStep_button');
 singleStep_button.addEventListener('mouseover', function() {
-    document.getElementById('singleStep_hover').classList.toggle('toggleGrid');
+    document.getElementById('singleStepHover_div').classList.toggle('toggleGrid');
 });
 singleStep_button.addEventListener('mouseleave', function() {
-    document.getElementById('singleStep_hover').classList.toggle('toggleGrid');
+    document.getElementById('singleStepHover_div').classList.toggle('toggleGrid');
 });
 
-const fullCommand_button = document.getElementById('fullCommand');
+const fullCommand_button = document.getElementById('fullCommand_button');
 fullCommand_button.addEventListener('mouseover', function() {
-    document.getElementById('fullCommand_hover').classList.toggle('toggleGrid');
+    document.getElementById('fullCommandHover_div').classList.toggle('toggleGrid');
 });
 fullCommand_button.addEventListener('mouseleave', function() {
-    document.getElementById('fullCommand_hover').classList.toggle('toggleGrid');
+    document.getElementById('fullCommandHover_div').classList.toggle('toggleGrid');
 });
 
-const settings_button = document.getElementById('settingsButton');
+const settings_button = document.getElementById('settingsButton_button');
 settings_button.addEventListener('mouseover', function() {
-    document.getElementById('settingsButton_hover').classList.toggle('toggleGrid');
+    document.getElementById('settingsButtonHover_div').classList.toggle('toggleGrid');
 });
 settings_button.addEventListener('mouseleave', function() {
-    document.getElementById('settingsButton_hover').classList.toggle('toggleGrid');
+    document.getElementById('settingsButtonHover_div').classList.toggle('toggleGrid');
 });
 
-const fullscreen_button = document.getElementById('fullscreenButton');
+const fullscreen_button = document.getElementById('fullscreenButton_button');
 fullscreen_button.addEventListener('mouseover', function() {
-    document.getElementById('fullscreenButton_hover').classList.toggle('toggleGrid');
+    document.getElementById('fullscreenButtonHover_div').classList.toggle('toggleGrid');
 });
 fullscreen_button.addEventListener('mouseleave', function() {
-    document.getElementById('fullscreenButton_hover').classList.toggle('toggleGrid');
+    document.getElementById('fullscreenButtonHover_div').classList.toggle('toggleGrid');
 });
 
-const toggleTheme_button = document.getElementById('toggleTheme');
+const toggleTheme_button = document.getElementById('toggleTheme_button');
 toggleTheme_button.addEventListener('mouseover', function() {
-    document.getElementById('toggleTheme_hover').classList.toggle('toggleGrid');
+    document.getElementById('toggleThemeHover_div').classList.toggle('toggleGrid');
 });
 toggleTheme_button.addEventListener('mouseleave', function() {
-    document.getElementById('toggleTheme_hover').classList.toggle('toggleGrid');
+    document.getElementById('toggleThemeHover_div').classList.toggle('toggleGrid');
 });
 
 
 
 /***************************************** settings functions *********************************/
-const programSelect = document.getElementById('commandSelect');
-const linkerFile = document.getElementById('linkerFile');
-const ioMapped = document.getElementById('radioIoMapped');
-const memoryMapped = document.getElementById('radioMemoryMap');
-const io1In = document.getElementById('IO1In');
-const io1Out = document.getElementById('IO1Out');
-const io1Address = document.getElementById('io1Address');
-const io2In = document.getElementById('IO2In');
-const io2Out = document.getElementById('IO2Out');
-const io2Address = document.getElementById('io2Address');
-const io3In = document.getElementById('IO3In');
-const io3Out = document.getElementById('IO3Out');
-const io3Address = document.getElementById('io3Address');
-const io1_arrow = document.getElementById('io1_arrow');
-const io2_arrow = document.getElementById('io2_arrow');
-const io3_arrow = document.getElementById('io3_arrow');
+const programSelection_select = document.getElementById('programSelection_select');
+const linkerFile_textarea = document.getElementById('linkerFile_textarea');
+const radioIoMapped_input = document.getElementById('radioIoMapped_input');
+const radioMemoryMap_input = document.getElementById('radioMemoryMap_input');
 
-const ramAddress = document.getElementById('addressRAM');
+const io1Address_textarea = document.getElementById('io1Address_textarea');
+const io2Address_textarea = document.getElementById('io2Address_textarea');
+const io3Address_textarea = document.getElementById('io3Address_textarea');
+
+const io1InputRadio_input = document.getElementById('io1InputRadio_input');
+const io2InputRadio_input = document.getElementById('io2InputRadio_input');
+const io3InputRadio_input = document.getElementById('io3InputRadio_input');
+
+const io1OutputRadio_input = document.getElementById('io1OutputRadio_input');
+const io2OutputRadio_input = document.getElementById('io2OutputRadio_input');
+const io3OutputRadio_input = document.getElementById('io3OutputRadio_input');
+
+const io1Arrow_div = document.getElementById('io1Arrow_div');
+const io2Arrow_div = document.getElementById('io2Arrow_div');
+const io3Arrow_div = document.getElementById('io3Arrow_div');
+
+const ramAddress_select = document.getElementById('ramAddress_select');
 
 
 const changeRamAddress_DOM = (hex1_string, hex2_string) => {
@@ -1332,14 +1608,18 @@ const changeRamAddress_DOM = (hex1_string, hex2_string) => {
     for (let i = 0; i < pEle.length; i++) {
         if(i<7){
             pEle[i].textContent = hex1_string + str[i] + 'x';
-        }else{
-            pEle[i].textContent = hex2_string + str[i] + 'x';
+        }
+        else if(i===7){
+
+        }
+        else{
+            pEle[i].textContent = hex2_string + str[i-1] + 'x';
         }
     }
 }
 
 const changeRamAddress = () => {
-    switch (ramAddress.value) {
+    switch (ramAddress_select.value) {
         case '2000':
             changeRamAddress_DOM('20', '3F');
             break;
@@ -1368,125 +1648,125 @@ const changeRamAddress = () => {
 
 const setSettingsDependingOnProgram = (ioMapped_boolean, io1IN_boolean, io2IN_boolean, io3IN_boolean, io1Address_hex, io2Address_hex, io3Address_hex, ramStartingAddress_hex) => {
     if(ioMapped_boolean){
-        ioMapped.checked = true;
+        radioIoMapped_input.checked = true;
     }
     else{
-        memoryMapped.checked = true;
+        radioMemoryMap_input.checked = true;
     }
 
     if(io1IN_boolean){
-        io1In.checked = true;
-        io1_arrow.classList.remove('ioArrowOUT');
+        io1InputRadio_input.checked = true;
+        io1Arrow_div.classList.remove('ioArrowOUT');
     } else {
-        io1Out.checked = true;
-        io1_arrow.classList.add('ioArrowOUT');
+        io1OutputRadio_input.checked = true;
+        io1Arrow_div.classList.add('ioArrowOUT');
     }
     if(io2IN_boolean){
-        io2In.checked = true;
-        io2_arrow.classList.remove('ioArrowOUT');
+        io2InputRadio_input.checked = true;
+        io2Arrow_div.classList.remove('ioArrowOUT');
     } else {
-        io2Out.checked = true;
-        io2_arrow.classList.add('ioArrowOUT');
+        io2OutputRadio_input.checked = true;
+        io2Arrow_div.classList.add('ioArrowOUT');
     }
     if(io3IN_boolean){
-        io3In.checked = true;
-        io3_arrow.classList.remove('ioArrowOUT');
+        io3InputRadio_input.checked = true;
+        io3Arrow_div.classList.remove('ioArrowOUT');
     } else {
-        io3Out.checked = true;
-        io3_arrow.classList.add('ioArrowOUT');
+        io3OutputRadio_input.checked = true;
+        io3Arrow_div.classList.add('ioArrowOUT');
     }
 
-    io1Address.value = io1Address_hex;
-    io2Address.value = io2Address_hex;
-    io3Address.value = io3Address_hex;
-    ramAddress.value = ramStartingAddress_hex;
+    io1Address_textarea.value = io1Address_hex;
+    io2Address_textarea.value = io2Address_hex;
+    io3Address_textarea.value = io3Address_hex;
+    ramAddress_select.value = ramStartingAddress_hex;
     changeRamAddress();
 }
 
 const updateProgram = () => {
-    switch(programSelect.value){
+    switch(programSelection_select.value){
         case 'own':
-            linkerFile.value = 'Fügen Sie hier den Inhalt der vom Linker erzeugten .OBJ-Datei ein.\n(im Intel-HEX-Format)';
+            linkerFile_textarea.value = 'Fügen Sie hier den Inhalt der vom Linker erzeugten .OBJ-Datei ein.\n(im Intel-HEX-Format)';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp1':
-            linkerFile.value = ':0100000000ff\n:0100010000fe\n:0100020000fd\n:0100030000fc\n:0100040000fb\n:0100050000fa\n:0100060000f9\n:0100070000f8\n:0100080000f7\n:0100090000f6\n:01000a0000d5\n:01000b0000d4\n:01000c0000d3\n:01000d0000d2\n:01000e0000d1\n:01000f0000d0\n:0100100000ef\n:0100110000ee\n:00000001FF';
+            linkerFile_textarea.value = ':0100000000ff\n:0100010000fe\n:0100020000fd\n:0100030000fc\n:0100040000fb\n:0100050000fa\n:0100060000f9\n:0100070000f8\n:0100080000f7\n:0100090000f6\n:01000a0000f5\n:01000b0000f4\n:01000c0000f3\n:01000d0000f2\n:01000e0000f1\n:01000f0000f0\n:0100100000ef\n:0100110000ee\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp2':
-            linkerFile.value = ':010000003Cc3\n:010001003Cc2\n:010002003Cc1\n:0100030004f8\n:0100040004f7\n:010005000Cee\n:0100060023d6\n:010007008771\n:010008008770\n:010009008076\n:01000a008055\n:01000b008153\n:01000c008152\n:01000d003D95\n:01000e003D94\n:01000f0005cb\n:010010000De2\n:01001100905e\n:01001200905d\n:01001300915b\n:00000001FF';
+            linkerFile_textarea.value = ':010000003Cc3\n:010001003Cc2\n:010002003Cc1\n:0100030004f8\n:0100040004f7\n:010005000Cee\n:0100060023d6\n:010007008771\n:010008008770\n:010009008076\n:01000a008075\n:01000b008173\n:01000c008172\n:01000d003Db5\n:01000e003Db4\n:01000f0005eb\n:010010000De2\n:01001100905e\n:01001200905d\n:01001300915b\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp3':
-            linkerFile.value = ':020000003E11af\n:020002000622d4\n:020004000E33b9\n:030006002155443d\n:01000900787e\n:01000a004194\n:01000b004F85\n:02000c003E662e\n:01000e00478a\n:02000f003E771a\n:010011004F9f\n:020012003E8826\n:010014007675\n:00000001FF';
+            linkerFile_textarea.value = ':020000003E11af\n:020002000622d4\n:020004000E33b9\n:030006002155443d\n:01000900787e\n:01000a0041b4\n:01000b004Fa5\n:02000c003E664e\n:01000e0047aa\n:02000f003E773a\n:010011004F9f\n:020012003E8826\n:010014007675\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp4':
-            linkerFile.value = ':04000000DD212211cb\n:02000400DD23fa\n:02000600DD23f8\n:02000800DD2Bee\n:03000a002144333b\n:01000d0023af\n:01000e0023ae\n:03000f003103009a\n:010012007677\n:00000001FF';
+            linkerFile_textarea.value = ':04000000DD212211cb\n:02000400DD23fa\n:02000600DD23f8\n:02000800DD2Bee\n:03000a002144335b\n:01000d0023cf\n:01000e0023ce\n:03000f00310300ba\n:010012007677\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp5':
-            linkerFile.value = ':020000003E11af\n:030002003200E0e9\n:0300050021332282\n:030008002201E0f2\n:04000b00DD2155443a\n:04000f00DD2203E0eb\n:010013003Cb0\n:0100140023c8\n:02001500DD23e9\n:0100170047a1\n:030018003A00E0cb\n:03001b002A03E0b5\n:04001e00DD2A01E0d6\n:01e00000001f\n:01e00100001e\n:01e00200001d\n:01e00300001c\n:01e00400001b\n:00000001FF';
+            linkerFile_textarea.value = ':020000003E11af\n:030002003200E0e9\n:0300050021332282\n:030008002201E0f2\n:04000b00DD2155445a\n:04000f00DD2203E00b\n:010013003Cb0\n:0100140023c8\n:02001500DD23e9\n:0100170047a1\n:030018003A00E0cb\n:03001b002A03E0d5\n:04001e00DD2A01E0f6\n:01e00000001f\n:01e00100001e\n:01e00200001d\n:01e00300001c\n:01e00400001b\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','E000');
             break;
         case 'bsp6':
-            linkerFile.value = ':020000003E12ae\n:030002002150E0aa\n:0100050047b3\n:03000600324FE096\n:01000900876f\n:01000a004F86\n:03000b003250E070\n:01000e00874a\n:01000f007759\n:030010003A4FE084\n:0100130047a5\n:030014003A50E07f\n:010017004F99\n:010018007E69\n:010019007670\n:01e04f0000b0\n:01e0500000cf\n:00000001FF';
+            linkerFile_textarea.value = ':020000003E12ae\n:030002002150E0aa\n:0100050047b3\n:03000600324FE096\n:01000900876f\n:01000a004Fa6\n:03000b003250E090\n:01000e00876a\n:01000f007779\n:030010003A4FE084\n:0100130047a5\n:030014003A50E07f\n:010017004F99\n:010018007E69\n:010019007670\n:01e04f0000d0\n:01e0500000cf\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','E000');
             break;
         case 'bsp7':
-            linkerFile.value = ':0300000031FFFFce\n:020003003EEEcf\n:020005000622d1\n:020007000E8861\n:010009008076\n:01000a00F5e0\n:01000b009143\n:01000c00478c\n:01000d00F1e1\n:01000e008051\n:01000f00F5db\n:01001000915e\n:0100110047a7\n:01001200F1fc\n:010013007676\n:00000001FF';
+            linkerFile_textarea.value = ':0300000031FFFFce\n:020003003EEEcf\n:020005000622d1\n:020007000E8861\n:010009008076\n:01000a00F500\n:01000b009163\n:01000c0047ac\n:01000d00F101\n:01000e008071\n:01000f00F5fb\n:01001000915e\n:0100110047a7\n:01001200F1fc\n:010013007676\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','E000');
             break;
         case 'bsp8':
-            linkerFile.value = ':020000003E0Cb4\n:0100020047b6\n:020003003EC0fd\n:010005004Fab\n:01000600A059\n:030007003200E0e4\n:01000a00795c\n:01000b00B024\n:03000c003201E0be\n:02000f003E177a\n:0100110047a7\n:020012003E713d\n:01001400A843\n:0100150047a3\n:02001600CB27f6\n:02001800CB27f4\n:02001a00CB27d2\n:01001c00784b\n:01001d0007bb\n:01001e0007ba\n:01001f0007b9\n:010020007867\n:0100210017c7\n:0100220017c6\n:0100230017c5\n:010024007665\n:01e00000001f\n:01e00100001e\n:00000001FF';
+            linkerFile_textarea.value = ':020000003E0Cb4\n:0100020047b6\n:020003003EC0fd\n:010005004Fab\n:01000600A059\n:030007003200E0e4\n:01000a00797c\n:01000b00B044\n:03000c003201E0de\n:02000f003E179a\n:0100110047a7\n:020012003E713d\n:01001400A843\n:0100150047a3\n:02001600CB27f6\n:02001800CB27f4\n:02001a00CB27f2\n:01001c00786b\n:01001d0007db\n:01001e0007da\n:01001f0007d9\n:010020007867\n:0100210017c7\n:0100220017c6\n:0100230017c5\n:010024007665\n:01e00000001f\n:01e00100001e\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','E000');
             break;
         case 'bsp9':
-            linkerFile.value = ':020000003E20a0\n:020002000610e6\n:020004000E30bc\n:01000600BF3a\n:03000700CA0B0021\n:01000a003C99\n:01000b00B81c\n:03000c00F21000cf\n:01000f003C94\n:01001000B936\n:03001100FA1500dd\n:010014003Caf\n:010015008169\n:010016008762\n:03001700DA2300e9\n:01001a00873e\n:03001b00DA2300c5\n:01001e00873a\n:03001f00DA2300c1\n:010022008756\n:03002300C3000017\n:00000001FF';
+            linkerFile_textarea.value = ':020000003E20a0\n:020002000610e6\n:020004000E30bc\n:01000600BF3a\n:03000700CA0B0021\n:01000a003Cb9\n:01000b00B83c\n:03000c00F21000ef\n:01000f003Cb4\n:01001000B936\n:03001100FA1500dd\n:010014003Caf\n:010015008169\n:010016008762\n:03001700DA2300e9\n:01001a00875e\n:03001b00DA2300e5\n:01001e00875a\n:03001f00DA2300e1\n:010022008756\n:03002300C3000017\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,true,'0000','0001','0002','2000');
             break;
         case 'bsp10':
-            linkerFile.value = ':0300000031FFFFce\n:0300030021700069\n:010006007E7b\n:02000700D30321\n:0100090047af\n:01000a0023b2\n:02000b00DB01f7\n:01000d004F83\n:01000e00B819\n:03000f00C2060006\n:010012007677\n:01007000008f\n:01007100107e\n:01007200206d\n:01007300305c\n:00000001FF';
+            linkerFile_textarea.value = ':0300000031FFFFce\n:0300030021700069\n:010006007E7b\n:02000700D30321\n:0100090047af\n:01000a0023d2\n:02000b00DB0117\n:01000d004Fa3\n:01000e00B839\n:03000f00C2060026\n:010012007677\n:01007000008f\n:01007100107e\n:01007200206d\n:01007300305c\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,false,'0001','0003','0005','E000');
             break;
         case 'bsp11':
-            linkerFile.value = ':0300000031FFFFce\n:030003003A00A020\n:0100060047b2\n:03000700CD4000e9\n:03000a003A00A0f9\n:01000d00B81a\n:03000e00CA030002\n:020040003E037d\n:010042003D80\n:03004300C24200b6\n:01004600C9f0\n:01a00000005f\n:01a00100005e\n:00000001FF';
+            linkerFile_textarea.value = ':0300000031FFFFce\n:030003003A00A020\n:0100060047b2\n:03000700CD4000e9\n:03000a003A00A019\n:01000d00B83a\n:03000e00CA030022\n:020040003E037d\n:010042003D80\n:03004300C24200b6\n:01004600C9f0\n:01a00000005f\n:01a00100005e\n:00000001FF';
             setSettingsDependingOnProgram(false,true,false,true,'A000','A001','A002','E000');
             break;
         case 'bsp12':
-            linkerFile.value = ':0300000031FFFFce\n:020003000E7776\n:02000500DB011d\n:01000700B93f\n:03000800CA1A0011\n:03000b00D21400ec\n:03000e00CD3200d0\n:03001100C3170012\n:03001400CD3B00e1\n:03001700C305001e\n:03001a00CD4400b2\n:03001d00C31700e6\n:020032003E008e\n:02003400D303f4\n:020036003E99f1\n:02003800D305ee\n:01003a00C9dc\n:02003b003E0065\n:02003d00D305c9\n:02003f003E99c8\n:02004100D303e7\n:01004300C9f3\n:020044003E007c\n:02004600D305e0\n:020048003E0078\n:02004a00D303be\n:01004c00C9ca\n:00000001FF';
+            linkerFile_textarea.value = ':0300000031FFFFce\n:020003000E7776\n:02000500DB011d\n:01000700B93f\n:03000800CA1A0011\n:03000b00D214000c\n:03000e00CD3200f0\n:03001100C3170012\n:03001400CD3B00e1\n:03001700C305001e\n:03001a00CD4400d2\n:03001d00C3170006\n:020032003E008e\n:02003400D303f4\n:020036003E99f1\n:02003800D305ee\n:01003a00C9fc\n:02003b003E0085\n:02003d00D305e9\n:02003f003E99e8\n:02004100D303e7\n:01004300C9f3\n:020044003E007c\n:02004600D305e0\n:020048003E0078\n:02004a00D303de\n:01004c00C9ea\n:00000001FF';
             setSettingsDependingOnProgram(true,true,false,false,'0001','0003','0005','E000');
             break;
         case 'bsp13':
-            linkerFile.value = ':0300000031FF3F8e\n:02000300DB0020\n:0100050047b3\n:02000600DB011c\n:03000800CD100018\n:02000b00D302fe\n:03000d00C303000a\n:020010000E04dc\n:02001200CB27fa\n:010014000Dde\n:03001500C2120014\n:020018000E04d4\n:02001a00CB27d2\n:03001c00D22000cf\n:01001f008040\n:010020000Dd2\n:03002100C21A0000\n:01002400C912\n:00000001FF';
+            linkerFile_textarea.value = ':0300000031FF3F8e\n:02000300DB0020\n:0100050047b3\n:02000600DB011c\n:03000800CD100018\n:02000b00D3021e\n:03000d00C303002a\n:020010000E04dc\n:02001200CB27fa\n:010014000Dde\n:03001500C2120014\n:020018000E04d4\n:02001a00CB27f2\n:03001c00D22000ef\n:01001f008060\n:010020000Dd2\n:03002100C21A0000\n:01002400C912\n:00000001FF';
             setSettingsDependingOnProgram(true,true,true,false,'0000','0001','0002','2000');
             break;
         case 'bsp14':
-            linkerFile.value = ':0300000031FF3F8e\n:02000300DB0020\n:020005000600f3\n:03000700CD0E001b\n:01000a00785d\n:02000b00D302fe\n:01000d00765c\n:01000e00F5dc\n:01000f003D93\n:03001000CA16000d\n:03001300CD0E000f\n:01001600F1f8\n:010017008068\n:0100180047a0\n:01001900C91d\n:00000001FF';
+            linkerFile_textarea.value = ':0300000031FF3F8e\n:02000300DB0020\n:020005000600f3\n:03000700CD0E001b\n:01000a00787d\n:02000b00D3021e\n:01000d00767c\n:01000e00F5fc\n:01000f003Db3\n:03001000CA16000d\n:03001300CD0E000f\n:01001600F1f8\n:010017008068\n:0100180047a0\n:01001900C91d\n:00000001FF';
             setSettingsDependingOnProgram(true,true,true,false,'0000','0001','0002','2000');
             break;
         case 'bsp15':
-            linkerFile.value = ':02000000DB0023\n:0300020032D007f2\n:02000500DB011d\n:0300070032D107ec\n:03000a00CDD60729\n:03000d003AD307bc\n:02001000D30219\n:03001200C3000028\n:0107d0000028\n:0107d1000027\n:0107d2000026\n:0107d3000025\n:0107d4000024\n:0107d5000023\n:0307d6003AD0070f\n:0107d90047d8\n:0307da003AD107ea\n:0107dd00807b\n:0307de0032D307ec\n:0107e100C94e\n:00000001FF';
+            linkerFile_textarea.value = ':02000000DB0023\n:0300020032D007f2\n:02000500DB011d\n:0300070032D107ec\n:03000a00CDD60749\n:03000d003AD307dc\n:02001000D30219\n:03001200C3000028\n:0107d0000028\n:0107d1000027\n:0107d2000026\n:0107d3000025\n:0107d4000024\n:0107d5000023\n:0307d6003AD0070f\n:0107d90047d8\n:0307da003AD1070a\n:0107dd00809b\n:0307de0032D3070c\n:0107e100C94e\n:00000001FF';
             setSettingsDependingOnProgram(true,true,true,false,'0000','0001','0002','2000');
             break;
         case 'bsp16':
-            linkerFile.value = ':02000000DB0122\n:02000200FE0Fef\n:03000400C2000037\n:030007003A1600a6\n:01000a00478e\n:03000b002117009a\n:01000e007E53\n:02000f00D302fa\n:0100110023cb\n:0100120005e8\n:03001300C20E001a\n:0100160004e5\n:0100170007e1\n:010018000Dda\n:010019000Fd7\n:01001a00764f\n:00000001FF';
+            linkerFile_textarea.value = ':02000000DB0122\n:02000200FE0Fef\n:03000400C2000037\n:030007003A1600a6\n:01000a0047ae\n:03000b00211700ba\n:01000e007E73\n:02000f00D3021a\n:0100110023cb\n:0100120005e8\n:03001300C20E001a\n:0100160004e5\n:0100170007e1\n:010018000Dda\n:010019000Fd7\n:01001a00766f\n:00000001FF';
             setSettingsDependingOnProgram(true,true,true,false,'0000','0001','0002','2000');
             break;
         case 'bsp17':
-            linkerFile.value = ':02000000DB0122\n:02000200FE0Fef\n:03000400C2000037\n:030007002A1A00b2\n:01000a007E57\n:01000b00478d\n:03000c002A1B008c\n:01000f007E52\n:02001000D30219\n:0100120023ca\n:0100130005e7\n:03001400C20F0018\n:03001700C3000023\n:01001a0009bc\n:01001b0001c3\n:01001c0003c0\n:01001d0005bd\n:01001e0007ba\n:01001f000Bb5\n:010020000Dd2\n:0100210011cd\n:0100220013ca\n:0100230017c5\n:00000001FF';
+            linkerFile_textarea.value = ':02000000DB0122\n:02000200FE0Fef\n:03000400C2000037\n:030007002A1A00b2\n:01000a007E77\n:01000b0047ad\n:03000c002A1B00ac\n:01000f007E72\n:02001000D30219\n:0100120023ca\n:0100130005e7\n:03001400C20F0018\n:03001700C3000023\n:01001a0009dc\n:01001b0001e3\n:01001c0003e0\n:01001d0005dd\n:01001e0007da\n:01001f000Bd5\n:010020000Dd2\n:0100210011cd\n:0100220013ca\n:0100230017c5\n:00000001FF';
             setSettingsDependingOnProgram(true,true,true,false,'0000','0001','0002','2000');
             break;
         case 'bsp18':
-            linkerFile.value = ':0300000031FF3F8e\n:020003000E02eb\n:02000500DB001e\n:03000700320020a4\n:01000a00795c\n:03000b00CD5000b5\n:02000e00DB00f5\n:030010003201209a\n:03001300CD4400d9\n:030016003A02208b\n:02001900FE00e7\n:03001b00CA31007\n:02001e003EABd7\n:02002000D30209\n:010022007964\n:03002300CD5000bd\n:020026003E0199\n:02002800D30201\n:01002a00793c\n:03002b00CD500095\n:03002e00C30500e7\n:020031003E7619\n:02003300D302f6\n:010035007951\n:03003600CD5000aa\n:020039003E2364\n:02003b00D302ce\n:01003d007929\n:03003e00CD500082\n:03004100C30500f4\n:030044003A00205f\n:010047004F69\n:030048003A01205a\n:01004b009103\n:03004c003202203d\n:01004f00C9c7\n:020050000605a3\n:0100520005a8\n:03005300C2520096\n:010056003D6c\n:03005700C2500094\n:01005a00C9bc\n:0120000000df\n:0120010000de\n:0120020000dd\n:0120030000dc\n:0120040000db\n:00000001FF';
+            linkerFile_textarea.value = ':0300000031FF3F8e\n:020003000E02eb\n:02000500DB001e\n:03000700320020a4\n:01000a00797c\n:03000b00CD5000d5\n:02000e00DB0015\n:030010003201209a\n:03001300CD4400d9\n:030016003A02208b\n:02001900FE00e7\n:03001b00CA3100e7\n:02001e003EABf7\n:02002000D30209\n:010022007964\n:03002300CD5000bd\n:020026003E0199\n:02002800D30201\n:01002a00795c\n:03002b00CD5000b5\n:03002e00C3050007\n:020031003E7619\n:02003300D302f6\n:010035007951\n:03003600CD5000aa\n:020039003E2364\n:02003b00D302ee\n:01003d007949\n:03003e00CD5000a2\n:03004100C30500f4\n:030044003A00205f\n:010047004F69\n:030048003A01205a\n:01004b009123\n:03004c003202205d\n:01004f00C9e7\n:020050000605a3\n:0100520005a8\n:03005300C2520096\n:010056003D6c\n:03005700C2500094\n:01005a00C9dc\n:0120000000df\n:0120010000de\n:0120020000dd\n:0120030000dc\n:0120040000db\n:00000001FF';
             setSettingsDependingOnProgram(true,true,true,false,'0000','0001','0002','2000');
             break;
         case 'bsp19':
-            linkerFile.value = ':020000003E00c0\n:020002000600f6\n:03000400211500c3\n:020007000E0Ddc\n:010009007E78\n:01000a008055\n:01000b00478d\n:01000c0023b0\n:01000d000Dc5\n:03000e00C2090004\n:010011007876\n:02001200D30019\n:010014007675\n:0100150001e9\n:0100160002e7\n:0100170001e7\n:0100180002e5\n:0100190001e5\n:01001a0001c4\n:01001b0001c3\n:01001c0001c2\n:01001d0002c0\n:01001e0002bf\n:01001f0001bf\n:0100200002dd\n:0100210001dd\n:00000001FF';
+            linkerFile_textarea.value = ':020000003E00c0\n:020002000600f6\n:03000400211500c3\n:020007000E0Ddc\n:010009007E78\n:01000a008075\n:01000b0047ad\n:01000c0023d0\n:01000d000De5\n:03000e00C2090024\n:010011007876\n:02001200D30019\n:010014007675\n:0100150001e9\n:0100160002e7\n:0100170001e7\n:0100180002e5\n:0100190001e5\n:01001a0001e4\n:01001b0001e3\n:01001c0001e2\n:01001d0002e0\n:01001e0002df\n:01001f0001df\n:0100200002dd\n:0100210001dd\n:00000001FF';
             setSettingsDependingOnProgram(true,false,false,true,'0000','0001','0002','2000');
             break;
         default:
-            linkerFile.value = '';
+            linkerFile_textarea.value = '';
             break;
     }
 }
@@ -1494,49 +1774,53 @@ const updateProgram = () => {
 //update of the classes 
 const updateIoClasses = () => {
     //IO-map
-    if(ioMapped.checked){
-        IO1.ioMapped_boolean, IO2.ioMapped_boolean, IO3.ioMapped_boolean = true;
+    if(radioIoMapped_input.checked){
+        IO1.ioMapped_boolean = true;
+        IO2.ioMapped_boolean = true;
+        IO3.ioMapped_boolean = true;
     }
     else {
-        IO1.ioMapped_boolean, IO2.ioMapped_boolean, IO3.ioMapped_boolean = false;
+        IO1.ioMapped_boolean = false;
+        IO2.ioMapped_boolean = false;
+        IO3.ioMapped_boolean = false;
     }
 
     //IO address and in-/output
-    if(io1In.checked){
+    if(io1InputRadio_input.checked){
         IO1.in_boolean = true;
         try{
-            io1_arrow.classList.remove('ioArrowOUT');
+            io1Arrow_div.classList.remove('ioArrowOUT');
         }catch{}
     }
     else {
         IO1.in_boolean = false;
-        io1_arrow.classList.add('ioArrowOUT');
+        io1Arrow_div.classList.add('ioArrowOUT');
     }
 
-    if(io2In.checked){
+    if(io2InputRadio_input.checked){
         IO2.in_boolean = true;
         try{
-            io2_arrow.classList.remove('ioArrowOUT');
+            io2Arrow_div.classList.remove('ioArrowOUT');
         }catch{}
     }
     else {
         IO2.in_boolean = false;
-        io2_arrow.classList.add('ioArrowOUT');
+        io2Arrow_div.classList.add('ioArrowOUT');
     }
 
-    if(io3In.checked){
+    if(io3InputRadio_input.checked){
         IO3.in_boolean = true;
         try{
-            io3_arrow.classList.remove('ioArrowOUT');
+            io3Arrow_div.classList.remove('ioArrowOUT');
         }catch{}
     }
     else {
         IO3.in_boolean = false;
-        io3_arrow.classList.add('ioArrowOUT');
+        io3Arrow_div.classList.add('ioArrowOUT');
     }
-    IO1.address_dec = convertHexToNumber(io1Address.value);
-    IO2.address_dec = convertHexToNumber(io2Address.value);
-    IO3.address_dec = convertHexToNumber(io3Address.value);
+    IO1.address_dec = convertHexToNumber(io1Address_textarea.value);
+    IO2.address_dec = convertHexToNumber(io2Address_textarea.value);
+    IO3.address_dec = convertHexToNumber(io3Address_textarea.value);
 }
 
 const saveSettings = () => {
@@ -1547,7 +1831,7 @@ const saveSettings = () => {
         RAM.reset();
         updateRedRectangle(0);
         toggleSettings();
-        errorWindow.classList.remove('toggleGrid');
+        errorWindow_div.classList.remove('toggleGrid');
     }
     
 }
@@ -1555,70 +1839,248 @@ const saveSettings = () => {
 
 // *****************************EventListeners*****************************/
 
-programSelect.addEventListener('input', updateProgram);
+programSelection_select.addEventListener('input', updateProgram);
 
-ioMapped.addEventListener('change', updateIoClasses);
+radioIoMapped_input.addEventListener('change', updateIoClasses);
 
-ramAddress.addEventListener('input', changeRamAddress);
+ramAddress_select.addEventListener('input', changeRamAddress);
 
-io1In.addEventListener('change', updateIoClasses);
-io1Out.addEventListener('change', updateIoClasses);
+io1InputRadio_input.addEventListener('change', updateIoClasses);
+io1OutputRadio_input.addEventListener('change', updateIoClasses);
 
-io2In.addEventListener('change', updateIoClasses);
-io2Out.addEventListener('change', updateIoClasses);
+io2InputRadio_input.addEventListener('change', updateIoClasses);
+io2OutputRadio_input.addEventListener('change', updateIoClasses);
 
-io3In.addEventListener('change', updateIoClasses);
-io3Out.addEventListener('change', updateIoClasses);
+io3InputRadio_input.addEventListener('change', updateIoClasses);
+io3OutputRadio_input.addEventListener('change', updateIoClasses);
 
 
 // *****************************errorWindow*****************************
-const errorWindow = document.getElementById('errorWindow');
-const errorMessage = document.getElementById('errorMessage');
-const checkSettings = () => {
-    if((convertHexToNumber(io1Address.value) === convertHexToNumber(io2Address.value)) && (IO1In.checked === IO2In.checked)){
-        errorMessage.textContent =  'IO1 und IO2 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
-        errorWindow.classList.add('toggleGrid');
-        return false;
-    }else if((convertHexToNumber(io1Address.value) === convertHexToNumber(io3Address.value)) && (IO1In.checked === IO3In.checked)){
-        errorMessage.textContent =  'IO1 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
-        errorWindow.classList.add('toggleGrid');
-        return false;
-    }else if((convertHexToNumber(io2Address.value) === convertHexToNumber(io3Address.value)) && (IO2In.checked === IO3In.checked)){
-        errorMessage.textContent =  'IO2 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.';
-        errorWindow.classList.add('toggleGrid');
-        return false;
-    }
-    if(document.getElementById('radioMemoryMap').checked){ //memory-mapped
-        if(convertHexToNumber(io1Address.value) < convertHexToNumber('2000')){
-            errorMessage.textContent =  `Die Adresse ${io1Address.value}h von IO1 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
-            errorWindow.classList.add('toggleGrid');
-            return false;
-        } else if(convertHexToNumber(io2Address.value) < convertHexToNumber('2000')){
-            errorMessage.textContent =  `Die Adresse ${io2Address.value}h von IO2 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
-            errorWindow.classList.add('toggleGrid');
-            return false;
-        } else if(convertHexToNumber(io3Address.value) < convertHexToNumber('2000')){
-            errorMessage.textContent =  `Die Adresse ${io3Address.value}h von IO3 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.`;
-            errorWindow.classList.add('toggleGrid');
-            return false;
+const errorWindow_div = document.getElementById('errorWindow_div');
+const errorMessage_textarea = document.getElementById('errorMessage_textarea');
+
+const checkLinkerFile = (errorMessage_string, count_dec) => {
+    const intelHexArray = linkerFile_textarea.value.split('\n');
+    let noError = true;
+    let recordLength = 0;
+    let recordAddress = 0;
+    let recordType = 0;
+    let data = 0;
+    let checksum = 0;
+
+    for (let i = 0; i < intelHexArray.length; i++) {
+        record = intelHexArray[i].trim();
+        if (record === '')
+            continue;
+
+        //check if line starts with :
+        if(noError){
+            if (record[0] !== ':'){
+                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}:\nJede Zeile muss mit einem : beginnen.\n\n`;
+                count_dec++; 
+                noError = false;
+            }
         }
 
-        if(convertHexToNumber(io1Address.value) >= RAM.startAddressRam_dec && convertHexToNumber(io1Address.value) < (RAM.startAddressRam_dec+ 8192)){
-            errorMessage.textContent =  `Die Adresse ${io1Address.value}h von IO1 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
-            errorWindow.classList.add('toggleGrid');
-            return false;
-        } else if(convertHexToNumber(io2Address.value) >= RAM.startAddressRam_dec && convertHexToNumber(io2Address.value) < (RAM.startAddressRam_dec+ 8192)){
-            errorMessage.textContent =  `Die Adresse ${io2Address.value}h von IO2 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
-            errorWindow.classList.add('toggleGrid');
-            return false;
-        } else if(convertHexToNumber(io3Address.value) >= RAM.startAddressRam_dec && convertHexToNumber(io3Address.value) < (RAM.startAddressRam_dec+ 8192)){
-            errorMessage.textContent =  `Die Adresse ${io3Address.value}h von IO3 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
-            errorWindow.classList.add('toggleGrid');
-            return false;
+        //check if line includes whitespace
+        if(noError){
+            if(record.includes(' ')){
+                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}:\nEs dürfen keine Leerzeichen in einem Record vorhanden sein.\n\n`;
+                count_dec++;
+                noError = false;
+            }
+        }
+        
+        //check record length
+        if(noError){
+            if(!checkValidHex(record[1]+record[2])){
+                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} ist keine gültige HEX-Zahl.\n\n`;
+                count_dec++;
+                noError = false;
+            }
+            if(noError){
+                recordLength = convertHexToNumber(record[1]+record[2]);
+                if(record.length < 1+2+4+2+recordLength*2+2){
+                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} stimmt nicht mit der Länge des Datensatzes überein.\n\n`;
+                    count_dec++;
+                    noError = false;
+                }
+            }
+        }
+        //check record address
+        if(noError){
+            if(!checkValidHex(record[3]+record[4]+record[5]+record[6])){
+                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordadresse ${record[3]+record[4]+record[5]+record[6]} ist keine gültige HEX-Zahl.\n\n`;
+                count_dec++;
+                noError = false;
+            }
+            //TODO: check if bigger than 1999h ??
+        }
+        //check record type
+        if(noError){
+            if(!checkValidHex(record[7]+record[8])){
+                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordtyp ${record[7]+record[8]} ist keine gültige HEX-Zahl.\n\n`;
+                count_dec++; 
+                noError = false;
+            }
+            //check if type is a data-record
+            if(noError){
+                if(recordLength === 0 && convertHexToNumber(record[7]+record[8]) === 0){
+                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} muss für einen Daten-Recordtyp größer als null sein.\n\n`;
+                    count_dec++;
+                    noError = false;
+                }
+            }
+            if(noError){
+                if(convertHexToNumber(record[7]+record[8]) > 1){
+                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Unbekannter Recordtyp ${record[7]+record[8]}.
+                    \n\n`;
+                    count_dec++;
+                    noError = false;
+                }
+            }
+        }
+        //check data
+        if(noError){
+            recordLength = convertHexToNumber(record[1]+record[2]);
+            for (let j = 0; j < recordLength*2; j = j+2) {
+                if(!checkValidHex(record[9+j]+record[10+j])){
+                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Datenbyte ${record[9+j]+record[10+j]} ist keine gültige HEX-Zahl.\n\n`;
+                    count_dec++;
+                    noError = false;
+                } 
+            }
+        }
+        //check checksum
+        if(noError){
+            if(!checkValidHex(record[9+recordLength*2]+record[10+recordLength*2])){
+                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Checkumme ${record[9+recordLength*2]+record[10+recordLength*2]} ist keine gültige HEX-Zahl.\n\n`;
+                count_dec++;
+                noError = false;
+            }
+            //TODO: mc8assembler
+            else if(calculateChecksum(record) !== '00'){
+                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Checkumme ${record[9+recordLength*2]+record[10+recordLength*2]} ist nicht korrekt. Richtige Checksumme: ${calculateChecksum(record.slice(0, -2))}\n\n`
+                noError = false;
+            }
         }
     }
-    return true;
+    return [errorMessage_string,count_dec];
+}
+//checks if IOs and Ram were set correctly
+const checkSettings = () => {
+    let errorMessage_string = '';
+    let count = 1;
+    let buf = checkLinkerFile(errorMessage_string, count);
+    errorMessage_string = buf[0];
+    count = buf[1];
+
+
+    if(io1Address_textarea.value === '')
+        io1Address_textarea.value = '0000';
+    if(io2Address_textarea.value === '')
+        io2Address_textarea.value = '0000';
+    if(io3Address_textarea.value === '')
+        io3Address_textarea.value = '0000';
+
+    //check if inputs are valid hex-numbers
+    if(!checkValidHex(io1Address_textarea.value)){
+        errorMessage_string +=  `${count}) Die Adresse ${io1Address_textarea.value}h von IO1 ist keine gültige HEX-Zahl. Bitte verwenden Sie nur die Ziffern 0-9 und die Zeichen A-F.
+        \n\n`;
+        count++; 
+    }
+    if(!checkValidHex(io2Address_textarea.value)){
+        errorMessage_string +=  `${count}) Die Adresse ${io2Address_textarea.value}h von IO2 ist keine gültige HEX-Zahl. Bitte verwenden Sie nur die Ziffern 0-9 und die Zeichen A-F.
+        \n\n`;
+        count++; 
+    }
+    if(!checkValidHex(io3Address_textarea.value)){
+        errorMessage_string +=  `${count}) Die Adresse ${io3Address_textarea.value}h von IO3 ist keine gültige HEX-Zahl. Bitte verwenden Sie nur die Ziffern 0-9 und die Zeichen A-F.
+        \n\n`;
+        count++; 
+    }
+
+    //check if inputs reside on same address
+    if((convertHexToNumber(io1Address_textarea.value) === convertHexToNumber(io2Address_textarea.value)) && (io1InputRadio_input.checked === io2InputRadio_input.checked)){
+        errorMessage_string +=  `${count}) IO1 und IO2 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.\n\n`;
+        count++;
+    }
+    if((convertHexToNumber(io1Address_textarea.value) === convertHexToNumber(io3Address_textarea.value)) && (io1InputRadio_input.checked === io3InputRadio_input.checked)){
+        errorMessage_string +=  `${count}) IO1 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.\n\n`;
+        count++;
+    }
+    if((convertHexToNumber(io2Address_textarea.value) === convertHexToNumber(io3Address_textarea.value)) && (io2InputRadio_input.checked === io3InputRadio_input.checked)){
+        errorMessage_string +=  `${count}) IO2 und IO3 liegen auf der gleichen Adresse. Dies ist nur erlaubt, wenn es sich um einen Eingabe- und um einen Ausgabebaustein handelt.\n\n`;
+        count++;
+    }
+
+
+    if(radioIoMapped_input.checked){
+        //if io-mapped: check if inputs are to big
+        if(convertHexToNumber(io1Address_textarea.value) > convertHexToNumber('FF')){
+            errorMessage_string +=  `${count}) Die Adresse ${io1Address_textarea.value}h von IO1 ist zu groß. Bitte verwenden Sie bei IO-mapping 8-Bit Adressen (Wertebereich 00h bis FFh).\n\n`;
+            count++;  
+        }
+        if(convertHexToNumber(io2Address_textarea.value) > convertHexToNumber('FF')){
+            errorMessage_string +=  `${count}) Die Adresse ${io2Address_textarea.value}h von IO2 ist zu groß. Bitte verwenden Sie bei IO-mapping 8-Bit Adressen (Wertebereich 00h bis FFh).\n\n`;
+            count++;  
+        }
+        if(convertHexToNumber(io3Address_textarea.value) > convertHexToNumber('FF')){
+            errorMessage_string +=  `${count}) Die Adresse ${io3Address_textarea.value}h von IO3 ist zu groß. Bitte verwenden Sie bei IO-mapping 8-Bit Adressen (Wertebereich 00h bis FFh).\n\n`;
+            count++;  
+        }
+    }
+    else{
+        //if memory-mapped: check if inputs are to big
+        if(convertHexToNumber(io1Address_textarea.value) > convertHexToNumber('FFFF')){
+            errorMessage_string +=  `${count}) Die Adresse ${io1Address_textarea.value}h von IO1 ist zu groß. Bitte verwenden Sie bei Memory-mapping 16-Bit Adressen (Wertebereich 0000h bis FFFFh).\n\n`;
+            count++;  
+        }
+        if(convertHexToNumber(io2Address_textarea.value) > convertHexToNumber('FFFF')){
+            errorMessage_string +=  `${count}) Die Adresse ${io2Address_textarea.value}h von IO2 ist zu groß. Bitte verwenden Sie bei Memory-mapping 16-Bit Adressen (Wertebereich 0000h bis FFFFh).\n\n`;
+            count++;  
+        }
+        if(convertHexToNumber(io3Address_textarea.value) > convertHexToNumber('FFFF')){
+            errorMessage_string +=  `${count}) Die Adresse ${io3Address_textarea.value}h von IO3 ist zu groß. Bitte verwenden Sie bei Memory-mapping 16-Bit Adressen (Wertebereich 0000h bis FFFFh).\n\n`;
+            count++;  
+        }
+
+        //check if inputs reside on ram/rom address
+        if(convertHexToNumber(io1Address_textarea.value) < convertHexToNumber('2000')){
+            errorMessage_string +=  `${count}) Die Adresse ${io1Address_textarea.value}h von IO1 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.\n\n`;
+            count++;  
+        }
+        if(convertHexToNumber(io2Address_textarea.value) < convertHexToNumber('2000')){
+            errorMessage_string +=  `${count}) Die Adresse ${io2Address_textarea.value}h von IO2 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.\n\n`;
+            count++;     
+        }
+        if(convertHexToNumber(io3Address_textarea.value) < convertHexToNumber('2000')){
+            errorMessage_string +=  `${count}) Die Adresse ${io3Address_textarea.value}h von IO3 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.\n\n`;
+            count++;
+        }
+        if(convertHexToNumber(io1Address_textarea.value) >= RAM.startAddressRam_dec && convertHexToNumber(io1Address_textarea.value) < (RAM.startAddressRam_dec+ 8192)){
+            errorMessage_string +=  `${count}) Die Adresse ${io1Address_textarea.value}h von IO1 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
+            count++;
+        }
+        if(convertHexToNumber(io2Address_textarea.value) >= RAM.startAddressRam_dec && convertHexToNumber(io2Address_textarea.value) < (RAM.startAddressRam_dec+ 8192)){
+            errorMessage_string +=  `${count}) Die Adresse ${io2Address_textarea.value}h von IO2 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
+            count++;
+        }
+        if(convertHexToNumber(io3Address_textarea.value) >= RAM.startAddressRam_dec && convertHexToNumber(io3Address_textarea.value) < (RAM.startAddressRam_dec+ 8192)){
+            errorMessage_string +=  `${count}) Die Adresse ${io3Address_textarea.value}h von IO3 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
+            count++;
+        }
+    }
+    
+    if(errorMessage_string === '')
+        return true;
+
+    errorWindow_div.classList.add('toggleGrid');
+    errorMessage_textarea.textContent = errorMessage_string;
+    return false;
 };
+
+
 
 
 
@@ -1870,11 +2332,14 @@ const updateRedRectangle = (PC_dec) =>{
         redRectangle.style.height = String(100/32*1) + "%";
     }
     else if(PC_dec < 8192) {
+        let xPos = PC_dec%8 +2;
+        let yPos = 0;
+        let bigger7 = convertNumberToHex_4digits(PC_dec)[3];
+        if(convertHexToNumber(bigger7) > 7)
+            yPos = 1;
         redRectangle.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
-        redRectangle.style.left = String(100/46*4) + "%";
-        redRectangle.style.top = String(100/32*30) + "%";
-        redRectangle.style.width = String(100/46*2) + "%";
-        redRectangle.style.height = String(100/32*2) + "%";
+        redRectangle.style.top = String(100/32*(30 + yPos)) + "%";
+        redRectangle.style.left = String(100/46*(xPos)) + "%";
     }
     else if(PC_dec >= RAM.startAddressRam_dec && PC_dec < RAM.startAddressRam_dec+112){
         PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
@@ -1882,19 +2347,23 @@ const updateRedRectangle = (PC_dec) =>{
         let xPos = PC_dec%8 +36;
         let yPos = Math.floor(PC_dec/8) + 2;
         redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
-        redRectangle.style.left = String(100/46*(xPos)) + "%";
+        
         redRectangle.style.top = String(100/32*(yPos)) + "%";
         redRectangle.style.width = String(100/46*1) + "%";
         redRectangle.style.height = String(100/32*1) + "%";
     }
     else if(PC_dec >= RAM.startAddressRam_dec+112 && PC_dec < RAM.startAddressRam_dec+8080){
         PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
+        let xPos = PC_dec%8 +36;
+        let yPos = 0;
+        let bigger7 = convertNumberToHex_4digits(PC_dec)[3];
+        if(convertHexToNumber(bigger7) > 7)
+            yPos = 1;
+
         redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
 
-        redRectangle.style.left = String(100/46*40) + "%";
-        redRectangle.style.top = String(100/32*16) + "%";
-        redRectangle.style.width = String(100/46*2) + "%";
-        redRectangle.style.height = String(100/32*2) + "%";
+        redRectangle.style.left = String(100/46*(xPos)) + "%";
+        redRectangle.style.top = String(100/32*(16+yPos)) + "%";
     }
     else if(PC_dec >= RAM.startAddressRam_dec+8080 && PC_dec < RAM.startAddressRam_dec+8192){
         PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
@@ -1912,7 +2381,6 @@ const updateRedRectangle = (PC_dec) =>{
         redRectangle.style.display = 'none';
     }
 }
-
 
 /******************************************************* ANIMATION IMPLEMENTATION ********************************************************* */
 /****************************************************************************************************************************************** */
@@ -1964,7 +2432,7 @@ const check_completeExecution = () => {
         //after the completion of an animation, check if program should be paused
         if(playStatus.noAnim || playStatus.oneCommand){  
             change_stepDescription('Prozessor angehalten');
-            stepNumber.textContent = '0';
+            stepNumber_p.textContent = '0';
             playStatus.setPause();
             setButtonPressed();
         }
@@ -2040,20 +2508,20 @@ const getRegisterByName = (register_string) => {
 
 /********************************* instant changes/update changes *********************************/
 //displays the description of the current Animation
-const change_stepDescription = (StringDescription) => stepDescription.textContent = StringDescription;
+const change_stepDescription = (StringDescription) => stepDescription_p.textContent = StringDescription;
 
 //increases the step number by 1
-const increaseStepNumber = () => stepNumber.textContent = String(Number(stepNumber.textContent)+1);
+const increaseStepNumber = () => stepNumber_p.textContent = String(Number(stepNumber_p.textContent)+1);
 
 //displays the the assembler notation. If the register IR contains a command which is not valid, the function returns false.
 const change_assemblerCommand = () =>{
     for(i=0; i<mc8_commands_array.length; i++){
         if(mc8_commands_array[i].machineCommand_dec === IR.dec){
-            assemblerCommand.textContent = mc8_commands_array[i].assembler_notation_string;
+            assemblerCommand_p.textContent = mc8_commands_array[i].assembler_notation_string;
             return true;
         }
     }
-    assemblerCommand.textContent = 'Befehl unbekannt';
+    assemblerCommand_p.textContent = 'Befehl unbekannt';
     return false;
 }
         
@@ -2088,123 +2556,123 @@ const addArrow = async(register_string) => {
     }
     if(!playStatus.noAnim){
         if(register_string === 'PC'){
-            registerArrow.classList.add('PC_arrow');
+            registerArrow_div.classList.add('PC_arrow');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                registerArrow.classList.remove('PC_arrow');
+                registerArrow_div.classList.remove('PC_arrow');
             }
         }
         
         else if(register_string === 'ZR'){
-            registerArrow.classList.add('ZR_arrow');
+            registerArrow_div.classList.add('ZR_arrow');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                registerArrow.classList.remove('ZR_arrow');
+                registerArrow_div.classList.remove('ZR_arrow');
             }
         }
         else if(register_string === 'HL'){
-            registerArrow.classList.add('HL_arrow');
+            registerArrow_div.classList.add('HL_arrow');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                registerArrow.classList.remove('HL_arrow');
+                registerArrow_div.classList.remove('HL_arrow');
             }
         }
         else if(register_string === 'IX'){
-            registerArrow.classList.add('IX_arrow');
+            registerArrow_div.classList.add('IX_arrow');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                registerArrow.classList.remove('IX_arrow');
+                registerArrow_div.classList.remove('IX_arrow');
             }
         }
         
         else if(register_string === 'SP'){
-            registerArrow.classList.add('SP_arrow');
+            registerArrow_div.classList.add('SP_arrow');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                registerArrow.classList.remove('SP_arrow');
+                registerArrow_div.classList.remove('SP_arrow');
             }
         }
 
         else if(register_string === 'IR'){
-            irArrow.classList.add('ir_arrow');
+            irArrow_div.classList.add('ir_arrow');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                irArrow.classList.remove('ir_arrow');
+                irArrow_div.classList.remove('ir_arrow');
             }
         }
         else if(register_string === 'FLAGS'){
-            flagsArrow.classList.add('flags_arrow');
+            movingFlagsArrow_div.classList.add('flags_arrow');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                flagsArrow.classList.remove('flags_arrow');
+                movingFlagsArrow_div.classList.remove('flags_arrow');
             }
         }
         else if(register_string === 'cFlag'){
-            cFlag_arrow.classList.add('cFlag_arrow');
+            cFlagArrow_div.classList.add('cFlag_arrow');
             FLAGS.c_DOM.classList.add('yellowBg', 'borderBox');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                cFlag_arrow.classList.remove('cFlag_arrow');
+                cFlagArrow_div.classList.remove('cFlag_arrow');
                 FLAGS.c_DOM.classList.remove('yellowBg', 'borderBox');
             }
         }
         else if(register_string === 'jumpZ'){
-            jump_arrow.classList.add('jump_arrow');
+            checkJumpArrow_div.classList.add('jump_arrow');
             FLAGS.z_DOM.classList.add('yellowBg', 'borderBox');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                jump_arrow.classList.remove('jump_arrow');
+                checkJumpArrow_div.classList.remove('jump_arrow');
                 FLAGS.z_DOM.classList.remove('yellowBg', 'borderBox');
             }
         }
         else if(register_string === 'jumpC'){
-            jump_arrow.classList.add('jump_arrow');
+            checkJumpArrow_div.classList.add('jump_arrow');
             FLAGS.c_DOM.classList.add('yellowBg', 'borderBox');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                jump_arrow.classList.remove('jump_arrow');
+                checkJumpArrow_div.classList.remove('jump_arrow');
                 FLAGS.c_DOM.classList.remove('yellowBg', 'borderBox');
             }
         }
         else if(register_string === 'jumpS'){
-            jump_arrow.classList.add('jump_arrow');
+            checkJumpArrow_div.classList.add('jump_arrow');
             FLAGS.s_DOM.classList.add('yellowBg', 'borderBox');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                jump_arrow.classList.remove('jump_arrow');
+                checkJumpArrow_div.classList.remove('jump_arrow');
                 FLAGS.s_DOM.classList.remove('yellowBg', 'borderBox');
             }
         }
         else if(register_string === 'jumpP'){
-            jump_arrow.classList.add('jump_arrow');
+            checkJumpArrow_div.classList.add('jump_arrow');
             FLAGS.p_DOM.classList.add('yellowBg', 'borderBox');
             try{
                 await sleepForIDLETIME();
             }
             finally{
-                jump_arrow.classList.remove('jump_arrow');
+                checkJumpArrow_div.classList.remove('jump_arrow');
                 FLAGS.p_DOM.classList.remove('yellowBg', 'borderBox');
             }
         }
@@ -2271,14 +2739,14 @@ const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
 
     //animate register update
     if(!playStatus.noAnim){
-        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
-        yellowBgElement.style.left = String(100/46*14) + '%';
-        yellowBgElement.classList.add('toggleGrid');
+        yellowBgElement_div.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement_div.style.left = String(100/46*14) + '%';
+        yellowBgElement_div.classList.add('toggleGrid');
         try{
             await sleepForIDLETIME();
         }
         finally{
-            yellowBgElement.classList.remove('toggleGrid');
+            yellowBgElement_div.classList.remove('toggleGrid');
         }
     }
 }
@@ -2291,14 +2759,14 @@ const updateRegister_hex4_lo = async(register_class, hex2_dec) => {
 
     //animate register update if Animation is required
     if(!playStatus.noAnim){
-        yellowBgElement.style.top = register_class.DOM.offsetTop + 'px';
-        yellowBgElement.style.left = String(100/46*16) + '%';
-        yellowBgElement.classList.add('toggleGrid');
+        yellowBgElement_div.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement_div.style.left = String(100/46*16) + '%';
+        yellowBgElement_div.classList.add('toggleGrid');
         try{
             await sleepForIDLETIME();
         }
         finally{
-            yellowBgElement.classList.remove('toggleGrid');
+            yellowBgElement_div.classList.remove('toggleGrid');
         }
     }
 }
@@ -2428,7 +2896,7 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
         pathElements.push(ele);
     }
 
-    //create last PathElement (hex-number)
+    //create PathElement (hex-number)
     let reg = document.createElement('h2');
     reg.style.position = 'absolute';
     reg.style.left = String(100/46*(xCoordinate[xCoordinate.length-1])) + '%';
@@ -2716,22 +3184,22 @@ const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
 const setFlagsAnimation = async() => {
     if (!playStatus.noAnim) {
         await addArrow('FLAGS');
-        movingFlags.children[0].textContent = FLAGS.c_dec;
-        movingFlags.children[1].textContent = FLAGS.z_dec;
-        movingFlags.children[2].textContent = FLAGS.p_dec;
-        movingFlags.children[3].textContent = FLAGS.s_dec;
-        movingFlags.classList.add('toggleGrid');
+        movingFlags_div.children[0].textContent = FLAGS.c_dec;
+        movingFlags_div.children[1].textContent = FLAGS.z_dec;
+        movingFlags_div.children[2].textContent = FLAGS.p_dec;
+        movingFlags_div.children[3].textContent = FLAGS.s_dec;
+        movingFlags_div.classList.add('toggleGrid');
         try{
             await sleepForIDLETIME();
             for (let i = 0; i < 21; i++) {
-                movingFlags.style.top = String(100/32*(8-i/20)) + '%';
+                movingFlags_div.style.top = String(100/32*(8-i/20)) + '%';
                 await sleep(1000/FRAMES);  
             }
             await sleepForIDLETIME();
         }
         finally{
-            movingFlags.classList.remove('toggleGrid');
-            movingFlags.style.top = String(100/32*8) + '%';
+            movingFlags_div.classList.remove('toggleGrid');
+            movingFlags_div.style.top = String(100/32*8) + '%';
         }
     }
     FLAGS.updateDOM();
@@ -2760,27 +3228,16 @@ const checkJumpAnimation = async(flag_string) => {
     }
 }
 
-const checkCorrectInput = (input_string) => {
-    const allowedChar = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
-    let check = true;
 
-    input_string = input_string.toUpperCase();
-    if(input_string.length > 2)
-        return false;
-    for (let i = 0; i < input_string.length; i++) {
-        for (let j = 0; j < allowedChar.length; j++) {
-            if(input_string[i] === allowedChar[j]){
-                check = true;
-                break;
-            }
-            else{
-                check = false;
-            }
-        }
-        if(!check)
+
+const checkCorrectInput = (input_string) => {
+    if(checkValidHex(input_string)){
+        if(input_string.length > 2){
             return false;
+        }
+        return true;
     }
-    return true;
+    return false;
 }
 
 //animation of IO-input
@@ -2791,23 +3248,25 @@ const changeIO = async(IOName_string) =>{
     let playStatusBuffer = playStatus.getStatus();
     switch (IOName_string) {
         case 'IO1':
-            IO_input_window_DOM = IO1_input_window;
-            IO_input_DOM = IO1_input;
+            IO_input_window_DOM = io1InputWindow_div;
+            IO_input_DOM = io1Input_input;
             break;
         case 'IO2':
-            IO_input_window_DOM = IO2_input_window;
-            IO_input_DOM = IO2_input;
+            IO_input_window_DOM = io2InputWindow_div;
+            IO_input_DOM = io2Input_input;
             break;
 
         case 'IO3':
-            IO_input_window_DOM = IO3_input_window;
-            IO_input_DOM = IO3_input;
+            IO_input_window_DOM = io3InputWindow_div;
+            IO_input_DOM = io3Input_input;
             break;
     
         default:
             throw Error('Unknown IO');
     }
     IO_input_window_DOM.classList.add('toggleGrid');
+    IO_input_DOM.focus();
+    IO_input_DOM.select();
     try{
         while(check){
             
@@ -2822,22 +3281,22 @@ const changeIO = async(IOName_string) =>{
             }
             else{
                 if (IOName_string === 'IO1') {
-                    document.getElementById('io1Input_info').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
+                    document.getElementById('io1InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                 }
                 else if (IOName_string === 'IO2') {
-                    document.getElementById('io2Input_info').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
+                    document.getElementById('io2InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                 }
                 else if (IOName_string === 'IO3') {
-                    document.getElementById('io3Input_info').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
+                    document.getElementById('io3InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                 }
             }
         }
     }
     finally{
         IO_input_window_DOM.classList.remove('toggleGrid');
-        document.getElementById('io1Input_info').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-        document.getElementById('io2Input_info').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-        document.getElementById('io3Input_info').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+        document.getElementById('io1InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+        document.getElementById('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+        document.getElementById('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
     }
 
     if(playStatusBuffer === 'completeExe')
@@ -2858,7 +3317,6 @@ const readFromMemoryInRegister = async(addressRegister_x4_string, targetRegister
 
     //update decoder without displaying  
     DECODER.update(1,0,0,1,address_dec);
-    
     await addArrow(addressRegister_x4_string);
     
     //determine ROM or RAM
@@ -2868,11 +3326,33 @@ const readFromMemoryInRegister = async(addressRegister_x4_string, targetRegister
         await updateRegister_hex(targetRegister_x2_string, ROM.getValue(address_dec));
     }
     else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+        RAM.updateVariableElements(address_dec);
         await transfer(addressRegister_x4_string, 'RAM2', address_dec);
         await transfer(RAM.getRamElementId(address_dec),targetRegister_x2_string, RAM.getValue(address_dec));
         await updateRegister_hex(targetRegister_x2_string,RAM.getValue(address_dec));
-    } 
-    //Neither ROM or RAM  
+    }
+    
+    else if(!IO1.ioMapped_boolean){
+       if(address_dec === IO1.address_dec){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_dec);
+            await changeIO('IO1');
+            await transfer('IO1', 'A', IO1.dec);
+            await updateRegister_hex('A', IO1.dec);
+        }
+        else if(address_dec === IO2.address_dec){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_dec);
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO2.dec);
+            await updateRegister_hex('A', IO2.dec);
+        }
+        else if(address_dec === IO3.address_dec){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_dec);
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO3.dec);
+            await updateRegister_hex('A', IO3.dec);
+        }
+    }
+    //Neither ROM or RAM  or IO
     else{
         //The address of the addressRegister is unknown.
         //the following code wont be executed completely, because the decoder will interrupt execution
@@ -2904,16 +3384,17 @@ const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_
         await transfer(addressRegister_x4_string, 'ROM2', address_dec);
     }
     else if (address_dec >= RAM.startAddressRam_dec && address_dec< RAM.startAddressRam_dec+RAM.size_dec){
+        RAM.updateVariableElements(address_dec);
         await transfer(addressRegister_x4_string, 'RAM2', address_dec);
         if(!playStatus.noAnim)
             document.getElementById(RAM.getRamElementId(address_dec)).classList.add('yellowBg', 'borderBox');
         try{
             await transfer(DataRegister_x2_string, RAM.getRamElementId(address_dec), data_dec);
         } catch (e) {
+            debugger
             document.getElementById(RAM.getRamElementId(address_dec)).classList.remove('yellowBg', 'borderBox');
             throw e;
         }
-
     }
     //Neither ROM or RAM
     else{
@@ -2932,32 +3413,146 @@ const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_
 }
 
 const readFromIo = async() =>{
-    
-    DECODER.update(1,0,1,0,ZR.lo_dec);
-    await transfer('ZR', 'DEC_UPDATE', ZR.lo_dec);
-    if(ZR.lo_dec === IO1.address_dec){
-        await changeIO('IO1');
-        await transfer('IO1', 'A', IO1.dec);
-        await updateRegister_hex('A', IO1.dec);
+    if(IO1.ioMapped_boolean){
+        DECODER.update(1,0,1,0,ZR.lo_dec);
+        await transfer('ZR', 'DEC_UPDATE', ZR.lo_dec);
+
+        if(IO1.address_dec === IO2.address_dec){
+            if(!IO1.in_boolean){
+                await transfer('A', 'IO2', A.dec);
+                await updateRegister_hex('IO2', A.dec);
+            }
+            else{
+                await transfer('A', 'IO1', A.dec);
+                await updateRegister_hex('IO1', A.dec);
+            }
+        }
+        else if(IO3.address_dec === IO2.address_dec){
+            if(!IO3.in_boolean){
+                await transfer('A', 'IO2', A.dec);
+                await updateRegister_hex('IO2', A.dec);
+            }
+            else{
+                await transfer('A', 'IO3', A.dec);
+                await updateRegister_hex('IO3', A.dec);
+            }
+        }
+        else if(IO1.address_dec === IO3.address_dec){
+            if(!IO1.in_boolean){
+                await transfer('A', 'IO3', A.dec);
+                await updateRegister_hex('IO3', A.dec);
+            }
+            else{
+                await transfer('A', 'IO1', A.dec);
+                await updateRegister_hex('IO1', A.dec);
+            }
+        }
+        else if(ZR.lo_dec === IO1.address_dec){
+            await changeIO('IO1');
+            await transfer('IO1', 'A', IO1.dec);
+            await updateRegister_hex('A', IO1.dec);
+        }
+        else if(ZR.lo_dec === IO2.address_dec){
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO2.dec);
+            await updateRegister_hex('A', IO2.dec);
+        }
+        else if(ZR.lo_dec === IO3.address_dec){
+            await changeIO('IO3');
+            await transfer('IO3', 'A', IO3.dec);
+            await updateRegister_hex('A', IO3.dec);
+        }
+        DECODER.resetDOM();
     }
-    else if(ZR.lo_dec === IO2.address_dec){
-        await changeIO('IO2');
-        await transfer('IO2', 'A', IO2.dec);
-        await updateRegister_hex('A', IO2.dec);
-    }
-    else if(ZR.lo_dec === IO3.address_dec){
-        await changeIO('IO3');
-        await transfer('IO3', 'A', IO3.dec);
-        await updateRegister_hex('A', IO3.dec);
-    }
-    DECODER.resetDOM();
+    else {
+        DECODER.update(1,0,1,0,ZR.dec);
+        await transfer('ZR', 'DEC_UPDATE', ZR.dec);
+        
+        if(IO1.address_dec === IO2.address_dec){
+            if(!IO1.in_boolean){
+                await transfer('A', 'IO2', A.dec);
+                await updateRegister_hex('IO2', A.dec);
+            }
+            else{
+                await transfer('A', 'IO1', A.dec);
+                await updateRegister_hex('IO1', A.dec);
+            }
+        }
+        else if(IO3.address_dec === IO2.address_dec){
+            if(!IO3.in_boolean){
+                await transfer('A', 'IO2', A.dec);
+                await updateRegister_hex('IO2', A.dec);
+            }
+            else{
+                await transfer('A', 'IO3', A.dec);
+                await updateRegister_hex('IO3', A.dec);
+            }
+        }
+        else if(IO1.address_dec === IO3.address_dec){
+            if(!IO1.in_boolean){
+                await transfer('A', 'IO3', A.dec);
+                await updateRegister_hex('IO3', A.dec);
+            }
+            else{
+                await transfer('A', 'IO1', A.dec);
+                await updateRegister_hex('IO1', A.dec);
+            }
+        }
+        else if(ZR.dec === IO1.address_dec){
+            await changeIO('IO1');
+            await transfer('IO1', 'A', IO1.dec);
+            await updateRegister_hex('A', IO1.dec);
+        }
+        else if(ZR.dec === IO2.address_dec){
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO2.dec);
+            await updateRegister_hex('A', IO2.dec);
+        }
+        else if(ZR.dec === IO3.address_dec){
+            await changeIO('IO3');
+            await transfer('IO3', 'A', IO3.dec);
+            await updateRegister_hex('A', IO3.dec);
+        }
+        DECODER.resetDOM();
+    }  
 }
 
 const writeToIo = async() =>{
     
     DECODER.update(0,1,1,0,ZR.lo_dec);
     await transfer('ZR', 'DEC_UPDATE', ZR.lo_dec);
-    if(ZR.lo_dec === IO1.address_dec){
+
+    if(IO1.address_dec === IO2.address_dec){
+        if(IO1.in_boolean){
+            await transfer('A', 'IO2', A.dec);
+            await updateRegister_hex('IO2', A.dec);
+        }
+        else{
+            await transfer('A', 'IO1', A.dec);
+            await updateRegister_hex('IO1', A.dec);
+        }
+    }
+    else if(IO3.address_dec === IO2.address_dec){
+        if(IO3.in_boolean){
+            await transfer('A', 'IO2', A.dec);
+            await updateRegister_hex('IO2', A.dec);
+        }
+        else{
+            await transfer('A', 'IO3', A.dec);
+            await updateRegister_hex('IO3', A.dec);
+        }
+    }
+    else if(IO1.address_dec === IO3.address_dec){
+        if(IO1.in_boolean){
+            await transfer('A', 'IO3', A.dec);
+            await updateRegister_hex('IO3', A.dec);
+        }
+        else{
+            await transfer('A', 'IO1', A.dec);
+            await updateRegister_hex('IO1', A.dec);
+        }
+    }
+    else if(ZR.lo_dec === IO1.address_dec){
         await transfer('A', 'IO1', A.dec);
         await updateRegister_hex('IO1', A.dec);
     }
@@ -3005,8 +3600,8 @@ const loadAddressBytesInZr = async() => {
 /********************************** command animations ****************************** */
 
 const get_next_command = async() => {
-    stepNumber.textContent = '0';
-    assemblerCommand.textContent = '';
+    stepNumber_p.textContent = '0';
+    assemblerCommand_p.textContent = '';
     IR.DOM.textContent = '';
 
     await description_update('Hole den nächsten Befehl');
@@ -3068,7 +3663,7 @@ const twoByteIX = async() => {
     
 
     if(IR.dec === 0b00100001){
-        assemblerCommand.textContent = 'MOV IX, dat_16';
+        assemblerCommand_p.textContent = 'MOV IX, dat_16';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
         await description_update('Hole das niederwertige Byte');
@@ -3079,7 +3674,7 @@ const twoByteIX = async() => {
         await increasePC();
     }
     else if(IR.dec === 0b00101010){
-        assemblerCommand.textContent = 'MOV IX, label';
+        assemblerCommand_p.textContent = 'MOV IX, label';
         await description_update('Hole das niederwertige Adressbyte');
         await readFromMemoryInRegister('PC', 'ZR_lo');
         await increasePC();
@@ -3095,7 +3690,7 @@ const twoByteIX = async() => {
         await readFromMemoryInRegister('ZR', 'IX_hi');
     }
     else if(IR.dec === 0b00100010 ){
-        assemblerCommand.textContent = 'MOV label, IX';
+        assemblerCommand_p.textContent = 'MOV label, IX';
         await description_update('Hole das niederwertige Adressbyte');
         await readFromMemoryInRegister('PC', 'ZR_lo');
         await increasePC();
@@ -3112,19 +3707,19 @@ const twoByteIX = async() => {
 
     }
     else if(IR.dec === 0b00100011){
-        assemblerCommand.textContent = 'INC IX';
+        assemblerCommand_p.textContent = 'INC IX';
         await description_update('Erhöhe die Adresse um 1');
         await addArrow('IX');
         await updateRegister_hex('IX', IX.dec+1);
     }
     else if(IR.dec === 0b00101011){
-        assemblerCommand.textContent = 'DEC IX';
+        assemblerCommand_p.textContent = 'DEC IX';
         await description_update('Verringere die Adresse um 1');
         await addArrow('IX');
         await updateRegister_hex('IX', IX.dec-1);
     }
     else if(IR.dec === 0b11101001){
-        assemblerCommand.textContent = 'JP [IX]';
+        assemblerCommand_p.textContent = 'JP [IX]';
          
     }
     
@@ -3627,7 +4222,7 @@ const twoByteShift = async() => {
 
     if(IR.dec === 0b00100111){
         await addArrow('IR');
-        assemblerCommand.textContent = 'SHL';
+        assemblerCommand_p.textContent = 'SHL';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
         await description_update('Hole den Operanden');
@@ -3639,7 +4234,7 @@ const twoByteShift = async() => {
     }
     else if(IR.dec === 0b00111111){
         await addArrow('IR');
-        assemblerCommand.textContent = 'SHR';
+        assemblerCommand_p.textContent = 'SHR';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
         await description_update('Hole den Operanden');
@@ -3962,6 +4557,7 @@ const init = () => {
     FLAGS.updateDec(0,0,0,0);
     FLAGS.updateDOM();
     DECODER.resetDOM();
+    RAM.updateVariableElements(0);
     DECODER.error = false;
     ALUOUT.DOM.textContent = '';
     ALU1.DOM.textContent = '';
@@ -3974,90 +4570,84 @@ const init = () => {
         movingObject.classList.remove('toggleGrid');
     }catch{}
 
-    stepNumber.textContent = '0';
-    stepDescription.textContent = 'Prozessor angehalten';
-    assemblerCommand.textContent = '';
-    decDisplay.textContent = '';
+    stepNumber_p.textContent = '0';
+    stepDescription_p.textContent = 'Prozessor angehalten';
+    assemblerCommand_p.textContent = '';
+    DECODER.display_DOM.textContent = '';
     
     updateRedRectangle(convertHexToNumber(PC.dec));
 }
 
 /********************************** button functions ****************************** */
-const play_DOM = document.getElementById('play');
-const pause_DOM = document.getElementById('pause');
-const stop_DOM = document.getElementById('stop');
-const slow_DOM = document.getElementById('slow');
-const fast_DOM = document.getElementById('fast');
-const oneCommand_DOM = document.getElementById('oneCommand');
-const singleStep_DOM = document.getElementById('singleStep');
-const fullCommand_DOM = document.getElementById('fullCommand');
 
 const setButtonPressed = () =>{
-
     if(playStatus.play){
-        play_DOM.classList.add('buttonPressed');
+        play_button.classList.add('buttonPressed');
     }else{
         try{
-            play_DOM.classList.remove('buttonPressed');
+            play_button.classList.remove('buttonPressed');
         }catch{}
     }
     if(playStatus.pause){
-        pause_DOM.classList.add('buttonPressed');
+        pause_button.classList.add('buttonPressed');
     }else{
         try{
-            pause_DOM.classList.remove('buttonPressed');
+            pause_button.classList.remove('buttonPressed');
         }catch{}
     }
     if(playStatus.stop){
-        stop_DOM.classList.add('buttonPressed');
+        stop_button.classList.add('buttonPressed');
     }else{
         try{
-            stop_DOM.classList.remove('buttonPressed');
+            stop_button.classList.remove('buttonPressed');
         }catch{}
     }
     if(playStatus.rocketSpeed){
-        fast_DOM.classList.add('buttonPressed');
+        fast_button.classList.add('buttonPressed');
         try{
-            slow_DOM.classList.remove('buttonPressed');
+            slow_button.classList.remove('buttonPressed');
         }catch{}
     }else{
-        slow_DOM.classList.add('buttonPressed');
+        slow_button.classList.add('buttonPressed');
         try{
-            fast_DOM.classList.remove('buttonPressed');
+            fast_button.classList.remove('buttonPressed');
         }catch{}
     }
     if(playStatus.oneCommand){
-        oneCommand_DOM.classList.add('buttonPressed');
+        oneCommand_button.classList.add('buttonPressed');
     }else{
         try{
-            oneCommand_DOM.classList.remove('buttonPressed');
+            oneCommand_button.classList.remove('buttonPressed');
         }catch{}
     }   
     if(playStatus.completeExe){
-        fullCommand_DOM.classList.add('buttonPressed');
+        fullCommand_button.classList.add('buttonPressed');
     }else{
         try{
-            fullCommand_DOM.classList.remove('buttonPressed');
+            fullCommand_button.classList.remove('buttonPressed');
         }catch{}
     }
     if(playStatus.noAnim && !playStatus.completeExe){
-        singleStep_DOM.classList.add('buttonPressed');
+        singleStep_button.classList.add('buttonPressed');
     }else{
         try{
-            singleStep_DOM.classList.remove('buttonPressed');
+            singleStep_button.classList.remove('buttonPressed');
         }catch{}
     }
 }
 setButtonPressed();
-function play(){
 
+function play(){
+    //only when stop is pressed(init), the program will be started anew  
     if(playStatus.stop){ //only when stop is pressed(init), the program will be started anew  
         playStatus.setPlay();
         run_program();
     }
-    playStatus.setPlay();
-    setButtonPressed();
-    
+
+    if(!playStatus.play){
+        playStatus.setPlay();
+        setButtonPressed();
+    }    
 }
 function pause(){
     if(!playStatus.stop)
@@ -4130,7 +4720,7 @@ const runCompleteExecution = () => {
 }
 
 const toggleSettings = () => {
-    settings.classList.toggle('toggleDisplay');
+    containerSettings_div.classList.toggle('toggleDisplay');
 }
 toggleSettings();
 
@@ -4161,7 +4751,7 @@ const openAssembler = () => {
 }
 
 const openInfo = () => {
-    document.getElementById('info_hover').classList.toggle('toggleGrid');
+    document.getElementById('infoWindow_div').classList.toggle('toggleGrid');
 }
 
 /******************************* mc8_commands *********************************** */
@@ -4262,9 +4852,4 @@ const mc8_commands_array = [
 
     nop_command         = new mc8_command('NOP', 0b00000000, 1, [0,0,0,0], nop),
     halt_command        = new mc8_command('HALT', 0b01110110, 1, [0,0,0,0], halt),
-
-
-   
-
-
 ];

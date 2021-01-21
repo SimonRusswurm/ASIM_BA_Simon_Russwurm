@@ -32,6 +32,7 @@ p{ margin: 0; padding: 0; color: #222222; font-family: droid-mono;}
 
 textarea{
     padding: 7% 0% 0% 0%;
+    outline: none; 
 }
 
 button{
@@ -42,7 +43,12 @@ button{
     cursor: pointer;
     background-color: transparent;
     border-color: transparent;
-    box-sizing: border-box;    
+    box-sizing: border-box;
+    outline: none;
+}
+
+input{
+    outline: none;
 }
 
 button:hover{
@@ -54,7 +60,7 @@ button:hover{
     transform: rotate(180deg);
 }
 
-.grid-template{
+.gridTemplate{
     display: grid;
     height: 100%;
     width: 100%;
@@ -138,6 +144,9 @@ button:hover{
 .redBg{
     background-color: #FF1930;
     color: #FBFBFB;
+}
+.lightYellowBg{
+    background-color:   rgb(255, 255, 92);
 }
 
 .arial{
@@ -257,10 +266,10 @@ button:hover{
     position: absolute;
     z-index: 5;
 }
-#movingObject{
+#movingObject_h2{
     color: #222222;
 }
-#movingAlu1, #movingAlu2, #ALUOUT{
+#movingAlu1_h2, #movingAlu2_h2, #ALUOUT{
     color: #222222;
 }
 
@@ -285,17 +294,11 @@ button:hover{
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: 1fr 1fr;
 }
-.Label-000x-1FFx{
-}
 .address-000x-1FFx{
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(2, 1fr);
 }
-.points1{
-    grid-row-start: -2;
-    grid-row-end: -1;
-    grid-column-start: 1;
-    grid-column-end: 3;
+.points{
     background-image: url(images/points.svg);
     background-position: center center;
     background-size: contain;
@@ -342,20 +345,20 @@ button:hover{
 .ioArrowOUT{
     background-image: url(images/IOArrowUP.svg);
 }
-#io1_h1{
+#io1Label_h1{
     top: calc(100%/32*0);
     left: calc(100%/46*12);
 }
-#io1_arrow{
+#io1Arrow_div{
     top: calc(100%/32*0);
     left: calc(100%/46*14);
 }
-#IO1{
+#io1RegisterValue_h2{
     top: calc(100%/32*0);
     left: calc(100%/46*16);
 }
 
-#IO1_input_window{
+#io1InputWindow_div{
     position: absolute;
     top: calc(100%/32*0);
     left: calc(100%/46*12);
@@ -367,19 +370,19 @@ button:hover{
     grid-template-rows: 2fr 4fr;  
 }
 
-#io2_h1{
+#io2Label_h1{
     top: calc(100%/32*0);
     left: calc(100%/46*20);
 }
-#io2_arrow{
+#io2Arrow_div{
     top: calc(100%/32*0);
     left: calc(100%/46*22);
 }
-#IO2{
+#io2RegisterValue_h2{
     top: calc(100%/32*0);
     left: calc(100%/46*24);
 }
-#IO2_input_window{
+#io2InputWindow_div{
     position: absolute;
     top: calc(100%/32*0);
     left: calc(100%/46*20);
@@ -391,19 +394,19 @@ button:hover{
     grid-template-rows: 2fr 4fr;  
 }
 
-#io3_h1{
+#io3Label_h1{
     top: calc(100%/32*0);
     left: calc(100%/46*28);
 }
-#io3_arrow{
+#io3Arrow_div{
     top: calc(100%/32*0);
     left: calc(100%/46*30);
 }
-#IO3{
+#io3RegisterValue_h2{
     top: calc(100%/32*0);
     left: calc(100%/46*32);
 }
-#IO3_input_window{
+#io3InputWindow_div{
     position: absolute;
     top: calc(100%/32*0);
     left: calc(100%/46*28);
@@ -417,11 +420,11 @@ button:hover{
 
 /* ******************************* AKKU/FLAGS ******************************* */
 
-#A{
+#aRegisterValue_h2{
     top: calc(100%/32*6);
     left: calc(100%/46*13);   
 }
-#a{
+#aRegisterLabel_h1{
     top: calc(100%/32*6);
     left: calc(100%/46*12);
 }
@@ -435,7 +438,7 @@ button:hover{
     grid-template-columns: repeat(4, 1fr);
 }
 
-#movingFlags{
+#movingFlags_div{
     position: absolute;
     grid-template-rows: 1fr;
     grid-template-columns: repeat(4, 1fr);
@@ -450,63 +453,63 @@ button:hover{
 
 /* ******************************* REGISTER ******************************* */
 
-#B{
+#bRegisterValue_h2{
     top: calc(100%/32*10);
     left: calc(100%/46*13);   
 }
-#b{
+#bRegisterLabel_h1{
     top: calc(100%/32*10);
     left: calc(100%/46*12);
 }
-#C{
+#cRegisterValue_h2{
     top: calc(100%/32*10);
     left: calc(100%/46*15);   
 }
-#c{
+#cRegisterLabel_h1{
     top: calc(100%/32*10);
     left: calc(100%/46*17);
 }
 
-#HL{
+#hlRegisterValue_h2{
     top: calc(100%/32*12);
     left: calc(100%/46*14);   
 }
-#hl{
+#hlRegisterLabel_h1{
     top: calc(100%/32*12);
     left: calc(100%/46*12);
 }
 
-#IX{
+#ixRegisterValue_h2{
     top: calc(100%/32*14);
     left: calc(100%/46*14);   
 }
-#ix{
+#ixRegisterLabel_h1{
     top: calc(100%/32*14);
     left: calc(100%/46*12);
 }
 
-#SP{
+#spRegisterValue_h2{
     top: calc(100%/32*16);
     left: calc(100%/46*14);   
 }
-#sp{
+#spRegisterLabel_h1{
     top: calc(100%/32*16);
     left: calc(100%/46*12);   
 }
 
-#PC{
+#pcRegisterValue_h2{
     top: calc(100%/32*18);
     left: calc(100%/46*14);   
 }
-#pc{
+#pcRegisterLabel_h1{
     top: calc(100%/32*18);
     left: calc(100%/46*12);
 }
-#ZR{
+#zrRegisterValue_h2{
     top: calc(100%/32*20);
     left: calc(100%/46*14);   
 }
-#zr{
+#zrRegisterLabel_h1{
     top: calc(100%/32*20);
     left: calc(100%/46*12);
 }
@@ -529,19 +532,19 @@ button:hover{
     z-index: 4;
 }
 
-#ALU1{
+#alu1RegisterValue_h2{
     position: absolute;
     top: calc(100%/32*6);
     left: calc(100%/46*24);
 }
 
-#ALU2{
+#alu2RegisterValue_h2{
     position: absolute;
     top: calc(100%/32*6);
     left: calc(100%/46*30);
 }
 
-#ALUOUT{
+#aluOutRegisterValue_h2{
     position: absolute;
     top: calc(100%/32*10);
     left: calc(100%/46*27);
@@ -549,20 +552,20 @@ button:hover{
 
 /* ******************************* CONTROLUNIT ******************************* */
 
-#controlunit{
+.controlUnitLabel{
     top: calc(100%/32*14);
     left: calc(100%/46*22);
     font-family: Arial, Helvetica, sans-serif;
 }
-#ir{
+#irRegisterLabel_h1{
     top: calc(100%/32*14);
     left: calc(100%/46*30);
 }
-#IR{
+#irRegisterValue_h2{
     top: calc(100%/32*14);
     left: calc(100%/46*32);
 }
-#SW1{
+.containerAssemblerCommand{
     top: calc(100%/32*16);
     left: calc(100%/46*22);
     display: grid;
@@ -571,7 +574,7 @@ button:hover{
     grid-template-rows: 1fr;
     grid-template-columns: 5fr 1fr;
 }
-#SW2{
+.containerControlUnit2{
     top: calc(100%/32*18);
     left: calc(100%/46*22);
     display: grid;
@@ -581,7 +584,7 @@ button:hover{
     grid-template-columns: 1fr;
 
 }
-#SW3{
+.containerStepDescription_div{
     display: grid;
     justify-items: center;
     align-items: center;
@@ -590,24 +593,24 @@ button:hover{
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 5fr;
 }
-.sNum{
+.containerStepNumber{
     display: grid;
     justify-items: center;
     align-items: center;
     height: 60%;
     width: 60%;
 }
-#assemblerCommand{
+#assemblerCommand_p{
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
 }
 
-#stepDescription{
+#stepDescription_p{
     justify-self: start;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#SW4{
+.containerDecoderLines{
     display: grid;
     justify-items: center;
     align-items: center;
@@ -617,7 +620,7 @@ button:hover{
     grid-template-columns: 4fr 2fr;
 }
 
-.dec-bits{
+.decoderBits{
     display: grid;
     justify-items: center;
     align-items: center;
@@ -627,13 +630,11 @@ button:hover{
     grid-template-columns: repeat(4, 1fr);
 }
 
-
-
-#dec{
+#deocderLabel_h1{
     top: calc(100%/32*26);
     left: calc(100%/46*26);
 }
-#decDisplay{
+#decDisplay_p{
     top: calc(100%/32*26);
     left: calc(100%/46*28);
     font-family: Arial, Helvetica, sans-serif;
@@ -649,7 +650,7 @@ button:hover{
     background-repeat: no-repeat;
 }
 
-#registerArrow{
+#registerArrow_div{
     position: absolute;
     top: calc(100%/32*10);
     left: calc(100%/46*18);
@@ -760,86 +761,87 @@ button:hover{
     grid-template-columns: repeat(13, 1fr);
 }
 
-#play{
+#play_button{
     background-image: url(images/play_button.svg);
     background-size: 50%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#pause{
+#pause_button{
     background-image: url(images/pause_button.svg);
     background-size: 50%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#stop{
+#stop_button{
     background-image: url(images/stop_button.svg);
     background-size: 50%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#slow{
+#slow_button{
     background-image: url(images/slow_button.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#fast{
+#fast_button{
     background-image: url(images/fast_button.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
-}#increase{
+}
+#increase_button{
     background-image: url(images/increase_button.svg);
     background-size: 50%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#decrease{
+#decrease_button{
     background-image: url(images/decrease_button.svg);
     background-size: 50%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#oneCommand{
+#oneCommand_button{
     background-image: url(images/oneCommand_button.svg);
     background-size: 80%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#singleStep{
+#singleStep_button{
     background-image: url(images/singleStep_button.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#fullCommand{
+#fullCommand_button{
     background-image: url(images/fullCommand.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#settingsButton{
+#settingsButton_button{
     background-image: url(images/settings_button.svg);
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
 }
-#fullscreenButton{
+#fullscreenButton_button{
     background-image: url(images/fullscreen_button.svg);
     background-size: 70%;
     background-position: center center;
     background-repeat: no-repeat;
 }
 
-#toggleTheme{
+#toggleTheme_button{
     background-image: url(images/toggleTheme_button.svg);
     background-size: 70%;
     background-position: center center;
     background-repeat: no-repeat;
 }
 
-/* ---------------------------------Settings--------------------------------------- */
+/* ******************************* settings ******************************* */
 .settingsWindow{
     position: absolute;
     display: none;
@@ -853,7 +855,15 @@ button:hover{
     color: #222222;
     font-family: Arial, Helvetica, sans-serif;
 }
-
+.settingsWindow button{
+    position: absolute;
+    height: calc(100%/26*2);
+    width: calc(100%/39*6);
+    background-color: #96dafc;
+}
+.settingsWindow button:hover{
+    background-color: #19B2FF;
+}
 .textareaFontSize{
     /* font-size: gets changed in JS */
     font-family: Arial, Helvetica, sans-serif;
@@ -894,9 +904,7 @@ button:hover{
     background-color: #96dafc;
 }
 
-
-
-#innerSettings{
+.innerSettings{
     position: absolute;
     background-color: #FBFBFB;
     border: 2px solid #19B2FF;
@@ -906,13 +914,7 @@ button:hover{
     left: calc(100%/46*2);
 }
 
-#configurationRomHeader{
-    position: absolute;
-    top: calc(100%/26*2);
-    left: calc(100%/39*2);
-}
-
-#commandSelect{
+#programSelection_select{
     position: absolute;
     top: calc(100%/26*4);
     left: calc(100%/39*2);
@@ -923,12 +925,7 @@ button:hover{
     box-sizing: border-box;  
 }
 
-#linkerFileHeader{
-    position: absolute;
-    top: calc(100%/26*6);
-    left: calc(100%/39*2);
-}
-#linkerFile{
+#linkerFile_textarea{
     position: absolute;
     top: calc(100%/26*7);
     left: calc(100%/39*2);
@@ -938,13 +935,6 @@ button:hover{
     padding: 0.7% 0.7%;
     resize: none;
     line-height: 130%;
-}
-
-
-#configurationIoHeader{
-    position: absolute;
-    top: calc(100%/26*2);
-    left: calc(100%/39*17);
 }
 
 .ioRectangle{
@@ -960,35 +950,35 @@ button:hover{
     align-items: center;
     width: 90%;
 }
-#io1Address{
+#io1Address_textarea{
     width: 100%;
     height: 100%;  
 }
-#io2Address{
+#io2Address_textarea{
     width: 100%;
     height: 100%;  
 }
-#io3Address{
+#io3Address_textarea{
     width: 100%;
     height: 100%;  
 }
 
 
-#io1Konfig{
+.containerIo1Konfig{
     position: absolute;
     top: calc(100%/26*7);
     left: calc(100%/39*17);
     width: calc(100%/39*6);
     height: calc(100%/26*6);
 }
-#io2Konfig{
+.containerIo2Konfig{
     position: absolute;
     top: calc(100%/26*7);
     left: calc(100%/39*24);
     width: calc(100%/39*6);
     height: calc(100%/26*6);
 }
-#io3Konfig{
+.containerIo3Konfig{
     position: absolute;
     top: calc(100%/26*7);
     left: calc(100%/39*31);
@@ -996,36 +986,31 @@ button:hover{
     height: calc(100%/26*6);
 }
 
-#konfigRAM{
-    position: absolute;
-    top: calc(100%/26*15);
-    left: calc(100%/39*17);
-}
-
-#addressRange{
-    position: absolute;
-    top: calc(100%/26*17);
-    left: calc(100%/39*17);
-}
-
-#addressRAM{
+#ramAddress_select{
     position: absolute;
     top: calc(100%/26*17);
     left: calc(100%/39*22);
 }
 
-#breakpoints_div{
+.containerBreakpoints{
     position: absolute;
     top: calc(100%/26*23);
     left: calc(100%/39*2);
+    height: calc(100%/26*1);
+    width: calc(100%/39*1);
     margin: 0px 0px;
 }
+#breakpointsCheckbox_input{
+    height: 60%;
+    width: 60%;
+}
+
 .noneDisplay{
     display: none;
 }
-#errorWindow{
+#errorWindow_div{
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 4fr;
+    grid-template-rows: 1fr 5fr;
     position: absolute;
     top: calc(100%/26*19);
     left: calc(100%/39*17);
@@ -1034,16 +1019,14 @@ button:hover{
     padding: 0.5%;
     background-color: yellow;
 }
+#errorMessage_textarea{
+    border-top: 0.1px solid #6A6A6A;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
 
-.settingsWindow button{
-    position: absolute;
-    height: calc(100%/26*2);
-    width: calc(100%/39*6);
-    background-color: #96dafc;
-}
-.settingsWindow button:hover{
-    background-color: #19B2FF;
-}
+
 #closeSettings_button{
     top: calc(100%/26*22);
     left: calc(100%/39*31);
@@ -1061,7 +1044,7 @@ button:hover{
     display: unset;
 }
 
-#info_hover{
+#infoWindow_div{
     position: absolute;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
@@ -1096,7 +1079,7 @@ button:hover{
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#rom_hover{
+#romLabelHover_div{
     grid-template-columns: 4fr 2fr 2fr;
     grid-template-rows: repeat(4,1fr);
     top: calc(100%/32*2);
@@ -1104,7 +1087,7 @@ button:hover{
     width: calc(100%/46*10);
     height: calc(100%/32*4);
 }
-#ram_hover{
+#ramLabelHover_div{
     grid-template-columns: 4fr 2fr 2fr;
     grid-template-rows: repeat(4,1fr);
     top: calc(100%/32*2);
@@ -1120,17 +1103,17 @@ button:hover{
     width: calc(100%/46*6);
     height: calc(100%/32*5);
 }
-#io1_hover{
+#io1LabelHover_div{
     left: calc(100%/46*12);
 }
-#io2_hover{
+#io2LabelHover_div{
     left: calc(100%/46*20);
 }
-#io3_hover{
+#io3LabelHover_div{
     left: calc(100%/46*28);
 }
 
-#a_hover{
+#aLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3,1fr);
     top: calc(100%/32*8);
@@ -1138,7 +1121,7 @@ button:hover{
     width: calc(100%/46*7);
     height: calc(100%/32*3);
 }
-#b_hover{
+#bLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3,1fr);
     top: calc(100%/32*12);
@@ -1146,7 +1129,7 @@ button:hover{
     width: calc(100%/46*6);
     height: calc(100%/32*3);
 }
-#c_hover{
+#cLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3,1fr);
     top: calc(100%/32*12);
@@ -1154,7 +1137,7 @@ button:hover{
     width: calc(100%/46*6);
     height: calc(100%/32*3);
 }
-#hl_hover{
+#hlLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*14);
@@ -1162,7 +1145,7 @@ button:hover{
     width: calc(100%/46*7);
     height: calc(100%/32*2);
 }
-#ix_hover{
+#ixLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*16);
@@ -1170,7 +1153,7 @@ button:hover{
     width: calc(100%/46*6);
     height: calc(100%/32*2);
 }
-#sp_hover{
+#spLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*18);
@@ -1178,7 +1161,7 @@ button:hover{
     width: calc(100%/46*6);
     height: calc(100%/32*2);
 }
-#pc_hover{
+#pcLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*20);
@@ -1186,7 +1169,7 @@ button:hover{
     width: calc(100%/46*7);
     height: calc(100%/32*2);
 }
-#zr_hover{
+#zrLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*22);
@@ -1194,7 +1177,7 @@ button:hover{
     width: calc(100%/46*7);
     height: calc(100%/32*2);
 }
-#ir_hover{
+#irLabelHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2,1fr);
     top: calc(100%/32*16);
@@ -1203,7 +1186,7 @@ button:hover{
     height: calc(100%/32*2);
 }
 
-#cFlag_hover{
+#cFlagHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
@@ -1211,7 +1194,7 @@ button:hover{
     width: calc(100%/46*5);
     height: calc(100%/32*1);
 }
-#zFlag_hover{
+#zFlagHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
@@ -1219,7 +1202,7 @@ button:hover{
     width: calc(100%/46*4);
     height: calc(100%/32*1);
 }
-#pFlag_hover{
+#pFlagHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
@@ -1227,7 +1210,7 @@ button:hover{
     width: calc(100%/46*8);
     height: calc(100%/32*1);
 }
-#sFlag_hover{
+#sFlagHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     top: calc(100%/32*5);
@@ -1236,7 +1219,7 @@ button:hover{
     height: calc(100%/32*1);
 }
 
-#dec_hover{
+#decoderHover_div{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 4fr;
     top: calc(100%/32*22);
@@ -1261,43 +1244,43 @@ button:hover{
     height: calc(100%/32*3);
     top: calc(100%/32*27);
 }
-#play_hover{
+#playHover_div{
     left: calc(100%/46*10);
 }
-#pause_hover{
+#pauseHover_div{
     left: calc(100%/46*10);
 }
-#stop_hover{
+#stopHover_div{
     left: calc(100%/46*10);
 }
-#slow_hover{
+#slowHover_div{
     left: calc(100%/46*12);
 }
-#fast_hover{
+#fastHover_div{
     left: calc(100%/46*14);
 }
-#increase_hover{
+#increaseHover_div{
     left: calc(100%/46*16);
 }
-#decrease_hover{
+#decreaseHover_div{
     left: calc(100%/46*18);
 }
-#oneCommand_hover{
+#oneCommandHover_div{
     left: calc(100%/46*20);
 }
-#singleStep_hover{
+#singleStepHover_div{
     left: calc(100%/46*22);
 }
-#fullCommand_hover{
+#fullCommandHover_div{
     left: calc(100%/46*24);
 }
-#settingsButton_hover{
+#settingsButtonHover_div{
     left: calc(100%/46*24);
 }
-#fullscreenButton_hover{  
+#fullscreenButtonHover_div{  
     left: calc(100%/46*26); 
 }
-#toggleTheme_hover{
+#toggleThemeHover_div{
     left: calc(100%/46*26); 
 }
 

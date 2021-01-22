@@ -1,19 +1,19 @@
 //resize window
 
-let containerAspectRatio = document.querySelector(".containerAspectRatio");
-let style = document.querySelector("style");
+let containerAspectRatio_div = document.getElementId('containerAspectRatio_div');
+let masterStyle_style = document.getElementById('masterStyle_style');
 
 
 const resizeWindow = () => {
 	if(window.innerHeight*1.4375 > window.innerWidth){
-        containerAspectRatio.style.width = String(window.innerWidth) + "px";
-        containerAspectRatio.style.height = String(window.innerWidth/1.4375) + "px";
-        style.innerHTML = "h1{font-size: 1.6vw;} p{font-size: 1.2vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}";
+        containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
+        containerAspectRatio_div.style.height = String(window.innerWidth/1.4375) + "px";
+        masterStyle_style.innerHTML = "h1{font-size: 1.6vw;} p{font-size: 1.2vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}";
         
     } else {
-        containerAspectRatio.style.width = String(window.innerHeight*1.4375) + "px";
-        containerAspectRatio.style.height = String(window.innerHeight) + "px";
-        style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
+        containerAspectRatio_div.style.width = String(window.innerHeight*1.4375) + "px";
+        containerAspectRatio_div.style.height = String(window.innerHeight) + "px";
+        masterStyle_style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
     }
 }
 

@@ -691,7 +691,7 @@ class Rom {
         return this.dec_array[address_dec];
     }
 
-    getElementId = (position_dec = PC.dec) => {
+    getElementId(position_dec = PC.dec){
         if (position_dec > 223) {
             let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
             return document.getElementById('romElementVariable' + String(lastValue_dec)).id;
@@ -819,7 +819,7 @@ class Ram {
         }  
     }
 
-    getRamElementId = (position_dec = 0) =>{
+    getRamElementId(position_dec = 0){
         if(position_dec > 8191){
             let x = Math.floor(position_dec/8192);
             position_dec = position_dec - x*8192;

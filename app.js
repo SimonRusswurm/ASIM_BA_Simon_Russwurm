@@ -15,7 +15,7 @@ const resizeWindow = () => {
         containerAspectRatio.style.height = String(window.innerHeight) + "px";
         style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
     }
-
+}
 
 window.addEventListener('DOMContentLoaded', function () {
 	resizeWindow();
@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', function () {
 window.addEventListener('resize', function () {
     resizeWindow();
 });
-}
+
 
 /***************************************** DOM_Selectors *********************************/
 const mc8Container = document.querySelector(".mc8Container");

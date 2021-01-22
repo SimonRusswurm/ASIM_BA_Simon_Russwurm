@@ -29,1244 +29,1244 @@ window.addEventListener('resize', function () {
 console.log('test');
 
 
-// /***************************************** DOM_Selectors *********************************/
-// const mc8Container = document.querySelector(".mc8Container");
-// const assemblerCommand_p = document.getElementById('assemblerCommand_p');
-// const stepNumber_p = document.getElementById('stepNumber_p');
-// const stepDescription_p = document.getElementById('stepDescription_p');
-// const stepNumberBackground = document.getElementsByClassName('containerStepNumber')[0];
-// const registerArrow_div = document.getElementById('registerArrow_div');
-// const irArrow_div = document.getElementById('irArrow_div');
-// const movingFlagsArrow_div = document.getElementById('movingFlagsArrow_div');
-// const cFlagArrow_div = document.getElementById('cFlagArrow_div');
-// const checkJumpArrow_div = document.getElementById('checkJumpArrow_div');
-// const containerSettings_div = document.getElementById('containerSettings_div');
-// const movingFlags_div = document.getElementById('movingFlags_div');
-// const flags_DOM = document.getElementById('flags');
-// const yellowBgElement_div = document.getElementById('yellowBgElement_div');
-// const io1InputWindow_div = document.getElementById('io1InputWindow_div');
-// const io2InputWindow_div = document.getElementById('io2InputWindow_div');
-// const io3InputWindow_div = document.getElementById('io3InputWindow_div');
-// const io1Input_input = document.getElementById('io1Input_input');
-// const io2Input_input = document.getElementById('io2Input_input');
-// const io3Input_input = document.getElementById('io3Input_input');
+/***************************************** DOM_Selectors *********************************/
+const mc8Container = document.querySelector(".mc8Container");
+const assemblerCommand_p = document.getElementById('assemblerCommand_p');
+const stepNumber_p = document.getElementById('stepNumber_p');
+const stepDescription_p = document.getElementById('stepDescription_p');
+const stepNumberBackground = document.getElementsByClassName('containerStepNumber')[0];
+const registerArrow_div = document.getElementById('registerArrow_div');
+const irArrow_div = document.getElementById('irArrow_div');
+const movingFlagsArrow_div = document.getElementById('movingFlagsArrow_div');
+const cFlagArrow_div = document.getElementById('cFlagArrow_div');
+const checkJumpArrow_div = document.getElementById('checkJumpArrow_div');
+const containerSettings_div = document.getElementById('containerSettings_div');
+const movingFlags_div = document.getElementById('movingFlags_div');
+const flags_DOM = document.getElementById('flags');
+const yellowBgElement_div = document.getElementById('yellowBgElement_div');
+const io1InputWindow_div = document.getElementById('io1InputWindow_div');
+const io2InputWindow_div = document.getElementById('io2InputWindow_div');
+const io3InputWindow_div = document.getElementById('io3InputWindow_div');
+const io1Input_input = document.getElementById('io1Input_input');
+const io2Input_input = document.getElementById('io2Input_input');
+const io3Input_input = document.getElementById('io3Input_input');
 
-// const movingObject = document.getElementById('movingObject_h2');
-// const movingAlu1 = document.getElementById('movingAlu1_h2');
-// const movingAlu2 = document.getElementById('movingAlu2_h2');
+const movingObject = document.getElementById('movingObject_h2');
+const movingAlu1 = document.getElementById('movingAlu1_h2');
+const movingAlu2 = document.getElementById('movingAlu2_h2');
 
-// const lastRomLabel_div = document.getElementById('lastRomLabel_div');
-// const lastRomLabel_p = document.getElementById('lastRomLabel_p');
+const lastRomLabel_div = document.getElementById('lastRomLabel_div');
+const lastRomLabel_p = document.getElementById('lastRomLabel_p');
 
-// const middleRamLabel_div = document.getElementById('middleRamLabel_div');
-// const middleRamLabel_p = document.getElementById('middleRamLabel_p');
-
-
-// /***************************************** conversion Hex/Int *********************************/
-// const convertHexToNumber = (hex_string) => {
-//     return parseInt(hex_string, 16);
-// }
-
-// const convertNumberToHex_4digits = (number_dec) => {
-//     number_dec = number_dec.toString(16);
-//     number_dec = number_dec.toUpperCase();
-//     let len = number_dec.length;
-//     for(i=4; i>len;i--){
-//         number_dec = '0' +number_dec;
-//     }
-//     return number_dec;
-// }
-
-// const convertNumberToHex_2digits = (number_dec) => {
-//     number_dec = number_dec.toString(16);
-//     number_dec = number_dec.toUpperCase();
-//     let len = number_dec.length;
-//     for(i=2; i>len;i--){
-//         number_dec = '0' + number_dec;
-//     }
-//     return number_dec;
-// }
-
-// const convertNumberToBinary_8digits = (number_dec) => {
-
-//     let str = (number_dec).toString(2);
-//     const len = str.length;
-//     if(len != 8){
-//         for (let i = 0; i < 8-len; i++) {
-//             str = '0' + str;
-//         }
-//     }
-//     str = str[0] +str[1] +str[2]+str[3]+ ' ' +str[4]+str[5]+str[6]+str[7];
-//     return str;
-// }
-
-// const convertNumberToBinaryArray = (number_dec) => {
-//     let bin = convertNumberToBinary_8digits(number_dec).replace(' ', '');
-//     let buf = [];
-//     for (let i = 0; i < bin.length; i++) {
-//        buf.push(Number(bin[i]));
-//     }
-//     return buf;
-// }
-
-// const convertBinaryToNumber = (binary_dec) => {
-//     let str = '0b' + String(binary_dec);
-//     return Number(str);    
-// }
-
-// const convertNumberToComplementOnTwo = (number_dec) => {
-//     if(number_dec>127){
-//         number_dec = number_dec-256;
-//     }
-//     return number_dec;
-// }
-
-// const checkValidHex = (input_string) => {
-//     const allowedChar = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
-//     let check = true;
-
-//     input_string = input_string.toUpperCase();
-//     for (let i = 0; i < input_string.length; i++) {
-//         for (let j = 0; j < allowedChar.length; j++) {
-//             if(input_string[i] === allowedChar[j]){
-//                 check = true;
-//                 break;
-//             }
-//             else{
-//                 check = false;
-//             }
-//         }
-//         if(!check)
-//             return false;
-//     }
-//     return true;
-// }
+const middleRamLabel_div = document.getElementById('middleRamLabel_div');
+const middleRamLabel_p = document.getElementById('middleRamLabel_p');
 
 
-// const calculateChecksum = (intelHexFormat_string) => {
-//     intelHexFormat_string = intelHexFormat_string.replace(':','');
-//     let sum = 0;
-//     const recordLength = convertHexToNumber(intelHexFormat_string[0] + intelHexFormat_string[1]);
-//     let withoutChecksum = 0;
+/***************************************** conversion Hex/Int *********************************/
+const convertHexToNumber = (hex_string) => {
+    return parseInt(hex_string, 16);
+}
 
-//     if(intelHexFormat_string.length > 2+4+2+recordLength*2){
-//         withoutChecksum = 2;
-//     }
+const convertNumberToHex_4digits = (number_dec) => {
+    number_dec = number_dec.toString(16);
+    number_dec = number_dec.toUpperCase();
+    let len = number_dec.length;
+    for(i=4; i>len;i--){
+        number_dec = '0' +number_dec;
+    }
+    return number_dec;
+}
+
+const convertNumberToHex_2digits = (number_dec) => {
+    number_dec = number_dec.toString(16);
+    number_dec = number_dec.toUpperCase();
+    let len = number_dec.length;
+    for(i=2; i>len;i--){
+        number_dec = '0' + number_dec;
+    }
+    return number_dec;
+}
+
+const convertNumberToBinary_8digits = (number_dec) => {
+
+    let str = (number_dec).toString(2);
+    const len = str.length;
+    if(len != 8){
+        for (let i = 0; i < 8-len; i++) {
+            str = '0' + str;
+        }
+    }
+    str = str[0] +str[1] +str[2]+str[3]+ ' ' +str[4]+str[5]+str[6]+str[7];
+    return str;
+}
+
+const convertNumberToBinaryArray = (number_dec) => {
+    let bin = convertNumberToBinary_8digits(number_dec).replace(' ', '');
+    let buf = [];
+    for (let i = 0; i < bin.length; i++) {
+       buf.push(Number(bin[i]));
+    }
+    return buf;
+}
+
+const convertBinaryToNumber = (binary_dec) => {
+    let str = '0b' + String(binary_dec);
+    return Number(str);    
+}
+
+const convertNumberToComplementOnTwo = (number_dec) => {
+    if(number_dec>127){
+        number_dec = number_dec-256;
+    }
+    return number_dec;
+}
+
+const checkValidHex = (input_string) => {
+    const allowedChar = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+    let check = true;
+
+    input_string = input_string.toUpperCase();
+    for (let i = 0; i < input_string.length; i++) {
+        for (let j = 0; j < allowedChar.length; j++) {
+            if(input_string[i] === allowedChar[j]){
+                check = true;
+                break;
+            }
+            else{
+                check = false;
+            }
+        }
+        if(!check)
+            return false;
+    }
+    return true;
+}
+
+
+const calculateChecksum = (intelHexFormat_string) => {
+    intelHexFormat_string = intelHexFormat_string.replace(':','');
+    let sum = 0;
+    const recordLength = convertHexToNumber(intelHexFormat_string[0] + intelHexFormat_string[1]);
+    let withoutChecksum = 0;
+
+    if(intelHexFormat_string.length > 2+4+2+recordLength*2){
+        withoutChecksum = 2;
+    }
     
-//     for (let i = 0; i < 2+4+2+recordLength*2+withoutChecksum; i= i+2) {
-//         sum +=  convertHexToNumber(intelHexFormat_string[i] + intelHexFormat_string[i+1]);        
-//     }
+    for (let i = 0; i < 2+4+2+recordLength*2+withoutChecksum; i= i+2) {
+        sum +=  convertHexToNumber(intelHexFormat_string[i] + intelHexFormat_string[i+1]);        
+    }
 
-//     sum = convertNumberToHex_4digits(sum);
-//     sum = convertHexToNumber(sum[2]+sum[3]);
+    sum = convertNumberToHex_4digits(sum);
+    sum = convertHexToNumber(sum[2]+sum[3]);
 
-//     let bin_array = convertNumberToBinaryArray(Math.abs(sum));
-//     let one_array =   [0,0,0,0,0,0,0,1];
-//     let carry_array = [0,0,0,0,0,0,0,0,0];
-//     let sum_array =   [0,0,0,0,0,0,0,0];
+    let bin_array = convertNumberToBinaryArray(Math.abs(sum));
+    let one_array =   [0,0,0,0,0,0,0,1];
+    let carry_array = [0,0,0,0,0,0,0,0,0];
+    let sum_array =   [0,0,0,0,0,0,0,0];
 
-//     //invert bin_array
-//     for (let i = 0; i < bin_array.length; i++) {
-//         if (bin_array[i] === 1) {
-//             bin_array[i] = 0;         
-//         }
-//         else
-//             bin_array[i] = 1;  
-//     }
+    //invert bin_array
+    for (let i = 0; i < bin_array.length; i++) {
+        if (bin_array[i] === 1) {
+            bin_array[i] = 0;         
+        }
+        else
+            bin_array[i] = 1;  
+    }
 
-//     //add one to bin_array
-//     for (let i = 8; i > 0; i--) {
-//         if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 1){
-//             carry_array[i-1] = 0;
-//             sum_array[i-1] = 1;
-//         }
-//         else if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 2){
-//             carry_array[i-1] = 1;
-//             sum_array[i-1] = 0;
-//         }
-//         else if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 3){
-//             carry_array[i-1] = 1;
-//             sum_array[i-1] = 1;
-//         }
-//     }
+    //add one to bin_array
+    for (let i = 8; i > 0; i--) {
+        if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 1){
+            carry_array[i-1] = 0;
+            sum_array[i-1] = 1;
+        }
+        else if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 2){
+            carry_array[i-1] = 1;
+            sum_array[i-1] = 0;
+        }
+        else if(bin_array[i-1] + one_array[i-1]+ carry_array[i] === 3){
+            carry_array[i-1] = 1;
+            sum_array[i-1] = 1;
+        }
+    }
 
-//     sum = convertNumberToHex_2digits(convertBinaryToNumber(sum_array.join('')));
-//     return sum;
-// }
-// /***************************************** ALU operations *********************************/
+    sum = convertNumberToHex_2digits(convertBinaryToNumber(sum_array.join('')));
+    return sum;
+}
+/***************************************** ALU operations *********************************/
 
-// //sets the flags, 0 == don't set flag, 1 == setFlag
-// const setFlags = (value_dec, result_bin_array, carry_bin_array, cFlag_dec, zFlag_dec, pFlag_dec,vFlag_dec, sFlag_dec) => {
+//sets the flags, 0 == don't set flag, 1 == setFlag
+const setFlags = (value_dec, result_bin_array, carry_bin_array, cFlag_dec, zFlag_dec, pFlag_dec,vFlag_dec, sFlag_dec) => {
     
-//     //carry flag
-//     if(cFlag_dec){
-//         FLAGS.c_dec = carry_bin_array[0];
-//     }
-//     else{
-//         FLAGS.c_dec = '-';
-//     }
+    //carry flag
+    if(cFlag_dec){
+        FLAGS.c_dec = carry_bin_array[0];
+    }
+    else{
+        FLAGS.c_dec = '-';
+    }
 
-//     //zero flag
-//     if(zFlag_dec){
-//         if(value_dec  === 0)
-//             FLAGS.z_dec = 1;
-//         else
-//             FLAGS.z_dec = 0;
-//     }
-//     else{
-//         FLAGS.z_dec = '-';
-//     }
+    //zero flag
+    if(zFlag_dec){
+        if(value_dec  === 0)
+            FLAGS.z_dec = 1;
+        else
+            FLAGS.z_dec = 0;
+    }
+    else{
+        FLAGS.z_dec = '-';
+    }
 
-//     //sing flag
-//     if(sFlag_dec){
-//         FLAGS.s_dec = result_bin_array[0];
-//     }
-//     else{
-//         FLAGS.s_dec = '-';
-//     }
+    //sing flag
+    if(sFlag_dec){
+        FLAGS.s_dec = result_bin_array[0];
+    }
+    else{
+        FLAGS.s_dec = '-';
+    }
 
-//     //parity flag
-//     if(pFlag_dec){
-//         let cnt = 0;
-//         for (let i = 0; i < result_bin_array.length; i++) {
-//             if(result_bin_array[i])
-//                 cnt += 1;        
-//         }
-//         if(cnt%2 === 0)
-//             FLAGS.p_dec = 1;
-//         else
-//             FLAGS.p_dec = 0;
-//     }
-//     //overflow flag
-//     else if(vFlag_dec){
-//         if((carry_bin_array[0] === 1 && carry_bin_array[1] === 0) || (carry_bin_array[0] === 0 && carry_bin_array[1] === 1))
-//             FLAGS.p_dec = 1;
-//         else
-//             FLAGS.p_dec = 0;
-//     }
-//     else{
-//         FLAGS.p_dec = '-';
-//     }
-// }
+    //parity flag
+    if(pFlag_dec){
+        let cnt = 0;
+        for (let i = 0; i < result_bin_array.length; i++) {
+            if(result_bin_array[i])
+                cnt += 1;        
+        }
+        if(cnt%2 === 0)
+            FLAGS.p_dec = 1;
+        else
+            FLAGS.p_dec = 0;
+    }
+    //overflow flag
+    else if(vFlag_dec){
+        if((carry_bin_array[0] === 1 && carry_bin_array[1] === 0) || (carry_bin_array[0] === 0 && carry_bin_array[1] === 1))
+            FLAGS.p_dec = 1;
+        else
+            FLAGS.p_dec = 0;
+    }
+    else{
+        FLAGS.p_dec = '-';
+    }
+}
 
-// const addBinary = (value1_dec, value2_dec, ersatzAddition_boolean) => {
-//     let value1_bin = convertNumberToBinaryArray(value1_dec);
-//     let value2_bin = convertNumberToBinaryArray(value2_dec);
-//     let carry_bin = [0,0,0,0,0,0,0,0,0];
+const addBinary = (value1_dec, value2_dec, ersatzAddition_boolean) => {
+    let value1_bin = convertNumberToBinaryArray(value1_dec);
+    let value2_bin = convertNumberToBinaryArray(value2_dec);
+    let carry_bin = [0,0,0,0,0,0,0,0,0];
    
-//     if(ersatzAddition_boolean){
-//         carry_bin[8] = 1;
-//         for (let i = 0; i < value2_bin.length; i++) {
-//             if(value2_bin[i] === 0)
-//                 value2_bin[i] = 1;
-//             else
-//                 value2_bin[i] = 0;
-//         }
-//     }
+    if(ersatzAddition_boolean){
+        carry_bin[8] = 1;
+        for (let i = 0; i < value2_bin.length; i++) {
+            if(value2_bin[i] === 0)
+                value2_bin[i] = 1;
+            else
+                value2_bin[i] = 0;
+        }
+    }
         
-//     let sum_bin =   [0,0,0,0,0,0,0,0];
-//     let sum_dec = 0;
+    let sum_bin =   [0,0,0,0,0,0,0,0];
+    let sum_dec = 0;
 
-//     for (let i = 8; i > 0; i--) {
-//         if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 1){
-//             carry_bin[i-1] = 0;
-//             sum_bin[i-1] = 1;
-//         }
-//         else if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 2){
-//             carry_bin[i-1] = 1;
-//             sum_bin[i-1] = 0;
-//         }
-//         else if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 3){
-//             carry_bin[i-1] = 1;
-//             sum_bin[i-1] = 1;
-//         }
-//     }
+    for (let i = 8; i > 0; i--) {
+        if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 1){
+            carry_bin[i-1] = 0;
+            sum_bin[i-1] = 1;
+        }
+        else if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 2){
+            carry_bin[i-1] = 1;
+            sum_bin[i-1] = 0;
+        }
+        else if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 3){
+            carry_bin[i-1] = 1;
+            sum_bin[i-1] = 1;
+        }
+    }
 
 
-//     sum_dec = convertBinaryToNumber(sum_bin.join(''));
+    sum_dec = convertBinaryToNumber(sum_bin.join(''));
      
-//     //set Flags
-//     setFlags(sum_dec, sum_bin, carry_bin, 1,1,0,1,1);
+    //set Flags
+    setFlags(sum_dec, sum_bin, carry_bin, 1,1,0,1,1);
 
-//     //if the addition was a replace-addition switch sign-flag
-//     if(ersatzAddition_boolean){
-//         if(FLAGS.c_dec)
-//             FLAGS.c_dec = 0;
-//         else
-//             FLAGS.c_dec = 1;
-//     }
+    //if the addition was a replace-addition switch sign-flag
+    if(ersatzAddition_boolean){
+        if(FLAGS.c_dec)
+            FLAGS.c_dec = 0;
+        else
+            FLAGS.c_dec = 1;
+    }
 
-//     return sum_dec;
-// }
+    return sum_dec;
+}
 
-// const incBinary = (value_dec) => {
-//     const result_dec = addBinary(value_dec, 1,false);
-//     FLAGS.c_dec = '-';
-//     return result_dec;
-// }
+const incBinary = (value_dec) => {
+    const result_dec = addBinary(value_dec, 1,false);
+    FLAGS.c_dec = '-';
+    return result_dec;
+}
 
-// const decBinary = (value_dec) => {
-//     const result_dec = addBinary(value_dec, 1, true);
-//     FLAGS.c_dec = '-';
-//     return result_dec;
-// }
+const decBinary = (value_dec) => {
+    const result_dec = addBinary(value_dec, 1, true);
+    FLAGS.c_dec = '-';
+    return result_dec;
+}
 
-// const andBinary = (value1_dec, value2_dec) => {
-//     let value1_bin = convertNumberToBinaryArray(value1_dec);
-//     let value2_bin = convertNumberToBinaryArray(value2_dec);
-//     let result_bin =   [0,0,0,0,0,0,0,0];
-//     let result_dec = 0;
+const andBinary = (value1_dec, value2_dec) => {
+    let value1_bin = convertNumberToBinaryArray(value1_dec);
+    let value2_bin = convertNumberToBinaryArray(value2_dec);
+    let result_bin =   [0,0,0,0,0,0,0,0];
+    let result_dec = 0;
  
 
-//     for (let i = 8; i > 0; i--) {
-//         if(value1_bin[i-1] && value2_bin[i-1]){
-//             result_bin[i-1] = 1;
-//         }
-//     }
+    for (let i = 8; i > 0; i--) {
+        if(value1_bin[i-1] && value2_bin[i-1]){
+            result_bin[i-1] = 1;
+        }
+    }
 
-//     result_dec = convertBinaryToNumber(result_bin.join(''));
+    result_dec = convertBinaryToNumber(result_bin.join(''));
 
-//     setFlags(result_dec, result_bin, [0], 1, 1,1,0,1);
+    setFlags(result_dec, result_bin, [0], 1, 1,1,0,1);
     
-//     return result_dec;
-// }
+    return result_dec;
+}
 
-// const orBinary = (value1_dec, value2_dec) => {
-//     let value1_bin = convertNumberToBinaryArray(value1_dec);
-//     let value2_bin = convertNumberToBinaryArray(value2_dec);
-//     let result_bin =   [0,0,0,0,0,0,0,0];
-//     let result_dec = 0;
+const orBinary = (value1_dec, value2_dec) => {
+    let value1_bin = convertNumberToBinaryArray(value1_dec);
+    let value2_bin = convertNumberToBinaryArray(value2_dec);
+    let result_bin =   [0,0,0,0,0,0,0,0];
+    let result_dec = 0;
 
-//     for (let i = 8; i > 0; i--) {
-//         if(value1_bin[i-1] || value2_bin[i-1]){
-//             result_bin[i-1] = 1;
-//         }
-//     }
+    for (let i = 8; i > 0; i--) {
+        if(value1_bin[i-1] || value2_bin[i-1]){
+            result_bin[i-1] = 1;
+        }
+    }
 
-//     result_dec = convertBinaryToNumber(result_bin.join(''));
+    result_dec = convertBinaryToNumber(result_bin.join(''));
 
-//     setFlags(result_dec, result_bin, [0], 1,1,1,0,1);
-    
-    
-//     return result_dec;
-// }
-
-// const xorBinary = (value1_dec, value2_dec) => {
-//     let value1_bin = convertNumberToBinaryArray(value1_dec);
-//     let value2_bin = convertNumberToBinaryArray(value2_dec);
-//     let result_bin =   [0,0,0,0,0,0,0,0];
-//     let result_dec = 0;
-
-//     for (let i = 8; i > 0; i--) {
-//         if(value1_bin[i-1] ^ value2_bin[i-1]){
-//             result_bin[i-1] = 1;
-//         }
-//     }
-
-//     result_dec = convertBinaryToNumber(result_bin.join(''));
-
-//     setFlags(result_dec, result_bin, [0], 1,1,1,0,1);
+    setFlags(result_dec, result_bin, [0], 1,1,1,0,1);
     
     
-//     return result_dec;
-// }
+    return result_dec;
+}
 
-// const shlBinary = (value_dec) => {
-//     let value_bin = convertNumberToBinaryArray(value_dec);
-//     let result_dec = 0;
-//     let firstBit = value_bin[0];
+const xorBinary = (value1_dec, value2_dec) => {
+    let value1_bin = convertNumberToBinaryArray(value1_dec);
+    let value2_bin = convertNumberToBinaryArray(value2_dec);
+    let result_bin =   [0,0,0,0,0,0,0,0];
+    let result_dec = 0;
 
-//     for (let i = 0; i < value_bin.length-1; i++) {
-//         value_bin[i] = value_bin[i+1];        
-//     }
-//     value_bin[7] = 0;
+    for (let i = 8; i > 0; i--) {
+        if(value1_bin[i-1] ^ value2_bin[i-1]){
+            result_bin[i-1] = 1;
+        }
+    }
 
-//     result_dec = convertBinaryToNumber(value_bin.join(''));
+    result_dec = convertBinaryToNumber(result_bin.join(''));
 
-//     setFlags(result_dec, value_bin, [firstBit], 1,1,1,0,1);
+    setFlags(result_dec, result_bin, [0], 1,1,1,0,1);
     
-//     return result_dec;
-// }
-
-// const shrBinary = (value_dec) => {
-//     let value_bin = convertNumberToBinaryArray(value_dec);
-//     let result_dec = 0;
-//     let lastBit = value_bin[7];
-
-//     for (let i = 7; i > 0; i--) {
-//         value_bin[i] = value_bin[i-1];        
-//     }
-//     value_bin[0] = 0;
-
-//     result_dec = convertBinaryToNumber(value_bin.join(''));
-
-//     setFlags(result_dec, value_bin, [lastBit], 1,1,1,0,1);
     
-//     return result_dec;
-// }
+    return result_dec;
+}
 
-// const rclBinary = (value_dec) => {
-//     let value_bin = convertNumberToBinaryArray(value_dec);
-//     let result_dec = 0;
+const shlBinary = (value_dec) => {
+    let value_bin = convertNumberToBinaryArray(value_dec);
+    let result_dec = 0;
+    let firstBit = value_bin[0];
 
-//     //save bit position 7 for setFlags ( [7,6,5,4,3,2,1,0])
-//     let carry_dec = value_bin[0];
+    for (let i = 0; i < value_bin.length-1; i++) {
+        value_bin[i] = value_bin[i+1];        
+    }
+    value_bin[7] = 0;
 
-//     //shift all bits left
-//     for (let i = 0; i < value_bin.length-1; i++) {
-//         value_bin[i] = value_bin[i+1];        
-//     }
+    result_dec = convertBinaryToNumber(value_bin.join(''));
 
-//     //write carry-flag in bit position 0 
-//     value_bin[7] = FLAGS.c_dec;
-
-//     result_dec = convertBinaryToNumber(value_bin.join(''));
-
-//     //set flags
-//     setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    setFlags(result_dec, value_bin, [firstBit], 1,1,1,0,1);
     
-//     return result_dec;
-// }
+    return result_dec;
+}
 
-// const rolBinary = (value_dec) => {
-//     let value_bin = convertNumberToBinaryArray(value_dec);
-//     let result_dec = 0;
+const shrBinary = (value_dec) => {
+    let value_bin = convertNumberToBinaryArray(value_dec);
+    let result_dec = 0;
+    let lastBit = value_bin[7];
 
-//     //save bit position 7 for setFlags [7,6,5,4,3,2,1,0]
-//     //                                  ^
-//     let carry_dec = value_bin[0];
+    for (let i = 7; i > 0; i--) {
+        value_bin[i] = value_bin[i-1];        
+    }
+    value_bin[0] = 0;
 
-//     //shift all bits left
-//     for (let i = 0; i < value_bin.length-1; i++) {
-//         value_bin[i] = value_bin[i+1];        
-//     }
+    result_dec = convertBinaryToNumber(value_bin.join(''));
 
-//     //write former bit 7 in bit position 0 
-//     value_bin[7] = carry_dec;
-
-//     result_dec = convertBinaryToNumber(value_bin.join(''));
-
-//     setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    setFlags(result_dec, value_bin, [lastBit], 1,1,1,0,1);
     
-//     return result_dec;
-// }
+    return result_dec;
+}
 
-// const rcrBinary = (value_dec) => {
-//     let value_bin = convertNumberToBinaryArray(value_dec);
-//     let result_dec = 0;
+const rclBinary = (value_dec) => {
+    let value_bin = convertNumberToBinaryArray(value_dec);
+    let result_dec = 0;
 
-//     //save bit position 0 for setFlags ([7,6,5,4,3,2,1,0])
-//     let carry_dec = value_bin[7];
+    //save bit position 7 for setFlags ( [7,6,5,4,3,2,1,0])
+    let carry_dec = value_bin[0];
 
-//     for (let i = 7; i > 0; i--) {
-//         value_bin[i] = value_bin[i-1];        
-//     }
+    //shift all bits left
+    for (let i = 0; i < value_bin.length-1; i++) {
+        value_bin[i] = value_bin[i+1];        
+    }
 
-//     //write carry-flag into bit 7
-//     value_bin[0] = FLAGS.c_dec;
+    //write carry-flag in bit position 0 
+    value_bin[7] = FLAGS.c_dec;
 
-//     result_dec = convertBinaryToNumber(value_bin.join(''));
+    result_dec = convertBinaryToNumber(value_bin.join(''));
 
-//     setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    //set flags
+    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
     
-//     return result_dec;
-// }
+    return result_dec;
+}
 
-// const rorBinary = (value_dec) => {
-//     let value_bin = convertNumberToBinaryArray(value_dec);
-//     let result_dec = 0;
+const rolBinary = (value_dec) => {
+    let value_bin = convertNumberToBinaryArray(value_dec);
+    let result_dec = 0;
 
-//     //save bit position 0 for setFlags ([7,6,5,4,3,2,1,0])
-//     let carry_dec = value_bin[7];
+    //save bit position 7 for setFlags [7,6,5,4,3,2,1,0]
+    //                                  ^
+    let carry_dec = value_bin[0];
 
-//     for (let i = 7; i > 0; i--) {
-//         value_bin[i] = value_bin[i-1];        
-//     }
+    //shift all bits left
+    for (let i = 0; i < value_bin.length-1; i++) {
+        value_bin[i] = value_bin[i+1];        
+    }
 
-//     //write former bit 0 into bit 7
-//     value_bin[0] = carry_dec;
+    //write former bit 7 in bit position 0 
+    value_bin[7] = carry_dec;
 
-//     result_dec = convertBinaryToNumber(value_bin.join(''));
+    result_dec = convertBinaryToNumber(value_bin.join(''));
 
-//     setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
     
-//     return result_dec;
-// }
+    return result_dec;
+}
 
-// /*************************************************************** Classes ***************************************************************/
-// class PlayStatus{
-//     constructor(){
-//         this.play = false;
-//         this.stop = true;
-//         this.pause = false;
-//         this.oneCommand = false;
-//         this.noAnim = false;
-//         this.completeExe = false;
-//         this.rocketSpeed = false;
-//     }
+const rcrBinary = (value_dec) => {
+    let value_bin = convertNumberToBinaryArray(value_dec);
+    let result_dec = 0;
 
-//     getStatus(){
-//         if(this.completeExe)
-//             return 'completeExe';
-//         else if(this.rocketSpeed)
-//             return 'rocketSpeed';
-//         else if(this.noAnim)
-//             return 'noAnim';
-//     }
+    //save bit position 0 for setFlags ([7,6,5,4,3,2,1,0])
+    let carry_dec = value_bin[7];
 
-//     setPlay(){
-//         this.play = true;
-//         this.stop = false;
-//         this.pause = false;
-//     }
+    for (let i = 7; i > 0; i--) {
+        value_bin[i] = value_bin[i-1];        
+    }
 
-//     setPause(){
-//         this.play = false;
-//         this.stop = false;
-//         this.pause = true;
-//         this.completeExe = false;
-//         this.noAnim = false;
-//     }
+    //write carry-flag into bit 7
+    value_bin[0] = FLAGS.c_dec;
 
-//     setStop(){
-//         this.play = false;
-//         this.stop = true;
-//         this.pause = false;
-//         this.oneCommand = false;
-//         this.noAnim = false;
-//         this.completeExe = false;
-//     }
-//     setOneCommand(){
-//         this.oneCommand = true;
-//     }
+    result_dec = convertBinaryToNumber(value_bin.join(''));
 
-//     setCompleteExecution(){
-//         this.noAnim = true;
-//         this.completeExe = true;
-//     }
+    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    
+    return result_dec;
+}
 
-//     setNoAnimation(){
-//         this.noAnim = true;
-//     }
+const rorBinary = (value_dec) => {
+    let value_bin = convertNumberToBinaryArray(value_dec);
+    let result_dec = 0;
 
-//     setRocketSpeed(){
-//         this.rocketSpeed = true;
-//     }
+    //save bit position 0 for setFlags ([7,6,5,4,3,2,1,0])
+    let carry_dec = value_bin[7];
 
-//     setSnailSpeed(){
-//         this.rocketSpeed = false;
-//     }
+    for (let i = 7; i > 0; i--) {
+        value_bin[i] = value_bin[i-1];        
+    }
 
-// }
+    //write former bit 0 into bit 7
+    value_bin[0] = carry_dec;
 
-// /******************************* ROM/RAM *********************************** */
-// class Rom {
-// 	constructor() {
-//         this.breakpoints_array = this.initBreakpoints();
-//         this.dec_array = this.init_dec();
-//         this.init_DOM();	
-//         this.startAddressRom_dec = 0;
-//         this.size_dec = 8192;
-// 	}
+    result_dec = convertBinaryToNumber(value_bin.join(''));
+
+    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    
+    return result_dec;
+}
+
+/*************************************************************** Classes ***************************************************************/
+class PlayStatus{
+    constructor(){
+        this.play = false;
+        this.stop = true;
+        this.pause = false;
+        this.oneCommand = false;
+        this.noAnim = false;
+        this.completeExe = false;
+        this.rocketSpeed = false;
+    }
+
+    getStatus(){
+        if(this.completeExe)
+            return 'completeExe';
+        else if(this.rocketSpeed)
+            return 'rocketSpeed';
+        else if(this.noAnim)
+            return 'noAnim';
+    }
+
+    setPlay(){
+        this.play = true;
+        this.stop = false;
+        this.pause = false;
+    }
+
+    setPause(){
+        this.play = false;
+        this.stop = false;
+        this.pause = true;
+        this.completeExe = false;
+        this.noAnim = false;
+    }
+
+    setStop(){
+        this.play = false;
+        this.stop = true;
+        this.pause = false;
+        this.oneCommand = false;
+        this.noAnim = false;
+        this.completeExe = false;
+    }
+    setOneCommand(){
+        this.oneCommand = true;
+    }
+
+    setCompleteExecution(){
+        this.noAnim = true;
+        this.completeExe = true;
+    }
+
+    setNoAnimation(){
+        this.noAnim = true;
+    }
+
+    setRocketSpeed(){
+        this.rocketSpeed = true;
+    }
+
+    setSnailSpeed(){
+        this.rocketSpeed = false;
+    }
+
+}
+
+/******************************* ROM/RAM *********************************** */
+class Rom {
+	constructor() {
+        this.breakpoints_array = this.initBreakpoints();
+        this.dec_array = this.init_dec();
+        this.init_DOM();	
+        this.startAddressRom_dec = 0;
+        this.size_dec = 8192;
+	}
 	
-// 	init_dec() {
-// 		let buf_arr = [];
-// 		for (let i = 0; i < 8192; i++){
-//             buf_arr.push(255);
-//         }
+	init_dec() {
+		let buf_arr = [];
+		for (let i = 0; i < 8192; i++){
+            buf_arr.push(255);
+        }
             
-// 		return buf_arr;	
-//     }
-//     initBreakpoints(){
-//         let buf_arr = [];
-// 		for (let i = 0; i < 8192; i++){
-//             buf_arr.push(0);
-//         }
-// 		return buf_arr;	
-//     }
-//     resetBreakpoints() {
-//         let buf_arr = [];
-// 		for (let i = 0; i < 8192; i++){
-//             buf_arr.push(0);
-//         } 
-//         this.breakpoints_array = buf_arr;
-//         for(let i = 0; i<224; i++){
-//             try{
-//                 document.getElementById('romElement' + String(i)).classList.remove('blueText');
-//             }catch (e){}
-// 		}	
-//     }
+		return buf_arr;	
+    }
+    initBreakpoints(){
+        let buf_arr = [];
+		for (let i = 0; i < 8192; i++){
+            buf_arr.push(0);
+        }
+		return buf_arr;	
+    }
+    resetBreakpoints() {
+        let buf_arr = [];
+		for (let i = 0; i < 8192; i++){
+            buf_arr.push(0);
+        } 
+        this.breakpoints_array = buf_arr;
+        for(let i = 0; i<224; i++){
+            try{
+                document.getElementById('romElement' + String(i)).classList.remove('blueText');
+            }catch (e){}
+		}	
+    }
 	
-// 	init_DOM() {
-//         let j = 0;
-//         //old 224
-// 	    for(var i = 0; i<240; i++){
-// 	        //create a romElement
-// 	        let romElement = document.createElement('p');
-// 	        romElement.classList.add('square1x1', 'positionAbsolute', 'centered');
-// 	        romElement.id = "romElement" + String(i);
+	init_DOM() {
+        let j = 0;
+        //old 224
+	    for(var i = 0; i<240; i++){
+	        //create a romElement
+	        let romElement = document.createElement('p');
+	        romElement.classList.add('square1x1', 'positionAbsolute', 'centered');
+	        romElement.id = "romElement" + String(i);
 	
-// 	        //after every 8th romElement -> new line should be filled
-// 	        if(!(i%8) && i !== 0)
-// 	            j++;
+	        //after every 8th romElement -> new line should be filled
+	        if(!(i%8) && i !== 0)
+	            j++;
     
-//             if(i>=224){
-//                 romElement.id = "romElementVariable" + String(i-224);
-//                 romElement.textContent = '';
-//             }
-//             else{
-//                 romElement.textContent = 'FF';
-//             }
+            if(i>=224){
+                romElement.id = "romElementVariable" + String(i-224);
+                romElement.textContent = '';
+            }
+            else{
+                romElement.textContent = 'FF';
+            }
 
-// 	        //define Position of romElement
-// 	        romElement.style.top = String(100/32*(j+2)) + "%";
-// 	        romElement.style.left = String(100/46*((i%8)+2)) + "%";
+	        //define Position of romElement
+	        romElement.style.top = String(100/32*(j+2)) + "%";
+	        romElement.style.left = String(100/46*((i%8)+2)) + "%";
 	
-// 	        //add romElement to body
-// 	        mc8Container.appendChild(romElement);    
-// 	    }
-// 	    return true;
-//     }
+	        //add romElement to body
+	        mc8Container.appendChild(romElement);    
+	    }
+	    return true;
+    }
 
-//     update() {
-//         this.resetBreakpoints();
-// 		let buf_string = '';
-//         let linker_string = linkerFile_textarea.value.replace(/\r\n|\n|\r/gm, '');
-// 		this.dec_array = this.init_dec();
-// 		//update dec_arr
-// 		for (let i = 0; i < linker_string.length; i++) {
-//         	if(linker_string[i] === ':'){
-//             	if(linker_string[i+8] === '1')
-//                 	break;
-//                 let length = Number(linker_string[i+2]);
-//                 let address = convertHexToNumber(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
+    update() {
+        this.resetBreakpoints();
+		let buf_string = '';
+        let linker_string = linkerFile_textarea.value.replace(/\r\n|\n|\r/gm, '');
+		this.dec_array = this.init_dec();
+		//update dec_arr
+		for (let i = 0; i < linker_string.length; i++) {
+        	if(linker_string[i] === ':'){
+            	if(linker_string[i+8] === '1')
+                	break;
+                let length = Number(linker_string[i+2]);
+                let address = convertHexToNumber(linker_string[i+3]+linker_string[i+4]+linker_string[i+5]+linker_string[i+6]);
                 
-//                 //load data
-//             	for (let j = 0; j < length; j++) {
-//                     if(j===0)
-//                         this.breakpoints_array[address+j] = 1;
-//                     this.dec_array[address+j] = convertHexToNumber(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
-//             	}   
-//         	}
-//         }
+                //load data
+            	for (let j = 0; j < length; j++) {
+                    if(j===0)
+                        this.breakpoints_array[address+j] = 1;
+                    this.dec_array[address+j] = convertHexToNumber(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
+            	}   
+        	}
+        }
         
 		
-//         //update DOM        
-// 		for(let i = 0; i<224; i++){
-//         	buf_string = this.dec_array[i].toString(16).toUpperCase();
-//         	if(buf_string.length === 1) //if number is smaller than 10 -->Bsp(0F) 
-//             	buf_string = '0' + buf_string;
-//             document.getElementById("romElement" + String(i)).textContent = buf_string;
+        //update DOM        
+		for(let i = 0; i<224; i++){
+        	buf_string = this.dec_array[i].toString(16).toUpperCase();
+        	if(buf_string.length === 1) //if number is smaller than 10 -->Bsp(0F) 
+            	buf_string = '0' + buf_string;
+            document.getElementById("romElement" + String(i)).textContent = buf_string;
 
-//             //add blue if breakpoints is checked
-//             if(breakpointsCheckbox_input.checked && this.breakpoints_array[i]){
-//                 document.getElementById("romElement" + String(i)).classList.add('blueText');
-//             }
-// 		}
-//     }
+            //add blue if breakpoints is checked
+            if(breakpointsCheckbox_input.checked && this.breakpoints_array[i]){
+                document.getElementById("romElement" + String(i)).classList.add('blueText');
+            }
+		}
+    }
 
-//     updateVariableElements(address_dec){
-//         if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== lastRomLabel_p.textContent.slice(0,-1)){
-//             if(address_dec > 223 && address_dec < 8192){
-//                 lastRomLabel_div.classList.remove('ellipses');
-//                 lastRomLabel_p.textContent = convertNumberToHex_4digits(address_dec).slice(0,-1)+'x';
-//                 lastRomLabel_div.classList.add('lightYellowBg');
+    updateVariableElements(address_dec){
+        if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== lastRomLabel_p.textContent.slice(0,-1)){
+            if(address_dec > 223 && address_dec < 8192){
+                lastRomLabel_div.classList.remove('ellipses');
+                lastRomLabel_p.textContent = convertNumberToHex_4digits(address_dec).slice(0,-1)+'x';
+                lastRomLabel_div.classList.add('lightYellowBg');
     
-//                 address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
+                address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
     
-//                 for (let i = 0; i < 16; i++) {
-//                     document.getElementById("romElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
-//                 }
-//             }
-//             else if(lastRomLabel_p.textContent !== '') {
-//                 lastRomLabel_div.classList.add('ellipses');
-//                 lastRomLabel_div.classList.remove('lightYellowBg');
-//                 lastRomLabel_p.textContent = '';
-//                 for (let i = 0; i < 16; i++) {
-//                     document.getElementById("romElementVariable" + String(i)).textContent = '';
-//                 }
-//             } 
-//         }  
-//     }
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("romElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
+                }
+            }
+            else if(lastRomLabel_p.textContent !== '') {
+                lastRomLabel_div.classList.add('ellipses');
+                lastRomLabel_div.classList.remove('lightYellowBg');
+                lastRomLabel_p.textContent = '';
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("romElementVariable" + String(i)).textContent = '';
+                }
+            } 
+        }  
+    }
     
-//     getValue(address_dec) {
-//         return this.dec_array[address_dec];
-//     }
+    getValue(address_dec) {
+        return this.dec_array[address_dec];
+    }
 
-//     getElementId(position_dec = PC.dec){
-//         if (position_dec > 223) {
-//             let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
-//             return document.getElementById('romElementVariable' + String(lastValue_dec)).id;
+    getElementId(position_dec = PC.dec){
+        if (position_dec > 223) {
+            let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
+            return document.getElementById('romElementVariable' + String(lastValue_dec)).id;
 
-//         }
-//         return document.getElementById('romElement' + String(position_dec)).id;
-//     } 
-// }
+        }
+        return document.getElementById('romElement' + String(position_dec)).id;
+    } 
+}
 
-// class Ram {
-//     constructor() {
-//         this.startAddressRam_dec = 8192;
-//         this.size_dec = 8192;
-// 		this.dec_array = this.init_dec();
-//         this.init_DOM();	
-// 	}
+class Ram {
+    constructor() {
+        this.startAddressRam_dec = 8192;
+        this.size_dec = 8192;
+		this.dec_array = this.init_dec();
+        this.init_DOM();	
+	}
 	
-// 	init_dec() {
-// 		let buf_arr = [];
-// 		for (let i = 0; i < 8192; i++)
-//         	buf_arr.push(255);
-// 		return buf_arr;	
-//     }
+	init_dec() {
+		let buf_arr = [];
+		for (let i = 0; i < 8192; i++)
+        	buf_arr.push(255);
+		return buf_arr;	
+    }
 	
-// 	init_DOM = () => {
-//         let j = 0;
-//         for(var i = 0; i<240; i++){
-//             //create a ramElement (same CSS as romElement)
-//             let ramElement = document.createElement('p');
-//             ramElement.classList.add('square1x1', 'positionAbsolute', 'centered');
-//             if(i<112){
-//                 ramElement.id = 'ramElement' + String(i);
-//                 ramElement.textContent = 'FF';
-//             }
-//             else if(i>127){
-//                 ramElement.id = 'ramElement' + String(i+8192-240);
-//                 ramElement.textContent = 'FF';
-//             }
-//             else{
-//                 ramElement.id = "ramElementVariable" + String(i-112);
-//                 ramElement.textContent = '';
-//             }
+	init_DOM = () => {
+        let j = 0;
+        for(var i = 0; i<240; i++){
+            //create a ramElement (same CSS as romElement)
+            let ramElement = document.createElement('p');
+            ramElement.classList.add('square1x1', 'positionAbsolute', 'centered');
+            if(i<112){
+                ramElement.id = 'ramElement' + String(i);
+                ramElement.textContent = 'FF';
+            }
+            else if(i>127){
+                ramElement.id = 'ramElement' + String(i+8192-240);
+                ramElement.textContent = 'FF';
+            }
+            else{
+                ramElement.id = "ramElementVariable" + String(i-112);
+                ramElement.textContent = '';
+            }
     
-//             //after every 8th romElement -> new line should be filled
-//             if(!(i%8) && i !== 0)
-//                 j++;
+            //after every 8th romElement -> new line should be filled
+            if(!(i%8) && i !== 0)
+                j++;
 
-//             //define Position of romElement
-//             ramElement.style.top = String(100/32*(j+2)) + "%";
-//             ramElement.style.left = String(100/46*((i%8)+36)) + "%";
+            //define Position of romElement
+            ramElement.style.top = String(100/32*(j+2)) + "%";
+            ramElement.style.left = String(100/46*((i%8)+36)) + "%";
     
-//             //add romElement to body
-//             mc8Container.appendChild(ramElement);    
-//         }
-//         return true;
-//     }
+            //add romElement to body
+            mc8Container.appendChild(ramElement);    
+        }
+        return true;
+    }
 
-//     reset(){
-//         for (let i = 0; i < this.dec_array.length; i++) {
-//             this.dec_array[i] = 255;
-//             if(i<112){
-//                 document.getElementById('ramElement' + String(i)).textContent = 'FF';
-//             }
-//             if(i>8192-113){
-//                 document.getElementById('ramElement' + String(i)).textContent ='FF';
-//             }
+    reset(){
+        for (let i = 0; i < this.dec_array.length; i++) {
+            this.dec_array[i] = 255;
+            if(i<112){
+                document.getElementById('ramElement' + String(i)).textContent = 'FF';
+            }
+            if(i>8192-113){
+                document.getElementById('ramElement' + String(i)).textContent ='FF';
+            }
                 
             
-//         }
-//     }
+        }
+    }
 
-//     getValue(address_dec) {
-//         if(address_dec > 8191){
-//             let x = Math.floor(address_dec/8192);
-//             address_dec = address_dec - x*8192;
-//         }
-//         return this.dec_array[address_dec];
-//     }
+    getValue(address_dec) {
+        if(address_dec > 8191){
+            let x = Math.floor(address_dec/8192);
+            address_dec = address_dec - x*8192;
+        }
+        return this.dec_array[address_dec];
+    }
     
-//     getHexValue(address_dec) {
-//         return convertNumberToHex_2digits(this.dec_array[address_dec]);
-//     }
+    getHexValue(address_dec) {
+        return convertNumberToHex_2digits(this.dec_array[address_dec]);
+    }
 
-//     update(address_dec, number_dec){
-//         if(address_dec > 8191){
-//             let x = Math.floor(address_dec/8192);
-//             address_dec = address_dec - x*8192;
-//         }
-//         this.dec_array[address_dec] = number_dec;
-//         if(address_dec < 112 || address_dec > 8191-112){
-//             document.getElementById('ramElement' + String(address_dec)).textContent = convertNumberToHex_2digits(number_dec);
-//         }
-//         else{
-//             let buf = convertHexToNumber(convertNumberToHex_4digits(address_dec)[3]);
-//             document.getElementById("ramElementVariable" + String(buf)).textContent = convertNumberToHex_2digits(number_dec);
-//         }
-//     }
+    update(address_dec, number_dec){
+        if(address_dec > 8191){
+            let x = Math.floor(address_dec/8192);
+            address_dec = address_dec - x*8192;
+        }
+        this.dec_array[address_dec] = number_dec;
+        if(address_dec < 112 || address_dec > 8191-112){
+            document.getElementById('ramElement' + String(address_dec)).textContent = convertNumberToHex_2digits(number_dec);
+        }
+        else{
+            let buf = convertHexToNumber(convertNumberToHex_4digits(address_dec)[3]);
+            document.getElementById("ramElementVariable" + String(buf)).textContent = convertNumberToHex_2digits(number_dec);
+        }
+    }
 
-//     updateVariableElements(address_dec){
-//         let x = 0;
-//         if(address_dec > 8191){
-//             x = Math.floor(address_dec/8192);
-//             address_dec = address_dec - x*8192;
-//         }
+    updateVariableElements(address_dec){
+        let x = 0;
+        if(address_dec > 8191){
+            x = Math.floor(address_dec/8192);
+            address_dec = address_dec - x*8192;
+        }
 
-//         if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== middleRamLabel_p.textContent.slice(0,-1)){
-//             if(address_dec > 111 && address_dec <= 8191-112){
-//                 middleRamLabel_div.classList.remove('ellipses');
-//                 middleRamLabel_div.classList.add('lightYellowBg');
-//                 middleRamLabel_p.textContent = convertNumberToHex_4digits(address_dec+x*8192).slice(0,-1)+'x';
-//                 address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
+        if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== middleRamLabel_p.textContent.slice(0,-1)){
+            if(address_dec > 111 && address_dec <= 8191-112){
+                middleRamLabel_div.classList.remove('ellipses');
+                middleRamLabel_div.classList.add('lightYellowBg');
+                middleRamLabel_p.textContent = convertNumberToHex_4digits(address_dec+x*8192).slice(0,-1)+'x';
+                address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
     
-//                 for (let i = 0; i < 16; i++) {
-//                     document.getElementById("ramElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
-//                 }
-//             }
-//             else if(middleRamLabel_p.textContent !== '') {
-//                 middleRamLabel_div.classList.add('ellipses');
-//                 middleRamLabel_div.classList.remove('lightYellowBg');
-//                 middleRamLabel_p.textContent = '';
-//                 for (let i = 0; i < 16; i++) {
-//                     document.getElementById("ramElementVariable" + String(i)).textContent = '';
-//                 }
-//             } 
-//         }  
-//     }
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("ramElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
+                }
+            }
+            else if(middleRamLabel_p.textContent !== '') {
+                middleRamLabel_div.classList.add('ellipses');
+                middleRamLabel_div.classList.remove('lightYellowBg');
+                middleRamLabel_p.textContent = '';
+                for (let i = 0; i < 16; i++) {
+                    document.getElementById("ramElementVariable" + String(i)).textContent = '';
+                }
+            } 
+        }  
+    }
 
-//     getRamElementId(position_dec = 0){
-//         if(position_dec > 8191){
-//             let x = Math.floor(position_dec/8192);
-//             position_dec = position_dec - x*8192;
-//         }
+    getRamElementId(position_dec = 0){
+        if(position_dec > 8191){
+            let x = Math.floor(position_dec/8192);
+            position_dec = position_dec - x*8192;
+        }
 
-//         if(position_dec > 111 && position_dec < 8191-111){
-//             let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
-//             return document.getElementById('ramElementVariable' + String(lastValue_dec)).id;
-//         }
-//         else
-//             return document.getElementById('ramElement' + String(position_dec)).id;
-//     }
+        if(position_dec > 111 && position_dec < 8191-111){
+            let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
+            return document.getElementById('ramElementVariable' + String(lastValue_dec)).id;
+        }
+        else
+            return document.getElementById('ramElement' + String(position_dec)).id;
+    }
 
-// }
+}
 
 
-// /******************************* Register *********************************** */
+/******************************* Register *********************************** */
 
-// class Register_x2 {
-// 	constructor(register_DOM){
-// 		this.DOM = register_DOM;
-// 		this.dec = 0;
-// 	}
+class Register_x2 {
+	constructor(register_DOM){
+		this.DOM = register_DOM;
+		this.dec = 0;
+	}
 	
-// 	update(value_dec){
-//         if(value_dec > 255)
-//             value_dec -= 256;
-//         if(value_dec < 0)
-//             value_dec = 255;
-// 		this.dec = value_dec;
-// 		this.DOM.textContent = convertNumberToHex_2digits(value_dec);		
-// 	}
+	update(value_dec){
+        if(value_dec > 255)
+            value_dec -= 256;
+        if(value_dec < 0)
+            value_dec = 255;
+		this.dec = value_dec;
+		this.DOM.textContent = convertNumberToHex_2digits(value_dec);		
+	}
 	
-// }
+}
 
-// class Register_x4 {
-// 	constructor(register_DOM){
-// 		this.dec = 0;
-//         this.DOM = register_DOM;
-// 		this.hi_dec = 0;
-// 		this.lo_dec = 0;
-// 	}
+class Register_x4 {
+	constructor(register_DOM){
+		this.dec = 0;
+        this.DOM = register_DOM;
+		this.hi_dec = 0;
+		this.lo_dec = 0;
+	}
 	
-// 	update(value_dec){
-//         if(value_dec > 65535)
-//             value_dec -= 65536;
-//         if(value_dec < 0)
-//             value_dec = 65535;
-//         this.dec = value_dec;
-//         this.DOM.textContent = convertNumberToHex_4digits(value_dec);
-//         this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
-//         this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
-// 	}	
+	update(value_dec){
+        if(value_dec > 65535)
+            value_dec -= 65536;
+        if(value_dec < 0)
+            value_dec = 65535;
+        this.dec = value_dec;
+        this.DOM.textContent = convertNumberToHex_4digits(value_dec);
+        this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
+        this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
+	}	
 	
-// 	update_lo(decimal_number){
-// 		let buf_string = this.DOM.textContent;
-// 		this.lo_dec = decimal_number;
-//         this.DOM.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
-//         this.dec = convertHexToNumber(this.DOM.textContent);
-// 	}
+	update_lo(decimal_number){
+		let buf_string = this.DOM.textContent;
+		this.lo_dec = decimal_number;
+        this.DOM.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
+        this.dec = convertHexToNumber(this.DOM.textContent);
+	}
 	
-// 	update_hi(decimal_number){
-// 		let buf_string = this.DOM.textContent;
-// 		this.hi_dec = decimal_number;
-//         this.DOM.textContent = convertNumberToHex_2digits(decimal_number) + buf_string[2] + buf_string[3];
-//         this.dec = convertHexToNumber(this.DOM.textContent);
-// 	}
-// }
+	update_hi(decimal_number){
+		let buf_string = this.DOM.textContent;
+		this.hi_dec = decimal_number;
+        this.DOM.textContent = convertNumberToHex_2digits(decimal_number) + buf_string[2] + buf_string[3];
+        this.dec = convertHexToNumber(this.DOM.textContent);
+	}
+}
 
-// class Pc_class extends Register_x4{
-//     constructor(register_DOM){
-// 		super(register_DOM);
-//     }
-//     update(value_dec){
-//         if(value_dec > 65535)
-//             value_dec -= 65536;
-//         if(value_dec < 0)
-//             value_dec = 65535;
-//         this.dec = value_dec;
-//         this.DOM.textContent = convertNumberToHex_4digits(value_dec);
-//         this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
-//         this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
+class Pc_class extends Register_x4{
+    constructor(register_DOM){
+		super(register_DOM);
+    }
+    update(value_dec){
+        if(value_dec > 65535)
+            value_dec -= 65536;
+        if(value_dec < 0)
+            value_dec = 65535;
+        this.dec = value_dec;
+        this.DOM.textContent = convertNumberToHex_4digits(value_dec);
+        this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
+        this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
 
-//         updateRedRectangle(PC.dec);
-//         ROM.updateVariableElements(value_dec);
-//         if(this.dec > RAM.startAddressRam_dec)
-//             RAM.updateVariableElements(value_dec);
+        updateRedRectangle(PC.dec);
+        ROM.updateVariableElements(value_dec);
+        if(this.dec > RAM.startAddressRam_dec)
+            RAM.updateVariableElements(value_dec);
     
-//     }
-// }
+    }
+}
 
-// class IO extends Register_x2 {
-//     constructor(register_DOM, address_dec, io1IN_boolean){
-// 		super(register_DOM);
-//         this.address_dec = address_dec;
-//         this.ioMapped_boolean = true;
-//         this.in_boolean = io1IN_boolean;
-//     }
+class IO extends Register_x2 {
+    constructor(register_DOM, address_dec, io1IN_boolean){
+		super(register_DOM);
+        this.address_dec = address_dec;
+        this.ioMapped_boolean = true;
+        this.in_boolean = io1IN_boolean;
+    }
     
-//     updateAddress(address_dec, ioMapped_boolean){
-//         this.address = address_dec;
-//         this.ioMapped_boolean = ioMapped_boolean;
-//     }
-// }
+    updateAddress(address_dec, ioMapped_boolean){
+        this.address = address_dec;
+        this.ioMapped_boolean = ioMapped_boolean;
+    }
+}
 
-// class Decoder {
-//     constructor(wr_DOM, rd_DOM, m_DOM, io_DOM, decDisplay_DOM){
-//         this.wr_DOM = wr_DOM;
-//         this.rd_DOM = rd_DOM;
-//         this.m_DOM = m_DOM;
-//         this.io_DOM = io_DOM;
-//         this.WR = 1;
-//         this.RD = 1;
-//         this.M = 1;
-//         this.IO = 1;
-//         this.display_DOM = decDisplay_DOM;
-//         this.text_string = '';
-//         this.error = false;
-//         this.ramAccess = false;
-//         this.ioAccess = false;
-//     }
+class Decoder {
+    constructor(wr_DOM, rd_DOM, m_DOM, io_DOM, decDisplay_DOM){
+        this.wr_DOM = wr_DOM;
+        this.rd_DOM = rd_DOM;
+        this.m_DOM = m_DOM;
+        this.io_DOM = io_DOM;
+        this.WR = 1;
+        this.RD = 1;
+        this.M = 1;
+        this.IO = 1;
+        this.display_DOM = decDisplay_DOM;
+        this.text_string = '';
+        this.error = false;
+        this.ramAccess = false;
+        this.ioAccess = false;
+    }
 	
-// 	update(wr_dec, rd_dec, m_dec, io_dec, address_dec){
-//         this.WR = wr_dec;
-//         this.RD = rd_dec;
-//         this.M = m_dec;
-//         this.IO = io_dec;
+	update(wr_dec, rd_dec, m_dec, io_dec, address_dec){
+        this.WR = wr_dec;
+        this.RD = rd_dec;
+        this.M = m_dec;
+        this.IO = io_dec;
 
-//         //read from memory
-//         if(rd_dec === 0 && m_dec === 0){
-//             this.ioAccess = false;
-//             if(address_dec < 8192){
-//                 this.text_string = 'Lese von ROM';
-//                 this.ramAccess = false;
-//             }   
-//             else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
-//                 this.ramAccess = true;
-//                 this.text_string = 'Lese von RAM';
-//             }
-//             else if(address_dec === IO1.address_dec){
-//                 this.ioAccess = true;
-//                 if(IO1.in_boolean){
-//                     this.text_string = 'Lese von IN1';
-//                 }
-//                 else{
-//                     this.text_string = 'Lese von OUT1';
-//                     this.error = true;
-//                 }
-//             }
-//             else if (address_dec === IO2.address_dec){
-//                 this.ioAccess = true;
-//                 if(IO2.in_boolean)
-//                     this.text_string = 'Lese von IN2';
-//                 else{
-//                     this.text_string = 'Lese von OUT2';
-//                     this.error = true;
-//                 }
-//             }
-//             else if (address_dec === IO3.address_dec){
-//                 this.ioAccess = true;
-//                 if(IO3.in_boolean)
-//                     this.text_string = 'Lese von IN3';
-//                 else{
-//                     this.text_string = 'Lese von OUT3';
-//                     this.error = true;
-//                 }
-//             }   
-//             else{
-//                 this.ramAccess = false;
-//                 this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
-//                 this.error = true;
-//             }
+        //read from memory
+        if(rd_dec === 0 && m_dec === 0){
+            this.ioAccess = false;
+            if(address_dec < 8192){
+                this.text_string = 'Lese von ROM';
+                this.ramAccess = false;
+            }   
+            else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+                this.ramAccess = true;
+                this.text_string = 'Lese von RAM';
+            }
+            else if(address_dec === IO1.address_dec){
+                this.ioAccess = true;
+                if(IO1.in_boolean){
+                    this.text_string = 'Lese von IN1';
+                }
+                else{
+                    this.text_string = 'Lese von OUT1';
+                    this.error = true;
+                }
+            }
+            else if (address_dec === IO2.address_dec){
+                this.ioAccess = true;
+                if(IO2.in_boolean)
+                    this.text_string = 'Lese von IN2';
+                else{
+                    this.text_string = 'Lese von OUT2';
+                    this.error = true;
+                }
+            }
+            else if (address_dec === IO3.address_dec){
+                this.ioAccess = true;
+                if(IO3.in_boolean)
+                    this.text_string = 'Lese von IN3';
+                else{
+                    this.text_string = 'Lese von OUT3';
+                    this.error = true;
+                }
+            }   
+            else{
+                this.ramAccess = false;
+                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            }
                 
-//         }
-//         //write to memory
-//         else if (wr_dec === 0 && m_dec === 0){
-//             this.ioAccess = false;
-//             if(address_dec < 8192){
-//                 this.ramAccess = false;
-//                 this.text_string = 'Schreibe auf ROM';
-//                 this.error = true;
-//             } 
-//             else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
-//                 this.ramAccess = true;
-//                 this.text_string = 'Schreibe auf RAM';
-//             }
-//             else if(address_dec === IO1.address_dec){
-//                 this.ioAccess = true;
-//                 if(!IO1.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT1';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf IN1';
-//                     this.error = true;
-//                 }                
-//             }
-//             else if (address_dec === IO2.address_dec){
-//                 this.ioAccess = true;
-//                 if(!IO2.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT2';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf IN2';
-//                     this.error = true;
-//                 }   
-//             }
-//             else if (address_dec === IO3.address_dec){
-//                 this.ioAccess = true;
-//                 if(!IO3.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT3';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf IN3';
-//                     this.error = true;
-//                 }   
-//             }
-//             else{
-//                 this.ramAccess = false;
-//                 this.text_string = 'Schreibe auf ???\nAdresse: ' + convertNumberToHex_2digits(address_dec);
-//                 this.error = true;
-//             } 
-//         }
-//         //read IO
-//         else if(rd_dec === 0 && io_dec === 0){
-//             this.ioAccess = true;
+        }
+        //write to memory
+        else if (wr_dec === 0 && m_dec === 0){
+            this.ioAccess = false;
+            if(address_dec < 8192){
+                this.ramAccess = false;
+                this.text_string = 'Schreibe auf ROM';
+                this.error = true;
+            } 
+            else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+                this.ramAccess = true;
+                this.text_string = 'Schreibe auf RAM';
+            }
+            else if(address_dec === IO1.address_dec){
+                this.ioAccess = true;
+                if(!IO1.in_boolean){
+                    this.text_string = 'Schreibe auf OUT1';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN1';
+                    this.error = true;
+                }                
+            }
+            else if (address_dec === IO2.address_dec){
+                this.ioAccess = true;
+                if(!IO2.in_boolean){
+                    this.text_string = 'Schreibe auf OUT2';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN2';
+                    this.error = true;
+                }   
+            }
+            else if (address_dec === IO3.address_dec){
+                this.ioAccess = true;
+                if(!IO3.in_boolean){
+                    this.text_string = 'Schreibe auf OUT3';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN3';
+                    this.error = true;
+                }   
+            }
+            else{
+                this.ramAccess = false;
+                this.text_string = 'Schreibe auf ???\nAdresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            } 
+        }
+        //read IO
+        else if(rd_dec === 0 && io_dec === 0){
+            this.ioAccess = true;
 
-//             if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
-//                 if(IO1.in_boolean){
-//                     this.text_string = 'Lese von IN1';
-//                 }
-//                 else{
-//                     this.text_string = 'Lese von IN2';
-//                 }
-//             }
-//             else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
-//                 if(IO1.in_boolean){
-//                     this.text_string = 'Lese von IN1';
-//                 }
-//                 else{
-//                     this.text_string = 'Lese von IN3';
-//                 }
-//             }
-//             else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
-//                 if(IO2.in_boolean){
-//                     this.text_string = 'Lese von IN2';
-//                 }
-//                 else{
-//                     this.text_string = 'Lese von IN3';
-//                 }
-//             }
+            if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
+                if(IO1.in_boolean){
+                    this.text_string = 'Lese von IN1';
+                }
+                else{
+                    this.text_string = 'Lese von IN2';
+                }
+            }
+            else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
+                if(IO1.in_boolean){
+                    this.text_string = 'Lese von IN1';
+                }
+                else{
+                    this.text_string = 'Lese von IN3';
+                }
+            }
+            else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
+                if(IO2.in_boolean){
+                    this.text_string = 'Lese von IN2';
+                }
+                else{
+                    this.text_string = 'Lese von IN3';
+                }
+            }
 
-//             else if(address_dec === IO1.address_dec){
-//                 if(IO1.in_boolean){
-//                     this.text_string = 'Lese von IN1';
-//                 }
-//                 else{
-//                     this.text_string = 'Lese von OUT1';
-//                     this.error = true;
-//                 }
-//             }
-//             else if (address_dec === IO2.address_dec){
-//                 if(IO2.in_boolean)
-//                     this.text_string = 'Lese von IN2';
-//                 else{
-//                     this.text_string = 'Lese von OUT2';
-//                     this.error = true;
-//                 }
-//             }
-//             else if (address_dec === IO3.address_dec){
-//                 if(IO3.in_boolean)
-//                     this.text_string = 'Lese von IN3';
-//                 else{
-//                     this.text_string = 'Lese von OUT3';
-//                     this.error = true;
-//                 }
-//             }
-//             else{
-//                 this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
-//                 this.error = true;
-//             }
-//         }
-//         //write IO
-//         else if(wr_dec === 0 && io_dec === 0){
-//             this.ioAccess = true;
+            else if(address_dec === IO1.address_dec){
+                if(IO1.in_boolean){
+                    this.text_string = 'Lese von IN1';
+                }
+                else{
+                    this.text_string = 'Lese von OUT1';
+                    this.error = true;
+                }
+            }
+            else if (address_dec === IO2.address_dec){
+                if(IO2.in_boolean)
+                    this.text_string = 'Lese von IN2';
+                else{
+                    this.text_string = 'Lese von OUT2';
+                    this.error = true;
+                }
+            }
+            else if (address_dec === IO3.address_dec){
+                if(IO3.in_boolean)
+                    this.text_string = 'Lese von IN3';
+                else{
+                    this.text_string = 'Lese von OUT3';
+                    this.error = true;
+                }
+            }
+            else{
+                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            }
+        }
+        //write IO
+        else if(wr_dec === 0 && io_dec === 0){
+            this.ioAccess = true;
 
-//             if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
-//                 if(!IO1.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT1';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf OUT2';
-//                 }
-//             }
-//             else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
-//                 if(!IO1.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT1';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf OUT3';
-//                 }
-//             }
-//             else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
-//                 if(!IO2.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT2';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf OUT3';
-//                 }
-//             }
+            if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
+                if(!IO1.in_boolean){
+                    this.text_string = 'Schreibe auf OUT1';
+                }
+                else{
+                    this.text_string = 'Schreibe auf OUT2';
+                }
+            }
+            else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
+                if(!IO1.in_boolean){
+                    this.text_string = 'Schreibe auf OUT1';
+                }
+                else{
+                    this.text_string = 'Schreibe auf OUT3';
+                }
+            }
+            else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
+                if(!IO2.in_boolean){
+                    this.text_string = 'Schreibe auf OUT2';
+                }
+                else{
+                    this.text_string = 'Schreibe auf OUT3';
+                }
+            }
             
-//             else if(address_dec === IO1.address_dec){
-//                 if(!IO1.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT1';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf IN1';
-//                     this.error = true;
-//                 }                
-//             }
-//             else if (address_dec === IO2.address_dec){
-//                 if(!IO2.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT2';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf IN2';
-//                     this.error = true;
-//                 }   
-//             }
-//             else if (address_dec === IO3.address_dec){
-//                 if(!IO3.in_boolean){
-//                     this.text_string = 'Schreibe auf OUT3';
-//                 }
-//                 else{
-//                     this.text_string = 'Schreibe auf IN3';
-//                     this.error = true;
-//                 }   
-//             }
-//             else{
-//                 this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
-//                 this.error = true;
-//             }
-//         }
-//     }
+            else if(address_dec === IO1.address_dec){
+                if(!IO1.in_boolean){
+                    this.text_string = 'Schreibe auf OUT1';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN1';
+                    this.error = true;
+                }                
+            }
+            else if (address_dec === IO2.address_dec){
+                if(!IO2.in_boolean){
+                    this.text_string = 'Schreibe auf OUT2';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN2';
+                    this.error = true;
+                }   
+            }
+            else if (address_dec === IO3.address_dec){
+                if(!IO3.in_boolean){
+                    this.text_string = 'Schreibe auf OUT3';
+                }
+                else{
+                    this.text_string = 'Schreibe auf IN3';
+                    this.error = true;
+                }   
+            }
+            else{
+                this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.error = true;
+            }
+        }
+    }
     
-//     updateDOM(){
-//         this.wr_DOM.textContent = this.WR;
-//         this.rd_DOM.textContent = this.RD;
-//         this.m_DOM.textContent = this.M;
-//         this.io_DOM.textContent = this.IO;
-//         this.display_DOM.textContent = this.text_string;
-//         if(this.ramAccess || this.ioAccess)
-//             this.display_DOM.classList.add('yellowBg');
-//         if(this.error){
-//             this.display_DOM.classList.add('redBg');
-//             throw Error('Decoder error');
-//         }
-//     }
+    updateDOM(){
+        this.wr_DOM.textContent = this.WR;
+        this.rd_DOM.textContent = this.RD;
+        this.m_DOM.textContent = this.M;
+        this.io_DOM.textContent = this.IO;
+        this.display_DOM.textContent = this.text_string;
+        if(this.ramAccess || this.ioAccess)
+            this.display_DOM.classList.add('yellowBg');
+        if(this.error){
+            this.display_DOM.classList.add('redBg');
+            throw Error('Decoder error');
+        }
+    }
 
-//     resetDOM() {
-//         this.wr_DOM.textContent = '';
-//         this.rd_DOM.textContent = '';
-//         this.m_DOM.textContent = '';
-//         this.io_DOM.textContent = '';
-//         this.display_DOM.textContent = '';
-//         try{
-//             this.display_DOM.classList.remove('yellowBg');
-//         }catch{}
-//         try{
-//             this.display_DOM.classList.remove('redBg');
-//         }catch{}
-//     }
-// }
+    resetDOM() {
+        this.wr_DOM.textContent = '';
+        this.rd_DOM.textContent = '';
+        this.m_DOM.textContent = '';
+        this.io_DOM.textContent = '';
+        this.display_DOM.textContent = '';
+        try{
+            this.display_DOM.classList.remove('yellowBg');
+        }catch{}
+        try{
+            this.display_DOM.classList.remove('redBg');
+        }catch{}
+    }
+}
 
-// /******************************* Flags *********************************** */
+/******************************* Flags *********************************** */
 
-// class Flags {
-// 	constructor(c_flag_DOM, z_flag_DOM, p_flag_DOM, s_flag_DOM){
-// 		this.c_dec = 0;
-// 		this.z_dec = 0;
-// 		this.p_dec = 0;
-// 		this.s_dec = 0;
-// 		this.c_DOM = c_flag_DOM;
-// 		this.z_DOM = z_flag_DOM;
-// 		this.p_DOM = p_flag_DOM;
-//         this.s_DOM = s_flag_DOM;
-//         this.dec = 0;
-//         this.DOM = flags_DOM;
-//     }
-//     update(value_dec){
-//         let bin_array = convertNumberToBinaryArray(value_dec);
-//         this.c_dec = bin_array[7];
-//         this.z_dec = bin_array[5];
-//         this.p_dec = bin_array[1];
-//         this.s_dec = bin_array[0];
-//         this.updateDOM()
+class Flags {
+	constructor(c_flag_DOM, z_flag_DOM, p_flag_DOM, s_flag_DOM){
+		this.c_dec = 0;
+		this.z_dec = 0;
+		this.p_dec = 0;
+		this.s_dec = 0;
+		this.c_DOM = c_flag_DOM;
+		this.z_DOM = z_flag_DOM;
+		this.p_DOM = p_flag_DOM;
+        this.s_DOM = s_flag_DOM;
+        this.dec = 0;
+        this.DOM = flags_DOM;
+    }
+    update(value_dec){
+        let bin_array = convertNumberToBinaryArray(value_dec);
+        this.c_dec = bin_array[7];
+        this.z_dec = bin_array[5];
+        this.p_dec = bin_array[1];
+        this.s_dec = bin_array[0];
+        this.updateDOM()
 
-//     }
-//     updateDec(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec){
-//         let buf = c
-//         this.c_dec = cFlag_dec;
-// 		this.z_dec = zFlag_dec;
-// 		this.p_dec = pFlag_dec;
-//         this.s_dec = sFlag_dec;
-//     }
+    }
+    updateDec(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec){
+        let buf = c
+        this.c_dec = cFlag_dec;
+		this.z_dec = zFlag_dec;
+		this.p_dec = pFlag_dec;
+        this.s_dec = sFlag_dec;
+    }
 	
-// 	updateDOM(){
-//         if(this.c_dec === '-')
-//             this.c_dec = 0;
-//         if(this.z_dec === '-')
-//             this.z_dec = 0;
-//         if(this.p_dec === '-')
-//             this.p_dec = 0;
-//         if(this.s_dec === '-')
-//             this.s_dec = 0;
-//         this.dec = convertBinaryToNumber([this.s_dec, this.p_dec, 0,0,0,this.z_dec,0,this.c_dec].join(''));
-// 		this.c_DOM.textContent = this.c_dec.toString();
-// 		this.z_DOM.textContent = this.z_dec.toString();
-// 		this.p_DOM.textContent = this.p_dec.toString();
-// 		this.s_DOM.textContent = this.s_dec.toString();
-// 	}	
-// }
+	updateDOM(){
+        if(this.c_dec === '-')
+            this.c_dec = 0;
+        if(this.z_dec === '-')
+            this.z_dec = 0;
+        if(this.p_dec === '-')
+            this.p_dec = 0;
+        if(this.s_dec === '-')
+            this.s_dec = 0;
+        this.dec = convertBinaryToNumber([this.s_dec, this.p_dec, 0,0,0,this.z_dec,0,this.c_dec].join(''));
+		this.c_DOM.textContent = this.c_dec.toString();
+		this.z_DOM.textContent = this.z_dec.toString();
+		this.p_DOM.textContent = this.p_dec.toString();
+		this.s_DOM.textContent = this.s_dec.toString();
+	}	
+}
 
-// /******************************* mc8_command ********************************* */
+/******************************* mc8_command ********************************* */
 
-// class mc8_command {
-//     constructor(assembler_notation_string, machineCommand_dec, bytes, flags_array, animationFunction){
-//         this.assembler_notation_string = assembler_notation_string;
-//         this.machineCommand_dec = machineCommand_dec;
-//         this.bytes = bytes;
-//         this.flags_array = flags_array;
-//         this.animationFunction = animationFunction;
-//     }
+class mc8_command {
+    constructor(assembler_notation_string, machineCommand_dec, bytes, flags_array, animationFunction){
+        this.assembler_notation_string = assembler_notation_string;
+        this.machineCommand_dec = machineCommand_dec;
+        this.bytes = bytes;
+        this.flags_array = flags_array;
+        this.animationFunction = animationFunction;
+    }
     
-//     async runAnimation() {
-//         return this.animationFunction();        
-//     }
-// }
+    async runAnimation() {
+        return this.animationFunction();        
+    }
+}
 
-// //variables
-// let isFullscreen = false;
-// let ANIMATION_SPEED = 3;
-// const playStatus = new PlayStatus();
-// let IDLETIME = 400;
-// let NOANIMATIONIDLETIME = 30;
-// const FRAMES = 60;
+//variables
+let isFullscreen = false;
+let ANIMATION_SPEED = 3;
+const playStatus = new PlayStatus();
+let IDLETIME = 400;
+let NOANIMATIONIDLETIME = 30;
+const FRAMES = 60;
 
 
 // //class variables
@@ -1286,7 +1286,7 @@ console.log('test');
 // const PC  = new Pc_class(document.getElementById('pcRegisterValue_h2'));
 // const ZR  = new Register_x4(document.getElementById('zrRegisterValue_h2'));
 // const FLAGS = new Flags(document.getElementById('cFlagValue_p'),document.getElementById('zFlagValue_p'),document.getElementById('pFlagValue_p'),document.getElementById('sFlagValue_p'));
-// const ROM = new Rom();
+const ROM = new Rom();
 // const RAM = new Ram();
 // const DECODER = new Decoder(document.getElementById('wrValue_p'),document.getElementById('rdValue_p'), document.getElementById('mValue_p'), document.getElementById('ioValue_p'),document.getElementById('decDisplay_p'));
 

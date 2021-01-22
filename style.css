@@ -873,7 +873,6 @@ h2.yellowBg, p.yellowBg, .yellowBg p, .yellowBg h2{
     position: absolute;
     top: calc(100%/26*17);
     left: calc(100%/39*22);
-    width: calc(100%/39*6);
     height: calc(100%/26*1);
 
 }

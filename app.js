@@ -1,6 +1,6 @@
 //resize window
 
-let containerAspectRatio_div = document.getElementId('containerAspectRatio_div');
+let containerAspectRatio_div = document.getElementById('containerAspectRatio_div');
 let masterStyle_style = document.getElementById('masterStyle_style');
 
 

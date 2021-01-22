@@ -1,18 +1,18 @@
 //resize window
 {
-let mc8 = document.querySelector(".mc8");
+let containerAspectRatio = document.querySelector(".containerAspectRatio");
 let style = document.querySelector("style");
 
 
 const resizeWindow = () => {
 	if(window.innerHeight*1.4375 > window.innerWidth){
-        mc8.style.width = String(window.innerWidth) + "px";
-        mc8.style.height = String(window.innerWidth/1.4375) + "px";
+        containerAspectRatio.style.width = String(window.innerWidth) + "px";
+        containerAspectRatio.style.height = String(window.innerWidth/1.4375) + "px";
         style.innerHTML = "h1{font-size: 1.6vw;} p{font-size: 1.2vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}";
         
     } else {
-        mc8.style.width = String(window.innerHeight*1.4375) + "px";
-        mc8.style.height = String(window.innerHeight) + "px";
+        containerAspectRatio.style.width = String(window.innerHeight*1.4375) + "px";
+        containerAspectRatio.style.height = String(window.innerHeight) + "px";
         style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
     }
 }
@@ -28,6 +28,7 @@ window.addEventListener('resize', function () {
 }
 
 /***************************************** DOM_Selectors *********************************/
+const mc8Container = document.querySelector(".mc8Container");
 const assemblerCommand_p = document.getElementById('assemblerCommand_p');
 const stepNumber_p = document.getElementById('stepNumber_p');
 const stepDescription_p = document.getElementById('stepDescription_p');
@@ -40,7 +41,6 @@ const checkJumpArrow_div = document.getElementById('checkJumpArrow_div');
 const containerSettings_div = document.getElementById('containerSettings_div');
 const movingFlags_div = document.getElementById('movingFlags_div');
 const flags_DOM = document.getElementById('flags');
-const grid = document.querySelector(".gridContainer");
 const yellowBgElement_div = document.getElementById('yellowBgElement_div');
 const io1InputWindow_div = document.getElementById('io1InputWindow_div');
 const io2InputWindow_div = document.getElementById('io2InputWindow_div');
@@ -590,7 +590,7 @@ class Rom {
         this.breakpoints_array = buf_arr;
         for(let i = 0; i<224; i++){
             try{
-                document.getElementById("romElement" + String(i)).classList.remove('blueText');
+                document.getElementById('romElement' + String(i)).classList.remove('blueText');
             }catch (e){}
 		}	
     }
@@ -601,7 +601,7 @@ class Rom {
 	    for(var i = 0; i<240; i++){
 	        //create a romElement
 	        let romElement = document.createElement('p');
-	        romElement.classList.add('romElement', 'gridTemplate');
+	        romElement.classList.add('square1x1', 'positionAbsolute', 'centered');
 	        romElement.id = "romElement" + String(i);
 	
 	        //after every 8th romElement -> new line should be filled
@@ -621,7 +621,7 @@ class Rom {
 	        romElement.style.left = String(100/46*((i%8)+2)) + "%";
 	
 	        //add romElement to body
-	        grid.appendChild(romElement);    
+	        mc8Container.appendChild(romElement);    
 	    }
 	    return true;
     }
@@ -666,7 +666,7 @@ class Rom {
     updateVariableElements(address_dec){
         if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== lastRomLabel_p.textContent.slice(0,-1)){
             if(address_dec > 223 && address_dec < 8192){
-                lastRomLabel_div.classList.remove('points');
+                lastRomLabel_div.classList.remove('ellipses');
                 lastRomLabel_p.textContent = convertNumberToHex_4digits(address_dec).slice(0,-1)+'x';
                 lastRomLabel_div.classList.add('lightYellowBg');
     
@@ -677,7 +677,7 @@ class Rom {
                 }
             }
             else if(lastRomLabel_p.textContent !== '') {
-                lastRomLabel_div.classList.add('points');
+                lastRomLabel_div.classList.add('ellipses');
                 lastRomLabel_div.classList.remove('lightYellowBg');
                 lastRomLabel_p.textContent = '';
                 for (let i = 0; i < 16; i++) {
@@ -721,7 +721,7 @@ class Ram {
         for(var i = 0; i<240; i++){
             //create a ramElement (same CSS as romElement)
             let ramElement = document.createElement('p');
-            ramElement.classList.add('romElement', 'gridTemplate');
+            ramElement.classList.add('square1x1', 'positionAbsolute', 'centered');
             if(i<112){
                 ramElement.id = 'ramElement' + String(i);
                 ramElement.textContent = 'FF';
@@ -744,7 +744,7 @@ class Ram {
             ramElement.style.left = String(100/46*((i%8)+36)) + "%";
     
             //add romElement to body
-            grid.appendChild(ramElement);    
+            mc8Container.appendChild(ramElement);    
         }
         return true;
     }
@@ -799,7 +799,7 @@ class Ram {
 
         if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== middleRamLabel_p.textContent.slice(0,-1)){
             if(address_dec > 111 && address_dec <= 8191-112){
-                middleRamLabel_div.classList.remove('points');
+                middleRamLabel_div.classList.remove('ellipses');
                 middleRamLabel_div.classList.add('lightYellowBg');
                 middleRamLabel_p.textContent = convertNumberToHex_4digits(address_dec+x*8192).slice(0,-1)+'x';
                 address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
@@ -809,7 +809,7 @@ class Ram {
                 }
             }
             else if(middleRamLabel_p.textContent !== '') {
-                middleRamLabel_div.classList.add('points');
+                middleRamLabel_div.classList.add('ellipses');
                 middleRamLabel_div.classList.remove('lightYellowBg');
                 middleRamLabel_p.textContent = '';
                 for (let i = 0; i < 16; i++) {
@@ -1430,11 +1430,11 @@ irRegisterLabel_h1.addEventListener('mouseleave', function() {
     document.getElementById('irLabelHover_div').classList.toggle('toggleGrid');
 });
 
-const deocderLabel_h1 = document.getElementById('deocderLabel_h1');
-deocderLabel_h1.addEventListener('mouseover', function() {
+const decoderLabel_h1 = document.getElementById('decoderLabel_h1');
+decoderLabel_h1.addEventListener('mouseover', function() {
     document.getElementById('decoderHover_div').classList.toggle('toggleGrid');
 });
-deocderLabel_h1.addEventListener('mouseleave', function() {
+decoderLabel_h1.addEventListener('mouseleave', function() {
     document.getElementById('decoderHover_div').classList.toggle('toggleGrid');
 });
 
@@ -2347,7 +2347,7 @@ const create_RedRectangle = () => {
     redRectangle.style.borderColor = "#FF1930";
     redRectangle.style.background = "#FCDEE1";
     redRectangle.style.color = "Black";
-    grid.appendChild(redRectangle);
+    mc8Container.appendChild(redRectangle);
     return redRectangle;
 }
 const redRectangle = create_RedRectangle();
@@ -2897,7 +2897,7 @@ const createGreyElement = (i, xCoordinate,yCoordinate) =>{
     ele.style.top = String(100/32*(yCoordinate[i]+0.5)) +'%';
     ele.style.height = String(100/32*1) + '%';
     ele.style.width = String(100/46*1) + '%';
-    ele.classList.add('pathElement' ,'rounded');
+    ele.classList.add('pathElement', 'alignBg' ,'rounded');
     return ele;
 }
 
@@ -2928,14 +2928,12 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
         pathElements.push(ele);
     }
 
-    //create PathElement (hex-number)
+    //create last PathElement (hex-number)
     let reg = document.createElement('h2');
-    reg.style.position = 'absolute';
     reg.style.left = String(100/46*(xCoordinate[xCoordinate.length-1])) + '%';
     reg.style.top = String(100/32*(yCoordinate[xCoordinate.length-1])) +'%';
     reg.textContent = startElement_DOM.textContent;
-    reg.style.color = "#222222";
-    reg.classList.add('yellowBg', 'borderBox', 'square2x2', 'rounded', );
+    reg.classList.add('yellowBg', 'borderBox', 'square2x2', 'positionAbsolute', 'centered', 'rounded', );
     if(fixPointLabel_A_string === 'PC' || fixPointLabel_A_string === 'ZR' || fixPointLabel_A_string === 'HL' || fixPointLabel_A_string === 'SP' || fixPointLabel_A_string === 'IX')
         reg.classList.add('rectangle4x2');
     
@@ -2943,7 +2941,7 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
 
     //add Elements to grid
     for (let i = 0; i < pathElements.length; i++) {
-        grid.appendChild(pathElements[i]);
+        mc8Container.appendChild(pathElements[i]);
     }
 
     //animate for certain time
@@ -3042,10 +3040,7 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
         if(!startPointInCPU || !endPointInCPU)
                 DECODER.updateDOM();
         await sleepForNOANIMATIONIDLETIME();
-        if(!DECODER.ramAccess && !DECODER.ioAccess){
-            DECODER.resetDOM();
-        }
-            
+        DECODER.resetDOM();       
     }
 }
 
@@ -3432,7 +3427,6 @@ const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_
         try{
             await transfer(DataRegister_x2_string, RAM.getRamElementId(address_dec), data_dec);
         } catch (e) {
-            debugger
             document.getElementById(RAM.getRamElementId(address_dec)).classList.remove('yellowBg', 'borderBox');
             throw e;
         }
@@ -3449,7 +3443,7 @@ const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_
 
     }
     finally{
-        document.getElementById(RAM.getRamElementId(address_dec)).classList.remove('borderBox');
+        document.getElementById(RAM.getRamElementId(address_dec)).classList.remove('borderBox', 'yellowBg');
         DECODER.resetDOM();
     }
 }
@@ -4713,7 +4707,6 @@ function decreaseSpeed(){
 
 function toggleTheme(){
     document.getElementsByTagName('html')[0].classList.toggle('black');
-
 }
 
 const rocketSpeed_on = () => {

@@ -102,22 +102,22 @@ var convertHexToNumber = function (hex_string) {
     return parseInt(hex_string, 16);
 };
 var convertNumberToHex_4digits = function (number_dec) {
-    number_dec = number_dec.toString(16);
-    number_dec = number_dec.toUpperCase();
-    var len = number_dec.length;
-    for (i = 4; i > len; i--) {
-        number_dec = '0' + number_dec;
+    var number_string = number_dec.toString(16);
+    number_string = number_string.toUpperCase();
+    var len = number_string.length;
+    for (var i = 4; i > len; i--) {
+        number_string = '0' + number_string;
     }
-    return number_dec;
+    return number_string;
 };
 var convertNumberToHex_2digits = function (number_dec) {
-    number_dec = number_dec.toString(16);
-    number_dec = number_dec.toUpperCase();
-    var len = number_dec.length;
-    for (i = 2; i > len; i--) {
-        number_dec = '0' + number_dec;
+    var number_string = number_dec.toString(16);
+    number_string = number_string.toUpperCase();
+    var len = number_string.length;
+    for (var i = 2; i > len; i--) {
+        number_string = '0' + number_string;
     }
-    return number_dec;
+    return number_string;
 };
 var convertNumberToBinary_8digits = function (number_dec) {
     var str = (number_dec).toString(2);
@@ -613,7 +613,7 @@ var Rom = /** @class */ (function () {
         return this.dec_array[address_dec];
     };
     Rom.prototype.getElementId = function (position_dec) {
-        if (position_dec === void 0) { position_dec = PC.dec; }
+        if (position_dec === void 0) { position_dec = PC.value_dec; }
         if (position_dec > 223) {
             var lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
             return document.getElementById('romElementVariable' + String(lastValue_dec)).id;
@@ -743,23 +743,23 @@ var Ram = /** @class */ (function () {
 /******************************* Register *********************************** */
 var Register_x2 = /** @class */ (function () {
     function Register_x2(register_DOM) {
-        this.DOM = register_DOM;
-        this.dec = 0;
+        this.domElement = register_DOM;
+        this.value_dec = 0;
     }
     Register_x2.prototype.update = function (value_dec) {
         if (value_dec > 255)
             value_dec -= 256;
         if (value_dec < 0)
             value_dec = 255;
-        this.dec = value_dec;
-        this.DOM.textContent = convertNumberToHex_2digits(value_dec);
+        this.value_dec = value_dec;
+        this.domElement.textContent = convertNumberToHex_2digits(value_dec);
     };
     return Register_x2;
 }());
 var Register_x4 = /** @class */ (function () {
     function Register_x4(register_DOM) {
-        this.dec = 0;
-        this.DOM = register_DOM;
+        this.value_dec = 0;
+        this.domElement = register_DOM;
         this.hi_dec = 0;
         this.lo_dec = 0;
     }
@@ -768,22 +768,22 @@ var Register_x4 = /** @class */ (function () {
             value_dec -= 65536;
         if (value_dec < 0)
             value_dec = 65535;
-        this.dec = value_dec;
-        this.DOM.textContent = convertNumberToHex_4digits(value_dec);
-        this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
-        this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
+        this.value_dec = value_dec;
+        this.domElement.textContent = convertNumberToHex_4digits(value_dec);
+        this.hi_dec = convertHexToNumber(this.domElement.textContent[0] + this.domElement.textContent[1]);
+        this.lo_dec = convertHexToNumber(this.domElement.textContent[2] + this.domElement.textContent[3]);
     };
     Register_x4.prototype.update_lo = function (decimal_number) {
-        var buf_string = this.DOM.textContent;
+        var buf_string = this.domElement.textContent;
         this.lo_dec = decimal_number;
-        this.DOM.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
-        this.dec = convertHexToNumber(this.DOM.textContent);
+        this.domElement.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
+        this.value_dec = convertHexToNumber(this.domElement.textContent);
     };
     Register_x4.prototype.update_hi = function (decimal_number) {
-        var buf_string = this.DOM.textContent;
+        var buf_string = this.domElement.textContent;
         this.hi_dec = decimal_number;
-        this.DOM.textContent = convertNumberToHex_2digits(decimal_number) + buf_string[2] + buf_string[3];
-        this.dec = convertHexToNumber(this.DOM.textContent);
+        this.domElement.textContent = convertNumberToHex_2digits(decimal_number) + buf_string[2] + buf_string[3];
+        this.value_dec = convertHexToNumber(this.domElement.textContent);
     };
     return Register_x4;
 }());
@@ -797,13 +797,13 @@ var Pc_class = /** @class */ (function (_super) {
             value_dec -= 65536;
         if (value_dec < 0)
             value_dec = 65535;
-        this.dec = value_dec;
-        this.DOM.textContent = convertNumberToHex_4digits(value_dec);
-        this.hi_dec = convertHexToNumber(this.DOM.textContent[0] + this.DOM.textContent[1]);
-        this.lo_dec = convertHexToNumber(this.DOM.textContent[2] + this.DOM.textContent[3]);
-        updateRedRectangle(PC.dec);
+        this.value_dec = value_dec;
+        this.domElement.textContent = convertNumberToHex_4digits(value_dec);
+        this.hi_dec = convertHexToNumber(this.domElement.textContent[0] + this.domElement.textContent[1]);
+        this.lo_dec = convertHexToNumber(this.domElement.textContent[2] + this.domElement.textContent[3]);
+        updateRedRectangle(PC.value_dec);
         ROM.updateVariableElements(value_dec);
-        if (this.dec > RAM.startAddressRam_dec)
+        if (this.value_dec > RAM.startAddressRam_dec)
             RAM.updateVariableElements(value_dec);
     };
     return Pc_class;
@@ -818,7 +818,7 @@ var IO = /** @class */ (function (_super) {
         return _this;
     }
     IO.prototype.updateAddress = function (address_dec, ioMapped_boolean) {
-        this.address = address_dec;
+        this.address_dec = address_dec;
         this.ioMapped_boolean = ioMapped_boolean;
     };
     return IO;
@@ -1055,10 +1055,10 @@ var Decoder = /** @class */ (function () {
         }
     };
     Decoder.prototype.updateDOM = function () {
-        this.wr_DOM.textContent = this.WR;
-        this.rd_DOM.textContent = this.RD;
-        this.m_DOM.textContent = this.M;
-        this.io_DOM.textContent = this.IO;
+        this.wr_DOM.textContent = String(this.WR);
+        this.rd_DOM.textContent = String(this.RD);
+        this.m_DOM.textContent = String(this.M);
+        this.io_DOM.textContent = String(this.IO);
         this.display_DOM.textContent = this.text_string;
         if (this.ramAccess || this.ioAccess)
             this.display_DOM.classList.add('yellowBg');
@@ -1095,8 +1095,8 @@ var Flags = /** @class */ (function () {
         this.z_DOM = z_flag_DOM;
         this.p_DOM = p_flag_DOM;
         this.s_DOM = s_flag_DOM;
-        this.dec = 0;
-        this.DOM = flags_DOM;
+        this.value_dec = 0;
+        this.domElement = flags_DOM;
     }
     Flags.prototype.update = function (value_dec) {
         var bin_array = convertNumberToBinaryArray(value_dec);
@@ -1107,7 +1107,6 @@ var Flags = /** @class */ (function () {
         this.updateDOM();
     };
     Flags.prototype.updateDec = function (cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec) {
-        var buf = c;
         this.c_dec = cFlag_dec;
         this.z_dec = zFlag_dec;
         this.p_dec = pFlag_dec;
@@ -1122,7 +1121,7 @@ var Flags = /** @class */ (function () {
             this.p_dec = 0;
         if (this.s_dec === '-')
             this.s_dec = 0;
-        this.dec = convertBinaryToNumber([this.s_dec, this.p_dec, 0, 0, 0, this.z_dec, 0, this.c_dec].join(''));
+        this.value_dec = convertBinaryToNumber([this.s_dec, this.p_dec, 0, 0, 0, this.z_dec, 0, this.c_dec].join(''));
         this.c_DOM.textContent = this.c_dec.toString();
         this.z_DOM.textContent = this.z_dec.toString();
         this.p_DOM.textContent = this.p_dec.toString();
@@ -1195,11 +1194,12 @@ ramLabel_h1.addEventListener('mouseleave', function () {
     document.getElementById('ramLabelHover_div').classList.toggle('toggleGrid');
 });
 var io1Label_h1 = document.getElementById('io1Label_h1');
+var checkedRadioIoMap_input = document.querySelector('input[name="radioIoMap"]:checked');
 io1Label_h1.addEventListener('mouseover', function () {
-    document.getElementById('io1Map_p').textContent = document.querySelector('input[name="radioIoMap"]:checked').value;
+    document.getElementById('io1Map_p').textContent = checkedRadioIoMap_input.value;
     document.getElementById('io1AddressHover_p').textContent = convertNumberToHex_4digits(convertHexToNumber(io1Address_textarea.value)) + 'h';
-    document.getElementById('io1ValueDec_p').textContent = IO1.dec + ' (' + convertNumberToComplementOnTwo(IO1.dec) + ')';
-    document.getElementById('io1ValueBin_p').textContent = convertNumberToBinary_8digits(IO1.dec);
+    document.getElementById('io1ValueDec_p').textContent = IO1.value_dec + ' (' + convertNumberToComplementOnTwo(IO1.value_dec) + ')';
+    document.getElementById('io1ValueBin_p').textContent = convertNumberToBinary_8digits(IO1.value_dec);
     document.getElementById('io1LabelHover_div').classList.toggle('toggleGrid');
 });
 io1Label_h1.addEventListener('mouseleave', function () {
@@ -1207,10 +1207,10 @@ io1Label_h1.addEventListener('mouseleave', function () {
 });
 var io2Label_h1 = document.getElementById('io2Label_h1');
 io2Label_h1.addEventListener('mouseover', function () {
-    document.getElementById('io2Map_p').textContent = document.querySelector('input[name="radioIoMap"]:checked').value;
+    document.getElementById('io2Map_p').textContent = checkedRadioIoMap_input.value;
     document.getElementById('io2AddressHover_p').textContent = convertNumberToHex_4digits(convertHexToNumber(io2Address_textarea.value)) + 'h';
-    document.getElementById('io2ValueDec_p').textContent = IO2.dec + ' (' + convertNumberToComplementOnTwo(IO2.dec) + ')';
-    document.getElementById('io2ValueBin_p').textContent = convertNumberToBinary_8digits(IO2.dec);
+    document.getElementById('io2ValueDec_p').textContent = IO2.value_dec + ' (' + convertNumberToComplementOnTwo(IO2.value_dec) + ')';
+    document.getElementById('io2ValueBin_p').textContent = convertNumberToBinary_8digits(IO2.value_dec);
     document.getElementById('io2LabelHover_div').classList.toggle('toggleGrid');
 });
 io2Label_h1.addEventListener('mouseleave', function () {
@@ -1218,10 +1218,10 @@ io2Label_h1.addEventListener('mouseleave', function () {
 });
 var io3Label_h1 = document.getElementById('io3Label_h1');
 io3Label_h1.addEventListener('mouseover', function () {
-    document.getElementById('io3Map_p').textContent = document.querySelector('input[name="radioIoMap"]:checked').value;
+    document.getElementById('io3Map_p').textContent = checkedRadioIoMap_input.value;
     document.getElementById('io3AddressHover_p').textContent = convertNumberToHex_4digits(convertHexToNumber(io3Address_textarea.value)) + 'h';
-    document.getElementById('io3ValueDec_p').textContent = IO3.dec + ' (' + convertNumberToComplementOnTwo(IO3.dec) + ')';
-    document.getElementById('io3ValueBin_p').textContent = convertNumberToBinary_8digits(IO3.dec);
+    document.getElementById('io3ValueDec_p').textContent = IO3.value_dec + ' (' + convertNumberToComplementOnTwo(IO3.value_dec) + ')';
+    document.getElementById('io3ValueBin_p').textContent = convertNumberToBinary_8digits(IO3.value_dec);
     document.getElementById('io3LabelHover_div').classList.toggle('toggleGrid');
 });
 io3Label_h1.addEventListener('mouseleave', function () {
@@ -1229,8 +1229,8 @@ io3Label_h1.addEventListener('mouseleave', function () {
 });
 var aRegisterLabel_h1 = document.getElementById('aRegisterLabel_h1');
 aRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('aHoverValueDec_p').textContent = 'Dezimal: ' + A.dec + ' (' + convertNumberToComplementOnTwo(A.dec) + ')';
-    document.getElementById('aHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(A.dec);
+    document.getElementById('aHoverValueDec_p').textContent = 'Dezimal: ' + A.value_dec + ' (' + convertNumberToComplementOnTwo(A.value_dec) + ')';
+    document.getElementById('aHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(A.value_dec);
     document.getElementById('aLabelHover_div').classList.toggle('toggleGrid');
 });
 aRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1238,8 +1238,8 @@ aRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var bRegisterLabel_h1 = document.getElementById('bRegisterLabel_h1');
 bRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('bHoverValueDec_p').textContent = 'Dezimal: ' + B.dec + ' (' + convertNumberToComplementOnTwo(B.dec) + ')';
-    document.getElementById('bHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(B.dec);
+    document.getElementById('bHoverValueDec_p').textContent = 'Dezimal: ' + B.value_dec + ' (' + convertNumberToComplementOnTwo(B.value_dec) + ')';
+    document.getElementById('bHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(B.value_dec);
     document.getElementById('bLabelHover_div').classList.toggle('toggleGrid');
 });
 bRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1247,8 +1247,8 @@ bRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var cRegisterLabel_h1 = document.getElementById('cRegisterLabel_h1');
 cRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('cHoverValueDec_p').textContent = 'Dezimal: ' + C.dec + ' (' + convertNumberToComplementOnTwo(C.dec) + ')';
-    document.getElementById('cHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(C.dec);
+    document.getElementById('cHoverValueDec_p').textContent = 'Dezimal: ' + C.value_dec + ' (' + convertNumberToComplementOnTwo(C.value_dec) + ')';
+    document.getElementById('cHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(C.value_dec);
     document.getElementById('cLabelHover_div').classList.toggle('toggleGrid');
 });
 cRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1256,7 +1256,7 @@ cRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var hlRegisterLabel_h1 = document.getElementById('hlRegisterLabel_h1');
 hlRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.dec;
+    document.getElementById('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.value_dec;
     document.getElementById('hlLabelHover_div').classList.toggle('toggleGrid');
 });
 hlRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1264,7 +1264,7 @@ hlRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var ixRegisterLabel_h1 = document.getElementById('ixRegisterLabel_h1');
 ixRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.dec;
+    document.getElementById('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.value_dec;
     document.getElementById('ixLabelHover_div').classList.toggle('toggleGrid');
 });
 ixRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1272,7 +1272,7 @@ ixRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var spRegisterLabel_h1 = document.getElementById('spRegisterLabel_h1');
 spRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.dec;
+    document.getElementById('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.value_dec;
     document.getElementById('spLabelHover_div').classList.toggle('toggleGrid');
 });
 spRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1280,7 +1280,7 @@ spRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var pcRegisterLabel_h1 = document.getElementById('pcRegisterLabel_h1');
 pcRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.dec;
+    document.getElementById('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.value_dec;
     document.getElementById('pcLabelHover_div').classList.toggle('toggleGrid');
 });
 pcRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1288,7 +1288,7 @@ pcRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var zrRegisterLabel_h1 = document.getElementById('zrRegisterLabel_h1');
 zrRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.dec;
+    document.getElementById('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.value_dec;
     document.getElementById('zrLabelHover_div').classList.toggle('toggleGrid');
 });
 zrRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1296,7 +1296,7 @@ zrRegisterLabel_h1.addEventListener('mouseleave', function () {
 });
 var irRegisterLabel_h1 = document.getElementById('irRegisterLabel_h1');
 irRegisterLabel_h1.addEventListener('mouseover', function () {
-    document.getElementById('irHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(IR.dec);
+    document.getElementById('irHoverValueBin_p').textContent = 'Binär: ' + convertNumberToBinary_8digits(IR.value_dec);
     document.getElementById('irLabelHover_div').classList.toggle('toggleGrid');
 });
 irRegisterLabel_h1.addEventListener('mouseleave', function () {
@@ -1725,7 +1725,7 @@ var checkLinkerFile = function (errorMessage_string, count_dec) {
     var data = 0;
     var checksum = 0;
     for (var i = 0; i < intelHexArray.length; i++) {
-        record = intelHexArray[i].trim();
+        var record = intelHexArray[i].trim();
         if (record === '')
             continue;
         //check if line starts with :
@@ -1810,7 +1810,7 @@ var checkLinkerFile = function (errorMessage_string, count_dec) {
                 count_dec++;
                 noError = false;
             }
-            //TODO: mc8assembler
+            //TODO: check with new mc8assembler
             else if (calculateChecksum(record) !== '00') {
                 errorMessage_string += count_dec + ") Fehler in der Linker-Datei in Zeile " + (i + 1) + ": Checkumme " + (record[9 + recordLength * 2] + record[10 + recordLength * 2]) + " ist nicht korrekt. Richtige Checksumme: " + calculateChecksum(record.slice(0, -2)) + "\n\n";
                 noError = false;
@@ -1946,58 +1946,58 @@ var Point = /** @class */ (function () {
     return Point;
 }());
 var fixPoints = [
-    rom1 = new Point(0, 10, 2, 'ROM1', -1, [1]),
-    point1 = new Point(1, 14, 2, '', 0, [2, 4]),
-    point2 = new Point(2, 14, 0, '', 1, [3]),
-    io1 = new Point(3, 16, 0, 'IO1', 2, []),
-    point4 = new Point(4, 18, 2, '', 1, [5, 12]),
-    point5 = new Point(5, 22, 2, '', 4, [6, 8]),
-    point6 = new Point(6, 22, 0, '', 5, [7]),
-    io2 = new Point(7, 24, 0, 'IO2', 6, []),
-    point8 = new Point(8, 30, 2, '', 5, [9, 11]),
-    point9 = new Point(9, 30, 0, '', 8, [10]),
-    io3 = new Point(10, 32, 0, 'IO3', 9, []),
-    ram1 = new Point(11, 34, 2, 'RAM1', 8, []),
-    point12 = new Point(12, 18, 4, '', 4, [13, 23]),
-    point13 = new Point(13, 24, 4, '', 12, [14, 15]),
-    alu1 = new Point(14, 24, 6, 'ALU1', 13, []),
-    point15 = new Point(15, 30, 4, '', 13, [16, 17]),
-    alu2 = new Point(16, 30, 6, 'ALU2', 15, []),
-    point17 = new Point(17, 34, 4, '', 15, [18]),
-    point18 = new Point(18, 34, 12, '', 17, [19, 21]),
-    point19 = new Point(19, 27, 12, '', 18, [20]),
-    aluOut = new Point(20, 27, 10, 'ALUOUT', 19, []),
-    point21 = new Point(21, 34, 14, '', 18, [22]),
-    ir = new Point(22, 32, 14, 'IR', 21, []),
-    point23 = new Point(23, 13, 4, '', 12, [24, 25]),
-    a = new Point(24, 13, 6, 'A', 23, [51]),
-    point25 = new Point(25, 10, 4, '', 23, [26]),
-    point26 = new Point(26, 10, 15, '', 25, [27]),
-    point27 = new Point(27, 14, 15, '', 26, [28, 33]),
-    ix = new Point(28, 14, 14, 'IX', 27, [29]),
-    hl = new Point(29, 14, 12, 'HL', 28, [30]),
-    point30 = new Point(30, 14, 10, '', 29, [31, 32]),
-    b = new Point(31, 13, 10, 'B', 30, []),
-    c = new Point(32, 15, 10, 'C', 30, []),
-    sp = new Point(33, 14, 16, 'SP', 27, [34]),
-    pc = new Point(34, 14, 18, 'PC', 33, [35]),
-    zr = new Point(35, 14, 20, 'ZR', 34, [36]),
-    point36 = new Point(36, 14, 24, 'DEC_UPDATE', 35, [37, 38]),
-    rom2 = new Point(37, 10, 24, 'ROM2', 36, []),
-    point38 = new Point(38, 28, 24, '', 36, [39, 40]),
-    dec = new Point(39, 28, 26, 'DEC', 38, []),
-    ram2 = new Point(40, 32, 24, 'RAM2', 38, []),
-    hl_lo = new Point(41, 16, 12, 'HL_lo', 29, []),
-    ix_lo = new Point(42, 16, 14, 'IX_lo', 28, []),
-    sp_lo = new Point(43, 16, 16, 'SP_lo', 33, []),
-    pc_lo = new Point(44, 16, 18, 'PC_lo', 34, []),
-    zr_lo = new Point(45, 16, 20, 'ZR_lo', 35, []),
-    hl_hi = new Point(46, 14, 12, 'HL_hi', 29, []),
-    ix_hi = new Point(47, 14, 14, 'IX_hi', 28, []),
-    sp_hi = new Point(48, 14, 16, 'SP_hi', 33, []),
-    pc_hi = new Point(49, 14, 18, 'PC_hi', 34, []),
-    zr_hi = new Point(50, 14, 20, 'ZR_hi', 35, []),
-    flags = new Point(51, 15, 6, 'FLAGS', 24, []),
+    new Point(0, 10, 2, 'ROM1', -1, [1]),
+    new Point(1, 14, 2, '', 0, [2, 4]),
+    new Point(2, 14, 0, '', 1, [3]),
+    new Point(3, 16, 0, 'IO1', 2, []),
+    new Point(4, 18, 2, '', 1, [5, 12]),
+    new Point(5, 22, 2, '', 4, [6, 8]),
+    new Point(6, 22, 0, '', 5, [7]),
+    new Point(7, 24, 0, 'IO2', 6, []),
+    new Point(8, 30, 2, '', 5, [9, 11]),
+    new Point(9, 30, 0, '', 8, [10]),
+    new Point(10, 32, 0, 'IO3', 9, []),
+    new Point(11, 34, 2, 'RAM1', 8, []),
+    new Point(12, 18, 4, '', 4, [13, 23]),
+    new Point(13, 24, 4, '', 12, [14, 15]),
+    new Point(14, 24, 6, 'ALU1', 13, []),
+    new Point(15, 30, 4, '', 13, [16, 17]),
+    new Point(16, 30, 6, 'ALU2', 15, []),
+    new Point(17, 34, 4, '', 15, [18]),
+    new Point(18, 34, 12, '', 17, [19, 21]),
+    new Point(19, 27, 12, '', 18, [20]),
+    new Point(20, 27, 10, 'ALUOUT', 19, []),
+    new Point(21, 34, 14, '', 18, [22]),
+    new Point(22, 32, 14, 'IR', 21, []),
+    new Point(23, 13, 4, '', 12, [24, 25]),
+    new Point(24, 13, 6, 'A', 23, [51]),
+    new Point(25, 10, 4, '', 23, [26]),
+    new Point(26, 10, 15, '', 25, [27]),
+    new Point(27, 14, 15, '', 26, [28, 33]),
+    new Point(28, 14, 14, 'IX', 27, [29]),
+    new Point(29, 14, 12, 'HL', 28, [30]),
+    new Point(30, 14, 10, '', 29, [31, 32]),
+    new Point(31, 13, 10, 'B', 30, []),
+    new Point(32, 15, 10, 'C', 30, []),
+    new Point(33, 14, 16, 'SP', 27, [34]),
+    new Point(34, 14, 18, 'PC', 33, [35]),
+    new Point(35, 14, 20, 'ZR', 34, [36]),
+    new Point(36, 14, 24, 'DEC_UPDATE', 35, [37, 38]),
+    new Point(37, 10, 24, 'ROM2', 36, []),
+    new Point(38, 28, 24, '', 36, [39, 40]),
+    new Point(39, 28, 26, 'DEC', 38, []),
+    new Point(40, 32, 24, 'RAM2', 38, []),
+    new Point(41, 16, 12, 'HL_lo', 29, []),
+    new Point(42, 16, 14, 'IX_lo', 28, []),
+    new Point(43, 16, 16, 'SP_lo', 33, []),
+    new Point(44, 16, 18, 'PC_lo', 34, []),
+    new Point(45, 16, 20, 'ZR_lo', 35, []),
+    new Point(46, 14, 12, 'HL_hi', 29, []),
+    new Point(47, 14, 14, 'IX_hi', 28, []),
+    new Point(48, 14, 16, 'SP_hi', 33, []),
+    new Point(49, 14, 18, 'PC_hi', 34, []),
+    new Point(50, 14, 20, 'ZR_hi', 35, []),
+    new Point(51, 15, 6, 'FLAGS', 24, []),
 ];
 //returns the index/position of a fixPoint in the fixPoint-array
 var getPointIndex = function (pointID_string) {
@@ -2114,28 +2114,29 @@ var getPointsAtoB = function (fixPointLabel_A_string, fixPointLabel_B_string) {
     return pointsAtoB;
 };
 /*********************************** red rectangle ************************************/
-var create_RedRectangle = function () {
-    var redRectangle = document.getElementById('romElement0').cloneNode(true);
-    redRectangle.classList.add("borderBox");
-    redRectangle.id = "redRectangle";
-    redRectangle.style.borderColor = "#FF1930";
-    redRectangle.style.background = "#FCDEE1";
-    redRectangle.style.color = "Black";
-    mc8Container.appendChild(redRectangle);
-    return redRectangle;
-};
-var redRectangle = create_RedRectangle();
+// const create_RedRectangle = () => {
+//     let redRectangle_p_p = document.getElementById('romElement0').cloneElement(true);
+//     redRectangle_p_p.classList.add("borderBox");
+//     redRectangle_p_p.id = "redRectangle_p";
+//     redRectangle_p_p.style.borderColor = "#FF1930";
+//     redRectangle_p_p.style.background = "#FCDEE1";
+//     redRectangle_p_p.style.color = "Black";
+//     mc8Container.appendChild(redRectangle_p_p);
+//     return redRectangle_p_p;
+// }
+// const redRectangle_p = create_RedRectangle();
+var redRectangle_p = document.getElementById('redRectangle_p');
 var updateRedRectangle = function (PC_dec) {
-    redRectangle.style.display = '';
+    redRectangle_p.style.display = '';
     if (PC_dec < 224) {
         //should always be on the position the PC is pointing at
         var xPos = PC_dec % 8 + 2;
         var yPos = Math.floor(PC_dec / 8) + 2;
-        redRectangle.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
-        redRectangle.style.left = String(100 / 46 * (xPos)) + "%";
-        redRectangle.style.top = String(100 / 32 * (yPos)) + "%";
-        redRectangle.style.width = String(100 / 46 * 1) + "%";
-        redRectangle.style.height = String(100 / 32 * 1) + "%";
+        redRectangle_p.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
+        redRectangle_p.style.left = String(100 / 46 * (xPos)) + "%";
+        redRectangle_p.style.top = String(100 / 32 * (yPos)) + "%";
+        redRectangle_p.style.width = String(100 / 46 * 1) + "%";
+        redRectangle_p.style.height = String(100 / 32 * 1) + "%";
     }
     else if (PC_dec < 8192) {
         var xPos = PC_dec % 8 + 2;
@@ -2143,18 +2144,18 @@ var updateRedRectangle = function (PC_dec) {
         var bigger7 = convertNumberToHex_4digits(PC_dec)[3];
         if (convertHexToNumber(bigger7) > 7)
             yPos = 1;
-        redRectangle.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
-        redRectangle.style.top = String(100 / 32 * (30 + yPos)) + "%";
-        redRectangle.style.left = String(100 / 46 * (xPos)) + "%";
+        redRectangle_p.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
+        redRectangle_p.style.top = String(100 / 32 * (30 + yPos)) + "%";
+        redRectangle_p.style.left = String(100 / 46 * (xPos)) + "%";
     }
     else if (PC_dec >= RAM.startAddressRam_dec && PC_dec < RAM.startAddressRam_dec + 112) {
         PC_dec = PC_dec - Math.floor(PC_dec / 8192) * 8192;
         var xPos = PC_dec % 8 + 36;
         var yPos = Math.floor(PC_dec / 8) + 2;
-        redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
-        redRectangle.style.top = String(100 / 32 * (yPos)) + "%";
-        redRectangle.style.width = String(100 / 46 * 1) + "%";
-        redRectangle.style.height = String(100 / 32 * 1) + "%";
+        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        redRectangle_p.style.top = String(100 / 32 * (yPos)) + "%";
+        redRectangle_p.style.width = String(100 / 46 * 1) + "%";
+        redRectangle_p.style.height = String(100 / 32 * 1) + "%";
     }
     else if (PC_dec >= RAM.startAddressRam_dec + 112 && PC_dec < RAM.startAddressRam_dec + 8080) {
         PC_dec = PC_dec - Math.floor(PC_dec / 8192) * 8192;
@@ -2163,25 +2164,25 @@ var updateRedRectangle = function (PC_dec) {
         var bigger7 = convertNumberToHex_4digits(PC_dec)[3];
         if (convertHexToNumber(bigger7) > 7)
             yPos = 1;
-        redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
-        redRectangle.style.left = String(100 / 46 * (xPos)) + "%";
-        redRectangle.style.top = String(100 / 32 * (16 + yPos)) + "%";
+        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        redRectangle_p.style.left = String(100 / 46 * (xPos)) + "%";
+        redRectangle_p.style.top = String(100 / 32 * (16 + yPos)) + "%";
     }
     else if (PC_dec >= RAM.startAddressRam_dec + 8080 && PC_dec < RAM.startAddressRam_dec + 8192) {
         PC_dec = PC_dec - Math.floor(PC_dec / 8192) * 8192;
-        console.log(PC_dec);
         var xPos = PC_dec % 8 + 36;
         var yPos = Math.floor((PC_dec - 7952) / 8) + 2;
-        redRectangle.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
-        redRectangle.style.left = String(100 / 46 * (xPos)) + "%";
-        redRectangle.style.top = String(100 / 32 * (yPos)) + "%";
-        redRectangle.style.width = String(100 / 46 * 1) + "%";
-        redRectangle.style.height = String(100 / 32 * 1) + "%";
+        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        redRectangle_p.style.left = String(100 / 46 * (xPos)) + "%";
+        redRectangle_p.style.top = String(100 / 32 * (yPos)) + "%";
+        redRectangle_p.style.width = String(100 / 46 * 1) + "%";
+        redRectangle_p.style.height = String(100 / 32 * 1) + "%";
     }
     else {
-        redRectangle.style.display = 'none';
+        redRectangle_p.style.display = 'none';
     }
 };
+updateRedRectangle(0);
 /******************************************************* ANIMATION IMPLEMENTATION ********************************************************* */
 /****************************************************************************************************************************************** */
 /******************** basic functions ********************/
@@ -2249,7 +2250,7 @@ var check_completeExecution = function () {
 //adds the next command to the runningProgram_array
 var pushNextCommand = function () {
     for (var i = 0; i < mc8_commands_array.length; i++) {
-        if (mc8_commands_array[i].machineCommand_dec === IR.dec)
+        if (mc8_commands_array[i].machineCommand_dec === IR.value_dec)
             runningProgram.push(mc8_commands_array[i].animationFunction);
     }
     runningProgram.push(get_next_command);
@@ -2317,8 +2318,8 @@ var change_stepDescription = function (StringDescription) { return stepDescripti
 var increaseStepNumber = function () { return stepNumber_p.textContent = String(Number(stepNumber_p.textContent) + 1); };
 //displays the the assembler notation. If the register IR contains a command which is not valid, the function returns false.
 var change_assemblerCommand = function () {
-    for (i = 0; i < mc8_commands_array.length; i++) {
-        if (mc8_commands_array[i].machineCommand_dec === IR.dec) {
+    for (var i = 0; i < mc8_commands_array.length; i++) {
+        if (mc8_commands_array[i].machineCommand_dec === IR.value_dec) {
             assemblerCommand_p.textContent = mc8_commands_array[i].assembler_notation_string;
             return true;
         }
@@ -2571,7 +2572,7 @@ var assemblerCommand_update = function () { return __awaiter(_this, void 0, void
             case 0: return [4 /*yield*/, checkPlayPressed()];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, add_yellow_background_for_IDLETIME(IR.DOM)];
+                return [4 /*yield*/, add_yellow_background_for_IDLETIME(IR.domElement)];
             case 2:
                 _a.sent();
                 return [4 /*yield*/, addArrow('IR')];
@@ -2596,8 +2597,8 @@ var updatePC = function () { return __awaiter(_this, void 0, void 0, function ()
             case 0: return [4 /*yield*/, checkPlayPressed()];
             case 1:
                 _a.sent();
-                PC.update(PC.dec + 1);
-                return [4 /*yield*/, add_yellow_background_for_IDLETIME(PC.DOM)];
+                PC.update(PC.value_dec + 1);
+                return [4 /*yield*/, add_yellow_background_for_IDLETIME(PC.domElement)];
             case 2:
                 _a.sent();
                 return [2 /*return*/];
@@ -2606,6 +2607,7 @@ var updatePC = function () { return __awaiter(_this, void 0, void 0, function ()
 }); };
 //updates and animates register/io with the passed value
 var updateRegister_hex = function (registerName_string, value_dec) { return __awaiter(_this, void 0, void 0, function () {
+    var reg;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, checkPlayPressed()];
@@ -2623,11 +2625,10 @@ var updateRegister_hex = function (registerName_string, value_dec) { return __aw
                 _a.sent();
                 return [3 /*break*/, 7];
             case 5:
-                //update register
                 reg = getRegisterByName(registerName_string);
                 reg.update(value_dec);
                 //animate register update
-                return [4 /*yield*/, add_yellow_background_for_IDLETIME(reg.DOM)];
+                return [4 /*yield*/, add_yellow_background_for_IDLETIME(reg.domElement)];
             case 6:
                 //animate register update
                 _a.sent();
@@ -2762,7 +2763,7 @@ var updateMovingObj = function (aPath, hexValue_string) {
     return movingObject;
 };
 var createGreyElement = function (i, xCoordinate, yCoordinate) {
-    ele = document.createElement('div');
+    var ele = document.createElement('div');
     ele.style.position = 'absolute';
     ele.style.left = String(100 / 46 * (xCoordinate[i] + 0.5)) + '%';
     ele.style.top = String(100 / 32 * (yCoordinate[i] + 0.5)) + '%';
@@ -2773,7 +2774,7 @@ var createGreyElement = function (i, xCoordinate, yCoordinate) {
 };
 //animation without a movingObject
 var createPaintedPath = function (path, fixPointLabel_A_string, fixPointLabel_B_string, startElement_DOM) { return __awaiter(_this, void 0, void 0, function () {
-    var pathElements, coords, xCoordinate, yCoordinate, i, i, reg, i, e_1, i;
+    var pathElements, coords, xCoordinate, yCoordinate, i, i, ele, reg, i, e_1, i;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -2837,7 +2838,7 @@ var createPaintedPath = function (path, fixPointLabel_A_string, fixPointLabel_B_
 var transfer = function (fixPointLabel_A_string, fixPointLabel_B_string, value_dec) {
     if (value_dec === void 0) { value_dec = 0; }
     return __awaiter(_this, void 0, void 0, function () {
-        var startPointInCPU, endPointInCPU, path, movingObjectCoordinates, xCoordinate, yCoordinate, i;
+        var startPointInCPU, endPointInCPU, path, value_string, movingObjectCoordinates, xCoordinate, yCoordinate, i;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, checkPlayPressed()];
@@ -2847,13 +2848,14 @@ var transfer = function (fixPointLabel_A_string, fixPointLabel_B_string, value_d
                     endPointInCPU = false;
                     if (!!playStatus.noAnim) return [3 /*break*/, 8];
                     path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
+                    value_string = void 0;
                     //convert value_dec to hex_4digits if required
                     if (value_dec > 255 || fixPointLabel_B_string === 'ROM2' || fixPointLabel_B_string === 'RAM2' || fixPointLabel_B_string === 'ZR' || fixPointLabel_B_string === 'PC' || fixPointLabel_B_string === 'IX' || fixPointLabel_B_string === 'HL' || fixPointLabel_B_string === 'SP')
-                        value_dec = convertNumberToHex_4digits(value_dec);
+                        value_string = convertNumberToHex_4digits(value_dec);
                     else
-                        value_dec = convertNumberToHex_2digits(value_dec);
-                    //update the moving object
-                    updateMovingObj(path, value_dec);
+                        value_string = convertNumberToHex_2digits(value_dec);
+                    //update the moving Element
+                    updateMovingObj(path, value_string);
                     movingObjectCoordinates = calcIntermediatePositions(path, 12);
                     xCoordinate = movingObjectCoordinates[0];
                     yCoordinate = movingObjectCoordinates[1];
@@ -2861,7 +2863,6 @@ var transfer = function (fixPointLabel_A_string, fixPointLabel_B_string, value_d
                     if (yCoordinate[0][0] < 24 && yCoordinate[0][0] > 3 && xCoordinate[0][0] > 9 && xCoordinate[0][0]) {
                         startPointInCPU = true;
                     }
-                    console.log(yCoordinate);
                     if (yCoordinate[yCoordinate.length - 1][11] < 24 && yCoordinate[yCoordinate.length - 1][11] > 3 && xCoordinate[xCoordinate.length - 1][11] > 9 && xCoordinate[xCoordinate.length - 1][11]) {
                         endPointInCPU = true;
                     }
@@ -2905,7 +2906,7 @@ var transfer = function (fixPointLabel_A_string, fixPointLabel_B_string, value_d
                     i++;
                     return [3 /*break*/, 4];
                 case 7:
-                    //remove object when transfer was successful 
+                    //remove Element when transfer was successful 
                     movingObject.classList.remove('toggleGrid');
                     return [3 /*break*/, 10];
                 case 8:
@@ -2956,8 +2957,8 @@ var conditionalPositionUpdate = function (xCoordinate_x12array, yCoordinate_x12a
 /************************************ALU animation**************************************/
 //set text content of movingAluElements and display them
 var setMovingAluElements = function (twoMovingAluElements_boolean) {
-    movingAlu1.textContent = ALU1.DOM.textContent;
-    movingAlu2.textContent = ALU2.DOM.textContent;
+    movingAlu1.textContent = ALU1.domElement.textContent;
+    movingAlu2.textContent = ALU2.domElement.textContent;
     movingAlu1.classList.add('toggleGrid');
     if (twoMovingAluElements_boolean)
         movingAlu2.classList.add('toggleGrid');
@@ -2976,99 +2977,96 @@ var resetMovingAluElements = function () {
 };
 resetMovingAluElements();
 //animation of ALU-usage
-var aluAnimation = function (aluOUT_dec, twoMovingAluElements_boolean, cFlag_boolean, saveToRegister_string) {
-    if (saveToRegister_string === void 0) { saveToRegister_string = false; }
-    return __awaiter(_this, void 0, void 0, function () {
-        var xCoordinateAlu1, xCoordinateAlu2, yCoordinate, j, i;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!!playStatus.noAnim) return [3 /*break*/, 11];
-                    xCoordinateAlu1 = [24];
-                    xCoordinateAlu2 = [30];
-                    yCoordinate = [6];
-                    for (j = 0; j < 30; j++) {
-                        xCoordinateAlu1.push(xCoordinateAlu1[j] + 0.1);
-                        xCoordinateAlu2.push(xCoordinateAlu2[j] - 0.1);
-                        yCoordinate.push(yCoordinate[j] + 1 / 7.5);
-                    }
-                    setMovingAluElements(twoMovingAluElements_boolean);
-                    ALU1.DOM.textContent = '';
-                    ALU2.DOM.textContent = '';
-                    if (!cFlag_boolean) return [3 /*break*/, 2];
-                    return [4 /*yield*/, addArrow('cFlag')];
-                case 1:
-                    _a.sent();
-                    _a.label = 2;
-                case 2:
-                    _a.trys.push([2, , 9, 10]);
-                    return [4 /*yield*/, sleepForIDLETIME()];
-                case 3:
-                    _a.sent();
-                    i = 0;
-                    _a.label = 4;
-                case 4:
-                    if (!(i < xCoordinateAlu1.length)) return [3 /*break*/, 7];
-                    updatePosition(movingAlu1, xCoordinateAlu1[i], yCoordinate[i]);
-                    updatePosition(movingAlu2, xCoordinateAlu2[i], yCoordinate[i]);
-                    return [4 /*yield*/, sleep(1000 / FRAMES)];
-                case 5:
-                    _a.sent();
-                    _a.label = 6;
-                case 6:
-                    i++;
-                    return [3 /*break*/, 4];
-                case 7:
-                    resetMovingAluElements();
-                    return [4 /*yield*/, updateRegister_hex('ALUOUT', aluOUT_dec)];
-                case 8:
-                    _a.sent();
-                    return [3 /*break*/, 10];
-                case 9:
-                    resetMovingAluElements();
-                    return [7 /*endfinally*/];
-                case 10:
-                    ALUOUT.DOM.classList.add('yellowBg');
-                    return [3 /*break*/, 13];
-                case 11: //noAnim
+var aluAnimation = function (aluOUT_dec, twoMovingAluElements_boolean, cFlag_boolean, saveToRegister_string) { return __awaiter(_this, void 0, void 0, function () {
+    var xCoordinateAlu1, xCoordinateAlu2, yCoordinate, j, i;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!!playStatus.noAnim) return [3 /*break*/, 11];
+                xCoordinateAlu1 = [24];
+                xCoordinateAlu2 = [30];
+                yCoordinate = [6];
+                for (j = 0; j < 30; j++) {
+                    xCoordinateAlu1.push(xCoordinateAlu1[j] + 0.1);
+                    xCoordinateAlu2.push(xCoordinateAlu2[j] - 0.1);
+                    yCoordinate.push(yCoordinate[j] + 1 / 7.5);
+                }
+                setMovingAluElements(twoMovingAluElements_boolean);
+                ALU1.domElement.textContent = '';
+                ALU2.domElement.textContent = '';
+                if (!cFlag_boolean) return [3 /*break*/, 2];
+                return [4 /*yield*/, addArrow('cFlag')];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, , 9, 10]);
+                return [4 /*yield*/, sleepForIDLETIME()];
+            case 3:
+                _a.sent();
+                i = 0;
+                _a.label = 4;
+            case 4:
+                if (!(i < xCoordinateAlu1.length)) return [3 /*break*/, 7];
+                updatePosition(movingAlu1, xCoordinateAlu1[i], yCoordinate[i]);
+                updatePosition(movingAlu2, xCoordinateAlu2[i], yCoordinate[i]);
+                return [4 /*yield*/, sleep(1000 / FRAMES)];
+            case 5:
+                _a.sent();
+                _a.label = 6;
+            case 6:
+                i++;
+                return [3 /*break*/, 4];
+            case 7:
+                resetMovingAluElements();
                 return [4 /*yield*/, updateRegister_hex('ALUOUT', aluOUT_dec)];
-                case 12:
-                    _a.sent();
-                    ALU1.DOM.textContent = '';
-                    ALU2.DOM.textContent = '';
-                    _a.label = 13;
-                case 13:
-                    _a.trys.push([13, , 18, 19]);
-                    return [4 /*yield*/, description_update('Setze die Flags')];
-                case 14:
-                    _a.sent();
-                    return [4 /*yield*/, setFlagsAnimation()];
-                case 15:
-                    _a.sent();
-                    if (!saveToRegister_string) return [3 /*break*/, 17];
-                    return [4 /*yield*/, description_update('Speichere das Ergebnis')];
-                case 16:
-                    _a.sent();
-                    _a.label = 17;
-                case 17: return [3 /*break*/, 19];
-                case 18:
-                    ALUOUT.DOM.classList.remove('yellowBg');
-                    ALUOUT.DOM.textContent = '';
-                    return [7 /*endfinally*/];
-                case 19:
-                    if (!saveToRegister_string) return [3 /*break*/, 22];
-                    return [4 /*yield*/, transfer('ALUOUT', saveToRegister_string, aluOUT_dec)];
-                case 20:
-                    _a.sent();
-                    return [4 /*yield*/, updateRegister_hex(saveToRegister_string, aluOUT_dec)];
-                case 21:
-                    _a.sent();
-                    _a.label = 22;
-                case 22: return [2 /*return*/];
-            }
-        });
+            case 8:
+                _a.sent();
+                return [3 /*break*/, 10];
+            case 9:
+                resetMovingAluElements();
+                return [7 /*endfinally*/];
+            case 10:
+                ALUOUT.domElement.classList.add('yellowBg');
+                return [3 /*break*/, 13];
+            case 11: //noAnim
+            return [4 /*yield*/, updateRegister_hex('ALUOUT', aluOUT_dec)];
+            case 12:
+                _a.sent();
+                ALU1.domElement.textContent = '';
+                ALU2.domElement.textContent = '';
+                _a.label = 13;
+            case 13:
+                _a.trys.push([13, , 18, 19]);
+                return [4 /*yield*/, description_update('Setze die Flags')];
+            case 14:
+                _a.sent();
+                return [4 /*yield*/, setFlagsAnimation()];
+            case 15:
+                _a.sent();
+                if (!saveToRegister_string) return [3 /*break*/, 17];
+                return [4 /*yield*/, description_update('Speichere das Ergebnis')];
+            case 16:
+                _a.sent();
+                _a.label = 17;
+            case 17: return [3 /*break*/, 19];
+            case 18:
+                ALUOUT.domElement.classList.remove('yellowBg');
+                ALUOUT.domElement.textContent = '';
+                return [7 /*endfinally*/];
+            case 19:
+                if (!(saveToRegister_string !== '')) return [3 /*break*/, 22];
+                return [4 /*yield*/, transfer('ALUOUT', saveToRegister_string, aluOUT_dec)];
+            case 20:
+                _a.sent();
+                return [4 /*yield*/, updateRegister_hex(saveToRegister_string, aluOUT_dec)];
+            case 21:
+                _a.sent();
+                _a.label = 22;
+            case 22: return [2 /*return*/];
+        }
     });
-};
+}); };
 var hlBcAnimation = function (aluOUT_dec, stepOne_boolean) { return __awaiter(_this, void 0, void 0, function () {
     var xCoordinateAlu1, xCoordinateAlu2, yCoordinate, j, i;
     return __generator(this, function (_a) {
@@ -3084,8 +3082,8 @@ var hlBcAnimation = function (aluOUT_dec, stepOne_boolean) { return __awaiter(_t
                     yCoordinate.push(yCoordinate[j] + 1 / 7.5);
                 }
                 setMovingAluElements(true);
-                ALU1.DOM.textContent = '';
-                ALU2.DOM.textContent = '';
+                ALU1.domElement.textContent = '';
+                ALU2.domElement.textContent = '';
                 if (!!stepOne_boolean) return [3 /*break*/, 2];
                 return [4 /*yield*/, addArrow('cFlag')];
             case 1:
@@ -3119,14 +3117,14 @@ var hlBcAnimation = function (aluOUT_dec, stepOne_boolean) { return __awaiter(_t
                 resetMovingAluElements();
                 return [7 /*endfinally*/];
             case 10:
-                ALUOUT.DOM.classList.add('yellowBg');
+                ALUOUT.domElement.classList.add('yellowBg');
                 return [3 /*break*/, 13];
             case 11: //noAnim
             return [4 /*yield*/, updateRegister_hex('ALUOUT', aluOUT_dec)];
             case 12:
                 _a.sent();
-                ALU1.DOM.textContent = '';
-                ALU2.DOM.textContent = '';
+                ALU1.domElement.textContent = '';
+                ALU2.domElement.textContent = '';
                 _a.label = 13;
             case 13:
                 if (!stepOne_boolean) return [3 /*break*/, 22];
@@ -3147,8 +3145,8 @@ var hlBcAnimation = function (aluOUT_dec, stepOne_boolean) { return __awaiter(_t
                 _a.sent();
                 return [3 /*break*/, 19];
             case 18:
-                ALUOUT.DOM.classList.remove('yellowBg');
-                ALUOUT.DOM.textContent = '';
+                ALUOUT.domElement.classList.remove('yellowBg');
+                ALUOUT.domElement.textContent = '';
                 return [7 /*endfinally*/];
             case 19: return [4 /*yield*/, transfer('ALUOUT', 'HL_lo', aluOUT_dec)];
             case 20:
@@ -3173,8 +3171,8 @@ var hlBcAnimation = function (aluOUT_dec, stepOne_boolean) { return __awaiter(_t
                 _a.sent();
                 return [3 /*break*/, 27];
             case 26:
-                ALUOUT.DOM.classList.remove('yellowBg');
-                ALUOUT.DOM.textContent = '';
+                ALUOUT.domElement.classList.remove('yellowBg');
+                ALUOUT.domElement.textContent = '';
                 return [7 /*endfinally*/];
             case 27: return [4 /*yield*/, transfer('ALUOUT', 'HL_hi', aluOUT_dec)];
             case 28:
@@ -3283,8 +3281,6 @@ var changeIO = function (IOName_string) { return __awaiter(_this, void 0, void 0
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                IO_input_window_DOM = 0;
-                IO_input_DOM = 0;
                 check = true;
                 playStatusBuffer = playStatus.getStatus();
                 switch (IOName_string) {
@@ -3361,7 +3357,7 @@ var readFromMemoryInRegister = function (addressRegister_x4_string, targetRegist
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                address_dec = getRegisterByName(addressRegister_x4_string).dec;
+                address_dec = getRegisterByName(addressRegister_x4_string).value_dec;
                 //update decoder without displaying  
                 DECODER.update(1, 0, 0, 1, address_dec);
                 return [4 /*yield*/, addArrow(addressRegister_x4_string)];
@@ -3371,7 +3367,7 @@ var readFromMemoryInRegister = function (addressRegister_x4_string, targetRegist
                 return [4 /*yield*/, transfer(addressRegister_x4_string, 'ROM2', address_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, transfer(ROM.getElementId(address_dec.dec), targetRegister_x2_string, ROM.getValue(address_dec))];
+                return [4 /*yield*/, transfer(ROM.getElementId(address_dec), targetRegister_x2_string, ROM.getValue(address_dec))];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, updateRegister_hex(targetRegister_x2_string, ROM.getValue(address_dec))];
@@ -3400,10 +3396,10 @@ var readFromMemoryInRegister = function (addressRegister_x4_string, targetRegist
                 return [4 /*yield*/, changeIO('IO1')];
             case 11:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO1', 'A', IO1.dec)];
+                return [4 /*yield*/, transfer('IO1', 'A', IO1.value_dec)];
             case 12:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO1.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO1.value_dec)];
             case 13:
                 _a.sent();
                 return [3 /*break*/, 24];
@@ -3415,10 +3411,10 @@ var readFromMemoryInRegister = function (addressRegister_x4_string, targetRegist
                 return [4 /*yield*/, changeIO('IO2')];
             case 16:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO2', 'A', IO2.dec)];
+                return [4 /*yield*/, transfer('IO2', 'A', IO2.value_dec)];
             case 17:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO2.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO2.value_dec)];
             case 18:
                 _a.sent();
                 return [3 /*break*/, 24];
@@ -3430,10 +3426,10 @@ var readFromMemoryInRegister = function (addressRegister_x4_string, targetRegist
                 return [4 /*yield*/, changeIO('IO2')];
             case 21:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO2', 'A', IO3.dec)];
+                return [4 /*yield*/, transfer('IO2', 'A', IO3.value_dec)];
             case 22:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO3.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO3.value_dec)];
             case 23:
                 _a.sent();
                 _a.label = 24;
@@ -3458,9 +3454,9 @@ var writeToMemoryFromRegister = function (addressRegister_x4_string, DataRegiste
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                address_dec = getRegisterByName(addressRegister_x4_string).dec;
+                address_dec = getRegisterByName(addressRegister_x4_string).value_dec;
                 register_x2_class = getRegisterByName(DataRegister_x2_string);
-                data_dec = register_x2_class.dec;
+                data_dec = register_x2_class.value_dec;
                 if (DataRegister_x2_string.includes('hi'))
                     data_dec = register_x2_class.hi_dec;
                 if (DataRegister_x2_string.includes('lo'))
@@ -3532,17 +3528,17 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
                 _a.sent();
                 if (!(IO1.address_dec === IO2.address_dec)) return [3 /*break*/, 8];
                 if (!!IO1.in_boolean) return [3 /*break*/, 4];
-                return [4 /*yield*/, transfer('A', 'IO2', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO2', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO2', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO2', A.value_dec)];
             case 3:
                 _a.sent();
                 return [3 /*break*/, 7];
-            case 4: return [4 /*yield*/, transfer('A', 'IO1', A.dec)];
+            case 4: return [4 /*yield*/, transfer('A', 'IO1', A.value_dec)];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO1', A.value_dec)];
             case 6:
                 _a.sent();
                 _a.label = 7;
@@ -3550,17 +3546,17 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
             case 8:
                 if (!(IO3.address_dec === IO2.address_dec)) return [3 /*break*/, 15];
                 if (!!IO3.in_boolean) return [3 /*break*/, 11];
-                return [4 /*yield*/, transfer('A', 'IO2', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO2', A.value_dec)];
             case 9:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO2', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO2', A.value_dec)];
             case 10:
                 _a.sent();
                 return [3 /*break*/, 14];
-            case 11: return [4 /*yield*/, transfer('A', 'IO3', A.dec)];
+            case 11: return [4 /*yield*/, transfer('A', 'IO3', A.value_dec)];
             case 12:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO3', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO3', A.value_dec)];
             case 13:
                 _a.sent();
                 _a.label = 14;
@@ -3568,17 +3564,17 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
             case 15:
                 if (!(IO1.address_dec === IO3.address_dec)) return [3 /*break*/, 22];
                 if (!!IO1.in_boolean) return [3 /*break*/, 18];
-                return [4 /*yield*/, transfer('A', 'IO3', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO3', A.value_dec)];
             case 16:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO3', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO3', A.value_dec)];
             case 17:
                 _a.sent();
                 return [3 /*break*/, 21];
-            case 18: return [4 /*yield*/, transfer('A', 'IO1', A.dec)];
+            case 18: return [4 /*yield*/, transfer('A', 'IO1', A.value_dec)];
             case 19:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO1', A.value_dec)];
             case 20:
                 _a.sent();
                 _a.label = 21;
@@ -3588,10 +3584,10 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
                 return [4 /*yield*/, changeIO('IO1')];
             case 23:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO1', 'A', IO1.dec)];
+                return [4 /*yield*/, transfer('IO1', 'A', IO1.value_dec)];
             case 24:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO1.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO1.value_dec)];
             case 25:
                 _a.sent();
                 return [3 /*break*/, 34];
@@ -3600,10 +3596,10 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
                 return [4 /*yield*/, changeIO('IO2')];
             case 27:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO2', 'A', IO2.dec)];
+                return [4 /*yield*/, transfer('IO2', 'A', IO2.value_dec)];
             case 28:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO2.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO2.value_dec)];
             case 29:
                 _a.sent();
                 return [3 /*break*/, 34];
@@ -3612,10 +3608,10 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
                 return [4 /*yield*/, changeIO('IO3')];
             case 31:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO3', 'A', IO3.dec)];
+                return [4 /*yield*/, transfer('IO3', 'A', IO3.value_dec)];
             case 32:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO3.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO3.value_dec)];
             case 33:
                 _a.sent();
                 _a.label = 34;
@@ -3623,23 +3619,23 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
                 DECODER.resetDOM();
                 return [3 /*break*/, 70];
             case 35:
-                DECODER.update(1, 0, 1, 0, ZR.dec);
-                return [4 /*yield*/, transfer('ZR', 'DEC_UPDATE', ZR.dec)];
+                DECODER.update(1, 0, 1, 0, ZR.value_dec);
+                return [4 /*yield*/, transfer('ZR', 'DEC_UPDATE', ZR.value_dec)];
             case 36:
                 _a.sent();
                 if (!(IO1.address_dec === IO2.address_dec)) return [3 /*break*/, 43];
                 if (!!IO1.in_boolean) return [3 /*break*/, 39];
-                return [4 /*yield*/, transfer('A', 'IO2', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO2', A.value_dec)];
             case 37:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO2', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO2', A.value_dec)];
             case 38:
                 _a.sent();
                 return [3 /*break*/, 42];
-            case 39: return [4 /*yield*/, transfer('A', 'IO1', A.dec)];
+            case 39: return [4 /*yield*/, transfer('A', 'IO1', A.value_dec)];
             case 40:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO1', A.value_dec)];
             case 41:
                 _a.sent();
                 _a.label = 42;
@@ -3647,17 +3643,17 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
             case 43:
                 if (!(IO3.address_dec === IO2.address_dec)) return [3 /*break*/, 50];
                 if (!!IO3.in_boolean) return [3 /*break*/, 46];
-                return [4 /*yield*/, transfer('A', 'IO2', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO2', A.value_dec)];
             case 44:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO2', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO2', A.value_dec)];
             case 45:
                 _a.sent();
                 return [3 /*break*/, 49];
-            case 46: return [4 /*yield*/, transfer('A', 'IO3', A.dec)];
+            case 46: return [4 /*yield*/, transfer('A', 'IO3', A.value_dec)];
             case 47:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO3', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO3', A.value_dec)];
             case 48:
                 _a.sent();
                 _a.label = 49;
@@ -3665,54 +3661,54 @@ var readFromIo = function () { return __awaiter(_this, void 0, void 0, function 
             case 50:
                 if (!(IO1.address_dec === IO3.address_dec)) return [3 /*break*/, 57];
                 if (!!IO1.in_boolean) return [3 /*break*/, 53];
-                return [4 /*yield*/, transfer('A', 'IO3', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO3', A.value_dec)];
             case 51:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO3', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO3', A.value_dec)];
             case 52:
                 _a.sent();
                 return [3 /*break*/, 56];
-            case 53: return [4 /*yield*/, transfer('A', 'IO1', A.dec)];
+            case 53: return [4 /*yield*/, transfer('A', 'IO1', A.value_dec)];
             case 54:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO1', A.value_dec)];
             case 55:
                 _a.sent();
                 _a.label = 56;
             case 56: return [3 /*break*/, 69];
             case 57:
-                if (!(ZR.dec === IO1.address_dec)) return [3 /*break*/, 61];
+                if (!(ZR.value_dec === IO1.address_dec)) return [3 /*break*/, 61];
                 return [4 /*yield*/, changeIO('IO1')];
             case 58:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO1', 'A', IO1.dec)];
+                return [4 /*yield*/, transfer('IO1', 'A', IO1.value_dec)];
             case 59:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO1.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO1.value_dec)];
             case 60:
                 _a.sent();
                 return [3 /*break*/, 69];
             case 61:
-                if (!(ZR.dec === IO2.address_dec)) return [3 /*break*/, 65];
+                if (!(ZR.value_dec === IO2.address_dec)) return [3 /*break*/, 65];
                 return [4 /*yield*/, changeIO('IO2')];
             case 62:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO2', 'A', IO2.dec)];
+                return [4 /*yield*/, transfer('IO2', 'A', IO2.value_dec)];
             case 63:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO2.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO2.value_dec)];
             case 64:
                 _a.sent();
                 return [3 /*break*/, 69];
             case 65:
-                if (!(ZR.dec === IO3.address_dec)) return [3 /*break*/, 69];
+                if (!(ZR.value_dec === IO3.address_dec)) return [3 /*break*/, 69];
                 return [4 /*yield*/, changeIO('IO3')];
             case 66:
                 _a.sent();
-                return [4 /*yield*/, transfer('IO3', 'A', IO3.dec)];
+                return [4 /*yield*/, transfer('IO3', 'A', IO3.value_dec)];
             case 67:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', IO3.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', IO3.value_dec)];
             case 68:
                 _a.sent();
                 _a.label = 69;
@@ -3733,17 +3729,17 @@ var writeToIo = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 if (!(IO1.address_dec === IO2.address_dec)) return [3 /*break*/, 8];
                 if (!IO1.in_boolean) return [3 /*break*/, 4];
-                return [4 /*yield*/, transfer('A', 'IO2', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO2', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO2', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO2', A.value_dec)];
             case 3:
                 _a.sent();
                 return [3 /*break*/, 7];
-            case 4: return [4 /*yield*/, transfer('A', 'IO1', A.dec)];
+            case 4: return [4 /*yield*/, transfer('A', 'IO1', A.value_dec)];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO1', A.value_dec)];
             case 6:
                 _a.sent();
                 _a.label = 7;
@@ -3751,17 +3747,17 @@ var writeToIo = function () { return __awaiter(_this, void 0, void 0, function (
             case 8:
                 if (!(IO3.address_dec === IO2.address_dec)) return [3 /*break*/, 15];
                 if (!IO3.in_boolean) return [3 /*break*/, 11];
-                return [4 /*yield*/, transfer('A', 'IO2', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO2', A.value_dec)];
             case 9:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO2', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO2', A.value_dec)];
             case 10:
                 _a.sent();
                 return [3 /*break*/, 14];
-            case 11: return [4 /*yield*/, transfer('A', 'IO3', A.dec)];
+            case 11: return [4 /*yield*/, transfer('A', 'IO3', A.value_dec)];
             case 12:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO3', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO3', A.value_dec)];
             case 13:
                 _a.sent();
                 _a.label = 14;
@@ -3769,45 +3765,45 @@ var writeToIo = function () { return __awaiter(_this, void 0, void 0, function (
             case 15:
                 if (!(IO1.address_dec === IO3.address_dec)) return [3 /*break*/, 22];
                 if (!IO1.in_boolean) return [3 /*break*/, 18];
-                return [4 /*yield*/, transfer('A', 'IO3', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO3', A.value_dec)];
             case 16:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO3', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO3', A.value_dec)];
             case 17:
                 _a.sent();
                 return [3 /*break*/, 21];
-            case 18: return [4 /*yield*/, transfer('A', 'IO1', A.dec)];
+            case 18: return [4 /*yield*/, transfer('A', 'IO1', A.value_dec)];
             case 19:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO1', A.value_dec)];
             case 20:
                 _a.sent();
                 _a.label = 21;
             case 21: return [3 /*break*/, 31];
             case 22:
                 if (!(ZR.lo_dec === IO1.address_dec)) return [3 /*break*/, 25];
-                return [4 /*yield*/, transfer('A', 'IO1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO1', A.value_dec)];
             case 23:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO1', A.value_dec)];
             case 24:
                 _a.sent();
                 return [3 /*break*/, 31];
             case 25:
                 if (!(ZR.lo_dec === IO2.address_dec)) return [3 /*break*/, 28];
-                return [4 /*yield*/, transfer('A', 'IO2', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO2', A.value_dec)];
             case 26:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO2', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO2', A.value_dec)];
             case 27:
                 _a.sent();
                 return [3 /*break*/, 31];
             case 28:
                 if (!(ZR.lo_dec === IO3.address_dec)) return [3 /*break*/, 31];
-                return [4 /*yield*/, transfer('A', 'IO3', A.dec)];
+                return [4 /*yield*/, transfer('A', 'IO3', A.value_dec)];
             case 29:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IO3', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('IO3', A.value_dec)];
             case 30:
                 _a.sent();
                 _a.label = 31;
@@ -3844,19 +3840,19 @@ var loadOperands = function (register1_string, register2_string) { return __awai
                 return [4 /*yield*/, description_update('Hole den 1. Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer(register1_string, 'ALU1', reg1_class.dec)];
+                return [4 /*yield*/, transfer(register1_string, 'ALU1', reg1_class.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', reg1_class.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', reg1_class.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den 2. Operanden')];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, transfer(register2_string, 'ALU2', reg2_class.dec)];
+                return [4 /*yield*/, transfer(register2_string, 'ALU2', reg2_class.value_dec)];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU2', reg2_class.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU2', reg2_class.value_dec)];
             case 6:
                 _a.sent();
                 return [2 /*return*/];
@@ -3895,7 +3891,7 @@ var get_next_command = function () { return __awaiter(_this, void 0, void 0, fun
             case 0:
                 stepNumber_p.textContent = '0';
                 assemblerCommand_p.textContent = '';
-                IR.DOM.textContent = '';
+                IR.domElement.textContent = '';
                 return [4 /*yield*/, description_update('Hole den nächsten Befehl')];
             case 1:
                 _a.sent();
@@ -4013,13 +4009,13 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, description_update('Erkenne den Befehl')];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, add_yellow_background_for_IDLETIME(IR.DOM)];
+                return [4 /*yield*/, add_yellow_background_for_IDLETIME(IR.domElement)];
             case 5:
                 _a.sent();
                 return [4 /*yield*/, addArrow('IR')];
             case 6:
                 _a.sent();
-                if (!(IR.dec === 33)) return [3 /*break*/, 15];
+                if (!(IR.value_dec === 33)) return [3 /*break*/, 15];
                 assemblerCommand_p.textContent = 'MOV IX, dat_16';
                 if (!!playStatus.noAnim) return [3 /*break*/, 8];
                 return [4 /*yield*/, sleepForIDLETIME()];
@@ -4046,7 +4042,7 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 return [3 /*break*/, 52];
             case 15:
-                if (!(IR.dec === 42)) return [3 /*break*/, 29];
+                if (!(IR.value_dec === 42)) return [3 /*break*/, 29];
                 assemblerCommand_p.textContent = 'MOV IX, label';
                 return [4 /*yield*/, description_update('Hole das niederwertige Adressbyte')];
             case 16:
@@ -4078,7 +4074,7 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('ZR')];
             case 25:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ZR', ZR.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('ZR', ZR.value_dec + 1)];
             case 26:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole das höherwertige Byte')];
@@ -4089,7 +4085,7 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 return [3 /*break*/, 52];
             case 29:
-                if (!(IR.dec === 34)) return [3 /*break*/, 43];
+                if (!(IR.value_dec === 34)) return [3 /*break*/, 43];
                 assemblerCommand_p.textContent = 'MOV label, IX';
                 return [4 /*yield*/, description_update('Hole das niederwertige Adressbyte')];
             case 30:
@@ -4121,7 +4117,7 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('ZR')];
             case 39:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ZR', ZR.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('ZR', ZR.value_dec + 1)];
             case 40:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schreibe das höherwertige Byte')];
@@ -4132,7 +4128,7 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 return [3 /*break*/, 52];
             case 43:
-                if (!(IR.dec === 35)) return [3 /*break*/, 47];
+                if (!(IR.value_dec === 35)) return [3 /*break*/, 47];
                 assemblerCommand_p.textContent = 'INC IX';
                 return [4 /*yield*/, description_update('Erhöhe die Adresse um 1')];
             case 44:
@@ -4140,12 +4136,12 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('IX')];
             case 45:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IX', IX.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('IX', IX.value_dec + 1)];
             case 46:
                 _a.sent();
                 return [3 /*break*/, 52];
             case 47:
-                if (!(IR.dec === 43)) return [3 /*break*/, 51];
+                if (!(IR.value_dec === 43)) return [3 /*break*/, 51];
                 assemblerCommand_p.textContent = 'DEC IX';
                 return [4 /*yield*/, description_update('Verringere die Adresse um 1')];
             case 48:
@@ -4153,12 +4149,12 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('IX')];
             case 49:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('IX', IX.dec - 1)];
+                return [4 /*yield*/, updateRegister_hex('IX', IX.value_dec - 1)];
             case 50:
                 _a.sent();
                 return [3 /*break*/, 52];
             case 51:
-                if (IR.dec === 233) {
+                if (IR.value_dec === 233) {
                     assemblerCommand_p.textContent = 'JP [IX]';
                 }
                 _a.label = 52;
@@ -4226,10 +4222,10 @@ var movAB = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Kopiere die Daten')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('B', 'A', B.dec)];
+                return [4 /*yield*/, transfer('B', 'A', B.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', B.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', B.value_dec)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4243,10 +4239,10 @@ var movAC = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Kopiere die Daten')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('C', 'A', C.dec)];
+                return [4 /*yield*/, transfer('C', 'A', C.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('A', C.dec)];
+                return [4 /*yield*/, updateRegister_hex('A', C.value_dec)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4260,10 +4256,10 @@ var movBA = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Kopiere die Daten')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'B', A.dec)];
+                return [4 /*yield*/, transfer('A', 'B', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('B', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('B', A.value_dec)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4277,10 +4273,10 @@ var movBC = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Kopiere die Daten')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('C', 'B', C.dec)];
+                return [4 /*yield*/, transfer('C', 'B', C.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('B', C.dec)];
+                return [4 /*yield*/, updateRegister_hex('B', C.value_dec)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4294,10 +4290,10 @@ var movCA = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Kopiere die Daten')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'C', A.dec)];
+                return [4 /*yield*/, transfer('A', 'C', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('C', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('C', A.value_dec)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4311,10 +4307,10 @@ var movCB = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Kopiere die Daten')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('B', 'C', B.dec)];
+                return [4 /*yield*/, transfer('B', 'C', B.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('C', B.dec)];
+                return [4 /*yield*/, updateRegister_hex('C', B.value_dec)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4419,7 +4415,7 @@ var movHlLabel = function () { return __awaiter(_this, void 0, void 0, function 
                 return [4 /*yield*/, addArrow('ZR')];
             case 10:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ZR', ZR.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('ZR', ZR.value_dec + 1)];
             case 11:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole das höherwertige Byte')];
@@ -4466,7 +4462,7 @@ var movLabelHl = function () { return __awaiter(_this, void 0, void 0, function 
                 return [4 /*yield*/, addArrow('ZR')];
             case 10:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ZR', ZR.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('ZR', ZR.value_dec + 1)];
             case 11:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schreibe das höherwertige Byte')];
@@ -4517,7 +4513,7 @@ var push = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('SP')];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec - 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec - 1)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schreibe den Akku')];
@@ -4532,7 +4528,7 @@ var push = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('SP')];
             case 7:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec - 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec - 1)];
             case 8:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schreibe die Flags')];
@@ -4561,7 +4557,7 @@ var pop = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('SP')];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec + 1)];
             case 5:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den Akku')];
@@ -4576,7 +4572,7 @@ var pop = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('SP')];
             case 9:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec + 1)];
             case 10:
                 _a.sent();
                 check_completeExecution();
@@ -4637,16 +4633,16 @@ var incA = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Erhöhe den Operanden um 1')];
             case 4:
                 _a.sent();
-                result = incBinary(A.dec);
+                result = incBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'A')];
             case 5:
                 _a.sent();
@@ -4662,16 +4658,16 @@ var incB = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('B', 'ALU1', B.dec)];
+                return [4 /*yield*/, transfer('B', 'ALU1', B.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', B.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', B.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Erhöhe den Operanden um 1')];
             case 4:
                 _a.sent();
-                result = incBinary(B.dec);
+                result = incBinary(B.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'B')];
             case 5:
                 _a.sent();
@@ -4687,16 +4683,16 @@ var incC = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('C', 'ALU1', C.dec)];
+                return [4 /*yield*/, transfer('C', 'ALU1', C.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', C.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', C.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Erhöhe den Operanden um 1')];
             case 4:
                 _a.sent();
-                result = incBinary(C.dec);
+                result = incBinary(C.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'C')];
             case 5:
                 _a.sent();
@@ -4714,7 +4710,7 @@ var incHl = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('HL')];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('HL', HL.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('HL', HL.value_dec + 1)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4730,16 +4726,16 @@ var decA = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Verringere den Operanden um 1')];
             case 4:
                 _a.sent();
-                result = decBinary(A.dec);
+                result = decBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'A')];
             case 5:
                 _a.sent();
@@ -4755,16 +4751,16 @@ var decB = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('B', 'ALU1', B.dec)];
+                return [4 /*yield*/, transfer('B', 'ALU1', B.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', B.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', B.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Verringere den Operanden um 1')];
             case 4:
                 _a.sent();
-                result = decBinary(B.dec);
+                result = decBinary(B.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'B')];
             case 5:
                 _a.sent();
@@ -4780,16 +4776,16 @@ var decC = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('C', 'ALU1', C.dec)];
+                return [4 /*yield*/, transfer('C', 'ALU1', C.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', C.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', C.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Verringere den Operanden um 1')];
             case 4:
                 _a.sent();
-                result = decBinary(C.dec);
+                result = decBinary(C.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'C')];
             case 5:
                 _a.sent();
@@ -4807,7 +4803,7 @@ var decHl = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('HL')];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('HL', HL.dec - 1)];
+                return [4 /*yield*/, updateRegister_hex('HL', HL.value_dec - 1)];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -4825,7 +4821,7 @@ var addA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Addiere die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, A.dec, false);
+                result = addBinary(A.value_dec, A.value_dec, false);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -4844,7 +4840,7 @@ var addB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Addiere die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, B.dec, false);
+                result = addBinary(A.value_dec, B.value_dec, false);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -4863,7 +4859,7 @@ var addC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Addiere die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, C.dec, false);
+                result = addBinary(A.value_dec, C.value_dec, false);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -4879,10 +4875,10 @@ var addDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
             case 0: return [4 /*yield*/, description_update('Hole den 1. Operator')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den 2. Operator')];
@@ -4897,7 +4893,7 @@ var addDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, description_update('Addiere die Operanden')];
             case 7:
                 _a.sent();
-                result = addBinary(A.dec, ALU2.dec, false);
+                result = addBinary(A.value_dec, ALU2.value_dec, false);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 8:
                 _a.sent();
@@ -4922,16 +4918,16 @@ var addHlBc = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, description_update('Hole das C-Register')];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, transfer('C', 'ALU2', C.dec)];
+                return [4 /*yield*/, transfer('C', 'ALU2', C.value_dec)];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU2', C.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU2', C.value_dec)];
             case 6:
                 _a.sent();
                 return [4 /*yield*/, description_update('Addiere die Operanden')];
             case 7:
                 _a.sent();
-                result = addBinary(HL.lo_dec, C.dec, false);
+                result = addBinary(HL.lo_dec, C.value_dec, false);
                 return [4 /*yield*/, hlBcAnimation(result, true)];
             case 8:
                 _a.sent();
@@ -4947,16 +4943,16 @@ var addHlBc = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, description_update('Hole das B-Register')];
             case 12:
                 _a.sent();
-                return [4 /*yield*/, transfer('B', 'ALU2', B.dec)];
+                return [4 /*yield*/, transfer('B', 'ALU2', B.value_dec)];
             case 13:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU2', B.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU2', B.value_dec)];
             case 14:
                 _a.sent();
                 return [4 /*yield*/, description_update('Addiere die Operanden')];
             case 15:
                 _a.sent();
-                result = addBinary(HL.hi_dec, B.dec + FLAGS.c_dec, false);
+                result = addBinary(HL.hi_dec, B.value_dec + FLAGS.c_dec, false);
                 return [4 /*yield*/, hlBcAnimation(result, false)];
             case 16:
                 _a.sent();
@@ -4975,7 +4971,7 @@ var subA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Subtrahiere die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, A.dec, true);
+                result = addBinary(A.value_dec, A.value_dec, true);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -4994,7 +4990,7 @@ var subB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Subtrahiere die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, B.dec, true);
+                result = addBinary(A.value_dec, B.value_dec, true);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5013,7 +5009,7 @@ var subC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Subtrahiere die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, C.dec, true);
+                result = addBinary(A.value_dec, C.value_dec, true);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5029,10 +5025,10 @@ var subDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
             case 0: return [4 /*yield*/, description_update('Hole den 1. Operator')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den 2. Operator')];
@@ -5047,7 +5043,7 @@ var subDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, description_update('Subtrahiere die Operanden')];
             case 7:
                 _a.sent();
-                result = addBinary(A.dec, ALU2.dec, true);
+                result = addBinary(A.value_dec, ALU2.value_dec, true);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 8:
                 _a.sent();
@@ -5066,7 +5062,7 @@ var andA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 AND OP2')];
             case 2:
                 _a.sent();
-                result = andBinary(A.dec, A.dec);
+                result = andBinary(A.value_dec, A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5085,7 +5081,7 @@ var andB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 AND OP2')];
             case 2:
                 _a.sent();
-                result = andBinary(A.dec, B.dec);
+                result = andBinary(A.value_dec, B.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5104,7 +5100,7 @@ var andC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 AND OP2')];
             case 2:
                 _a.sent();
-                result = andBinary(A.dec, C.dec);
+                result = andBinary(A.value_dec, C.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5120,10 +5116,10 @@ var andDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
             case 0: return [4 /*yield*/, description_update('Hole den 1. Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den 2. Operanden')];
@@ -5138,7 +5134,7 @@ var andDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, description_update('OP1 AND OP2')];
             case 7:
                 _a.sent();
-                result = andBinary(A.dec, ALU2.dec);
+                result = andBinary(A.value_dec, ALU2.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 8:
                 _a.sent();
@@ -5157,7 +5153,7 @@ var orA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 OR OP2')];
             case 2:
                 _a.sent();
-                result = orBinary(ALU1.dec, ALU2.dec);
+                result = orBinary(ALU1.value_dec, ALU2.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5176,7 +5172,7 @@ var orB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 OR OP2')];
             case 2:
                 _a.sent();
-                result = orBinary(ALU1.dec, ALU2.dec);
+                result = orBinary(ALU1.value_dec, ALU2.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5195,7 +5191,7 @@ var orC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 OR OP2')];
             case 2:
                 _a.sent();
-                result = orBinary(ALU1.dec, ALU2.dec);
+                result = orBinary(ALU1.value_dec, ALU2.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5211,10 +5207,10 @@ var orDat_8 = function () { return __awaiter(_this, void 0, void 0, function () 
             case 0: return [4 /*yield*/, description_update('Hole den 1. Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den 2. Operanden')];
@@ -5229,7 +5225,7 @@ var orDat_8 = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, description_update('OP1 OR OP2')];
             case 7:
                 _a.sent();
-                result = orBinary(ALU1.dec, ALU2.dec);
+                result = orBinary(ALU1.value_dec, ALU2.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 8:
                 _a.sent();
@@ -5248,7 +5244,7 @@ var xorA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 XOR OP2')];
             case 2:
                 _a.sent();
-                result = xorBinary(A.dec, A.dec);
+                result = xorBinary(A.value_dec, A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5267,7 +5263,7 @@ var xorB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 XOR OP2')];
             case 2:
                 _a.sent();
-                result = xorBinary(A.dec, B.dec);
+                result = xorBinary(A.value_dec, B.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5286,7 +5282,7 @@ var xorC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('OP1 XOR OP2')];
             case 2:
                 _a.sent();
-                result = xorBinary(A.dec, C.dec);
+                result = xorBinary(A.value_dec, C.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 3:
                 _a.sent();
@@ -5302,10 +5298,10 @@ var xorDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
             case 0: return [4 /*yield*/, description_update('Hole den 1. Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den 2. Operanden')];
@@ -5320,7 +5316,7 @@ var xorDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, description_update('OP1 OR OP2')];
             case 7:
                 _a.sent();
-                result = xorBinary(ALU1.dec, ALU2.dec);
+                result = xorBinary(ALU1.value_dec, ALU2.value_dec);
                 return [4 /*yield*/, aluAnimation(result, true, false, 'A')];
             case 8:
                 _a.sent();
@@ -5345,10 +5341,10 @@ var twoByteShift = function () { return __awaiter(_this, void 0, void 0, functio
                 return [4 /*yield*/, description_update('Erkenne den Befehl')];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, add_yellow_background_for_IDLETIME(IR.DOM)];
+                return [4 /*yield*/, add_yellow_background_for_IDLETIME(IR.domElement)];
             case 5:
                 _a.sent();
-                if (!(IR.dec === 39)) return [3 /*break*/, 14];
+                if (!(IR.value_dec === 39)) return [3 /*break*/, 14];
                 return [4 /*yield*/, addArrow('IR')];
             case 6:
                 _a.sent();
@@ -5361,22 +5357,22 @@ var twoByteShift = function () { return __awaiter(_this, void 0, void 0, functio
             case 8: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 9:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 10:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 11:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schiebe Operanden nach links')];
             case 12:
                 _a.sent();
-                result = shlBinary(A.dec);
+                result = shlBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'A')];
             case 13:
                 _a.sent();
                 return [3 /*break*/, 23];
             case 14:
-                if (!(IR.dec === 63)) return [3 /*break*/, 23];
+                if (!(IR.value_dec === 63)) return [3 /*break*/, 23];
                 return [4 /*yield*/, addArrow('IR')];
             case 15:
                 _a.sent();
@@ -5389,16 +5385,16 @@ var twoByteShift = function () { return __awaiter(_this, void 0, void 0, functio
             case 17: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 18:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 19:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 20:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schiebe Operanden nach rechts')];
             case 21:
                 _a.sent();
-                result = shrBinary(A.dec);
+                result = shrBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'A')];
             case 22:
                 _a.sent();
@@ -5416,16 +5412,16 @@ var rcl = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Rotiere Operand mit Carry-Flag nach links')];
             case 4:
                 _a.sent();
-                result = rclBinary(A.dec);
+                result = rclBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, true, 'A')];
             case 5:
                 _a.sent();
@@ -5441,16 +5437,16 @@ var rol = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Rotiere Operand ohne Carry-Flag nach links')];
             case 4:
                 _a.sent();
-                result = rolBinary(A.dec);
+                result = rolBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'A')];
             case 5:
                 _a.sent();
@@ -5466,16 +5462,16 @@ var rcr = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Rotiere Operand mit Carry-Flag nach rechts')];
             case 4:
                 _a.sent();
-                result = rcrBinary(A.dec);
+                result = rcrBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, true, 'A')];
             case 5:
                 _a.sent();
@@ -5491,16 +5487,16 @@ var ror = function () { return __awaiter(_this, void 0, void 0, function () {
             case 0: return [4 /*yield*/, description_update('Hole den Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Rotiere Operand ohne Carry-Flag nach rechts')];
             case 4:
                 _a.sent();
-                result = rorBinary(A.dec);
+                result = rorBinary(A.value_dec);
                 return [4 /*yield*/, aluAnimation(result, false, false, 'A')];
             case 5:
                 _a.sent();
@@ -5519,8 +5515,8 @@ var cpA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Vergleiche die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, A.dec, true);
-                return [4 /*yield*/, aluAnimation(result, true, false, false)];
+                result = addBinary(A.value_dec, A.value_dec, true);
+                return [4 /*yield*/, aluAnimation(result, true, false, '')];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -5538,8 +5534,8 @@ var cpB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Vergleiche die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, B.dec, true);
-                return [4 /*yield*/, aluAnimation(result, true, false, false)];
+                result = addBinary(A.value_dec, B.value_dec, true);
+                return [4 /*yield*/, aluAnimation(result, true, false, '')];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -5557,8 +5553,8 @@ var cpC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, description_update('Vergleiche die Operanden')];
             case 2:
                 _a.sent();
-                result = addBinary(A.dec, C.dec, true);
-                return [4 /*yield*/, aluAnimation(result, true, false, false)];
+                result = addBinary(A.value_dec, C.value_dec, true);
+                return [4 /*yield*/, aluAnimation(result, true, false, '')];
             case 3:
                 _a.sent();
                 check_completeExecution();
@@ -5573,10 +5569,10 @@ var cpDat_8 = function () { return __awaiter(_this, void 0, void 0, function () 
             case 0: return [4 /*yield*/, description_update('Hole den 1. Operanden')];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, transfer('A', 'ALU1', A.dec)];
+                return [4 /*yield*/, transfer('A', 'ALU1', A.value_dec)];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('ALU1', A.dec)];
+                return [4 /*yield*/, updateRegister_hex('ALU1', A.value_dec)];
             case 3:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole den 2. Operanden')];
@@ -5591,8 +5587,8 @@ var cpDat_8 = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, description_update('Vergleiche die Operanden')];
             case 7:
                 _a.sent();
-                result = addBinary(A.dec, ALU2.dec, true);
-                return [4 /*yield*/, aluAnimation(result, true, false, false)];
+                result = addBinary(A.value_dec, ALU2.value_dec, true);
+                return [4 /*yield*/, aluAnimation(result, true, false, '')];
             case 8:
                 _a.sent();
                 check_completeExecution();
@@ -5619,10 +5615,10 @@ var jpnzLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5651,10 +5647,10 @@ var jpzLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5683,10 +5679,10 @@ var jpncLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5715,10 +5711,10 @@ var jpcLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5747,10 +5743,10 @@ var jpnoLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5779,10 +5775,10 @@ var jpoLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5811,10 +5807,10 @@ var jpnsLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5843,10 +5839,10 @@ var jpsLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, addArrow('ZR')];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 7:
                 _a.sent();
                 _a.label = 8;
@@ -5868,10 +5864,10 @@ var jpLabel = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, addArrow('ZR')];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 5:
                 _a.sent();
                 check_completeExecution();
@@ -5906,7 +5902,7 @@ var callLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('SP')];
             case 8:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec - 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec - 1)];
             case 9:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schreibe das HI-Byte des PC')];
@@ -5921,7 +5917,7 @@ var callLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('SP')];
             case 13:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec - 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec - 1)];
             case 14:
                 _a.sent();
                 return [4 /*yield*/, description_update('Schreibe das LO-Byte des PC')];
@@ -5936,10 +5932,10 @@ var callLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, addArrow('ZR')];
             case 18:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 19:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 20:
                 _a.sent();
                 check_completeExecution();
@@ -5962,7 +5958,7 @@ var ret = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('SP')];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec + 1)];
             case 5:
                 _a.sent();
                 return [4 /*yield*/, description_update('Hole das höherwertige Adressbyte')];
@@ -5977,7 +5973,7 @@ var ret = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('SP')];
             case 9:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('SP', SP.dec + 1)];
+                return [4 /*yield*/, updateRegister_hex('SP', SP.value_dec + 1)];
             case 10:
                 _a.sent();
                 return [4 /*yield*/, description_update('Lade den Programmzähler')];
@@ -5986,10 +5982,10 @@ var ret = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, addArrow('ZR')];
             case 12:
                 _a.sent();
-                return [4 /*yield*/, transfer('ZR', 'PC', ZR.dec)];
+                return [4 /*yield*/, transfer('ZR', 'PC', ZR.value_dec)];
             case 13:
                 _a.sent();
-                return [4 /*yield*/, updateRegister_hex('PC', ZR.dec)];
+                return [4 /*yield*/, updateRegister_hex('PC', ZR.value_dec)];
             case 14:
                 _a.sent();
                 check_completeExecution();
@@ -5998,7 +5994,7 @@ var ret = function () { return __awaiter(_this, void 0, void 0, function () {
     });
 }); };
 var runningProgram = [get_next_command];
-var run_program = function (currentTime) { return __awaiter(_this, void 0, void 0, function () {
+var run_program = function () { return __awaiter(_this, void 0, void 0, function () {
     var i, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -6055,9 +6051,9 @@ var init = function () {
     DECODER.resetDOM();
     RAM.updateVariableElements(0);
     DECODER.error = false;
-    ALUOUT.DOM.textContent = '';
-    ALU1.DOM.textContent = '';
-    ALU2.DOM.textContent = '';
+    ALUOUT.domElement.textContent = '';
+    ALU1.domElement.textContent = '';
+    ALU2.domElement.textContent = '';
     try {
         movingObject.classList.remove('toggleGrid');
     }
@@ -6227,10 +6223,10 @@ var toggleFullscreen = function () {
         if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
         }
-        else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+        else if (document.documentElement.webkitRequestFullscreen) {
             document.documentElement.webkitRequestFullscreen();
         }
-        else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+        else if (document.documentElement.msRequestFullscreen) {
             document.documentElement.msRequestFullscreen();
         }
         isFullscreen = true;
@@ -6239,10 +6235,10 @@ var toggleFullscreen = function () {
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
-        else if (document.webkitExitFullscreen) { /* Safari */
+        else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
         }
-        else if (document.msExitFullscreen) { /* IE11 */
+        else if (document.msExitFullscreen) {
             document.msExitFullscreen();
         }
         isFullscreen = false;
@@ -6257,77 +6253,77 @@ var openInfo = function () {
 /******************************* mc8_commands *********************************** */
 //overflowflag = 1, parityflag = 2;
 var mc8_commands_array = [
-    movAdat_8_command = new mc8_command('MOV A, dat_8', 62, 2, [0, 0, 0, 0], movAdat_8),
-    movBdat_8_command = new mc8_command('MOV B, dat_8', 6, 2, [0, 0, 0, 0], movBdat_8),
-    movCdat_8_command = new mc8_command('MOV C, dat_8', 14, 2, [0, 0, 0, 0], movCdat_8),
-    twoByteIX_command = new mc8_command('2-Byte Befehl', 221, 4, [0, 0, 0, 0], twoByteIX),
-    movHLdat_16_command = new mc8_command('MOV HL, dat_16', 33, 3, [0, 0, 0, 0], movHLdat_16),
-    movSPdat_16_command = new mc8_command('MOV SP, dat_16', 49, 3, [0, 0, 0, 0], movSPdat_16),
-    movAB_command = new mc8_command('MOV A, B', 120, 1, [0, 0, 0, 0], movAB),
-    movAC_command = new mc8_command('MOV A, C', 121, 1, [0, 0, 0, 0], movAC),
-    movBA_command = new mc8_command('MOV B, A', 71, 1, [0, 0, 0, 0], movBA),
-    movBC_command = new mc8_command('MOV B, C', 65, 1, [0, 0, 0, 0], movBC),
-    movCA_command = new mc8_command('MOV C, A', 79, 1, [0, 0, 0, 0], movCA),
-    movCB_command = new mc8_command('MOV C, B', 72, 1, [0, 0, 0, 0], movCB),
-    movALabel_command = new mc8_command('MOV A, label', 58, 3, [0, 0, 0, 0], movALabel),
-    movLabelA_command = new mc8_command('MOV label, A', 50, 3, [0, 0, 0, 0], movLabelA),
-    movHlLabel_command = new mc8_command('MOV HL, label', 42, 3, [0, 0, 0, 0], movHlLabel),
-    movLabelHl_command = new mc8_command('MOV label, HL', 34, 3, [0, 0, 0, 0], movLabelHl),
-    movAHl_command = new mc8_command('MOV A, [HL]', 126, 1, [0, 0, 0, 0], movAHl),
-    movHlA_command = new mc8_command('MOV [HL], A', 119, 1, [0, 0, 0, 0], movHlA),
-    push_command = new mc8_command('PUSH', 245, 1, [0, 0, 0, 0], push),
-    pop_command = new mc8_command('POP', 241, 1, [0, 0, 0, 0], pop),
-    inAport_command = new mc8_command('IN A, port', 219, 2, [0, 0, 0, 0], inA),
-    outPortA_command = new mc8_command('OUT port, A', 211, 2, [0, 0, 0, 0], outA),
-    incA_command = new mc8_command('INC A', 60, 1, [0, 1, 1, 1], incA),
-    incB_command = new mc8_command('INC B', 4, 1, [0, 1, 1, 1], incB),
-    incC_command = new mc8_command('INC C', 12, 1, [0, 1, 1, 1], incC),
-    incHl_command = new mc8_command('INC HL', 35, 1, [0, 0, 0, 0], incHl),
-    decA_command = new mc8_command('DEC A', 61, 1, [0, 1, 1, 1], decA),
-    decB_command = new mc8_command('DEC B', 5, 1, [0, 1, 1, 1], decB),
-    decC_command = new mc8_command('DEC C', 13, 1, [0, 1, 1, 1], decC),
-    decHL_command = new mc8_command('DEC HL', 43, 1, [0, 0, 0, 0], decHl),
-    addA_command = new mc8_command('ADD A', 135, 1, [1, 1, 1, 1], addA),
-    addB_command = new mc8_command('ADD B', 128, 1, [1, 1, 1, 1], addB),
-    addC_command = new mc8_command('ADD C', 129, 1, [1, 1, 1, 1], addC),
-    addDat_8_command = new mc8_command('ADD dat_8', 198, 2, [1, 1, 1, 1], addDat_8),
-    addHlBc_command = new mc8_command('ADD HL, BC', 9, 1, [1, 0, 0, 0], addHlBc),
-    subA_command = new mc8_command('SUB A', 151, 1, [1, 1, 1, 1], subA),
-    subB_command = new mc8_command('SUB B', 144, 1, [1, 1, 1, 1], subB),
-    subC_command = new mc8_command('SUB C', 145, 1, [1, 1, 1, 1], subC),
-    subDat_8_command = new mc8_command('SUB dat_8', 214, 2, [1, 1, 1, 1], subDat_8),
-    andA_command = new mc8_command('AND A', 167, 1, [1, 1, 2, 1], andA),
-    andB_command = new mc8_command('AND B', 160, 1, [1, 1, 2, 1], andB),
-    andC_command = new mc8_command('AND C', 161, 1, [1, 1, 2, 1], andC),
-    andDat_8_command = new mc8_command('AND dat_8', 230, 2, [1, 1, 2, 1], andDat_8),
-    orA_command = new mc8_command('OR A', 183, 1, [1, 1, 2, 1], orA),
-    orB_command = new mc8_command('OR B', 176, 1, [1, 1, 2, 1], orB),
-    orC_command = new mc8_command('OR C', 177, 1, [1, 1, 2, 1], orC),
-    orDat_8_command = new mc8_command('OR dat_8', 246, 2, [1, 1, 2, 1], orDat_8),
-    xorA_command = new mc8_command('XOR A', 175, 1, [1, 1, 2, 1], xorA),
-    xorB_command = new mc8_command('XOR B', 168, 1, [1, 1, 2, 1], xorB),
-    xorC_command = new mc8_command('XOR C', 169, 1, [1, 1, 2, 1], xorC),
-    xorDat_8_command = new mc8_command('XOR dat_8', 238, 2, [1, 1, 2, 1], xorDat_8),
-    twoByteShift_command = new mc8_command('2-Byte-Befehl', 203, 2, [1, 1, 2, 1], twoByteShift),
-    rcl_command = new mc8_command('RCL', 23, 1, [1, 0, 0, 0], rcl),
-    rol_command = new mc8_command('ROL', 7, 1, [1, 0, 0, 0], rol),
-    rcr_command = new mc8_command('RCR', 31, 1, [1, 0, 0, 0], rcr),
-    ror_command = new mc8_command('ROR', 15, 1, [1, 0, 0, 0], ror),
-    cpA_command = new mc8_command('CP A', 191, 1, [1, 1, 1, 1], cpA),
-    cpB_command = new mc8_command('CP B', 184, 1, [1, 1, 1, 1], cpB),
-    cpC_command = new mc8_command('CP C', 185, 1, [1, 1, 1, 1], cpC),
-    cpDat_8_command = new mc8_command('CP dat_8', 254, 2, [1, 1, 1, 1], cpDat_8),
-    jpnzLabel_command = new mc8_command('JPNZ label', 194, 3, [0, 0, 0, 0], jpnzLabel),
-    jpzLabel_command = new mc8_command('JPZ label', 202, 3, [0, 0, 0, 0], jpzLabel),
-    jpncLabel_command = new mc8_command('JPNC label', 210, 3, [0, 0, 0, 0], jpncLabel),
-    jpcLabel_command = new mc8_command('JPC label', 218, 3, [0, 0, 0, 0], jpcLabel),
-    jpnoLabel_command = new mc8_command('JPNO label', 226, 3, [0, 0, 0, 0], jpnoLabel),
-    jpoLabel_command = new mc8_command('JPO label', 234, 3, [0, 0, 0, 0], jpoLabel),
-    jpnsLabel_command = new mc8_command('JPNS label', 242, 3, [0, 0, 0, 0], jpnsLabel),
-    jpsLabel_command = new mc8_command('JPS label', 250, 3, [0, 0, 0, 0], jpsLabel),
-    jpLabel_command = new mc8_command('JP label', 195, 3, [0, 0, 0, 0], jpLabel),
-    callLabel_command = new mc8_command('CALL label', 205, 3, [0, 0, 0, 0], callLabel),
-    ret_command = new mc8_command('RET', 201, 3, [0, 0, 0, 0], ret),
-    nop_command = new mc8_command('NOP', 0, 1, [0, 0, 0, 0], nop),
-    halt_command = new mc8_command('HALT', 118, 1, [0, 0, 0, 0], halt),
+    new mc8_command('MOV A, dat_8', 62, 2, [0, 0, 0, 0], movAdat_8),
+    new mc8_command('MOV B, dat_8', 6, 2, [0, 0, 0, 0], movBdat_8),
+    new mc8_command('MOV C, dat_8', 14, 2, [0, 0, 0, 0], movCdat_8),
+    new mc8_command('2-Byte Befehl', 221, 4, [0, 0, 0, 0], twoByteIX),
+    new mc8_command('MOV HL, dat_16', 33, 3, [0, 0, 0, 0], movHLdat_16),
+    new mc8_command('MOV SP, dat_16', 49, 3, [0, 0, 0, 0], movSPdat_16),
+    new mc8_command('MOV A, B', 120, 1, [0, 0, 0, 0], movAB),
+    new mc8_command('MOV A, C', 121, 1, [0, 0, 0, 0], movAC),
+    new mc8_command('MOV B, A', 71, 1, [0, 0, 0, 0], movBA),
+    new mc8_command('MOV B, C', 65, 1, [0, 0, 0, 0], movBC),
+    new mc8_command('MOV C, A', 79, 1, [0, 0, 0, 0], movCA),
+    new mc8_command('MOV C, B', 72, 1, [0, 0, 0, 0], movCB),
+    new mc8_command('MOV A, label', 58, 3, [0, 0, 0, 0], movALabel),
+    new mc8_command('MOV label, A', 50, 3, [0, 0, 0, 0], movLabelA),
+    new mc8_command('MOV HL, label', 42, 3, [0, 0, 0, 0], movHlLabel),
+    new mc8_command('MOV label, HL', 34, 3, [0, 0, 0, 0], movLabelHl),
+    new mc8_command('MOV A, [HL]', 126, 1, [0, 0, 0, 0], movAHl),
+    new mc8_command('MOV [HL], A', 119, 1, [0, 0, 0, 0], movHlA),
+    new mc8_command('PUSH', 245, 1, [0, 0, 0, 0], push),
+    new mc8_command('POP', 241, 1, [0, 0, 0, 0], pop),
+    new mc8_command('IN A, port', 219, 2, [0, 0, 0, 0], inA),
+    new mc8_command('OUT port, A', 211, 2, [0, 0, 0, 0], outA),
+    new mc8_command('INC A', 60, 1, [0, 1, 1, 1], incA),
+    new mc8_command('INC B', 4, 1, [0, 1, 1, 1], incB),
+    new mc8_command('INC C', 12, 1, [0, 1, 1, 1], incC),
+    new mc8_command('INC HL', 35, 1, [0, 0, 0, 0], incHl),
+    new mc8_command('DEC A', 61, 1, [0, 1, 1, 1], decA),
+    new mc8_command('DEC B', 5, 1, [0, 1, 1, 1], decB),
+    new mc8_command('DEC C', 13, 1, [0, 1, 1, 1], decC),
+    new mc8_command('DEC HL', 43, 1, [0, 0, 0, 0], decHl),
+    new mc8_command('ADD A', 135, 1, [1, 1, 1, 1], addA),
+    new mc8_command('ADD B', 128, 1, [1, 1, 1, 1], addB),
+    new mc8_command('ADD C', 129, 1, [1, 1, 1, 1], addC),
+    new mc8_command('ADD dat_8', 198, 2, [1, 1, 1, 1], addDat_8),
+    new mc8_command('ADD HL, BC', 9, 1, [1, 0, 0, 0], addHlBc),
+    new mc8_command('SUB A', 151, 1, [1, 1, 1, 1], subA),
+    new mc8_command('SUB B', 144, 1, [1, 1, 1, 1], subB),
+    new mc8_command('SUB C', 145, 1, [1, 1, 1, 1], subC),
+    new mc8_command('SUB dat_8', 214, 2, [1, 1, 1, 1], subDat_8),
+    new mc8_command('AND A', 167, 1, [1, 1, 2, 1], andA),
+    new mc8_command('AND B', 160, 1, [1, 1, 2, 1], andB),
+    new mc8_command('AND C', 161, 1, [1, 1, 2, 1], andC),
+    new mc8_command('AND dat_8', 230, 2, [1, 1, 2, 1], andDat_8),
+    new mc8_command('OR A', 183, 1, [1, 1, 2, 1], orA),
+    new mc8_command('OR B', 176, 1, [1, 1, 2, 1], orB),
+    new mc8_command('OR C', 177, 1, [1, 1, 2, 1], orC),
+    new mc8_command('OR dat_8', 246, 2, [1, 1, 2, 1], orDat_8),
+    new mc8_command('XOR A', 175, 1, [1, 1, 2, 1], xorA),
+    new mc8_command('XOR B', 168, 1, [1, 1, 2, 1], xorB),
+    new mc8_command('XOR C', 169, 1, [1, 1, 2, 1], xorC),
+    new mc8_command('XOR dat_8', 238, 2, [1, 1, 2, 1], xorDat_8),
+    new mc8_command('2-Byte-Befehl', 203, 2, [1, 1, 2, 1], twoByteShift),
+    new mc8_command('RCL', 23, 1, [1, 0, 0, 0], rcl),
+    new mc8_command('ROL', 7, 1, [1, 0, 0, 0], rol),
+    new mc8_command('RCR', 31, 1, [1, 0, 0, 0], rcr),
+    new mc8_command('ROR', 15, 1, [1, 0, 0, 0], ror),
+    new mc8_command('CP A', 191, 1, [1, 1, 1, 1], cpA),
+    new mc8_command('CP B', 184, 1, [1, 1, 1, 1], cpB),
+    new mc8_command('CP C', 185, 1, [1, 1, 1, 1], cpC),
+    new mc8_command('CP dat_8', 254, 2, [1, 1, 1, 1], cpDat_8),
+    new mc8_command('JPNZ label', 194, 3, [0, 0, 0, 0], jpnzLabel),
+    new mc8_command('JPZ label', 202, 3, [0, 0, 0, 0], jpzLabel),
+    new mc8_command('JPNC label', 210, 3, [0, 0, 0, 0], jpncLabel),
+    new mc8_command('JPC label', 218, 3, [0, 0, 0, 0], jpcLabel),
+    new mc8_command('JPNO label', 226, 3, [0, 0, 0, 0], jpnoLabel),
+    new mc8_command('JPO label', 234, 3, [0, 0, 0, 0], jpoLabel),
+    new mc8_command('JPNS label', 242, 3, [0, 0, 0, 0], jpnsLabel),
+    new mc8_command('JPS label', 250, 3, [0, 0, 0, 0], jpsLabel),
+    new mc8_command('JP label', 195, 3, [0, 0, 0, 0], jpLabel),
+    new mc8_command('CALL label', 205, 3, [0, 0, 0, 0], callLabel),
+    new mc8_command('RET', 201, 3, [0, 0, 0, 0], ret),
+    new mc8_command('NOP', 0, 1, [0, 0, 0, 0], nop),
+    new mc8_command('HALT', 118, 1, [0, 0, 0, 0], halt),
 ];

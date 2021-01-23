@@ -261,6 +261,10 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     z-index: 2
 }
 
+.redRectangle {
+    border-color: #FF1930;
+}
+
 .containerAspectRatio {
     position: fixed;
     display: -webkit-box;

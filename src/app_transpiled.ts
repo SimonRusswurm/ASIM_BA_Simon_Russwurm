@@ -2835,7 +2835,7 @@ const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
 
     //animate register update
     if(!playStatus.noAnim){
-        yellowBgElement_div.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement_div.style.top = register_class.domElement.offsetTop + 'px';
         yellowBgElement_div.style.left = String(100/46*14) + '%';
         yellowBgElement_div.classList.add('toggleGrid');
         try{
@@ -2855,7 +2855,7 @@ const updateRegister_hex4_lo = async(register_class, hex2_dec) => {
 
     //animate register update if Animation is required
     if(!playStatus.noAnim){
-        yellowBgElement_div.style.top = register_class.DOM.offsetTop + 'px';
+        yellowBgElement_div.style.top = register_class.domElement.offsetTop + 'px';
         yellowBgElement_div.style.left = String(100/46*16) + '%';
         yellowBgElement_div.classList.add('toggleGrid');
         try{

@@ -2646,7 +2646,7 @@ var updateRegister_hex4_hi = function (register_class, hex2_dec) { return __awai
                 //update register
                 register_class.update_hi(hex2_dec);
                 if (!!playStatus.noAnim) return [3 /*break*/, 5];
-                yellowBgElement_div.style.top = register_class.DOM.offsetTop + 'px';
+                yellowBgElement_div.style.top = register_class.domElement.offsetTop + 'px';
                 yellowBgElement_div.style.left = String(100 / 46 * 14) + '%';
                 yellowBgElement_div.classList.add('toggleGrid');
                 _a.label = 2;
@@ -2672,7 +2672,7 @@ var updateRegister_hex4_lo = function (register_class, hex2_dec) { return __awai
                 //update register
                 register_class.update_lo(hex2_dec);
                 if (!!playStatus.noAnim) return [3 /*break*/, 5];
-                yellowBgElement_div.style.top = register_class.DOM.offsetTop + 'px';
+                yellowBgElement_div.style.top = register_class.domElement.offsetTop + 'px';
                 yellowBgElement_div.style.left = String(100 / 46 * 16) + '%';
                 yellowBgElement_div.classList.add('toggleGrid');
                 _a.label = 2;

@@ -710,14 +710,14 @@ class Ram {
         this.init_DOM();	
 	}
 	
-	init_dec() {
+	init_dec(){
 		let buf_arr = [];
 		for (let i = 0; i < 8192; i++)
         	buf_arr.push(255);
 		return buf_arr;	
     }
 	
-	init_DOM = () => {
+	init_DOM(){
         let j = 0;
         for(var i = 0; i<240; i++){
             //create a ramElement (same CSS as romElement)

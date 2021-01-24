@@ -52,6 +52,7 @@ var _this = this;
 var containerAspectRatio_div = document.getElementById('containerAspectRatio_div');
 var masterStyle_style = document.getElementById('masterStyle_style');
 var resizeWindow = function () {
+    alert('resize:', window.innerHeight);
     if (window.innerHeight * 1.4375 > window.innerWidth) {
         containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
         containerAspectRatio_div.style.height = String(window.innerWidth / 1.4375) + "px";

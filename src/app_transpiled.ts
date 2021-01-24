@@ -6,7 +6,7 @@ const masterStyle_style = document.getElementById('masterStyle_style');
 
 const resizeWindow = () => {
 
-    if(window.screen.height/window.innerHeight > 0.4){
+    // console.log(window.)
         //calculate size depending on viewport width (width < height)
         if(window.innerHeight*1.4375 > window.innerWidth){
             containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
@@ -21,7 +21,6 @@ const resizeWindow = () => {
             containerAspectRatio_div.style.left = String((window.innerWidth-window.innerHeight*1.4375)/2) + "px";
             masterStyle_style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
         }
-    }
 }
 
 window.addEventListener('DOMContentLoaded', function () {

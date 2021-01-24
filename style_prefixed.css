@@ -266,7 +266,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .containerAspectRatio {
-    position: fixed;
+    position: absolute;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -276,7 +276,8 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    top: 0;
+    top: 0px;
+    left: 0px;
     width: 143.75vh;
     height: 100vh
 }

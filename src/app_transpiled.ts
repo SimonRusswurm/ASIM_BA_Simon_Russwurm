@@ -5,7 +5,7 @@ const masterStyle_style = document.getElementById('masterStyle_style');
 
 
 const resizeWindow = () => {
-    alert('resize:' window.innerHeight);
+    console.log(window.innerHeight, window.screen.availHeight)
 	if(window.innerHeight*1.4375 > window.innerWidth){
         containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
         containerAspectRatio_div.style.height = String(window.innerWidth/1.4375) + "px";

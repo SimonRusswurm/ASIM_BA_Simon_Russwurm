@@ -3325,7 +3325,7 @@ var changeIO = function (IOName_string) { return __awaiter(_this, void 0, void 0
                         throw Error('Unknown IO');
                 }
                 IO_input_window_DOM.classList.add('toggleGrid');
-                IO_input_DOM.focus();
+                // IO_input_DOM.focus();
                 IO_input_DOM.select();
                 _a.label = 1;
             case 1:

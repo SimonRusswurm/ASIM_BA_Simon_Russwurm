@@ -3393,7 +3393,7 @@ const changeIO = async(IOName_string) =>{
             throw Error('Unknown IO');
     }
     IO_input_window_DOM.classList.add('toggleGrid');
-    IO_input_DOM.focus();
+    // IO_input_DOM.focus();
     IO_input_DOM.select();
     try{
         while(check){

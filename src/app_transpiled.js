@@ -58,7 +58,6 @@ var initialRatioHW_number = Math.round(initial_height / initial_width * 100) / 1
 var resizeWindow = function (first_boolean) {
     var currentRatio = Math.round(window.innerWidth / window.innerHeight * 10) / 10;
     if (currentRatio !== initialRatioWH_number || first_boolean) {
-        document.body.style.transform = 'scale(1)';
         initialRatioWH_number = currentRatio;
         if (window.innerHeight * 1.4375 > window.innerWidth) {
             containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
@@ -71,7 +70,9 @@ var resizeWindow = function (first_boolean) {
             var h4FontSize = window.innerWidth / 100 * 2.5;
             var textareaFontSize = window.innerWidth / 100 * 1.4;
             var borderSize = window.innerWidth / 100 * 0.01;
-            masterStyle_style.innerHTML = "h1{font-size: " + h1FontSize + "px;} p{font-size: " + pFontSize + "px;} h2{font-size: " + h2FontSize + "px;} h3{font-size: " + h3FontSize + "px;} h4{font-size: " + h4FontSize + "px;} .textareaFontSize{font-size: " + textareaFontSize + "px;} .borderBox{ box-sizing: border-box; border-width: " + borderSize + "px;} .inputFontSize{font-size: " + h2FontSize + "px;}";
+            var borderRadius = window.innerWidth / 100 * 0.7;
+            var borderRadius_string = ".rounded{ border-radius: " + borderRadius + "px;} .topLeft{border-top-left-radius: " + borderRadius + "px;} .topRight{border-top-right-radius: " + borderRadius + "px;} .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;} .bottomRight{border-bottom-right-radius: " + borderRadius + "px;} .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
+            masterStyle_style.innerHTML = "h1{font-size: " + h1FontSize + "px;} p{font-size: " + pFontSize + "px;} h2{font-size: " + h2FontSize + "px;} h3{font-size: " + h3FontSize + "px;} h4{font-size: " + h4FontSize + "px;} .textareaFontSize{font-size: " + textareaFontSize + "px;} .borderBox{border-width: " + borderSize + "px;} .inputFontSize{font-size: " + h2FontSize + "px;} " + borderRadius_string;
         }
         else {
             containerAspectRatio_div.style.width = String(window.innerHeight * 1.4375) + "px";
@@ -83,10 +84,11 @@ var resizeWindow = function (first_boolean) {
             var h3FontSize = window.innerHeight / 100 * 1.4375;
             var h4FontSize = window.innerHeight / 100 * 3.59375;
             var textareaFontSize = window.innerHeight / 100 * 2.0125;
-            var borderSize = window.innerWidth / 100 * 0.01 * 1.4375;
-            masterStyle_style.innerHTML = "h1{font-size: " + h1FontSize + "px;} p{font-size: " + pFontSize + "px;} h2{font-size: " + h2FontSize + "px;} h3{font-size: " + h3FontSize + "px;} h4{font-size: " + h4FontSize + "px;} .textareaFontSize{font-size: " + textareaFontSize + "px;} .borderBox{ box-sizing: border-box; border-width: " + borderSize + "px;} .inputFontSize{font-size: " + h2FontSize + "px;}";
+            var borderSize = window.innerHeight / 100 * 0.01 * 1.4375;
+            var borderRadius = window.innerHeight / 100 * 0.7;
+            var borderRadius_string = ".rounded{ border-radius: " + borderRadius + "px;} .topLeft{border-top-left-radius: " + borderRadius + "px;} .topRight{border-top-right-radius: " + borderRadius + "px;} .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;} .bottomRight{border-bottom-right-radius: " + borderRadius + "px;} .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
+            masterStyle_style.innerHTML = "h1{font-size: " + h1FontSize + "px;} p{font-size: " + pFontSize + "px;} h2{font-size: " + h2FontSize + "px;} h3{font-size: " + h3FontSize + "px;} h4{font-size: " + h4FontSize + "px;} .textareaFontSize{font-size: " + textareaFontSize + "px;} .borderBox{border-width: " + borderSize + "px;} .inputFontSize{font-size: " + h2FontSize + "px;}" + borderRadius_string;
         }
-        console.log('resized');
     }
 };
 window.addEventListener('DOMContentLoaded', function () {

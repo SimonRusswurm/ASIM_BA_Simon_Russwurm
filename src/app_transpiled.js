@@ -6169,6 +6169,10 @@ var setButtonPressed = function () {
     }
 };
 setButtonPressed();
+io1Input_input.addEventListener('keyup', function (e) {
+    if (e.key === 'Enter')
+        play();
+});
 function play() {
     //only when stop is pressed(init), the program will be started anew  
     if (playStatus.stop) { //only when stop is pressed(init), the program will be started anew  

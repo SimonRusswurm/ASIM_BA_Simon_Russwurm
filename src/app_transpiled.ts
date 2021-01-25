@@ -3408,7 +3408,7 @@ const changeIO = async(IOName_string) =>{
         while(check){
             
             pause();
-            
+
             await checkPlayPressed();
             
             if(IO_input_DOM.value === '')
@@ -4758,6 +4758,11 @@ const setButtonPressed = () =>{
     }
 }
 setButtonPressed();
+
+io1Input_input.addEventListener('keyup', function(e){
+        if (e.key === 'Enter')
+          play();    
+});
 
 function play(){
     //only when stop is pressed(init), the program will be started anew  

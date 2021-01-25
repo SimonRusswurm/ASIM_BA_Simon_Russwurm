@@ -10,21 +10,23 @@ let initialRatioHW_number:number = Math.round(initial_height/initial_width*100)/
 
 const resizeWindow = (first_boolean:boolean) => {
     let currentRatio = Math.round(window.innerWidth/window.innerHeight*10)/10;
-    if(currentRatio !== initialRatioWH_number || first_boolean){
+
+    if((currentRatio !== initialRatioWH_number && window.innerHeight > 310 && window.innerWidth >620) || first_boolean){
         initialRatioWH_number = currentRatio;
         if(window.innerHeight*1.4375 > window.innerWidth){
-            containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
-            containerAspectRatio_div.style.height = String(window.innerWidth/1.4375) + "px";
+            let width_number = window.innerWidth;
+            containerAspectRatio_div.style.width = String(width_number) + "px";
+            containerAspectRatio_div.style.height = String(width_number/1.4375) + "px";
             // containerAspectRatio_div.style.left = "0px";
 
-            let pFontSize:number = window.innerWidth/100*1.2;
-            let h1FontSize:number = window.innerWidth/100*1.6;
-            let h2FontSize:number = window.innerWidth/100*3;
-            let h3FontSize:number = window.innerWidth/100*1;
-            let h4FontSize:number = window.innerWidth/100*2.5;
-            let textareaFontSize:number = window.innerWidth/100*1.4;
-            let borderSize:number = window.innerWidth/100*0.01;
-            let borderRadius:number = window.innerWidth/100*0.7;
+            let pFontSize:number = width_number/100*1.2;
+            let h1FontSize:number = width_number/100*1.6;
+            let h2FontSize:number = width_number/100*3;
+            let h3FontSize:number = width_number/100*1;
+            let h4FontSize:number = width_number/100*2.5;
+            let textareaFontSize:number = width_number/100*1.4;
+            let borderSize:number = width_number/100*0.01;
+            let borderRadius:number = width_number/100*0.7;
             let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
 
             
@@ -32,18 +34,20 @@ const resizeWindow = (first_boolean:boolean) => {
             masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{border-width: ${borderSize}px;} .inputFontSize{font-size: ${h2FontSize}px;} ` + borderRadius_string;
         } 
         else {
-            containerAspectRatio_div.style.width = String(window.innerHeight*1.4375) + "px";
-            containerAspectRatio_div.style.height = String(window.innerHeight) + "px";
-            // containerAspectRatio_div.style.left = String((window.innerWidth-window.innerHeight*1.4375)/2) + "px";
+            let height_number:number = window.innerHeight;
 
-            let pFontSize:number = window.innerHeight/100*1.725;
-            let h1FontSize:number = window.innerHeight/100*2.3;
-            let h2FontSize:number = window.innerHeight/100*4.3125;
-            let h3FontSize:number = window.innerHeight/100*1.4375;
-            let h4FontSize:number = window.innerHeight/100*3.59375;
-            let textareaFontSize:number = window.innerHeight/100*2.0125;
-            let borderSize:number = window.innerHeight/100*0.01*1.4375;
-            let borderRadius:number = window.innerHeight/100*0.7;
+            containerAspectRatio_div.style.width = String(height_number*1.4375) + "px";
+            containerAspectRatio_div.style.height = String(height_number) + "px";
+            // containerAspectRatio_div.style.left = String((window.innerWidth-height_number*1.4375)/2) + "px";
+
+            let pFontSize:number = height_number/100*1.725;
+            let h1FontSize:number = height_number/100*2.3;
+            let h2FontSize:number = height_number/100*4.3125;
+            let h3FontSize:number = height_number/100*1.4375;
+            let h4FontSize:number = height_number/100*3.59375;
+            let textareaFontSize:number = height_number/100*2.0125;
+            let borderSize:number = height_number/100*0.01*1.4375;
+            let borderRadius:number = height_number/100*0.7;
             let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
 
             masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{border-width: ${borderSize}px;} .inputFontSize{font-size: ${h2FontSize}px;}` + borderRadius_string; 

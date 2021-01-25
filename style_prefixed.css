@@ -150,23 +150,23 @@ select {
 }
 
 .topLeft {
-    border-top-left-radius: .5vw
+    border-top-left-radius: 5px
 }
 
 .topRight {
-    border-top-right-radius: .5vw
+    border-top-right-radius: 5px
 }
 
 .bottomLeft {
-    border-bottom-left-radius: .5vw
+    border-bottom-left-radius: 5px
 }
 
 .bottomRight {
-    border-bottom-right-radius: .5vw
+    border-bottom-right-radius: 5px
 }
 
 .rounded {
-    border-radius: .5vw
+    border-radius: 5px
 }
 
 .lightRounded {

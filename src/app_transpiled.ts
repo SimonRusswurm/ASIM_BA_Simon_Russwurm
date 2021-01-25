@@ -24,7 +24,8 @@ const resizeWindow = (first_boolean:boolean) => {
             let h2FontSize:number = width_number/100*3;
             let h3FontSize:number = width_number/100*1;
             let h4FontSize:number = width_number/100*2.5;
-            let textareaFontSize:number = width_number/100*1.4;
+            // let textareaFontSize:number = width_number/100*1.4;
+            let textareaFontSize:number = 16;
             let borderSize:number = width_number/100*0.01;
             let borderRadius:number = width_number/100*0.7;
             let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
@@ -45,7 +46,8 @@ const resizeWindow = (first_boolean:boolean) => {
             let h2FontSize:number = height_number/100*4.3125;
             let h3FontSize:number = height_number/100*1.4375;
             let h4FontSize:number = height_number/100*3.59375;
-            let textareaFontSize:number = height_number/100*2.0125;
+            // let textareaFontSize:number = height_number/100*2.0125;
+            let textareaFontSize:number = 16;
             let borderSize:number = height_number/100*0.01*1.4375;
             let borderRadius:number = height_number/100*0.7;
             let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
@@ -4701,6 +4703,21 @@ const init = () => {
 }
 
 /********************************** button functions ****************************** */
+io1Input_input.addEventListener('keyup', function(e){
+    if (e.key === 'Enter')
+      play();    
+});
+
+io2Input_input.addEventListener('keyup', function(e){
+if (e.key === 'Enter')
+  play();    
+});
+
+io3Input_input.addEventListener('keyup', function(e){
+if (e.key === 'Enter')
+  play();    
+});
+
 
 const setButtonPressed = () =>{
     if(playStatus.play){
@@ -4758,11 +4775,6 @@ const setButtonPressed = () =>{
     }
 }
 setButtonPressed();
-
-io1Input_input.addEventListener('keyup', function(e){
-        if (e.key === 'Enter')
-          play();    
-});
 
 function play(){
     //only when stop is pressed(init), the program will be started anew  

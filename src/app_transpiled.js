@@ -69,7 +69,8 @@ var resizeWindow = function (first_boolean) {
             var h2FontSize = width_number / 100 * 3;
             var h3FontSize = width_number / 100 * 1;
             var h4FontSize = width_number / 100 * 2.5;
-            var textareaFontSize = width_number / 100 * 1.4;
+            // let textareaFontSize:number = width_number/100*1.4;
+            var textareaFontSize = 16;
             var borderSize = width_number / 100 * 0.01;
             var borderRadius = width_number / 100 * 0.7;
             var borderRadius_string = ".rounded{ border-radius: " + borderRadius + "px;} .topLeft{border-top-left-radius: " + borderRadius + "px;} .topRight{border-top-right-radius: " + borderRadius + "px;} .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;} .bottomRight{border-bottom-right-radius: " + borderRadius + "px;} .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
@@ -85,7 +86,8 @@ var resizeWindow = function (first_boolean) {
             var h2FontSize = height_number / 100 * 4.3125;
             var h3FontSize = height_number / 100 * 1.4375;
             var h4FontSize = height_number / 100 * 3.59375;
-            var textareaFontSize = height_number / 100 * 2.0125;
+            // let textareaFontSize:number = height_number/100*2.0125;
+            var textareaFontSize = 16;
             var borderSize = height_number / 100 * 0.01 * 1.4375;
             var borderRadius = height_number / 100 * 0.7;
             var borderRadius_string = ".rounded{ border-radius: " + borderRadius + "px;} .topLeft{border-top-left-radius: " + borderRadius + "px;} .topRight{border-top-right-radius: " + borderRadius + "px;} .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;} .bottomRight{border-bottom-right-radius: " + borderRadius + "px;} .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
@@ -6098,6 +6100,18 @@ var init = function () {
     DECODER.display_DOM.textContent = '';
 };
 /********************************** button functions ****************************** */
+io1Input_input.addEventListener('keyup', function (e) {
+    if (e.key === 'Enter')
+        play();
+});
+io2Input_input.addEventListener('keyup', function (e) {
+    if (e.key === 'Enter')
+        play();
+});
+io3Input_input.addEventListener('keyup', function (e) {
+    if (e.key === 'Enter')
+        play();
+});
 var setButtonPressed = function () {
     if (playStatus.play) {
         play_button.classList.add('buttonPressed');
@@ -6169,10 +6183,6 @@ var setButtonPressed = function () {
     }
 };
 setButtonPressed();
-io1Input_input.addEventListener('keyup', function (e) {
-    if (e.key === 'Enter')
-        play();
-});
 function play() {
     //only when stop is pressed(init), the program will be started anew  
     if (playStatus.stop) { //only when stop is pressed(init), the program will be started anew  

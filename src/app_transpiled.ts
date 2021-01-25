@@ -11,6 +11,7 @@ let initialRatioHW_number:number = Math.round(initial_height/initial_width*100)/
 const resizeWindow = (first_boolean:boolean) => {
     let currentRatio = Math.round(window.innerWidth/window.innerHeight*10)/10;
     if(currentRatio !== initialRatioWH_number || first_boolean){
+        document.body.style.transform = 'scale(1)';
         initialRatioWH_number = currentRatio;
         if(window.innerHeight*1.4375 > window.innerWidth){
             containerAspectRatio_div.style.width = String(window.innerWidth) + "px";

@@ -23,9 +23,9 @@ const resizeWindow = (first_boolean:boolean) => {
             let h3FontSize:number = window.innerWidth/100*1;
             let h4FontSize:number = window.innerWidth/100*2.5;
             let textareaFontSize:number = window.innerWidth/100*1.4;
-            let borderSize:number = window.innerWidth/100*0.1;
+            let borderSize:number = window.innerWidth/100*0.01;
 
-            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{ box-sizing: border-box; border: ${borderSize}px solid #6A6A6A;} .inputFontSize{font-size: ${h2FontSize}px;}`;
+            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{ box-sizing: border-box; border-width: ${borderSize}px;} .inputFontSize{font-size: ${h2FontSize}px;}`;
         } 
         else {
             containerAspectRatio_div.style.width = String(window.innerHeight*1.4375) + "px";
@@ -38,9 +38,9 @@ const resizeWindow = (first_boolean:boolean) => {
             let h3FontSize:number = window.innerHeight/100*1.4375;
             let h4FontSize:number = window.innerHeight/100*3.59375;
             let textareaFontSize:number = window.innerHeight/100*2.0125;
-            let borderSize:number = window.innerWidth/100*0.1*1.4375;
+            let borderSize:number = window.innerWidth/100*0.01*1.4375;
 
-            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{ box-sizing: border-box; border: ${borderSize}px solid #6A6A6A;} .inputFontSize{font-size: ${h2FontSize}px;}`; 
+            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{ box-sizing: border-box; border-width: ${borderSize}px;} .inputFontSize{font-size: ${h2FontSize}px;}`; 
         }
         console.log('resized');
     } 

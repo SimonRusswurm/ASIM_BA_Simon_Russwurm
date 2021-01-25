@@ -69,8 +69,7 @@ var resizeWindow = function (first_boolean) {
             var h2FontSize = width_number / 100 * 3;
             var h3FontSize = width_number / 100 * 1;
             var h4FontSize = width_number / 100 * 2.5;
-            // let textareaFontSize:number = width_number/100*1.4;
-            var textareaFontSize = 16;
+            var textareaFontSize = width_number / 100 * 1.4;
             var borderSize = width_number / 100 * 0.01;
             var borderRadius = width_number / 100 * 0.7;
             var borderRadius_string = ".rounded{ border-radius: " + borderRadius + "px;} .topLeft{border-top-left-radius: " + borderRadius + "px;} .topRight{border-top-right-radius: " + borderRadius + "px;} .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;} .bottomRight{border-bottom-right-radius: " + borderRadius + "px;} .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
@@ -86,8 +85,7 @@ var resizeWindow = function (first_boolean) {
             var h2FontSize = height_number / 100 * 4.3125;
             var h3FontSize = height_number / 100 * 1.4375;
             var h4FontSize = height_number / 100 * 3.59375;
-            // let textareaFontSize:number = height_number/100*2.0125;
-            var textareaFontSize = 16;
+            var textareaFontSize = height_number / 100 * 2.0125;
             var borderSize = height_number / 100 * 0.01 * 1.4375;
             var borderRadius = height_number / 100 * 0.7;
             var borderRadius_string = ".rounded{ border-radius: " + borderRadius + "px;} .topLeft{border-top-left-radius: " + borderRadius + "px;} .topRight{border-top-right-radius: " + borderRadius + "px;} .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;} .bottomRight{border-bottom-right-radius: " + borderRadius + "px;} .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
@@ -6371,3 +6369,23 @@ var mc8_commands_array = [
     new mc8_command('NOP', 0, 1, [0, 0, 0, 0], nop),
     new mc8_command('HALT', 118, 1, [0, 0, 0, 0], halt),
 ];
+var ramSelect_div = document.getElementById('ramSelect_div');
+var ramSelection_p = document.getElementById('ramSelection_p');
+var ramSelectOptions_select = document.getElementById('ramSelectOptions_select');
+var options = document.getElementsByClassName('option');
+var toggleSelect = function () {
+    ramSelectOptions_select.style.height = String(window.innerHeight) + 'px';
+    ramSelectOptions_select.classList.toggle('toggleGrid');
+};
+ramSelect_div.addEventListener('click', function () {
+    toggleSelect();
+});
+var _loop_1 = function (i) {
+    options[i].addEventListener('click', function () {
+        ramSelection_p.textContent = options[i].textContent;
+        toggleSelect();
+    });
+};
+for (var i = 0; i < options.length; i++) {
+    _loop_1(i);
+}

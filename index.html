@@ -426,14 +426,11 @@
                         <p>Breakpoints</p>
                     </div>
                     
-                    
-
-                    
                     <h4 style="position: absolute; top: calc(100%/26*2); left: calc(100%/39*17);">Konfiguration IO-Bausteine:</h4>
 
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*17);">
                         <input id="radioIoMapped_input" type="radio" class="radiostyle" name="radioIoMap" value="IO-mapped" checked="checked">
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
                     <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>IO mapped</p>
@@ -441,7 +438,7 @@
 
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*17);">
                         <input id="radioMemoryMap_input" type="radio"  class="radiostyle" name="radioIoMap" value="Memory-mapped">
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
                     <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
                         <p>Memory map</p>
@@ -464,11 +461,11 @@
                     </div>
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*18);">
                         <input id="io1InputRadio_input" type="radio" class="radio" name="IO1InOut" value="In" checked="checked">
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*18);">
                         <input id="io1OutputRadio_input" type="radio" name="IO1InOut" value="Out">
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
 
 
@@ -490,11 +487,11 @@
                     </div>
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*25);">
                         <input id="io2InputRadio_input" type="radio" class="radio" name="IO2InOut" value="In" >
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*25);">
                         <input id="io2OutputRadio_input" type="radio"  name="IO2InOut" value="Out" checked="checked">
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
 
 
@@ -516,11 +513,11 @@
                     </div>
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*32);">
                         <input id="io3InputRadio_input" type="radio" class="radio" name="IO3InOut" value="In" checked="checked">
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
                     <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*32);">
                         <input id="io3OutputRadio_input" type="radio"  name="IO3InOut" value="Out">
-                        <span class="checkmark"></span>
+                        <span class="checkmark borderBox"></span>
                     </div>
 
 
@@ -538,6 +535,13 @@
                         <option value="C000">C000h - DFFFh</option>
                         <option value="E000">E000h - FFFFh</option>
                     </select>
+
+                    <div id="ramSelect_div" class="customSelect lightRounded borderBox textareaFontSize centered">
+                        <p id="ramSelection_p">2000h - 3FFFh</p>
+                        <p>+</p>
+                    </div>
+
+                    
                     
                     <div id="errorWindow_div" class="lightRounded borderBox displayNone">
                         <p class="textareaFontSize" style="align-self: center;  ">Fehler in der Konfiguration:</p>
@@ -550,7 +554,15 @@
                 </div>
             </div>
             
-
+            <div id="ramSelectOptions_select" class="borderBox displayNone rounded">
+                <h2 class="option">2000h - 3FFFh</h2>
+                <h2 class="option">4000h - 5FFFh</h2>
+                <h2 class="option">6000h - 7FFFh</h2>
+                <h2 class="option">8000h - 9FFFh</h2>
+                <h2 class="option">A000h - BFFFh</h2>
+                <h2 class="option">C000h - DFFFh</h2>
+                <h2 class="option">E000h - FFFFh</h2>
+            </div>
            
             <!-- ************************************************** hover pop ups *************************************************  -->
             <!-- the following div blocks are the elements which appear when the mouse is hovered over the blue h1/h3 headings  -->

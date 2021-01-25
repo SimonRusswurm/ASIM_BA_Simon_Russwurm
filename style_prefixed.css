@@ -908,11 +908,55 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     width: 50%;
     background-color: #fff;
     border-radius: 50%;
-    border: #222 1px solid
 }
 
 .radioContainer input:checked~.checkmark {
     background-color: #96dafc
+}
+
+
+.customSelect{
+    position:absolute;
+    top: calc(100%/26*17);
+    left: calc(100%/39*22);
+    height: calc(100%/26*1);
+    width: calc(100%/39*6);
+    cursor: pointer;
+    background-color: #96dafc;
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.customSelect:hover{
+    background-color: #19b2ff;
+}
+
+#ramSelectOptions_select{
+    position: absolute;
+    top: -1%;
+    left: calc(100%/46*13);
+    width: calc(100%/46*20);;
+    
+    background-color: #fbfbfbf6;
+    cursor: pointer;
+
+    grid-template-rows: repeat(7,1fr);
+    justify-items: center;
+    align-items: center;
+    z-index: 12;
+}
+
+.option{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.option:hover{
+    background-color: #bbbbbb; 
 }
 
 .innerSettings {

@@ -24,8 +24,7 @@ const resizeWindow = (first_boolean:boolean) => {
             let h2FontSize:number = width_number/100*3;
             let h3FontSize:number = width_number/100*1;
             let h4FontSize:number = width_number/100*2.5;
-            // let textareaFontSize:number = width_number/100*1.4;
-            let textareaFontSize:number = 16;
+            let textareaFontSize:number = width_number/100*1.4;
             let borderSize:number = width_number/100*0.01;
             let borderRadius:number = width_number/100*0.7;
             let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
@@ -46,8 +45,7 @@ const resizeWindow = (first_boolean:boolean) => {
             let h2FontSize:number = height_number/100*4.3125;
             let h3FontSize:number = height_number/100*1.4375;
             let h4FontSize:number = height_number/100*3.59375;
-            // let textareaFontSize:number = height_number/100*2.0125;
-            let textareaFontSize:number = 16;
+            let textareaFontSize:number = height_number/100*2.0125;
             let borderSize:number = height_number/100*0.01*1.4375;
             let borderRadius:number = height_number/100*0.7;
             let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
@@ -4991,3 +4989,27 @@ const mc8_commands_array = [
     new mc8_command('NOP', 0b00000000, 1, [0,0,0,0], nop),
     new mc8_command('HALT', 0b01110110, 1, [0,0,0,0], halt),
 ];
+
+
+
+
+const ramSelect_div = document.getElementById('ramSelect_div');
+const ramSelection_p = document.getElementById('ramSelection_p');
+const ramSelectOptions_select = document.getElementById('ramSelectOptions_select');
+let options = document.getElementsByClassName('option');
+
+const toggleSelect = () => {
+    ramSelectOptions_select.style.height = String(window.innerHeight)+'px';
+    ramSelectOptions_select.classList.toggle('toggleGrid');
+}
+
+ramSelect_div.addEventListener('click', function (){
+        toggleSelect();
+});
+
+for (let i = 0; i < options.length; i++) {
+    options[i].addEventListener('click', function(){
+        ramSelection_p.textContent = options[i].textContent;
+        toggleSelect();
+    });
+ }

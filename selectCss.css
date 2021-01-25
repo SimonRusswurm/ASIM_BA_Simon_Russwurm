@@ -1,0 +1,58 @@
+body{display: flex; justify-content: center;}
+
+.container{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    left: 0px;
+    width: 143.75vh;
+    height: 100vh;
+}
+
+.custom_select{
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 15%;
+    height: 5%;
+    background-color: dodgerblue;
+    cursor: pointer;
+}
+
+.openSelect{
+    position: absolute;
+    display: none;
+    top: 15%;
+    right: 10%;
+    width: 30%;
+    height: 50%;
+    background-color: #fbfbfb;
+    cursor: pointer;
+
+    grid-template-rows: repeat(7,1fr);
+    justify-items: center;
+    align-items: center;
+}
+
+.custom_select select{
+    display: none;
+}
+
+.option{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.option:hover{
+    
+    background-color: #bbbbbb; 
+}
+
+.displayOn{
+    display: grid;
+}

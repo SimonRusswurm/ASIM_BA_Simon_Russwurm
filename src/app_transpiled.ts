@@ -2,31 +2,57 @@
 
 const containerAspectRatio_div = document.getElementById('containerAspectRatio_div');
 const masterStyle_style = document.getElementById('masterStyle_style');
+let initial_width = window.innerWidth;
+let initial_height = window.innerHeight;
+let initialRatioWH_number:number = Math.round(initial_width/initial_height*10)/10;
+let initialRatioHW_number:number = Math.round(initial_height/initial_width*100)/100;
 
 
-const resizeWindow = () => {
-    console.log(window.screen.height, window.innerHeight);
+const resizeWindow = (first_boolean:boolean) => {
+    let currentRatio = Math.round(window.innerWidth/window.innerHeight*10)/10;
+    if(currentRatio !== initialRatioWH_number || first_boolean){
+        initialRatioWH_number = currentRatio;
+        if(window.innerHeight*1.4375 > window.innerWidth){
+            containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
+            containerAspectRatio_div.style.height = String(window.innerWidth/1.4375) + "px";
+            // containerAspectRatio_div.style.left = "0px";
 
-    if(window.innerHeight*1.4375 > window.innerWidth){
-        containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
-        containerAspectRatio_div.style.height = String(window.innerWidth/1.4375) + "px";
-        // containerAspectRatio_div.style.left = "0px";
-        masterStyle_style.innerHTML = "h1{font-size: 1.6vw;} p{font-size: 1.2vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}"; 
+            let pFontSize:number = window.innerWidth/100*1.2;
+            let h1FontSize:number = window.innerWidth/100*1.6;
+            let h2FontSize:number = window.innerWidth/100*3;
+            let h3FontSize:number = window.innerWidth/100*1;
+            let h4FontSize:number = window.innerWidth/100*2.5;
+            let textareaFontSize:number = window.innerWidth/100*1.4;
+
+            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;}`; 
+            // masterStyle_style.innerHTML = `h1{font-size: 1.6vw;} p{font-size: ${pFontSize}px;} h2{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}`; 
+        } 
+        else {
+            containerAspectRatio_div.style.width = String(window.innerHeight*1.4375) + "px";
+            containerAspectRatio_div.style.height = String(window.innerHeight) + "px";
+            // containerAspectRatio_div.style.left = String((window.innerWidth-window.innerHeight*1.4375)/2) + "px";
+
+            let pFontSize:number = window.innerHeight/100*1.725;
+            let h1FontSize:number = window.innerHeight/100*2.3;
+            let h2FontSize:number = window.innerHeight/100*4.3125;
+            let h3FontSize:number = window.innerHeight/100*1.4375;
+            let h4FontSize:number = window.innerHeight/100*3.59375;
+            let textareaFontSize:number = window.innerHeight/100*2.0125;
+
+            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;}`; 
+            // masterStyle_style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
+        }
+        console.log('resized');
     } 
-    else {
-        containerAspectRatio_div.style.width = String(window.innerHeight*1.4375) + "px";
-        containerAspectRatio_div.style.height = String(window.innerHeight) + "px";
-        // containerAspectRatio_div.style.left = String((window.innerWidth-window.innerHeight*1.4375)/2) + "px";
-        masterStyle_style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
-    }
 }
 
+
 window.addEventListener('DOMContentLoaded', function () {
-	resizeWindow();
+	resizeWindow(true);
 });
 
 window.addEventListener('resize', function () {
-    resizeWindow();
+    resizeWindow(false);
 });
 
 

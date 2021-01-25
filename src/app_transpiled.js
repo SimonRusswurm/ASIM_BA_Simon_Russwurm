@@ -51,26 +51,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 var containerAspectRatio_div = document.getElementById('containerAspectRatio_div');
 var masterStyle_style = document.getElementById('masterStyle_style');
-var resizeWindow = function () {
-    console.log(window.screen.height, window.innerHeight);
-    if (window.innerHeight * 1.4375 > window.innerWidth) {
-        containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
-        containerAspectRatio_div.style.height = String(window.innerWidth / 1.4375) + "px";
-        // containerAspectRatio_div.style.left = "0px";
-        masterStyle_style.innerHTML = "h1{font-size: 1.6vw;} p{font-size: 1.2vw;} h2{font-size: 3vw;} .h2mov{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}";
-    }
-    else {
-        containerAspectRatio_div.style.width = String(window.innerHeight * 1.4375) + "px";
-        containerAspectRatio_div.style.height = String(window.innerHeight) + "px";
-        // containerAspectRatio_div.style.left = String((window.innerWidth-window.innerHeight*1.4375)/2) + "px";
-        masterStyle_style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} .h2mov{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
+var initial_width = window.innerWidth;
+var initial_height = window.innerHeight;
+var initialRatioWH_number = Math.round(initial_width / initial_height * 10) / 10;
+var initialRatioHW_number = Math.round(initial_height / initial_width * 100) / 100;
+var resizeWindow = function (first_boolean) {
+    var currentRatio = Math.round(window.innerWidth / window.innerHeight * 10) / 10;
+    if (currentRatio !== initialRatioWH_number || first_boolean) {
+        initialRatioWH_number = currentRatio;
+        if (window.innerHeight * 1.4375 > window.innerWidth) {
+            containerAspectRatio_div.style.width = String(window.innerWidth) + "px";
+            containerAspectRatio_div.style.height = String(window.innerWidth / 1.4375) + "px";
+            // containerAspectRatio_div.style.left = "0px";
+            var pFontSize = window.innerWidth / 100 * 1.2;
+            var h1FontSize = window.innerWidth / 100 * 1.6;
+            var h2FontSize = window.innerWidth / 100 * 3;
+            var h3FontSize = window.innerWidth / 100 * 1;
+            var h4FontSize = window.innerWidth / 100 * 2.5;
+            var textareaFontSize = window.innerWidth / 100 * 1.4;
+            masterStyle_style.innerHTML = "h1{font-size: " + h1FontSize + "px;} p{font-size: " + pFontSize + "px;} h2{font-size: " + h2FontSize + "px;} h3{font-size: " + h3FontSize + "px;} h4{font-size: " + h4FontSize + "px;} .textareaFontSize{font-size: " + textareaFontSize + "px;}";
+            // masterStyle_style.innerHTML = `h1{font-size: 1.6vw;} p{font-size: ${pFontSize}px;} h2{font-size: 3vw;} h3{font-size: 1vw;} h4{font-size: 2.5vw} .textareaFontSize{font-size: 1.4vw;}`; 
+        }
+        else {
+            containerAspectRatio_div.style.width = String(window.innerHeight * 1.4375) + "px";
+            containerAspectRatio_div.style.height = String(window.innerHeight) + "px";
+            // containerAspectRatio_div.style.left = String((window.innerWidth-window.innerHeight*1.4375)/2) + "px";
+            var pFontSize = window.innerHeight / 100 * 1.725;
+            var h1FontSize = window.innerHeight / 100 * 2.3;
+            var h2FontSize = window.innerHeight / 100 * 4.3125;
+            var h3FontSize = window.innerHeight / 100 * 1.4375;
+            var h4FontSize = window.innerHeight / 100 * 3.59375;
+            var textareaFontSize = window.innerHeight / 100 * 2.0125;
+            masterStyle_style.innerHTML = "h1{font-size: " + h1FontSize + "px;} p{font-size: " + pFontSize + "px;} h2{font-size: " + h2FontSize + "px;} h3{font-size: " + h3FontSize + "px;} h4{font-size: " + h4FontSize + "px;} .textareaFontSize{font-size: " + textareaFontSize + "px;}";
+            // masterStyle_style.innerHTML = "h1{font-size: 2.3vh;} p{font-size: 1.725vh;} h2{font-size: 4.3125vh;} h3{font-size: 1.4375vh;} h4{font-size: 3.59375vh} .textareaFontSize{font-size: 2.0125vh;}";
+        }
+        console.log('resized');
     }
 };
 window.addEventListener('DOMContentLoaded', function () {
-    resizeWindow();
+    resizeWindow(true);
 });
 window.addEventListener('resize', function () {
-    resizeWindow();
+    resizeWindow(false);
 });
 /***************************************** DOM_Selectors *********************************/
 var mc8Container = document.querySelector(".mc8Container");

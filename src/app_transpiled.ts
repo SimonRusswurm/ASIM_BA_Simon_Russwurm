@@ -1970,11 +1970,7 @@ const saveSettings = () => {
 
 // *****************************EventListeners*****************************/
 
-// programSelection_select.addEventListener('input', updateProgram);
-
 radioIoMapped_input.addEventListener('change', updateIoClasses);
-
-// ramAddress_select.addEventListener('change', changeRamAddress);
 
 io1InputRadio_input.addEventListener('change', updateIoClasses);
 io1OutputRadio_input.addEventListener('change', updateIoClasses);

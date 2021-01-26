@@ -981,7 +981,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     display: grid;
     align-items: center;
     border-bottom: 1px solid #dbdbdb;
-    padding: 2%;
+    padding: 20px;
 }
 
 .option:hover{

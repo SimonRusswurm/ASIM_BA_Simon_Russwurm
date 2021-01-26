@@ -1092,6 +1092,10 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     background-color: white;
     cursor: pointer;
 }
+#breakpointsCheckbox_div{
+    height: 80%;
+    width: 80%;
+}
 .breakpointsMark{
     background-color:  #96dafc;
     background-image: url(images/breakpoint_checkmark.svg);

@@ -2626,6 +2626,7 @@ var addArrow = function (register_string) { return __awaiter(_this, void 0, void
         }
     });
 }); };
+alert('Test1');
 //animation of updating the description
 var description_update = function (description_string) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {

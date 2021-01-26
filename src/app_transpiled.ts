@@ -2862,7 +2862,7 @@ const addArrow = async(register_string) => {
     return true;
 }
 
-
+alert('Test1');
 //animation of updating the description
 const description_update = async(description_string) => {
     await checkPlayPressed();

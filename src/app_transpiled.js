@@ -1582,6 +1582,11 @@ var setSettingsDependingOnProgram = function (ioMapped_boolean, io1IN_boolean, i
     io2Address_textarea.value = io2Address_hex;
     io3Address_textarea.value = io3Address_hex;
     ramAddress_select.value = ramStartingAddress_hex;
+    for (var i = 0; i < ramAddress_select.children.length; i++) {
+        if (ramAddress_select.children[i].value === ramStartingAddress_hex) {
+            ramSelection_p.textContent = ramAddress_select.children[i].textContent;
+        }
+    }
     changeRamAddress();
 };
 var updateProgram = function () {
@@ -1734,9 +1739,9 @@ var saveSettings = function () {
     }
 };
 // *****************************EventListeners*****************************/
-programSelection_select.addEventListener('input', updateProgram);
+// programSelection_select.addEventListener('input', updateProgram);
 radioIoMapped_input.addEventListener('change', updateIoClasses);
-ramAddress_select.addEventListener('input', changeRamAddress);
+// ramAddress_select.addEventListener('change', changeRamAddress);
 io1InputRadio_input.addEventListener('change', updateIoClasses);
 io1OutputRadio_input.addEventListener('change', updateIoClasses);
 io2InputRadio_input.addEventListener('change', updateIoClasses);
@@ -6385,6 +6390,8 @@ programSelection_div.addEventListener('click', function () {
 });
 var _loop_1 = function (i) {
     ramOptions[i].addEventListener('click', function () {
+        ramAddress_select.value = ramAddress_select.children[i].value;
+        changeRamAddress();
         ramSelection_p.textContent = ramOptions[i].textContent;
         ramSelectOptions_div.classList.toggle('toggleGrid');
     });
@@ -6394,6 +6401,8 @@ for (var i = 0; i < ramOptions.length; i++) {
 }
 var _loop_2 = function (i) {
     programOptions[i].addEventListener('click', function () {
+        programSelection_select.value = programSelection_select.children[i].value;
+        updateProgram();
         programSelection_p.textContent = programOptions[i].textContent;
         programSelectionOptions_div.classList.toggle('toggleGrid');
     });

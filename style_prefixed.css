@@ -923,12 +923,11 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     background-color: #96dafc
 }
 
-/* TODO: prefix */
-
 .customSelect{
     position:absolute;
     cursor: pointer;
     background-color: white;
+    display: -ms-grid;
     display: grid;
     padding-left: .3%;
 }
@@ -942,7 +941,9 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     left: calc(100%/39*2);
     height: calc(100%/26*1);
     width: calc(100%/39*13);
+    -ms-grid-columns: 12fr 1fr;
     grid-template-columns: 12fr 1fr;
+    -ms-grid-rows: 1fr;
     grid-template-rows: 1fr;
 }
 
@@ -951,7 +952,9 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     left: calc(100%/39*22);
     height: calc(100%/26*1);
     width: calc(100%/39*6);
+    -ms-grid-columns: 5fr 1fr;
     grid-template-columns: 5fr 1fr;
+    -ms-grid-rows: 1fr;
     grid-template-rows: 1fr;
 }
 
@@ -974,8 +977,11 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .option{
+    display: -ms-grid;
     display: grid;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     border-bottom: 1px solid #dbdbdb;
     padding: 20px;
 }
@@ -1090,12 +1096,12 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     height: calc(100%/26*1);
     width: calc(100%/39*1);
     margin: 0 0;
-    background-color: white;
     cursor: pointer;
 }
 #breakpointsCheckbox_div{
     height: 80%;
     width: 80%;
+    background-color: white;
 }
 .breakpointsMark{
     background-color:  #96dafc;

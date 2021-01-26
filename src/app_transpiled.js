@@ -6371,21 +6371,33 @@ var mc8_commands_array = [
 ];
 var ramSelect_div = document.getElementById('ramSelect_div');
 var ramSelection_p = document.getElementById('ramSelection_p');
-var ramSelectOptions_select = document.getElementById('ramSelectOptions_select');
-var options = document.getElementsByClassName('option');
-var toggleSelect = function () {
-    ramSelectOptions_select.style.height = String(window.innerHeight) + 'px';
-    ramSelectOptions_select.classList.toggle('toggleGrid');
-};
+var ramSelectOptions_div = document.getElementById('ramSelectOptions_div');
+var programSelection_div = document.getElementById('programSelection_div');
+var programSelection_p = document.getElementById('programSelection_p');
+var programSelectionOptions_div = document.getElementById('programSelectionOptions_div');
+var ramOptions = ramSelectOptions_div.children;
+var programOptions = programSelectionOptions_div.children;
 ramSelect_div.addEventListener('click', function () {
-    toggleSelect();
+    ramSelectOptions_div.classList.toggle('toggleGrid');
+});
+programSelection_div.addEventListener('click', function () {
+    programSelectionOptions_div.classList.toggle('toggleGrid');
 });
 var _loop_1 = function (i) {
-    options[i].addEventListener('click', function () {
-        ramSelection_p.textContent = options[i].textContent;
-        toggleSelect();
+    ramOptions[i].addEventListener('click', function () {
+        ramSelection_p.textContent = ramOptions[i].textContent;
+        ramSelectOptions_div.classList.toggle('toggleGrid');
     });
 };
-for (var i = 0; i < options.length; i++) {
+for (var i = 0; i < ramOptions.length; i++) {
     _loop_1(i);
+}
+var _loop_2 = function (i) {
+    programOptions[i].addEventListener('click', function () {
+        programSelection_p.textContent = programOptions[i].textContent;
+        programSelectionOptions_div.classList.toggle('toggleGrid');
+    });
+};
+for (var i = 0; i < programOptions.length; i++) {
+    _loop_2(i);
 }

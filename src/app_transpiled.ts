@@ -4991,25 +4991,35 @@ const mc8_commands_array = [
 ];
 
 
-
-
 const ramSelect_div = document.getElementById('ramSelect_div');
 const ramSelection_p = document.getElementById('ramSelection_p');
-const ramSelectOptions_select = document.getElementById('ramSelectOptions_select');
-let options = document.getElementsByClassName('option');
+const ramSelectOptions_div = document.getElementById('ramSelectOptions_div');
 
-const toggleSelect = () => {
-    ramSelectOptions_select.style.height = String(window.innerHeight)+'px';
-    ramSelectOptions_select.classList.toggle('toggleGrid');
-}
+const programSelection_div = document.getElementById('programSelection_div');
+const programSelection_p = document.getElementById('programSelection_p');
+const programSelectionOptions_div = document.getElementById('programSelectionOptions_div');
+
+const ramOptions = ramSelectOptions_div.children;
+const programOptions = programSelectionOptions_div.children;
 
 ramSelect_div.addEventListener('click', function (){
-        toggleSelect();
+    ramSelectOptions_div.classList.toggle('toggleGrid');
 });
 
-for (let i = 0; i < options.length; i++) {
-    options[i].addEventListener('click', function(){
-        ramSelection_p.textContent = options[i].textContent;
-        toggleSelect();
+programSelection_div.addEventListener('click', function (){
+    programSelectionOptions_div.classList.toggle('toggleGrid');
+});
+
+for (let i = 0; i < ramOptions.length; i++) {
+        ramOptions[i].addEventListener('click', function(){
+            ramSelection_p.textContent = ramOptions[i].textContent;
+            ramSelectOptions_div.classList.toggle('toggleGrid');
+        });
+}
+
+for (let i = 0; i < programOptions.length; i++) {
+    programOptions[i].addEventListener('click', function(){
+        programSelection_p.textContent = programOptions[i].textContent;
+        programSelectionOptions_div.classList.toggle('toggleGrid');
     });
- }
+}

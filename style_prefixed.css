@@ -47,6 +47,14 @@ h4 {
     font-family: Arial,Helvetica,sans-serif
 }
 
+h5{
+    margin: 0;
+    padding: 0;
+    color: #222;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 17px;
+}
+
 p {
     margin: 0;
     padding: 0;
@@ -119,7 +127,7 @@ select {
     display: -ms-grid;
     display: grid;
     -ms-flex-line-pack: center;
-    align-content: center
+    align-items: center
 }
 
 .centeredVertical {
@@ -914,45 +922,67 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     background-color: #96dafc
 }
 
-
 .customSelect{
     position:absolute;
+    cursor: pointer;
+    background-color: white;
+    display: grid;
+    padding-left: .3%;
+}
+
+.customSelect:hover{
+    background-color: #96dafc;
+}
+
+#programSelection_div{
+    top: calc(100%/26*4);
+    left: calc(100%/39*2);
+    height: calc(100%/26*1);
+    width: calc(100%/39*13);
+    grid-template-columns: 12fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+#ramSelect_div{
     top: calc(100%/26*17);
     left: calc(100%/39*22);
     height: calc(100%/26*1);
     width: calc(100%/39*6);
-    cursor: pointer;
-    background-color: #96dafc;
-    display: grid;
     grid-template-columns: 5fr 1fr;
     grid-template-rows: 1fr;
 }
 
-.customSelect:hover{
-    background-color: #19b2ff;
-}
-
-#ramSelectOptions_select{
+.selectOptions{
     position: absolute;
-    top: -1%;
-    left: calc(100%/46*13);
-    width: calc(100%/46*20);;
-    
     background-color: #fbfbfbf6;
     cursor: pointer;
 
-    grid-template-rows: repeat(7,1fr);
-    justify-items: center;
-    align-items: center;
     z-index: 12;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#ramSelectOptions_div{
+    top: calc(100%/32*2);
+    left: calc(100%/46*13);
+    height: calc(100%/32*28);
+    width: calc(100%/46*20);
+    text-align: center; 
+}
+
+#programSelectionOptions_div{
+    top: calc(100%/32*2);
+    left: calc(100%/46*2);
+    height: calc(100%/32*28);
+    width: calc(100%/46*42);  
 }
 
 .option{
     display: grid;
-    justify-items: center;
+    /* justify-items: center; */
     align-items: center;
-    height: 100%;
-    width: 100%;
+    border-bottom: 1px solid #dbdbdb;
+    padding: 5px;
 }
 
 .option:hover{

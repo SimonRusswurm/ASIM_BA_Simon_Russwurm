@@ -415,6 +415,11 @@
                         <option value="bsp19">Bsp 19 - Beispielprogramm</option>
                     </select>
 
+                    <div id="programSelection_div" class="customSelect lightRounded borderBox textareaFontSize centeredHorizontal">
+                        <p id="programSelection_p">Wählen Sie ein Programm</p>
+                        <p class="centered">+</p>
+                    </div>
+
                     <p style="position: absolute; top: calc(100%/26*6); left: calc(100%/39*2);">Linker-Datei:</p>                    
                     <textarea id="linkerFile_textarea" name="linkerFile" class="lightRounded borderBox textareaFontSize"></textarea>
 
@@ -536,12 +541,11 @@
                         <option value="E000">E000h - FFFFh</option>
                     </select>
 
-                    <div id="ramSelect_div" class="customSelect lightRounded borderBox textareaFontSize centered">
+                    <div id="ramSelect_div" class="customSelect lightRounded borderBox textareaFontSize centeredHorizontal">
                         <p id="ramSelection_p">2000h - 3FFFh</p>
-                        <p>+</p>
+                        <p class="centered">+</p>
                     </div>
 
-                    
                     
                     <div id="errorWindow_div" class="lightRounded borderBox displayNone">
                         <p class="textareaFontSize" style="align-self: center;  ">Fehler in der Konfiguration:</p>
@@ -554,14 +558,37 @@
                 </div>
             </div>
             
-            <div id="ramSelectOptions_select" class="borderBox displayNone rounded">
-                <h2 class="option">2000h - 3FFFh</h2>
-                <h2 class="option">4000h - 5FFFh</h2>
-                <h2 class="option">6000h - 7FFFh</h2>
-                <h2 class="option">8000h - 9FFFh</h2>
-                <h2 class="option">A000h - BFFFh</h2>
-                <h2 class="option">C000h - DFFFh</h2>
-                <h2 class="option">E000h - FFFFh</h2>
+            <div id="ramSelectOptions_div" class="selectOptions borderBox displayNone rounded">
+                <h5 class="option">2000h - 3FFFh</h5>
+                <h5 class="option">4000h - 5FFFh</h5>
+                <h5 class="option">6000h - 7FFFh</h5>
+                <h5 class="option">8000h - 9FFFh</h5>
+                <h5 class="option">A000h - BFFFh</h5>
+                <h5 class="option">C000h - DFFFh</h5>
+                <h5 class="option">E000h - FFFFh</h5>
+            </div>
+
+            <div id="programSelectionOptions_div" class="selectOptions borderBox displayNone rounded">
+                <h5 class="option">Eigenes Programm</h5>
+                <h5 class="option">Bsp 01 - Erklärung FETCH-Phase</h5>
+                <h5 class="option">Bsp 02 - Erklärung Ausführungsphase</h5>
+                <h5 class="option">Bsp 03 - Transportbefehle</h5>
+                <h5 class="option">Bsp 04 - 2-Byte Befehle</h5>
+                <h5 class="option">Bsp 05 - Verwendung RAM</h5>
+                <h5 class="option">Bsp 06 - Registerindirekte Adressierung</h5>
+                <h5 class="option">Bsp 07 - Verwendung Stack</h5>
+                <h5 class="option">Bsp 08 - Logische Operation</h5>
+                <h5 class="option">Bsp 09 - Vergleiche und Verzweigungen</h5>
+                <h5 class="option">Bsp 10 - I/O mapped Ein-/Ausgabe</h5>
+                <h5 class="option">Bsp 11 - Memory mapped Ein-/Ausgabe</h5>
+                <h5 class="option">Bsp 12 - Unterprogramme</h5>
+                <h5 class="option">Bsp 13 - Multiplikation</h5>
+                <h5 class="option">Bsp 14 - Reihe</h5>
+                <h5 class="option">Bsp 15 - Fehlerprogramm 1</h5>
+                <h5 class="option">Bsp 16 - Fehlerprogramm 2</h5>
+                <h5 class="option">Bsp 17 - Fehlerprogramm 3</h5>
+                <h5 class="option">Bsp 18 - Fehlerprogramm 4</h5>
+                <h5 class="option">Bsp 19 - Beispielprogramm</h5>
             </div>
            
             <!-- ************************************************** hover pop ups *************************************************  -->

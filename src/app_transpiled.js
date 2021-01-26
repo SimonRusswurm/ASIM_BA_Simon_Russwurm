@@ -57,7 +57,7 @@ var initialRatioWH_number = Math.round(initial_width / initial_height * 10) / 10
 var initialRatioHW_number = Math.round(initial_height / initial_width * 100) / 100;
 var resizeWindow = function (first_boolean) {
     var currentRatio = Math.round(window.innerWidth / window.innerHeight * 10) / 10;
-    if ((currentRatio !== initialRatioWH_number && window.innerHeight > 310 && window.innerWidth > 620) || first_boolean) {
+    if ((currentRatio !== initialRatioWH_number && window.innerHeight > 200 && window.innerWidth > 400) || first_boolean) {
         initialRatioWH_number = currentRatio;
         if (window.innerHeight * 1.4375 > window.innerWidth) {
             var width_number = window.innerWidth;
@@ -1505,6 +1505,7 @@ var io2Arrow_div = document.getElementById('io2Arrow_div');
 var io3Arrow_div = document.getElementById('io3Arrow_div');
 var ramAddress_select = document.getElementById('ramAddress_select');
 var breakpointsCheckbox_input = document.getElementById('breakpointsCheckbox_input');
+var breakpointsCheckbox_div = document.getElementById('breakpointsCheckbox_div');
 var changeRamAddress_DOM = function (hex1_string, hex2_string) {
     var pEle = document.getElementsByClassName('RamAddressLabel');
     var str = ['0', '1', '2', '3', '4', '5', '6', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
@@ -1738,6 +1739,42 @@ var saveSettings = function () {
         errorWindow_div.classList.remove('toggleGrid');
     }
 };
+var ramSelect_div = document.getElementById('ramSelect_div');
+var ramSelection_p = document.getElementById('ramSelection_p');
+var ramSelectOptions_div = document.getElementById('ramSelectOptions_div');
+var programSelection_div = document.getElementById('programSelection_div');
+var programSelection_p = document.getElementById('programSelection_p');
+var programSelectionOptions_div = document.getElementById('programSelectionOptions_div');
+var ramOptions = ramSelectOptions_div.children;
+var programOptions = programSelectionOptions_div.children;
+ramSelect_div.addEventListener('click', function () {
+    ramSelectOptions_div.classList.toggle('toggleGrid');
+});
+programSelection_div.addEventListener('click', function () {
+    programSelectionOptions_div.classList.toggle('toggleGrid');
+});
+var _loop_1 = function (i) {
+    ramOptions[i].addEventListener('click', function () {
+        ramAddress_select.value = ramAddress_select.children[i].value;
+        changeRamAddress();
+        ramSelection_p.textContent = ramOptions[i].textContent;
+        ramSelectOptions_div.classList.toggle('toggleGrid');
+    });
+};
+for (var i = 0; i < ramOptions.length; i++) {
+    _loop_1(i);
+}
+var _loop_2 = function (i) {
+    programOptions[i].addEventListener('click', function () {
+        programSelection_select.value = programSelection_select.children[i].value;
+        updateProgram();
+        programSelection_p.textContent = programOptions[i].textContent;
+        programSelectionOptions_div.classList.toggle('toggleGrid');
+    });
+};
+for (var i = 0; i < programOptions.length; i++) {
+    _loop_2(i);
+}
 // *****************************EventListeners*****************************/
 radioIoMapped_input.addEventListener('change', updateIoClasses);
 io1InputRadio_input.addEventListener('change', updateIoClasses);
@@ -1746,6 +1783,13 @@ io2InputRadio_input.addEventListener('change', updateIoClasses);
 io2OutputRadio_input.addEventListener('change', updateIoClasses);
 io3InputRadio_input.addEventListener('change', updateIoClasses);
 io3OutputRadio_input.addEventListener('change', updateIoClasses);
+breakpointsCheckbox_div.addEventListener('click', function () {
+    breakpointsCheckbox_div.classList.toggle('breakpointsMark');
+    if (breakpointsCheckbox_input.checked)
+        breakpointsCheckbox_input.checked = false;
+    else
+        breakpointsCheckbox_input.checked = true;
+});
 // *****************************errorWindow*****************************
 var errorWindow_div = document.getElementById('errorWindow_div');
 var errorMessage_textarea = document.getElementById('errorMessage_textarea');
@@ -6372,39 +6416,3 @@ var mc8_commands_array = [
     new mc8_command('NOP', 0, 1, [0, 0, 0, 0], nop),
     new mc8_command('HALT', 118, 1, [0, 0, 0, 0], halt),
 ];
-var ramSelect_div = document.getElementById('ramSelect_div');
-var ramSelection_p = document.getElementById('ramSelection_p');
-var ramSelectOptions_div = document.getElementById('ramSelectOptions_div');
-var programSelection_div = document.getElementById('programSelection_div');
-var programSelection_p = document.getElementById('programSelection_p');
-var programSelectionOptions_div = document.getElementById('programSelectionOptions_div');
-var ramOptions = ramSelectOptions_div.children;
-var programOptions = programSelectionOptions_div.children;
-ramSelect_div.addEventListener('click', function () {
-    ramSelectOptions_div.classList.toggle('toggleGrid');
-});
-programSelection_div.addEventListener('click', function () {
-    programSelectionOptions_div.classList.toggle('toggleGrid');
-});
-var _loop_1 = function (i) {
-    ramOptions[i].addEventListener('click', function () {
-        ramAddress_select.value = ramAddress_select.children[i].value;
-        changeRamAddress();
-        ramSelection_p.textContent = ramOptions[i].textContent;
-        ramSelectOptions_div.classList.toggle('toggleGrid');
-    });
-};
-for (var i = 0; i < ramOptions.length; i++) {
-    _loop_1(i);
-}
-var _loop_2 = function (i) {
-    programOptions[i].addEventListener('click', function () {
-        programSelection_select.value = programSelection_select.children[i].value;
-        updateProgram();
-        programSelection_p.textContent = programOptions[i].textContent;
-        programSelectionOptions_div.classList.toggle('toggleGrid');
-    });
-};
-for (var i = 0; i < programOptions.length; i++) {
-    _loop_2(i);
-}

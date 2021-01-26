@@ -64,7 +64,7 @@ p {
 
 textarea {
     padding: 7% 0 0 0;
-    outline: 0
+    outline: 0;
 }
 
 button {
@@ -912,8 +912,8 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .checkmark {
-    height: 50%;
-    width: 50%;
+    height: 70%;
+    width:  70%;
     background-color: #fff;
     border-radius: 50%;
 }
@@ -921,6 +921,8 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 .radioContainer input:checked~.checkmark {
     background-color: #96dafc
 }
+
+/* TODO: prefix */
 
 .customSelect{
     position:absolute;
@@ -954,6 +956,10 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 
 .selectOptions{
     position: absolute;
+    top: calc(100%/32*2);
+    left: calc(100%/46*2);
+    height: calc(100%/32*28);
+    width: calc(100%/46*42);
     background-color: #fbfbfbf6;
     cursor: pointer;
 
@@ -963,18 +969,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 #ramSelectOptions_div{
-    top: calc(100%/32*2);
-    left: calc(100%/46*13);
-    height: calc(100%/32*28);
-    width: calc(100%/46*20);
     text-align: center; 
-}
-
-#programSelectionOptions_div{
-    top: calc(100%/32*2);
-    left: calc(100%/46*2);
-    height: calc(100%/32*28);
-    width: calc(100%/46*42);  
 }
 
 .option{
@@ -1093,12 +1088,13 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     left: calc(100%/39*2);
     height: calc(100%/26*1);
     width: calc(100%/39*1);
-    margin: 0 0
+    margin: 0 0;
+    background-color: white;
+    cursor: pointer;
 }
-
-#breakpointsCheckbox_input {
-    height: 60%;
-    width: 60%
+.breakpointsMark{
+    background-color:  #96dafc;
+    background-image: url(images/breakpoint_checkmark.svg);
 }
 
 #errorWindow_div {

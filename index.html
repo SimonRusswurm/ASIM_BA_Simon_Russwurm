@@ -391,8 +391,7 @@
             <div id="containerSettings_div" class="settingsWindow borderBox rounded">
                 <div class="borderBox rounded innerSettings">
                     <h4 style="position: absolute; top: calc(100%/26*2); left: calc(100%/39*2);">Konfiguration ROM:</h4>
-                    <select id="programSelection_select" name="programSelection" class="lightRounded borderBox textareaFontSize">
-                        <option value="" disabled selected hidden>Wählen Sie ein Programm</option>
+                    <select id="programSelection_select" name="programSelection" class="lightRounded borderBox textareaFontSize displayNone">
                         <option value="own">Eigenes Programm</option>
                         <option value="bsp1">Bsp 01 - Erklärung FETCH-Phase</option>
                         <option value="bsp2">Bsp 02 - Erklärung Ausführungsphase</option>
@@ -423,11 +422,12 @@
                     <p style="position: absolute; top: calc(100%/26*6); left: calc(100%/39*2);">Linker-Datei:</p>                    
                     <textarea id="linkerFile_textarea" name="linkerFile" class="lightRounded borderBox textareaFontSize"></textarea>
 
-                    <div class="containerBreakpoints gridChild containerCheckbox">
-                        <input id="breakpointsCheckbox_input" type="checkbox" >
+
+                    <div id="breakpointsCheckbox_div" class="containerBreakpoints alignBg borderBox rounded">
+                        <input id="breakpointsCheckbox_input" type="checkbox" class="displayNone" >
                     </div>
                     
-                    <div style="position: absolute; top: calc(100%/26*23); left: calc(100%/39*3); height: calc(100%/26*1); width: calc(100%/39*5);" class="centeredHorizontal" >
+                    <div style="position: absolute; top: calc(100%/26*23); left: calc(100%/39*3.2); height: calc(100%/26*1); width: calc(100%/39*5);" class="centeredHorizontal" >
                         <p>Breakpoints</p>
                     </div>
                     

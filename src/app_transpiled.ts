@@ -2254,9 +2254,6 @@ const checkSettings = () => {
 };
 
 
-
-
-
 /*********************************** bus system and path logic ************************************/
 class Point{
     index: number;
@@ -4907,14 +4904,16 @@ const toggleSettings = () => {
 }
 toggleSettings();
 
+const doc:any = document.documentElement;
+
 const toggleFullscreen = () => {
     if(!isFullscreen){
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
+        if (doc.requestFullscreen) {
+            doc.requestFullscreen();
+        } else if (doc.webkitRequestFullscreen) {
+            doc.webkitRequestFullscreen();
+        } else if (doc.msRequestFullscreen) {
+            doc.msRequestFullscreen();
         }
         isFullscreen = true;
     } else {

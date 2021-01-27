@@ -4204,7 +4204,7 @@ const addDat_8 = async() => {
 }
 
 const addHlBc = async() => {
-    await description_update('Hole das L-Register (HL_LO');
+    await description_update('Hole das L-Register (HL_LO)');
     await transfer('HL_lo','ALU1',HL.lo_dec);
     await updateRegister_hex('ALU1', HL.lo_dec);
     await description_update('Hole das C-Register');
@@ -4215,7 +4215,7 @@ const addHlBc = async() => {
     let result = addBinary(HL.lo_dec,C.value_dec,false);
     await hlBcAnimation(result,true);
 
-    await description_update('Hole das H-Register (HL_HI');
+    await description_update('Hole das H-Register (HL_HI)');
     await transfer('HL_hi','ALU1',HL.hi_dec);
     await updateRegister_hex('ALU1', HL.hi_dec);
     await description_update('Hole das B-Register');

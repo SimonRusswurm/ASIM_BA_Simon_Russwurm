@@ -2626,7 +2626,6 @@ var addArrow = function (register_string) { return __awaiter(_this, void 0, void
         }
     });
 }); };
-
 //animation of updating the description
 var description_update = function (description_string) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -4984,7 +4983,7 @@ var addHlBc = function () { return __awaiter(_this, void 0, void 0, function () 
     var result;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, description_update('Hole das L-Register (HL_LO')];
+            case 0: return [4 /*yield*/, description_update('Hole das L-Register (HL_LO)')];
             case 1:
                 _a.sent();
                 return [4 /*yield*/, transfer('HL_lo', 'ALU1', HL.lo_dec)];
@@ -5009,7 +5008,7 @@ var addHlBc = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, hlBcAnimation(result, true)];
             case 8:
                 _a.sent();
-                return [4 /*yield*/, description_update('Hole das H-Register (HL_HI')];
+                return [4 /*yield*/, description_update('Hole das H-Register (HL_HI)')];
             case 9:
                 _a.sent();
                 return [4 /*yield*/, transfer('HL_hi', 'ALU1', HL.hi_dec)];
@@ -6308,16 +6307,17 @@ var toggleSettings = function () {
     containerSettings_div.classList.toggle('toggleDisplay');
 };
 toggleSettings();
+var doc = document.documentElement;
 var toggleFullscreen = function () {
     if (!isFullscreen) {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
+        if (doc.requestFullscreen) {
+            doc.requestFullscreen();
         }
-        else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen();
+        else if (doc.webkitRequestFullscreen) {
+            doc.webkitRequestFullscreen();
         }
-        else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
+        else if (doc.msRequestFullscreen) {
+            doc.msRequestFullscreen();
         }
         isFullscreen = true;
     }

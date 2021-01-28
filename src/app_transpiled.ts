@@ -1,60 +1,87 @@
-//resize window
+/**
+ * Resizing logic*****************************************************************************************************
+ * The ratio of the containerAspectRatio_div is defined with 46/32 = 1.4375
+ */
+const containerAspectRatio_div:HTMLElement = document.getElementById('containerAspectRatio_div');
+const masterStyle_style:HTMLElement = document.getElementById('masterStyle_style');
+let initialRatio_number:number = Math.round(window.innerWidth/window.innerHeight*10)/10;
 
-const containerAspectRatio_div = document.getElementById('containerAspectRatio_div');
-const masterStyle_style = document.getElementById('masterStyle_style');
-let initial_width = window.innerWidth;
-let initial_height = window.innerHeight;
-let initialRatioWH_number:number = Math.round(initial_width/initial_height*10)/10;
-let initialRatioHW_number:number = Math.round(initial_height/initial_width*100)/100;
+const resizeWindow = (first_boolean:boolean):void => {
+    const iH_number:number = window.innerHeight;
+    const iW_number:number = window.innerWidth;
+    const currentRatio_number:number = Math.round(iH_number/iW_number*10)/10;
 
+    /**
+        Method only resizes application when screenRatio changes.
+        When the user is zooming, innerWidth and innerHeight will change but the ratio innerWidth/innerHeight stays the same.
+    */
+    if((currentRatio_number !== initialRatio_number && iH_number > 200 && iW_number >400) || first_boolean){
 
-const resizeWindow = (first_boolean:boolean) => {
-    let currentRatio = Math.round(window.innerWidth/window.innerHeight*10)/10;
+        initialRatio_number = currentRatio_number;
 
-    if((currentRatio !== initialRatioWH_number && window.innerHeight > 200 && window.innerWidth >400) || first_boolean){
-        initialRatioWH_number = currentRatio;
-        if(window.innerHeight*1.4375 > window.innerWidth){
-            let width_number = window.innerWidth;
-            containerAspectRatio_div.style.width = String(width_number) + "px";
-            containerAspectRatio_div.style.height = String(width_number/1.4375) + "px";
-            // containerAspectRatio_div.style.left = "0px";
+        let pFontSize:number = 0;
+        let h1FontSize:number = 0;
+        let h2FontSize:number = 0;
+        let h3FontSize:number = 0;
+        let h4FontSize:number = 0;
+        let textareaFontSize:number = 0;
+        let borderSize:number = 0;
+        let borderRadius:number = 0;
+        let fontSize_string:string = '';
+        let borderRadius_string:string = '';        
 
-            let pFontSize:number = width_number/100*1.2;
-            let h1FontSize:number = width_number/100*1.6;
-            let h2FontSize:number = width_number/100*3;
-            let h3FontSize:number = width_number/100*1;
-            let h4FontSize:number = width_number/100*2.5;
-            let textareaFontSize:number = width_number/100*1.4;
-            let borderSize:number = width_number/100*0.01;
-            let borderRadius:number = width_number/100*0.7;
-            let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
+        /**
+         * If the application fills the entire width of the screen, the size of the application must also be calculated
+         * using the width. And vice versa.
+         */
+        if(iH_number*46/32 > iW_number){
+            containerAspectRatio_div.style.width = `${iW_number}px`;
+            containerAspectRatio_div.style.height = `${iW_number/1.4375}px`;
+            // containerAspectRatio_div.style.left = '0px';
 
-            
-
-            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{border-width: ${borderSize}px;} .inputFontSize{font-size: ${h2FontSize}px;} ` + borderRadius_string;
+            pFontSize  = iW_number/100*1.2;
+            h1FontSize = iW_number/100*1.6;
+            h2FontSize = iW_number/100*3;
+            h3FontSize = iW_number/100*1;
+            h4FontSize = iW_number/100*2.5;
+            textareaFontSize = iW_number/100*1.4;
+            borderSize = iW_number/100*0.01;
+            borderRadius = iW_number/100*0.7;
         } 
         else {
-            let height_number:number = window.innerHeight;
-
-            containerAspectRatio_div.style.width = String(height_number*1.4375) + "px";
-            containerAspectRatio_div.style.height = String(height_number) + "px";
+            containerAspectRatio_div.style.width = `${iH_number*1.4375}px`;
+            containerAspectRatio_div.style.height = `${iH_number}px`;
             // containerAspectRatio_div.style.left = String((window.innerWidth-height_number*1.4375)/2) + "px";
 
-            let pFontSize:number = height_number/100*1.725;
-            let h1FontSize:number = height_number/100*2.3;
-            let h2FontSize:number = height_number/100*4.3125;
-            let h3FontSize:number = height_number/100*1.4375;
-            let h4FontSize:number = height_number/100*3.59375;
-            let textareaFontSize:number = height_number/100*2.0125;
-            let borderSize:number = height_number/100*0.01*1.4375;
-            let borderRadius:number = height_number/100*0.7;
-            let borderRadius_string:string = `.rounded{ border-radius: ${borderRadius}px;} .topLeft{border-top-left-radius: ${borderRadius}px;} .topRight{border-top-right-radius: ${borderRadius}px;} .bottomLeft{border-bottom-left-radius: ${borderRadius}px;} .bottomRight{border-bottom-right-radius: ${borderRadius}px;} .lightRounded{border-radius: ${borderRadius/2}px;}`;
-
-            masterStyle_style.innerHTML = `h1{font-size: ${h1FontSize}px;} p{font-size: ${pFontSize}px;} h2{font-size: ${h2FontSize}px;} h3{font-size: ${h3FontSize}px;} h4{font-size: ${h4FontSize}px;} .textareaFontSize{font-size: ${textareaFontSize}px;} .borderBox{border-width: ${borderSize}px;} .inputFontSize{font-size: ${h2FontSize}px;}` + borderRadius_string; 
+            pFontSize  = iH_number/100*1.2*1.4375;
+            h1FontSize = iH_number/100*1.6*1.4375;
+            h2FontSize = iH_number/100*3*1.4375;
+            h3FontSize = iH_number/100*1*1.4375;
+            h4FontSize = iH_number/100*2.5*1.4375;
+            textareaFontSize = iH_number/100*1.4*1.4375;
+            borderSize = iH_number/100*0.01*1.4375;
+            borderRadius = iH_number/100*0.7*1.4375;
         }
+        fontSize_string = 
+                `p{font-size: ${pFontSize}px;}
+                h1{font-size: ${h1FontSize}px;}
+                h2{font-size: ${h2FontSize}px;}
+                h3{font-size: ${h3FontSize}px;}
+                h4{font-size: ${h4FontSize}px;}
+                .textareaFontSize{font-size: ${textareaFontSize}px;}
+                .inputFontSize{font-size: ${h2FontSize}px;}`;
+        borderRadius_string =
+                `.borderBox{border-width: ${borderSize}px;}
+                .rounded{ border-radius: ${borderRadius}px;}
+                .topLeft{border-top-left-radius: ${borderRadius}px;}
+                .topRight{border-top-right-radius: ${borderRadius}px;}
+                .bottomLeft{border-bottom-left-radius: ${borderRadius}px;}
+                .bottomRight{border-bottom-right-radius: ${borderRadius}px;}
+                .lightRounded{border-radius: ${borderRadius/2}px;}`;
+     
+        masterStyle_style.innerHTML = fontSize_string + borderRadius_string;
     } 
 }
-
 
 window.addEventListener('DOMContentLoaded', function () {
 	resizeWindow(true);
@@ -65,68 +92,75 @@ window.addEventListener('resize', function () {
 });
 
 
-/***************************************** DOM_Selectors *********************************/
-const mc8Container = document.querySelector(".mc8Container");
-const assemblerCommand_p = document.getElementById('assemblerCommand_p');
-const stepNumber_p = document.getElementById('stepNumber_p');
-const stepDescription_p = document.getElementById('stepDescription_p');
-const stepNumberBackground = document.getElementsByClassName('containerStepNumber')[0];
-const registerArrow_div = document.getElementById('registerArrow_div');
-const irArrow_div = document.getElementById('irArrow_div');
-const movingFlagsArrow_div = document.getElementById('movingFlagsArrow_div');
-const cFlagArrow_div = document.getElementById('cFlagArrow_div');
-const checkJumpArrow_div = document.getElementById('checkJumpArrow_div');
-const containerSettings_div = document.getElementById('containerSettings_div');
-const movingFlags_div = document.getElementById('movingFlags_div');
-const flags_DOM = document.getElementById('flags');
-const yellowBgElement_div = document.getElementById('yellowBgElement_div');
-const io1InputWindow_div = document.getElementById('io1InputWindow_div');
-const io2InputWindow_div = document.getElementById('io2InputWindow_div');
-const io3InputWindow_div = document.getElementById('io3InputWindow_div');
-const io1Input_input = document.getElementById('io1Input_input');
-const io2Input_input = document.getElementById('io2Input_input');
-const io3Input_input = document.getElementById('io3Input_input');
+/***************************************************DOM-selectors***************************************************/
+const mc8_div:HTMLElement = document.getElementById('mc8_div');
 
-const movingObject = document.getElementById('movingObject_h2');
-const movingAlu1 = document.getElementById('movingAlu1_h2');
-const movingAlu2 = document.getElementById('movingAlu2_h2');
+//control unit
+const assemblerCommand_p:HTMLElement = document.getElementById('assemblerCommand_p');
+const stepNumber_p:HTMLElement = document.getElementById('stepNumber_p');
+const stepDescription_p:HTMLElement = document.getElementById('stepDescription_p');
+const stepNumberBg_div:HTMLElement = document.getElementById('stepNumberBg_div');
 
-const lastRomLabel_div = document.getElementById('lastRomLabel_div');
-const lastRomLabel_p = document.getElementById('lastRomLabel_p');
+//arrows
+const registerArrow_div:HTMLElement = document.getElementById('registerArrow_div');
+const irArrow_div:HTMLElement = document.getElementById('irArrow_div');
+const movingFlagsArrow_div:HTMLElement = document.getElementById('movingFlagsArrow_div');
+const cFlagArrow_div:HTMLElement = document.getElementById('cFlagArrow_div');
+const checkJumpArrow_div:HTMLElement = document.getElementById('checkJumpArrow_div');
 
-const middleRamLabel_div = document.getElementById('middleRamLabel_div');
-const middleRamLabel_p = document.getElementById('middleRamLabel_p');
+//io input pop ups
+const io1InputWindow_div:HTMLElement = document.getElementById('io1InputWindow_div');
+const io2InputWindow_div:HTMLElement = document.getElementById('io2InputWindow_div');
+const io3InputWindow_div:HTMLElement = document.getElementById('io3InputWindow_div');
+const io1Input_input:HTMLElement = document.getElementById('io1Input_input');
+const io2Input_input:HTMLElement = document.getElementById('io2Input_input');
+const io3Input_input:HTMLElement = document.getElementById('io3Input_input');
+
+//moving elements
+const movingObject_h2:HTMLElement = document.getElementById('movingObject_h2');
+const movingFlags_div:HTMLElement = document.getElementById('movingFlags_div');
+const movingAlu1:HTMLElement = document.getElementById('movingAlu1_h2');
+const movingAlu2:HTMLElement = document.getElementById('movingAlu2_h2');
+
+//yellow register background element
+const yellowBgElement_div:HTMLElement = document.getElementById('yellowBgElement_div');
+
+//rom/ram variable memory blocks
+const lastRomLabel_div:HTMLElement = document.getElementById('lastRomLabel_div');
+const lastRomLabel_p:HTMLElement = document.getElementById('lastRomLabel_p');
+const middleRamLabel_div:HTMLElement = document.getElementById('middleRamLabel_div');
+const middleRamLabel_p:HTMLElement = document.getElementById('middleRamLabel_p');
 
 
-/***************************************** conversion Hex/Int *********************************/
-const convertHexToNumber = (hex_string) => {
-    return parseInt(hex_string, 16);
+/***************************************************basic methods***************************************************/
+const convertHexToNumber = (hexValue_string:string):number => {
+    return parseInt(hexValue_string, 16);
 }
 
-const convertNumberToHex_4digits = (number_dec:number):string => {
-    let number_string:string = number_dec.toString(16);
-    number_string = number_string.toUpperCase();
-    let len = number_string.length;
+const convertNumberToHex_4digits = (value_number:number):string => {
+    let str:string = value_number.toString(16);
+    str = str.toUpperCase();
+    const len:number = str.length;
     for(let i=4; i>len;i--){
-        number_string = '0' + number_string;
+        str = '0' + str;
     }
-    return number_string;
+    return str;
 }
 
-const convertNumberToHex_2digits = (number_dec:number):string => {
-    let number_string = number_dec.toString(16);
-    number_string = number_string.toUpperCase();
-    let len = number_string.length;
+const convertNumberToHex_2digits = (value_number:number):string => {
+    let str:string = value_number.toString(16);
+    str = str.toUpperCase();
+    const len:number = str.length;
     for(let i=2; i>len;i--){
-        number_string = '0' + number_string;
+        str = '0' + str;
     }
-    return number_string;
+    return str;
 }
 
-const convertNumberToBinary_8digits = (number_dec) => {
+const convertNumberTo8DigitsBinaryString = (value_number:number):string => {
 
-    let str = (number_dec).toString(2);
-    const len = str.length;
+    let str:string = (value_number).toString(2);
+    const len:number = str.length;
     if(len != 8){
         for (let i = 0; i < 8-len; i++) {
             str = '0' + str;
@@ -136,8 +170,8 @@ const convertNumberToBinary_8digits = (number_dec) => {
     return str;
 }
 
-const convertNumberToBinaryArray = (number_dec) => {
-    let bin = convertNumberToBinary_8digits(number_dec).replace(' ', '');
+const convertNumberToBinaryArray = (value_number:number):number[] => {
+    const bin:string = convertNumberTo8DigitsBinaryString(value_number).replace(' ', '');
     let buf = [];
     for (let i = 0; i < bin.length; i++) {
        buf.push(Number(bin[i]));
@@ -145,26 +179,25 @@ const convertNumberToBinaryArray = (number_dec) => {
     return buf;
 }
 
-const convertBinaryToNumber = (binary_dec) => {
-    let str = '0b' + String(binary_dec);
-    return Number(str);    
+const convertBinaryToNumber = (binValue_string:string):number => {
+    return Number(`0b${binValue_string}`);    
 }
 
-const convertNumberToComplementOnTwo = (number_dec) => {
-    if(number_dec>127){
-        number_dec = number_dec-256;
+const convertNumberToComplementOnTwo = (value_number:number):number => {
+    if(value_number>127){
+        value_number = value_number-256;
     }
-    return number_dec;
+    return value_number;
 }
 
-const checkValidHex = (input_string) => {
-    const allowedChar = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
-    let check = true;
+const checkValidHex = (hexValue_string:string):boolean => {
+    const allowedChar:Array<string> = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+    let check:boolean = true;
 
-    input_string = input_string.toUpperCase();
-    for (let i = 0; i < input_string.length; i++) {
+    hexValue_string = hexValue_string.toUpperCase();
+    for (let i = 0; i < hexValue_string.length; i++) {
         for (let j = 0; j < allowedChar.length; j++) {
-            if(input_string[i] === allowedChar[j]){
+            if(hexValue_string[i] === allowedChar[j]){
                 check = true;
                 break;
             }
@@ -178,28 +211,30 @@ const checkValidHex = (input_string) => {
     return true;
 }
 
-
 const calculateChecksum = (intelHexFormat_string:string):string => {
     intelHexFormat_string = intelHexFormat_string.replace(':','');
     let sum:any = 0;
-    const recordLength = convertHexToNumber(intelHexFormat_string[0] + intelHexFormat_string[1]);
-    let withoutChecksum = 0;
+    const recordLength:number = convertHexToNumber(intelHexFormat_string[0] + intelHexFormat_string[1]);
+    let checksumIncluded:number = 0;
 
+    /**
+     * IntelHexFormat:  :-03-0006-00-215544-3d (startCode-byteCount-Address-recordType-data-checksum)
+     */
     if(intelHexFormat_string.length > 2+4+2+recordLength*2){
-        withoutChecksum = 2;
+        checksumIncluded = 2;
     }
     
-    for (let i = 0; i < 2+4+2+recordLength*2+withoutChecksum; i= i+2) {
+    for (let i = 0; i < 2+4+2+recordLength*2+checksumIncluded; i= i+2) {
         sum +=  convertHexToNumber(intelHexFormat_string[i] + intelHexFormat_string[i+1]);        
     }
 
     sum = convertNumberToHex_4digits(sum);
     sum = convertHexToNumber(sum[2]+sum[3]);
 
-    let bin_array = convertNumberToBinaryArray(Math.abs(sum));
-    let one_array =   [0,0,0,0,0,0,0,1];
-    let carry_array = [0,0,0,0,0,0,0,0,0];
-    let sum_array =   [0,0,0,0,0,0,0,0];
+    let bin_array:number[] = convertNumberToBinaryArray(Math.abs(sum));
+    let one_array:number[] =   [0,0,0,0,0,0,0,1];
+    let carry_array:number[] = [0,0,0,0,0,0,0,0,0];
+    let sum_array:number[] =   [0,0,0,0,0,0,0,0];
 
     //invert bin_array
     for (let i = 0; i < bin_array.length; i++) {
@@ -229,68 +264,71 @@ const calculateChecksum = (intelHexFormat_string:string):string => {
     sum = convertNumberToHex_2digits(convertBinaryToNumber(sum_array.join('')));
     return sum;
 }
-/***************************************** ALU operations *********************************/
 
-//sets the flags, 0 == don't set flag, 1 == setFlag
-const setFlags = (value_dec, result_bin_array, carry_bin_array, cFlag_dec, zFlag_dec, pFlag_dec,vFlag_dec, sFlag_dec) => {
+/*************************************************** ALU operations ***************************************************/
+
+const setFlags = (value_number:number, binValue_array:number[], binCarry_array:number[], setC:number, setZ:number, setP:number,setV:number, setS:number):void => {
     
     //carry flag
-    if(cFlag_dec){
-        FLAGS.c_dec = carry_bin_array[0];
+    if(setC){
+        FLAGS.c_number = binCarry_array[0];
     }
     else{
-        FLAGS.c_dec = '-';
+        FLAGS.c_number = '-';
     }
 
     //zero flag
-    if(zFlag_dec){
-        if(value_dec  === 0)
-            FLAGS.z_dec = 1;
+    if(setZ){
+        if(value_number  === 0)
+            FLAGS.z_number = 1;
         else
-            FLAGS.z_dec = 0;
+            FLAGS.z_number = 0;
     }
     else{
-        FLAGS.z_dec = '-';
+        FLAGS.z_number = '-';
     }
 
     //sing flag
-    if(sFlag_dec){
-        FLAGS.s_dec = result_bin_array[0];
+    if(setS){
+        FLAGS.s_number = binValue_array[0];
     }
     else{
-        FLAGS.s_dec = '-';
+        FLAGS.s_number = '-';
     }
 
     //parity flag
-    if(pFlag_dec){
+    if(setP){
         let cnt = 0;
-        for (let i = 0; i < result_bin_array.length; i++) {
-            if(result_bin_array[i])
+        for (let i = 0; i < binValue_array.length; i++) {
+            if(binValue_array[i])
                 cnt += 1;        
         }
         if(cnt%2 === 0)
-            FLAGS.p_dec = 1;
+            FLAGS.p_number = 1;
         else
-            FLAGS.p_dec = 0;
+            FLAGS.p_number = 0;
     }
     //overflow flag
-    else if(vFlag_dec){
-        if((carry_bin_array[0] === 1 && carry_bin_array[1] === 0) || (carry_bin_array[0] === 0 && carry_bin_array[1] === 1))
-            FLAGS.p_dec = 1;
+    else if(setV){
+        if((binCarry_array[0] === 1 && binCarry_array[1] === 0) || (binCarry_array[0] === 0 && binCarry_array[1] === 1))
+            FLAGS.p_number = 1;
         else
-            FLAGS.p_dec = 0;
+            FLAGS.p_number = 0;
     }
     else{
-        FLAGS.p_dec = '-';
+        FLAGS.p_number = '-';
     }
 }
 
-const addBinary = (value1_dec, value2_dec, ersatzAddition_boolean) => {
-    let value1_bin = convertNumberToBinaryArray(value1_dec);
-    let value2_bin = convertNumberToBinaryArray(value2_dec);
-    let carry_bin = [0,0,0,0,0,0,0,0,0];
-   
-    if(ersatzAddition_boolean){
+const addBinary = (value1_number:number, value2_number:number, replacementAddition_boolean:boolean):number => {
+    let value1_bin:number[] = convertNumberToBinaryArray(value1_number);
+    let value2_bin:number[] = convertNumberToBinaryArray(value2_number);
+    let carry_bin:number[] = [0,0,0,0,0,0,0,0,0];
+    let sum_bin:number[] =   [0,0,0,0,0,0,0,0];
+    let sum_number:number = 0;
+
+
+    if(replacementAddition_boolean){
         carry_bin[8] = 1;
         for (let i = 0; i < value2_bin.length; i++) {
             if(value2_bin[i] === 0)
@@ -299,10 +337,8 @@ const addBinary = (value1_dec, value2_dec, ersatzAddition_boolean) => {
                 value2_bin[i] = 0;
         }
     }
-        
-    let sum_bin =   [0,0,0,0,0,0,0,0];
-    let sum_dec = 0;
-
+   
+   
     for (let i = 8; i > 0; i--) {
         if(value1_bin[i-1] + value2_bin[i-1]+ carry_bin[i] === 1){
             carry_bin[i-1] = 0;
@@ -318,40 +354,39 @@ const addBinary = (value1_dec, value2_dec, ersatzAddition_boolean) => {
         }
     }
 
-
-    sum_dec = convertBinaryToNumber(sum_bin.join(''));
+    sum_number = convertBinaryToNumber(sum_bin.join(''));
      
     //set Flags
-    setFlags(sum_dec, sum_bin, carry_bin, 1,1,0,1,1);
+    setFlags(sum_number, sum_bin, carry_bin, 1,1,0,1,1);
 
     //if the addition was a replace-addition switch sign-flag
-    if(ersatzAddition_boolean){
-        if(FLAGS.c_dec)
-            FLAGS.c_dec = 0;
+    if(replacementAddition_boolean){
+        if(FLAGS.c_number)
+            FLAGS.c_number = 0;
         else
-            FLAGS.c_dec = 1;
+            FLAGS.c_number = 1;
     }
 
-    return sum_dec;
+    return sum_number;
 }
 
-const incBinary = (value_dec) => {
-    const result_dec = addBinary(value_dec, 1,false);
-    FLAGS.c_dec = '-';
-    return result_dec;
+const incBinary = (value_number:number):number => {
+    const result:number = addBinary(value_number, 1,false);
+    FLAGS.c_number = '-';
+    return result;
 }
 
-const decBinary = (value_dec) => {
-    const result_dec = addBinary(value_dec, 1, true);
-    FLAGS.c_dec = '-';
-    return result_dec;
+const decBinary = (value_number:number):number => {
+    const result:number = addBinary(value_number, 1, true);
+    FLAGS.c_number = '-';
+    return result;
 }
 
-const andBinary = (value1_dec, value2_dec) => {
-    let value1_bin = convertNumberToBinaryArray(value1_dec);
-    let value2_bin = convertNumberToBinaryArray(value2_dec);
-    let result_bin =   [0,0,0,0,0,0,0,0];
-    let result_dec = 0;
+const andBinary = (value1_number:number, value2_number:number):number => {
+    let value1_bin:number[] = convertNumberToBinaryArray(value1_number);
+    let value2_bin:number[] = convertNumberToBinaryArray(value2_number);
+    let result_bin:number[] =   [0,0,0,0,0,0,0,0];
+    let result:number = 0;
  
 
     for (let i = 8; i > 0; i--) {
@@ -360,18 +395,18 @@ const andBinary = (value1_dec, value2_dec) => {
         }
     }
 
-    result_dec = convertBinaryToNumber(result_bin.join(''));
+    result = convertBinaryToNumber(result_bin.join(''));
 
-    setFlags(result_dec, result_bin, [0], 1, 1,1,0,1);
+    setFlags(result, result_bin, [0], 1, 1,1,0,1);
     
-    return result_dec;
+    return result;
 }
 
-const orBinary = (value1_dec, value2_dec) => {
-    let value1_bin = convertNumberToBinaryArray(value1_dec);
-    let value2_bin = convertNumberToBinaryArray(value2_dec);
-    let result_bin =   [0,0,0,0,0,0,0,0];
-    let result_dec = 0;
+const orBinary = (value1_number:number, value2_number:number):number => {
+    let value1_bin:number[] = convertNumberToBinaryArray(value1_number);
+    let value2_bin:number[] = convertNumberToBinaryArray(value2_number);
+    let result_bin:number[] =   [0,0,0,0,0,0,0,0];
+    let result:number = 0;
 
     for (let i = 8; i > 0; i--) {
         if(value1_bin[i-1] || value2_bin[i-1]){
@@ -379,19 +414,18 @@ const orBinary = (value1_dec, value2_dec) => {
         }
     }
 
-    result_dec = convertBinaryToNumber(result_bin.join(''));
+    result = convertBinaryToNumber(result_bin.join(''));
 
-    setFlags(result_dec, result_bin, [0], 1,1,1,0,1);
+    setFlags(result, result_bin, [0], 1,1,1,0,1);
     
-    
-    return result_dec;
+    return result;
 }
 
-const xorBinary = (value1_dec, value2_dec) => {
-    let value1_bin = convertNumberToBinaryArray(value1_dec);
-    let value2_bin = convertNumberToBinaryArray(value2_dec);
-    let result_bin =   [0,0,0,0,0,0,0,0];
-    let result_dec = 0;
+const xorBinary = (value1_number:number, value2_number:number):number => {
+    let value1_bin:number[] = convertNumberToBinaryArray(value1_number);
+    let value2_bin:number[] = convertNumberToBinaryArray(value2_number);
+    let result_bin:number[] =   [0,0,0,0,0,0,0,0];
+    let result:number = 0;
 
     for (let i = 8; i > 0; i--) {
         if(value1_bin[i-1] ^ value2_bin[i-1]){
@@ -399,54 +433,54 @@ const xorBinary = (value1_dec, value2_dec) => {
         }
     }
 
-    result_dec = convertBinaryToNumber(result_bin.join(''));
+    result = convertBinaryToNumber(result_bin.join(''));
 
-    setFlags(result_dec, result_bin, [0], 1,1,1,0,1);
+    setFlags(result, result_bin, [0], 1,1,1,0,1);
     
     
-    return result_dec;
+    return result;
 }
 
-const shlBinary = (value_dec) => {
-    let value_bin = convertNumberToBinaryArray(value_dec);
-    let result_dec = 0;
-    let firstBit = value_bin[0];
+const shlBinary = (value_number:number):number => {
+    let value_bin:number[] = convertNumberToBinaryArray(value_number);
+    let result:number = 0;
+    let firstBit:number = value_bin[0];
 
     for (let i = 0; i < value_bin.length-1; i++) {
         value_bin[i] = value_bin[i+1];        
     }
     value_bin[7] = 0;
 
-    result_dec = convertBinaryToNumber(value_bin.join(''));
+    result = convertBinaryToNumber(value_bin.join(''));
 
-    setFlags(result_dec, value_bin, [firstBit], 1,1,1,0,1);
+    setFlags(result, value_bin, [firstBit], 1,1,1,0,1);
     
-    return result_dec;
+    return result;
 }
 
-const shrBinary = (value_dec) => {
-    let value_bin = convertNumberToBinaryArray(value_dec);
-    let result_dec = 0;
-    let lastBit = value_bin[7];
+const shrBinary = (value_number:number):number => {
+    let value_bin:number[] = convertNumberToBinaryArray(value_number);
+    let result:number = 0;
+    let lastBit:number = value_bin[7];
 
     for (let i = 7; i > 0; i--) {
         value_bin[i] = value_bin[i-1];        
     }
     value_bin[0] = 0;
 
-    result_dec = convertBinaryToNumber(value_bin.join(''));
+    result = convertBinaryToNumber(value_bin.join(''));
 
-    setFlags(result_dec, value_bin, [lastBit], 1,1,1,0,1);
+    setFlags(result, value_bin, [lastBit], 1,1,1,0,1);
     
-    return result_dec;
+    return result;
 }
 
-const rclBinary = (value_dec) => {
-    let value_bin = convertNumberToBinaryArray(value_dec);
-    let result_dec = 0;
+const rclBinary = (value_number:number):number => {
+    let value_bin:number[] = convertNumberToBinaryArray(value_number);
+    let result:number = 0;
 
     //save bit position 7 for setFlags ( [7,6,5,4,3,2,1,0])
-    let carry_dec = value_bin[0];
+    let carry:number = value_bin[0];
 
     //shift all bits left
     for (let i = 0; i < value_bin.length-1; i++) {
@@ -454,23 +488,23 @@ const rclBinary = (value_dec) => {
     }
 
     //write carry-flag in bit position 0 
-    value_bin[7] = FLAGS.c_dec;
+    value_bin[7] = FLAGS.c_number;
 
-    result_dec = convertBinaryToNumber(value_bin.join(''));
+    result = convertBinaryToNumber(value_bin.join(''));
 
     //set flags
-    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    setFlags(result, value_bin, [carry], 1,0,0,0,0);
     
-    return result_dec;
+    return result;
 }
 
-const rolBinary = (value_dec) => {
-    let value_bin = convertNumberToBinaryArray(value_dec);
-    let result_dec = 0;
+const rolBinary = (value_number:number):number => {
+    let value_bin:number[] = convertNumberToBinaryArray(value_number);
+    let result:number = 0;
 
     //save bit position 7 for setFlags [7,6,5,4,3,2,1,0]
     //                                  ^
-    let carry_dec = value_bin[0];
+    let carry:number = value_bin[0];
 
     //shift all bits left
     for (let i = 0; i < value_bin.length-1; i++) {
@@ -478,58 +512,58 @@ const rolBinary = (value_dec) => {
     }
 
     //write former bit 7 in bit position 0 
-    value_bin[7] = carry_dec;
+    value_bin[7] = carry;
 
-    result_dec = convertBinaryToNumber(value_bin.join(''));
+    result = convertBinaryToNumber(value_bin.join(''));
 
-    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    setFlags(result, value_bin, [carry], 1,0,0,0,0);
     
-    return result_dec;
+    return result;
 }
 
-const rcrBinary = (value_dec) => {
-    let value_bin = convertNumberToBinaryArray(value_dec);
-    let result_dec = 0;
+const rcrBinary = (value_number:number):number => {
+    let value_bin:number[] = convertNumberToBinaryArray(value_number);
+    let result:number = 0;
 
     //save bit position 0 for setFlags ([7,6,5,4,3,2,1,0])
-    let carry_dec = value_bin[7];
+    let carry:number = value_bin[7];
 
     for (let i = 7; i > 0; i--) {
         value_bin[i] = value_bin[i-1];        
     }
 
     //write carry-flag into bit 7
-    value_bin[0] = FLAGS.c_dec;
+    value_bin[0] = FLAGS.c_number;
 
-    result_dec = convertBinaryToNumber(value_bin.join(''));
+    result = convertBinaryToNumber(value_bin.join(''));
 
-    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    setFlags(result, value_bin, [carry], 1,0,0,0,0);
     
-    return result_dec;
+    return result;
 }
 
-const rorBinary = (value_dec) => {
-    let value_bin = convertNumberToBinaryArray(value_dec);
-    let result_dec = 0;
+const rorBinary = (value_number:number):number => {
+    let value_bin:number[] = convertNumberToBinaryArray(value_number);
+    let result:number = 0;
 
     //save bit position 0 for setFlags ([7,6,5,4,3,2,1,0])
-    let carry_dec = value_bin[7];
+    let carry:number = value_bin[7];
 
     for (let i = 7; i > 0; i--) {
         value_bin[i] = value_bin[i-1];        
     }
 
     //write former bit 0 into bit 7
-    value_bin[0] = carry_dec;
+    value_bin[0] = carry;
 
-    result_dec = convertBinaryToNumber(value_bin.join(''));
+    result = convertBinaryToNumber(value_bin.join(''));
 
-    setFlags(result_dec, value_bin, [carry_dec], 1,0,0,0,0);
+    setFlags(result, value_bin, [carry], 1,0,0,0,0);
     
-    return result_dec;
+    return result;
 }
 
-/*************************************************************** Classes ***************************************************************/
+/***************************************************Classes***************************************************/
 class PlayStatus{
     play: boolean;
     stop: boolean;
@@ -549,30 +583,19 @@ class PlayStatus{
         this.rocketSpeed = false;
     }
 
-    getStatus(){
-        if(this.completeExe)
-            return 'completeExe';
-        else if(this.rocketSpeed)
-            return 'rocketSpeed';
-        else if(this.noAnim)
-            return 'noAnim';
-    }
-
-    setPlay(){
+    setPlay():void{
         this.play = true;
         this.stop = false;
         this.pause = false;
     }
 
-    setPause(){
+    setPause():void{
         this.play = false;
         this.stop = false;
         this.pause = true;
-        this.completeExe = false;
-        this.noAnim = false;
     }
 
-    setStop(){
+    setStop():void{
         this.play = false;
         this.stop = true;
         this.pause = false;
@@ -580,108 +603,102 @@ class PlayStatus{
         this.noAnim = false;
         this.completeExe = false;
     }
-    setOneCommand(){
+    setOneCommand():void{
         this.oneCommand = true;
     }
 
-    setCompleteExecution(){
+    setCompleteExecution():void{
         this.noAnim = true;
         this.completeExe = true;
     }
 
-    setNoAnimation(){
+    setNoAnimation():void{
         this.noAnim = true;
+        this.completeExe = false;
     }
 
-    setRocketSpeed(){
+    setRocketSpeed():void{
         this.rocketSpeed = true;
+        this.noAnim = false;
+        this.completeExe = false;
     }
 
-    setSnailSpeed(){
+    setSnailSpeed():void{
         this.rocketSpeed = false;
+        this.noAnim = false;
+        this.completeExe = false;
     }
-
 }
-
-/******************************* ROM/RAM *********************************** */
 class Rom {
     breakpoints_array: Array<number>;
-    dec_array: Array<number>;
-    startAddressRom_dec: number;
-    size_dec: number;
+    number_array: Array<number>;
+    startAddressRom_number: number;
+    size_number: number;
+
 	constructor() {
         this.breakpoints_array = this.initBreakpoints();
-        this.dec_array = this.init_dec();
+        this.number_array = this.initNumberArray();
         this.init_DOM();	
-        this.startAddressRom_dec = 0;
-        this.size_dec = 8192;
+        this.startAddressRom_number = 0;
+        this.size_number = 8192;
 	}
 	
-	init_dec() {
+	initNumberArray():number[] {
 		let buf_arr = [];
 		for (let i = 0; i < 8192; i++){
             buf_arr.push(255);
         }
-            
+        this.number_array = buf_arr;            
 		return buf_arr;	
     }
-    initBreakpoints(){
+    initBreakpoints():number[] {
         let buf_arr = [];
 		for (let i = 0; i < 8192; i++){
             buf_arr.push(0);
         }
 		return buf_arr;	
     }
-    resetBreakpoints() {
-        let buf_arr = [];
-		for (let i = 0; i < 8192; i++){
-            buf_arr.push(0);
-        } 
-        this.breakpoints_array = buf_arr;
+    resetBreakpoints():void {
+        this.breakpoints_array = this.initBreakpoints();
         for(let i = 0; i<224; i++){
-            try{
-                document.getElementById('romElement' + String(i)).classList.remove('blueText');
-            }catch (e){}
+            document.getElementById(`romElement${i}`).classList.remove('blueText');
 		}	
     }
 	
-	init_DOM() {
+	init_DOM():void{
         let j = 0;
-        //old 224
+
 	    for(var i = 0; i<240; i++){
-	        //create a romElement
-	        let romElement = document.createElement('p');
+	        const romElement:HTMLElement = document.createElement('p');
 	        romElement.classList.add('square1x1', 'positionAbsolute', 'centered');
-	        romElement.id = "romElement" + String(i);
+	        romElement.id = `romElement${i}`;
 	
 	        //after every 8th romElement -> new line should be filled
 	        if(!(i%8) && i !== 0)
 	            j++;
     
             if(i>=224){
-                romElement.id = "romElementVariable" + String(i-224);
+                romElement.id = `romElementVariable${i-224}`;
                 romElement.textContent = '';
             }
             else{
                 romElement.textContent = 'FF';
             }
 
-	        //define Position of romElement
-	        romElement.style.top = String(100/32*(j+2)) + "%";
-	        romElement.style.left = String(100/46*((i%8)+2)) + "%";
+	        romElement.style.top = `${100/32*(j+2)}%`;
+	        romElement.style.left = `${100/46*((i%8)+2)}%`;
 	
-	        //add romElement to body
-	        mc8Container.appendChild(romElement);    
+	        mc8_div.appendChild(romElement);    
 	    }
-	    return true;
     }
 
-    update() {
+    update():void{
         this.resetBreakpoints();
+        this.initNumberArray();
 		let buf_string = '';
         let linker_string = linkerFile_textarea.value.replace(/\r\n|\n|\r/gm, '');
-		this.dec_array = this.init_dec();
-		//update dec_arr
+		
+		//assuming the linkerFile is correct
 		for (let i = 0; i < linker_string.length; i++) {
         	if(linker_string[i] === ':'){
             	if(linker_string[i+8] === '1')
@@ -693,37 +710,34 @@ class Rom {
             	for (let j = 0; j < length; j++) {
                     if(j===0)
                         this.breakpoints_array[address+j] = 1;
-                    this.dec_array[address+j] = convertHexToNumber(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
+                    this.number_array[address+j] = convertHexToNumber(linker_string[i+9+j*2]+linker_string[i+10+j*2]);                          
             	}   
         	}
         }
-        
 		
         //update DOM        
 		for(let i = 0; i<224; i++){
-        	buf_string = this.dec_array[i].toString(16).toUpperCase();
-        	if(buf_string.length === 1) //if number is smaller than 10 -->Bsp(0F) 
-            	buf_string = '0' + buf_string;
-            document.getElementById("romElement" + String(i)).textContent = buf_string;
+        	buf_string = convertNumberToHex_2digits(this.number_array[i])
+            document.getElementById(`romElement${i}`).textContent = buf_string;
 
-            //add blue if breakpoints is checked
             if(breakpointsCheckbox_input.checked && this.breakpoints_array[i]){
-                document.getElementById("romElement" + String(i)).classList.add('blueText');
+                document.getElementById(`romElement${i}`).classList.add('blueText');
             }
 		}
     }
 
-    updateVariableElements(address_dec){
-        if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== lastRomLabel_p.textContent.slice(0,-1)){
-            if(address_dec > 223 && address_dec < 8192){
+    updateVariableElements(address_number:number):void{
+        if(convertNumberToHex_4digits(address_number).slice(0,-1) !== lastRomLabel_p.textContent.slice(0,-1)){
+            if(address_number > 223 && address_number < 8192){
+                let lastXXX0Address:number = address_number-address_number%16;
+
                 lastRomLabel_div.classList.remove('ellipses');
-                lastRomLabel_p.textContent = convertNumberToHex_4digits(address_dec).slice(0,-1)+'x';
+                lastRomLabel_p.textContent = convertNumberToHex_4digits(address_number).slice(0,-1)+'x';
                 lastRomLabel_div.classList.add('lightYellowBg');
-    
-                address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
-    
+                
+                
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById("romElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
+                    document.getElementById(`romElementVariable${i}`).textContent = convertNumberToHex_2digits(this.number_array[lastXXX0Address+i]);
                 }
             }
             else if(lastRomLabel_p.textContent !== '') {
@@ -731,135 +745,115 @@ class Rom {
                 lastRomLabel_div.classList.remove('lightYellowBg');
                 lastRomLabel_p.textContent = '';
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById("romElementVariable" + String(i)).textContent = '';
+                    document.getElementById(`romElementVariable${i}`).textContent = '';
                 }
             } 
         }  
     }
     
-    getValue(address_dec) {
-        return this.dec_array[address_dec];
+    getValue(address_number:number):number{
+        return this.number_array[address_number];
     }
 
-    getElementId(position_dec = PC.value_dec){
-        if (position_dec > 223) {
-            let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
-            return document.getElementById('romElementVariable' + String(lastValue_dec)).id;
-
+    getElementId(address_number = PC.value_number):string{
+        if (address_number > 223) {
+            return document.getElementById(`romElementVariable${address_number%16}`).id;
         }
-        return document.getElementById('romElement' + String(position_dec)).id;
+        return document.getElementById(`romElement${address_number}`).id;
     } 
 }
 
 class Ram {
-    startAddressRam_dec: number;
-    size_dec: number;
-    dec_array: Array<number>;
+    startAddressRam_number: number;
+    size_number: number;
+    number_array: Array<number>;
 
     constructor() {
-        this.startAddressRam_dec = 8192;
-        this.size_dec = 8192;
-		this.dec_array = this.init_dec();
-        this.init_DOM();	
+        this.startAddressRam_number = 8192;
+        this.size_number = 8192;
+		this.number_array = this.init_number();
+        this.init_DOM();
 	}
 	
-	init_dec(){
+	init_number():number[]{
 		let buf_arr = [];
 		for (let i = 0; i < 8192; i++)
         	buf_arr.push(255);
 		return buf_arr;	
     }
 	
-	init_DOM(){
+	init_DOM():void{
         let j = 0;
         for(var i = 0; i<240; i++){
-            //create a ramElement (same CSS as romElement)
-            let ramElement = document.createElement('p');
+            const ramElement = document.createElement('p');
             ramElement.classList.add('square1x1', 'positionAbsolute', 'centered');
             if(i<112){
-                ramElement.id = 'ramElement' + String(i);
+                ramElement.id = `ramElement${i}`;
                 ramElement.textContent = 'FF';
             }
             else if(i>127){
-                ramElement.id = 'ramElement' + String(i+8192-240);
+                ramElement.id = `ramElement${i+8192-240}`;
                 ramElement.textContent = 'FF';
             }
             else{
-                ramElement.id = "ramElementVariable" + String(i-112);
+                ramElement.id = `ramElementVariable${i-112}`;
                 ramElement.textContent = '';
             }
     
-            //after every 8th romElement -> new line should be filled
             if(!(i%8) && i !== 0)
                 j++;
 
-            //define Position of romElement
-            ramElement.style.top = String(100/32*(j+2)) + "%";
-            ramElement.style.left = String(100/46*((i%8)+36)) + "%";
+            ramElement.style.top = `${100/32*(j+2)}%`;
+            ramElement.style.left = `${100/46*((i%8)+36)}%`;
     
-            //add romElement to body
-            mc8Container.appendChild(ramElement);    
+            mc8_div.appendChild(ramElement);    
         }
-        return true;
     }
 
-    reset(){
-        for (let i = 0; i < this.dec_array.length; i++) {
-            this.dec_array[i] = 255;
+    reset():void{
+        for (let i = 0; i < this.number_array.length; i++) {
+            this.number_array[i] = 255;
             if(i<112){
-                document.getElementById('ramElement' + String(i)).textContent = 'FF';
+                document.getElementById(`ramElement${i}`).textContent = 'FF';
             }
             if(i>8192-113){
-                document.getElementById('ramElement' + String(i)).textContent ='FF';
-            }
-                
-            
+                document.getElementById(`ramElement${i}`).textContent = 'FF';
+            }  
         }
     }
 
-    getValue(address_dec) {
-        if(address_dec > 8191){
-            let x = Math.floor(address_dec/8192);
-            address_dec = address_dec - x*8192;
-        }
-        return this.dec_array[address_dec];
-    }
-    
-    getHexValue(address_dec) {
-        return convertNumberToHex_2digits(this.dec_array[address_dec]);
+    reduceToRange200h(address_number:number):number{        
+        return this.number_array[address_number - Math.floor(address_number/8192)*8192];
     }
 
-    update(address_dec, number_dec){
-        if(address_dec > 8191){
-            let x = Math.floor(address_dec/8192);
-            address_dec = address_dec - x*8192;
-        }
-        this.dec_array[address_dec] = number_dec;
-        if(address_dec < 112 || address_dec > 8191-112){
-            document.getElementById('ramElement' + String(address_dec)).textContent = convertNumberToHex_2digits(number_dec);
+    getValue(address_number:number):number {
+        return this.number_array[this.reduceToRange200h(address_number)];
+    }
+
+    updateElement(address_number:number, value_number:number):void{
+        address_number = this.reduceToRange200h(address_number);
+
+        this.number_array[address_number] = value_number;
+        if(address_number < 112 || address_number > 8191-112){
+            document.getElementById(`ramElement${address_number}`).textContent = convertNumberToHex_2digits(value_number);
         }
         else{
-            let buf = convertHexToNumber(convertNumberToHex_4digits(address_dec)[3]);
-            document.getElementById("ramElementVariable" + String(buf)).textContent = convertNumberToHex_2digits(number_dec);
+            document.getElementById(`ramElementVariable${address_number%16}`).textContent = convertNumberToHex_2digits(value_number);
         }
     }
 
-    updateVariableElements(address_dec){
-        let x = 0;
-        if(address_dec > 8191){
-            x = Math.floor(address_dec/8192);
-            address_dec = address_dec - x*8192;
-        }
+    updateVariableElements(address_number:number):void{
+        let reducedAddress = this.reduceToRange200h(address_number);
 
-        if(convertNumberToHex_4digits(address_dec).slice(0,-1) !== middleRamLabel_p.textContent.slice(0,-1)){
-            if(address_dec > 111 && address_dec <= 8191-112){
+        if(convertNumberToHex_4digits(address_number).slice(0,-1) !== middleRamLabel_p.textContent.slice(0,-1)){
+            if(reducedAddress > 111 && reducedAddress <= 8191-112){
                 middleRamLabel_div.classList.remove('ellipses');
                 middleRamLabel_div.classList.add('lightYellowBg');
-                middleRamLabel_p.textContent = convertNumberToHex_4digits(address_dec+x*8192).slice(0,-1)+'x';
-                address_dec = convertHexToNumber(convertNumberToHex_4digits(address_dec).slice(0,-1)+'0');
-    
+                middleRamLabel_p.textContent = convertNumberToHex_4digits(address_number).slice(0,-1)+'x';
+                
+                let lastXXX0Address:number = reducedAddress - reducedAddress%16;
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById("ramElementVariable" + String(i)).textContent = convertNumberToHex_2digits(this.dec_array[address_dec+i]);
+                    document.getElementById(`ramElementVariable${i}`).textContent = convertNumberToHex_2digits(this.number_array[lastXXX0Address+i]);
                 }
             }
             else if(middleRamLabel_p.textContent !== '') {
@@ -867,128 +861,118 @@ class Ram {
                 middleRamLabel_div.classList.remove('lightYellowBg');
                 middleRamLabel_p.textContent = '';
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById("ramElementVariable" + String(i)).textContent = '';
+                    document.getElementById(`ramElementVariable${i}`).textContent = '';
                 }
             } 
         }  
     }
 
-    getRamElementId(position_dec = 0){
-        if(position_dec > 8191){
-            let x = Math.floor(position_dec/8192);
-            position_dec = position_dec - x*8192;
-        }
+    getRamElementId(address_number:number = 0):string{
+        address_number = this.reduceToRange200h(address_number);
 
-        if(position_dec > 111 && position_dec < 8191-111){
-            let lastValue_dec = convertHexToNumber(convertNumberToHex_4digits(position_dec)[3]);
-            return document.getElementById('ramElementVariable' + String(lastValue_dec)).id;
+        if(address_number > 111 && address_number < 8191-111){
+            return document.getElementById(`ramElementVariable${address_number%16}`).id;
         }
         else
-            return document.getElementById('ramElement' + String(position_dec)).id;
+            return document.getElementById(`ramElement${address_number}`).id;
     }
-
 }
 
-/******************************* Register *********************************** */
-
 class Register_x2 {
-    domElement: Element;
-    value_dec: number;
+    domElement: HTMLElement;
+    value_number: number;
 
-	constructor(register_DOM){
-		this.domElement = register_DOM;
-		this.value_dec = 0;
+	constructor(register_htmlElement:HTMLElement){
+		this.domElement = register_htmlElement;
+		this.value_number = 0;
 	}
 	
-	update(value_dec){
-        if(value_dec > 255)
-            value_dec -= 256;
-        if(value_dec < 0)
-            value_dec = 255;
-		this.value_dec = value_dec;
-		this.domElement.textContent = convertNumberToHex_2digits(value_dec);		
+	update(value_number){
+        if(value_number > 255)
+            value_number -= 256;
+        if(value_number < 0)
+            value_number = 255;
+		this.value_number = value_number;
+		this.domElement.textContent = convertNumberToHex_2digits(value_number);		
 	}
 	
 }
 
 class Register_x4 {
-    value_dec: number;
+    value_number: number;
     domElement: Element;
-    hi_dec: number;
-    lo_dec: number;
+    hi_number: number;
+    lo_number: number;
 	constructor(register_DOM){
-		this.value_dec = 0;
+		this.value_number = 0;
         this.domElement = register_DOM;
-		this.hi_dec = 0;
-		this.lo_dec = 0;
+		this.hi_number = 0;
+		this.lo_number = 0;
 	}
 	
-	update(value_dec){
-        if(value_dec > 65535)
-            value_dec -= 65536;
-        if(value_dec < 0)
-            value_dec = 65535;
-        this.value_dec = value_dec;
-        this.domElement.textContent = convertNumberToHex_4digits(value_dec);
-        this.hi_dec = convertHexToNumber(this.domElement.textContent[0] + this.domElement.textContent[1]);
-        this.lo_dec = convertHexToNumber(this.domElement.textContent[2] + this.domElement.textContent[3]);
+	update(value_number){
+        if(value_number > 65535)
+            value_number -= 65536;
+        if(value_number < 0)
+            value_number = 65535;
+        this.value_number = value_number;
+        this.domElement.textContent = convertNumberToHex_4digits(value_number);
+        this.hi_number = convertHexToNumber(this.domElement.textContent[0] + this.domElement.textContent[1]);
+        this.lo_number = convertHexToNumber(this.domElement.textContent[2] + this.domElement.textContent[3]);
 	}	
 	
 	update_lo(decimal_number){
 		let buf_string = this.domElement.textContent;
-		this.lo_dec = decimal_number;
+		this.lo_number = decimal_number;
         this.domElement.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(decimal_number);
-        this.value_dec = convertHexToNumber(this.domElement.textContent);
+        this.value_number = convertHexToNumber(this.domElement.textContent);
 	}
 	
 	update_hi(decimal_number){
 		let buf_string = this.domElement.textContent;
-		this.hi_dec = decimal_number;
+		this.hi_number = decimal_number;
         this.domElement.textContent = convertNumberToHex_2digits(decimal_number) + buf_string[2] + buf_string[3];
-        this.value_dec = convertHexToNumber(this.domElement.textContent);
+        this.value_number = convertHexToNumber(this.domElement.textContent);
 	}
 }
-
 class Pc_class extends Register_x4{
     constructor(register_DOM){
 		super(register_DOM);
     }
-    update(value_dec){
-        if(value_dec > 65535)
-            value_dec -= 65536;
-        if(value_dec < 0)
-            value_dec = 65535;
-        this.value_dec = value_dec;
-        this.domElement.textContent = convertNumberToHex_4digits(value_dec);
-        this.hi_dec = convertHexToNumber(this.domElement.textContent[0] + this.domElement.textContent[1]);
-        this.lo_dec = convertHexToNumber(this.domElement.textContent[2] + this.domElement.textContent[3]);
+    update(value_number){
+        if(value_number > 65535)
+            value_number -= 65536;
+        if(value_number < 0)
+            value_number = 65535;
+        this.value_number = value_number;
+        this.domElement.textContent = convertNumberToHex_4digits(value_number);
+        this.hi_number = convertHexToNumber(this.domElement.textContent[0] + this.domElement.textContent[1]);
+        this.lo_number = convertHexToNumber(this.domElement.textContent[2] + this.domElement.textContent[3]);
 
-        updateRedRectangle(PC.value_dec);
-        ROM.updateVariableElements(value_dec);
-        if(this.value_dec > RAM.startAddressRam_dec)
-            RAM.updateVariableElements(value_dec);
+        updateRedRectangle(PC.value_number);
+        ROM.updateVariableElements(value_number);
+        if(this.value_number > RAM.startAddressRam_number)
+            RAM.updateVariableElements(value_number);
     
     }
 }
-
 class IO extends Register_x2 {
-    address_dec: number;
+    address_number: number;
     ioMapped_boolean: boolean;
     in_boolean: boolean;
 
-    constructor(register_DOM, address_dec, io1IN_boolean){
+    constructor(register_DOM, address_number, io1IN_boolean){
 		super(register_DOM);
-        this.address_dec = address_dec;
+        this.address_number = address_number;
         this.ioMapped_boolean = true;
         this.in_boolean = io1IN_boolean;
     }
     
-    updateAddress(address_dec, ioMapped_boolean){
-        this.address_dec = address_dec;
+    updateAddress(address_number, ioMapped_boolean){
+        this.address_number = address_number;
         this.ioMapped_boolean = ioMapped_boolean;
     }
 }
-
 class Decoder {
     wr_DOM: Element;
     rd_DOM: Element;
@@ -1019,24 +1003,24 @@ class Decoder {
         this.ioAccess = false;
     }
 	
-	update(wr_dec, rd_dec, m_dec, io_dec, address_dec){
-        this.WR = wr_dec;
-        this.RD = rd_dec;
-        this.M = m_dec;
-        this.IO = io_dec;
+	update(wr_number, rd_number, m_number, io_number, address_number){
+        this.WR = wr_number;
+        this.RD = rd_number;
+        this.M = m_number;
+        this.IO = io_number;
 
         //read from memory
-        if(rd_dec === 0 && m_dec === 0){
+        if(rd_number === 0 && m_number === 0){
             this.ioAccess = false;
-            if(address_dec < 8192){
+            if(address_number < 8192){
                 this.text_string = 'Lese von ROM';
                 this.ramAccess = false;
             }   
-            else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+            else if (address_number >= RAM.startAddressRam_number && address_number < RAM.startAddressRam_number+RAM.size_number){
                 this.ramAccess = true;
                 this.text_string = 'Lese von RAM';
             }
-            else if(address_dec === IO1.address_dec){
+            else if(address_number === IO1.address_number){
                 this.ioAccess = true;
                 if(IO1.in_boolean){
                     this.text_string = 'Lese von IN1';
@@ -1046,7 +1030,7 @@ class Decoder {
                     this.error = true;
                 }
             }
-            else if (address_dec === IO2.address_dec){
+            else if (address_number === IO2.address_number){
                 this.ioAccess = true;
                 if(IO2.in_boolean)
                     this.text_string = 'Lese von IN2';
@@ -1055,7 +1039,7 @@ class Decoder {
                     this.error = true;
                 }
             }
-            else if (address_dec === IO3.address_dec){
+            else if (address_number === IO3.address_number){
                 this.ioAccess = true;
                 if(IO3.in_boolean)
                     this.text_string = 'Lese von IN3';
@@ -1066,24 +1050,24 @@ class Decoder {
             }   
             else{
                 this.ramAccess = false;
-                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_number);
                 this.error = true;
             }
                 
         }
         //write to memory
-        else if (wr_dec === 0 && m_dec === 0){
+        else if (wr_number === 0 && m_number === 0){
             this.ioAccess = false;
-            if(address_dec < 8192){
+            if(address_number < 8192){
                 this.ramAccess = false;
                 this.text_string = 'Schreibe auf ROM';
                 this.error = true;
             } 
-            else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
+            else if (address_number >= RAM.startAddressRam_number && address_number < RAM.startAddressRam_number+RAM.size_number){
                 this.ramAccess = true;
                 this.text_string = 'Schreibe auf RAM';
             }
-            else if(address_dec === IO1.address_dec){
+            else if(address_number === IO1.address_number){
                 this.ioAccess = true;
                 if(!IO1.in_boolean){
                     this.text_string = 'Schreibe auf OUT1';
@@ -1093,7 +1077,7 @@ class Decoder {
                     this.error = true;
                 }                
             }
-            else if (address_dec === IO2.address_dec){
+            else if (address_number === IO2.address_number){
                 this.ioAccess = true;
                 if(!IO2.in_boolean){
                     this.text_string = 'Schreibe auf OUT2';
@@ -1103,7 +1087,7 @@ class Decoder {
                     this.error = true;
                 }   
             }
-            else if (address_dec === IO3.address_dec){
+            else if (address_number === IO3.address_number){
                 this.ioAccess = true;
                 if(!IO3.in_boolean){
                     this.text_string = 'Schreibe auf OUT3';
@@ -1115,15 +1099,15 @@ class Decoder {
             }
             else{
                 this.ramAccess = false;
-                this.text_string = 'Schreibe auf ???\nAdresse: ' + convertNumberToHex_2digits(address_dec);
+                this.text_string = 'Schreibe auf ???\nAdresse: ' + convertNumberToHex_2digits(address_number);
                 this.error = true;
             } 
         }
         //read IO
-        else if(rd_dec === 0 && io_dec === 0){
+        else if(rd_number === 0 && io_number === 0){
             this.ioAccess = true;
 
-            if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
+            if(IO1.address_number === IO2.address_number && IO1.address_number === address_number){
                 if(IO1.in_boolean){
                     this.text_string = 'Lese von IN1';
                 }
@@ -1131,7 +1115,7 @@ class Decoder {
                     this.text_string = 'Lese von IN2';
                 }
             }
-            else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
+            else if(IO1.address_number === IO3.address_number && IO1.address_number === address_number){
                 if(IO1.in_boolean){
                     this.text_string = 'Lese von IN1';
                 }
@@ -1139,7 +1123,7 @@ class Decoder {
                     this.text_string = 'Lese von IN3';
                 }
             }
-            else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
+            else if(IO2.address_number === IO3.address_number && IO2.address_number === address_number){
                 if(IO2.in_boolean){
                     this.text_string = 'Lese von IN2';
                 }
@@ -1148,7 +1132,7 @@ class Decoder {
                 }
             }
 
-            else if(address_dec === IO1.address_dec){
+            else if(address_number === IO1.address_number){
                 if(IO1.in_boolean){
                     this.text_string = 'Lese von IN1';
                 }
@@ -1157,7 +1141,7 @@ class Decoder {
                     this.error = true;
                 }
             }
-            else if (address_dec === IO2.address_dec){
+            else if (address_number === IO2.address_number){
                 if(IO2.in_boolean)
                     this.text_string = 'Lese von IN2';
                 else{
@@ -1165,7 +1149,7 @@ class Decoder {
                     this.error = true;
                 }
             }
-            else if (address_dec === IO3.address_dec){
+            else if (address_number === IO3.address_number){
                 if(IO3.in_boolean)
                     this.text_string = 'Lese von IN3';
                 else{
@@ -1174,15 +1158,15 @@ class Decoder {
                 }
             }
             else{
-                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.text_string = 'Lese von ??? Adresse: ' + convertNumberToHex_2digits(address_number);
                 this.error = true;
             }
         }
         //write IO
-        else if(wr_dec === 0 && io_dec === 0){
+        else if(wr_number === 0 && io_number === 0){
             this.ioAccess = true;
 
-            if(IO1.address_dec === IO2.address_dec && IO1.address_dec === address_dec){
+            if(IO1.address_number === IO2.address_number && IO1.address_number === address_number){
                 if(!IO1.in_boolean){
                     this.text_string = 'Schreibe auf OUT1';
                 }
@@ -1190,7 +1174,7 @@ class Decoder {
                     this.text_string = 'Schreibe auf OUT2';
                 }
             }
-            else if(IO1.address_dec === IO3.address_dec && IO1.address_dec === address_dec){
+            else if(IO1.address_number === IO3.address_number && IO1.address_number === address_number){
                 if(!IO1.in_boolean){
                     this.text_string = 'Schreibe auf OUT1';
                 }
@@ -1198,7 +1182,7 @@ class Decoder {
                     this.text_string = 'Schreibe auf OUT3';
                 }
             }
-            else if(IO2.address_dec === IO3.address_dec && IO2.address_dec === address_dec){
+            else if(IO2.address_number === IO3.address_number && IO2.address_number === address_number){
                 if(!IO2.in_boolean){
                     this.text_string = 'Schreibe auf OUT2';
                 }
@@ -1207,7 +1191,7 @@ class Decoder {
                 }
             }
             
-            else if(address_dec === IO1.address_dec){
+            else if(address_number === IO1.address_number){
                 if(!IO1.in_boolean){
                     this.text_string = 'Schreibe auf OUT1';
                 }
@@ -1216,7 +1200,7 @@ class Decoder {
                     this.error = true;
                 }                
             }
-            else if (address_dec === IO2.address_dec){
+            else if (address_number === IO2.address_number){
                 if(!IO2.in_boolean){
                     this.text_string = 'Schreibe auf OUT2';
                 }
@@ -1225,7 +1209,7 @@ class Decoder {
                     this.error = true;
                 }   
             }
-            else if (address_dec === IO3.address_dec){
+            else if (address_number === IO3.address_number){
                 if(!IO3.in_boolean){
                     this.text_string = 'Schreibe auf OUT3';
                 }
@@ -1235,7 +1219,7 @@ class Decoder {
                 }   
             }
             else{
-                this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_dec);
+                this.text_string = 'Schreibe auf ??? Adresse: ' + convertNumberToHex_2digits(address_number);
                 this.error = true;
             }
         }
@@ -1269,77 +1253,106 @@ class Decoder {
         }catch{}
     }
 }
-
-/******************************* Flags *********************************** */
-
 class Flags {
-    c_dec: any;
-    z_dec: any;
-    p_dec: any;
-    s_dec: any;
+    c_number: any;
+    z_number: any;
+    p_number: any;
+    s_number: any;
     c_DOM: Element;
     z_DOM: Element;
     p_DOM: Element;
     s_DOM: Element;
-    value_dec: number;
+    value_number: number;
     domElement: Element;
 
-    constructor(c_flag_DOM, z_flag_DOM, p_flag_DOM, s_flag_DOM){
-		this.c_dec = 0;
-		this.z_dec = 0;
-		this.p_dec = 0;
-		this.s_dec = 0;
+    constructor(c_flag_DOM, z_flag_DOM, p_flag_DOM, s_flag_DOM, containerFlags_div){
+		this.c_number = 0;
+		this.z_number = 0;
+		this.p_number = 0;
+		this.s_number = 0;
 		this.c_DOM = c_flag_DOM;
 		this.z_DOM = z_flag_DOM;
 		this.p_DOM = p_flag_DOM;
         this.s_DOM = s_flag_DOM;
-        this.value_dec = 0;
-        this.domElement = flags_DOM;
+        this.value_number = 0;
+        this.domElement = containerFlags_div;
     }
-    update(value_dec){
-        let bin_array = convertNumberToBinaryArray(value_dec);
-        this.c_dec = bin_array[7];
-        this.z_dec = bin_array[5];
-        this.p_dec = bin_array[1];
-        this.s_dec = bin_array[0];
+    update(value_number){
+        let bin_array = convertNumberToBinaryArray(value_number);
+        this.c_number = bin_array[7];
+        this.z_number = bin_array[5];
+        this.p_number = bin_array[1];
+        this.s_number = bin_array[0];
         this.updateDOM()
 
     }
-    updateDec(cFlag_dec, zFlag_dec, pFlag_dec, sFlag_dec){
-        this.c_dec = cFlag_dec;
-		this.z_dec = zFlag_dec;
-		this.p_dec = pFlag_dec;
-        this.s_dec = sFlag_dec;
+    updateDec(cFlag_number, zFlag_number, pFlag_number, sFlag_number){
+        this.c_number = cFlag_number;
+		this.z_number = zFlag_number;
+		this.p_number = pFlag_number;
+        this.s_number = sFlag_number;
     }
 	
 	updateDOM(){
-        if(this.c_dec === '-')
-            this.c_dec = 0;
-        if(this.z_dec === '-')
-            this.z_dec = 0;
-        if(this.p_dec === '-')
-            this.p_dec = 0;
-        if(this.s_dec === '-')
-            this.s_dec = 0;
-        this.value_dec = convertBinaryToNumber([this.s_dec, this.p_dec, 0,0,0,this.z_dec,0,this.c_dec].join(''));
-		this.c_DOM.textContent = this.c_dec.toString();
-		this.z_DOM.textContent = this.z_dec.toString();
-		this.p_DOM.textContent = this.p_dec.toString();
-		this.s_DOM.textContent = this.s_dec.toString();
+        if(this.c_number === '-')
+            this.c_number = 0;
+        if(this.z_number === '-')
+            this.z_number = 0;
+        if(this.p_number === '-')
+            this.p_number = 0;
+        if(this.s_number === '-')
+            this.s_number = 0;
+        this.value_number = convertBinaryToNumber([this.s_number, this.p_number, 0,0,0,this.z_number,0,this.c_number].join(''));
+		this.c_DOM.textContent = this.c_number.toString();
+		this.z_DOM.textContent = this.z_number.toString();
+		this.p_DOM.textContent = this.p_number.toString();
+		this.s_DOM.textContent = this.s_number.toString();
 	}	
 }
+class Point{
+    index: number;
+    x: number;
+    y: number;
+    label: string;
+    parent: Point;
+    children: number[];
 
-/******************************* mc8_command ********************************* */
 
+    constructor(index,x,y,labelString, parent,childArray){
+        this.index = index;
+        this.x = x;
+        this.y = y;
+        this.label = labelString;
+        this.parent = parent;
+        this.children = childArray;
+    }
+
+    getParent(){
+        return this.parent;
+    }
+
+    getSmallerChild(){
+        if(this.children.length === 0)
+            return;
+        return this.children[0];
+    }
+    getGreaterChild(){
+        if(this.children.length === 0)
+            return;
+        else
+            return this.children[this.children.length -1];
+    }
+
+}
 class mc8_command {
     assembler_notation_string: string;
-    machineCommand_dec: number;
+    machineCommand_number: number;
     bytes: number;
     flags_array: number[];
     animationFunction: any;
-    constructor(assembler_notation_string, machineCommand_dec, bytes, flags_array, animationFunction){
+    constructor(assembler_notation_string, machineCommand_number, bytes, flags_array, animationFunction){
         this.assembler_notation_string = assembler_notation_string;
-        this.machineCommand_dec = machineCommand_dec;
+        this.machineCommand_number = machineCommand_number;
         this.bytes = bytes;
         this.flags_array = flags_array;
         this.animationFunction = animationFunction;
@@ -1375,11 +1388,64 @@ const IX  = new Register_x4(document.getElementById('ixRegisterValue_h2'));
 const SP  = new Register_x4(document.getElementById('spRegisterValue_h2'));
 const PC  = new Pc_class(document.getElementById('pcRegisterValue_h2'));
 const ZR  = new Register_x4(document.getElementById('zrRegisterValue_h2'));
-const FLAGS = new Flags(document.getElementById('cFlagValue_p'),document.getElementById('zFlagValue_p'),document.getElementById('pFlagValue_p'),document.getElementById('sFlagValue_p'));
+const FLAGS = new Flags(document.getElementById('cFlagValue_p'),document.getElementById('zFlagValue_p'),document.getElementById('pFlagValue_p'),document.getElementById('sFlagValue_p'),document.getElementById('flagsContainer_div'));
 const ROM = new Rom();
 const RAM = new Ram();
 const DECODER = new Decoder(document.getElementById('wrValue_p'),document.getElementById('rdValue_p'), document.getElementById('mValue_p'), document.getElementById('ioValue_p'),document.getElementById('decDisplay_p'));
-
+const fixPoints = [
+    new Point(0,10,2,'ROM1',-1,[1]),
+    new Point(1,14,2,'',0,[2,4]),
+    new Point(2,14,0,'',1,[3]),
+    new Point(3,16,0,'IO1',2,[]),
+    new Point(4,18,2,'',1,[5,12]),
+    new Point(5,22,2,'',4,[6,8]),
+    new Point(6,22,0,'',5,[7]),
+    new Point(7,24,0,'IO2',6,[]),
+    new Point(8,30,2,'',5,[9,11]),
+    new Point(9,30,0,'',8,[10]),
+    new Point(10,32,0,'IO3',9,[]),
+    new Point(11,34,2,'RAM1',8,[]),
+    new Point(12,18,4,'',4,[13,23]),
+    new Point(13,24,4,'',12,[14,15]),
+    new Point(14,24,6,'ALU1',13,[]),
+    new Point(15,30,4,'',13,[16,17]),
+    new Point(16,30,6,'ALU2',15,[]),
+    new Point(17,34,4,'',15,[18]),
+    new Point(18,34,12,'',17,[19,21]),
+    new Point(19,27,12,'',18,[20]),
+    new Point(20,27,10,'ALUOUT',19,[]),
+    new Point(21,34,14,'',18,[22]),
+    new Point(22,32,14,'IR',21,[]),
+    new Point(23,13,4,'',12,[24,25]),
+    new Point(24,13,6,'A',23,[51]),
+    new Point(25,10,4,'',23,[26]),
+    new Point(26,10,15,'',25,[27]),
+    new Point(27,14,15,'',26,[28,33]),
+    new Point(28,14,14,'IX',27,[29]),
+    new Point(29,14,12,'HL',28,[30]),
+    new Point(30,14,10,'',29,[31,32]),
+    new Point(31,13,10,'B',30,[]),
+    new Point(32,15,10,'C',30,[]),
+    new Point(33,14,16,'SP',27,[34]),
+    new Point(34,14,18,'PC',33,[35]),
+    new Point(35,14,20,'ZR',34,[36]),
+    new Point(36,14,24,'DEC_UPDATE',35,[37,38]),
+    new Point(37,10,24,'ROM2',36,[]),
+    new Point(38,28,24,'',36,[39,40]),
+    new Point(39,28,26,'DEC',38,[]),
+    new Point(40,32,24,'RAM2',38,[]),
+    new Point(41,16,12,'HL_lo',29,[]),
+    new Point(42,16,14,'IX_lo',28,[]),
+    new Point(43,16,16,'SP_lo',33,[]),
+    new Point(44,16,18,'PC_lo',34,[]),
+    new Point(45,16,20,'ZR_lo',35,[]),
+    new Point(46,14,12,'HL_hi',29,[]),
+    new Point(47,14,14,'IX_hi',28,[]),
+    new Point(48,14,16,'SP_hi',33,[]),
+    new Point(49,14,18,'PC_hi',34,[]),
+    new Point(50,14,20,'ZR_hi',35,[]),
+    new Point(51,15,6,'FLAGS',24,[]),
+];
 
 /***************************************** Hover popups *********************************/
 const romLabel_h1 = document.getElementById('romLabel_h1');
@@ -1392,10 +1458,10 @@ romLabel_h1.addEventListener('mouseleave', function() {
 
 const ramLabel_h1 = document.getElementById('ramLabel_h1');
 ramLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('ramStartAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_dec) + 'h';
-    document.getElementById('ramStartAddressDec_p').textContent = String(RAM.startAddressRam_dec);
-    document.getElementById('ramEndAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_dec+8192-1) + 'h';
-    document.getElementById('ramEndAddressDec_p').textContent = String(RAM.startAddressRam_dec+8192-1);
+    document.getElementById('ramStartAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number) + 'h';
+    document.getElementById('ramStartAddressDec_p').textContent = String(RAM.startAddressRam_number);
+    document.getElementById('ramEndAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number+8192-1) + 'h';
+    document.getElementById('ramEndAddressDec_p').textContent = String(RAM.startAddressRam_number+8192-1);
     document.getElementById('ramLabelHover_div').classList.toggle('toggleGrid');
 });
 ramLabel_h1.addEventListener('mouseleave', function() {
@@ -1407,8 +1473,8 @@ const checkedRadioIoMap_input:any = document.querySelector('input[name="radioIoM
 io1Label_h1.addEventListener('mouseover', function() {
     document.getElementById('io1Map_p').textContent = checkedRadioIoMap_input.value;
     document.getElementById('io1AddressHover_p').textContent = convertNumberToHex_4digits(convertHexToNumber(io1Address_textarea.value)) + 'h';
-    document.getElementById('io1ValueDec_p').textContent = IO1.value_dec + ' (' + convertNumberToComplementOnTwo(IO1.value_dec) + ')';
-    document.getElementById('io1ValueBin_p').textContent = convertNumberToBinary_8digits(IO1.value_dec);
+    document.getElementById('io1ValueDec_p').textContent = IO1.value_number + ' (' + convertNumberToComplementOnTwo(IO1.value_number) + ')';
+    document.getElementById('io1ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO1.value_number);
     document.getElementById('io1LabelHover_div').classList.toggle('toggleGrid');
 });
 io1Label_h1.addEventListener('mouseleave', function() {
@@ -1419,8 +1485,8 @@ const io2Label_h1 = document.getElementById('io2Label_h1');
 io2Label_h1.addEventListener('mouseover', function() {
     document.getElementById('io2Map_p').textContent = checkedRadioIoMap_input.value;
     document.getElementById('io2AddressHover_p').textContent =  convertNumberToHex_4digits(convertHexToNumber(io2Address_textarea.value)) + 'h';
-    document.getElementById('io2ValueDec_p').textContent = IO2.value_dec + ' (' + convertNumberToComplementOnTwo(IO2.value_dec) + ')';
-    document.getElementById('io2ValueBin_p').textContent = convertNumberToBinary_8digits(IO2.value_dec);
+    document.getElementById('io2ValueDec_p').textContent = IO2.value_number + ' (' + convertNumberToComplementOnTwo(IO2.value_number) + ')';
+    document.getElementById('io2ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO2.value_number);
     document.getElementById('io2LabelHover_div').classList.toggle('toggleGrid');
 });
 io2Label_h1.addEventListener('mouseleave', function() {
@@ -1431,8 +1497,8 @@ const io3Label_h1 = document.getElementById('io3Label_h1');
 io3Label_h1.addEventListener('mouseover', function() {
     document.getElementById('io3Map_p').textContent = checkedRadioIoMap_input.value;
     document.getElementById('io3AddressHover_p').textContent =  convertNumberToHex_4digits(convertHexToNumber(io3Address_textarea.value)) + 'h';
-    document.getElementById('io3ValueDec_p').textContent = IO3.value_dec + ' (' + convertNumberToComplementOnTwo(IO3.value_dec) + ')';
-    document.getElementById('io3ValueBin_p').textContent = convertNumberToBinary_8digits(IO3.value_dec);
+    document.getElementById('io3ValueDec_p').textContent = IO3.value_number + ' (' + convertNumberToComplementOnTwo(IO3.value_number) + ')';
+    document.getElementById('io3ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO3.value_number);
     document.getElementById('io3LabelHover_div').classList.toggle('toggleGrid');
 });
 io3Label_h1.addEventListener('mouseleave', function() {
@@ -1441,8 +1507,8 @@ io3Label_h1.addEventListener('mouseleave', function() {
 
 const aRegisterLabel_h1 = document.getElementById('aRegisterLabel_h1');
 aRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('aHoverValueDec_p').textContent = 'Dezimal: ' + A.value_dec + ' (' + convertNumberToComplementOnTwo(A.value_dec) + ')';
-    document.getElementById('aHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(A.value_dec);
+    document.getElementById('aHoverValueDec_p').textContent = 'Dezimal: ' + A.value_number + ' (' + convertNumberToComplementOnTwo(A.value_number) + ')';
+    document.getElementById('aHoverValueBin_p').textContent =  'Binär: ' + convertNumberTo8DigitsBinaryString(A.value_number);
     document.getElementById('aLabelHover_div').classList.toggle('toggleGrid');
 });
 aRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1451,8 +1517,8 @@ aRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const bRegisterLabel_h1 = document.getElementById('bRegisterLabel_h1');
 bRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('bHoverValueDec_p').textContent = 'Dezimal: ' + B.value_dec + ' (' + convertNumberToComplementOnTwo(B.value_dec) + ')';
-    document.getElementById('bHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(B.value_dec);
+    document.getElementById('bHoverValueDec_p').textContent = 'Dezimal: ' + B.value_number + ' (' + convertNumberToComplementOnTwo(B.value_number) + ')';
+    document.getElementById('bHoverValueBin_p').textContent =  'Binär: ' + convertNumberTo8DigitsBinaryString(B.value_number);
     document.getElementById('bLabelHover_div').classList.toggle('toggleGrid');
 });
 bRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1461,8 +1527,8 @@ bRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const cRegisterLabel_h1 = document.getElementById('cRegisterLabel_h1');
 cRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('cHoverValueDec_p').textContent = 'Dezimal: ' + C.value_dec + ' (' + convertNumberToComplementOnTwo(C.value_dec) + ')';
-    document.getElementById('cHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(C.value_dec);
+    document.getElementById('cHoverValueDec_p').textContent = 'Dezimal: ' + C.value_number + ' (' + convertNumberToComplementOnTwo(C.value_number) + ')';
+    document.getElementById('cHoverValueBin_p').textContent =  'Binär: ' + convertNumberTo8DigitsBinaryString(C.value_number);
     document.getElementById('cLabelHover_div').classList.toggle('toggleGrid');
 });
 cRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1471,7 +1537,7 @@ cRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const hlRegisterLabel_h1 = document.getElementById('hlRegisterLabel_h1');
 hlRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.value_dec;
+    document.getElementById('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.value_number;
     document.getElementById('hlLabelHover_div').classList.toggle('toggleGrid');
 });
 hlRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1480,7 +1546,7 @@ hlRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const ixRegisterLabel_h1 = document.getElementById('ixRegisterLabel_h1');
 ixRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.value_dec;
+    document.getElementById('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.value_number;
     document.getElementById('ixLabelHover_div').classList.toggle('toggleGrid');
 });
 ixRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1489,7 +1555,7 @@ ixRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const spRegisterLabel_h1 = document.getElementById('spRegisterLabel_h1');
 spRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.value_dec;
+    document.getElementById('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.value_number;
     document.getElementById('spLabelHover_div').classList.toggle('toggleGrid');
 });
 spRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1498,7 +1564,7 @@ spRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const pcRegisterLabel_h1 = document.getElementById('pcRegisterLabel_h1');
 pcRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.value_dec;
+    document.getElementById('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.value_number;
     document.getElementById('pcLabelHover_div').classList.toggle('toggleGrid');
 });
 pcRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1507,7 +1573,7 @@ pcRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const zrRegisterLabel_h1 = document.getElementById('zrRegisterLabel_h1');
 zrRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.value_dec;
+    document.getElementById('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.value_number;
     document.getElementById('zrLabelHover_div').classList.toggle('toggleGrid');
 });
 zrRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1516,7 +1582,7 @@ zrRegisterLabel_h1.addEventListener('mouseleave', function() {
 
 const irRegisterLabel_h1 = document.getElementById('irRegisterLabel_h1');
 irRegisterLabel_h1.addEventListener('mouseover', function() {
-    document.getElementById('irHoverValueBin_p').textContent =  'Binär: ' + convertNumberToBinary_8digits(IR.value_dec);
+    document.getElementById('irHoverValueBin_p').textContent =  'Binär: ' + convertNumberTo8DigitsBinaryString(IR.value_number);
     document.getElementById('irLabelHover_div').classList.toggle('toggleGrid');
 });
 irRegisterLabel_h1.addEventListener('mouseleave', function() {
@@ -1702,6 +1768,8 @@ toggleTheme_button.addEventListener('mouseleave', function() {
 
 
 /***************************************** settings functions *********************************/
+
+const containerSettings_div = document.getElementById('containerSettings_div');
 const programSelection_select:any = document.getElementById('programSelection_select');
 const linkerFile_textarea:any = document.getElementById('linkerFile_textarea');
 const radioIoMapped_input:any = document.getElementById('radioIoMapped_input');
@@ -1731,7 +1799,7 @@ const breakpointsCheckbox_div:any = document.getElementById('breakpointsCheckbox
 const changeRamAddress_DOM = (hex1_string, hex2_string) => {
     const pEle = document.getElementsByClassName('RamAddressLabel');
     const str = ['0','1', '2','3','4','5','6','9','A','B','C','D','E','F'];
-    RAM.startAddressRam_dec = convertHexToNumber(hex1_string + '00');
+    RAM.startAddressRam_number = convertHexToNumber(hex1_string + '00');
     for (let i = 0; i < pEle.length; i++) {
         if(i<7){
             pEle[i].textContent = hex1_string + str[i] + 'x';
@@ -1950,9 +2018,9 @@ const updateIoClasses = () => {
         IO3.in_boolean = false;
         io3Arrow_div.classList.add('ioArrowOUT');
     }
-    IO1.address_dec = convertHexToNumber(io1Address_textarea.value);
-    IO2.address_dec = convertHexToNumber(io2Address_textarea.value);
-    IO3.address_dec = convertHexToNumber(io3Address_textarea.value);
+    IO1.address_number = convertHexToNumber(io1Address_textarea.value);
+    IO2.address_number = convertHexToNumber(io2Address_textarea.value);
+    IO3.address_number = convertHexToNumber(io3Address_textarea.value);
 }
 
 const saveSettings = () => {
@@ -2032,7 +2100,7 @@ breakpointsCheckbox_div.addEventListener('click', function () {
 const errorWindow_div = document.getElementById('errorWindow_div');
 const errorMessage_textarea = document.getElementById('errorMessage_textarea');
 
-const checkLinkerFile = (errorMessage_string, count_dec) => {
+const checkLinkerFile = (errorMessage_string, count_number) => {
     const intelHexArray = linkerFile_textarea.value.split('\n');
     let noError = true;
     let recordLength = 0;
@@ -2049,8 +2117,8 @@ const checkLinkerFile = (errorMessage_string, count_dec) => {
         //check if line starts with :
         if(noError){
             if (record[0] !== ':'){
-                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}:\nJede Zeile muss mit einem : beginnen.\n\n`;
-                count_dec++; 
+                errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}:\nJede Zeile muss mit einem : beginnen.\n\n`;
+                count_number++; 
                 noError = false;
             }
         }
@@ -2058,8 +2126,8 @@ const checkLinkerFile = (errorMessage_string, count_dec) => {
         //check if line includes whitespace
         if(noError){
             if(record.includes(' ')){
-                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}:\nEs dürfen keine Leerzeichen in einem Record vorhanden sein.\n\n`;
-                count_dec++;
+                errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}:\nEs dürfen keine Leerzeichen in einem Record vorhanden sein.\n\n`;
+                count_number++;
                 noError = false;
             }
         }
@@ -2067,15 +2135,15 @@ const checkLinkerFile = (errorMessage_string, count_dec) => {
         //check record length
         if(noError){
             if(!checkValidHex(record[1]+record[2])){
-                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} ist keine gültige HEX-Zahl.\n\n`;
-                count_dec++;
+                errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} ist keine gültige HEX-Zahl.\n\n`;
+                count_number++;
                 noError = false;
             }
             if(noError){
                 recordLength = convertHexToNumber(record[1]+record[2]);
                 if(record.length < 1+2+4+2+recordLength*2+2){
-                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} stimmt nicht mit der Länge des Datensatzes überein.\n\n`;
-                    count_dec++;
+                    errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} stimmt nicht mit der Länge des Datensatzes überein.\n\n`;
+                    count_number++;
                     noError = false;
                 }
             }
@@ -2083,8 +2151,8 @@ const checkLinkerFile = (errorMessage_string, count_dec) => {
         //check record address
         if(noError){
             if(!checkValidHex(record[3]+record[4]+record[5]+record[6])){
-                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordadresse ${record[3]+record[4]+record[5]+record[6]} ist keine gültige HEX-Zahl.\n\n`;
-                count_dec++;
+                errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordadresse ${record[3]+record[4]+record[5]+record[6]} ist keine gültige HEX-Zahl.\n\n`;
+                count_number++;
                 noError = false;
             }
             //TODO: check if bigger than 1999h ??
@@ -2092,23 +2160,23 @@ const checkLinkerFile = (errorMessage_string, count_dec) => {
         //check record type
         if(noError){
             if(!checkValidHex(record[7]+record[8])){
-                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordtyp ${record[7]+record[8]} ist keine gültige HEX-Zahl.\n\n`;
-                count_dec++; 
+                errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordtyp ${record[7]+record[8]} ist keine gültige HEX-Zahl.\n\n`;
+                count_number++; 
                 noError = false;
             }
             //check if type is a data-record
             if(noError){
                 if(recordLength === 0 && convertHexToNumber(record[7]+record[8]) === 0){
-                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} muss für einen Daten-Recordtyp größer als null sein.\n\n`;
-                    count_dec++;
+                    errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Recordlänge ${record[1]+record[2]} muss für einen Daten-Recordtyp größer als null sein.\n\n`;
+                    count_number++;
                     noError = false;
                 }
             }
             if(noError){
                 if(convertHexToNumber(record[7]+record[8]) > 1){
-                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Unbekannter Recordtyp ${record[7]+record[8]}.
+                    errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Unbekannter Recordtyp ${record[7]+record[8]}.
                     \n\n`;
-                    count_dec++;
+                    count_number++;
                     noError = false;
                 }
             }
@@ -2118,8 +2186,8 @@ const checkLinkerFile = (errorMessage_string, count_dec) => {
             recordLength = convertHexToNumber(record[1]+record[2]);
             for (let j = 0; j < recordLength*2; j = j+2) {
                 if(!checkValidHex(record[9+j]+record[10+j])){
-                    errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Datenbyte ${record[9+j]+record[10+j]} ist keine gültige HEX-Zahl.\n\n`;
-                    count_dec++;
+                    errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Datenbyte ${record[9+j]+record[10+j]} ist keine gültige HEX-Zahl.\n\n`;
+                    count_number++;
                     noError = false;
                 } 
             }
@@ -2127,18 +2195,18 @@ const checkLinkerFile = (errorMessage_string, count_dec) => {
         //check checksum
         if(noError){
             if(!checkValidHex(record[9+recordLength*2]+record[10+recordLength*2])){
-                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Checkumme ${record[9+recordLength*2]+record[10+recordLength*2]} ist keine gültige HEX-Zahl.\n\n`;
-                count_dec++;
+                errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Checkumme ${record[9+recordLength*2]+record[10+recordLength*2]} ist keine gültige HEX-Zahl.\n\n`;
+                count_number++;
                 noError = false;
             }
             //TODO: check with new mc8assembler
             else if(calculateChecksum(record) !== '00'){
-                errorMessage_string +=  `${count_dec}) Fehler in der Linker-Datei in Zeile ${i+1}: Checkumme ${record[9+recordLength*2]+record[10+recordLength*2]} ist nicht korrekt. Richtige Checksumme: ${calculateChecksum(record.slice(0, -2))}\n\n`
+                errorMessage_string +=  `${count_number}) Fehler in der Linker-Datei in Zeile ${i+1}: Checkumme ${record[9+recordLength*2]+record[10+recordLength*2]} ist nicht korrekt. Richtige Checksumme: ${calculateChecksum(record.slice(0, -2))}\n\n`
                 noError = false;
             }
         }
     }
-    return [errorMessage_string,count_dec];
+    return [errorMessage_string,count_number];
 }
 //checks if IOs and Ram were set correctly
 const checkSettings = () => {
@@ -2231,15 +2299,15 @@ const checkSettings = () => {
             errorMessage_string +=  `${count}) Die Adresse ${io3Address_textarea.value}h von IO3 liegt im Adressbereich des ROM. Bitte verwenden Sie eine andere Adresse.\n\n`;
             count++;
         }
-        if(convertHexToNumber(io1Address_textarea.value) >= RAM.startAddressRam_dec && convertHexToNumber(io1Address_textarea.value) < (RAM.startAddressRam_dec+ 8192)){
+        if(convertHexToNumber(io1Address_textarea.value) >= RAM.startAddressRam_number && convertHexToNumber(io1Address_textarea.value) < (RAM.startAddressRam_number+ 8192)){
             errorMessage_string +=  `${count}) Die Adresse ${io1Address_textarea.value}h von IO1 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
             count++;
         }
-        if(convertHexToNumber(io2Address_textarea.value) >= RAM.startAddressRam_dec && convertHexToNumber(io2Address_textarea.value) < (RAM.startAddressRam_dec+ 8192)){
+        if(convertHexToNumber(io2Address_textarea.value) >= RAM.startAddressRam_number && convertHexToNumber(io2Address_textarea.value) < (RAM.startAddressRam_number+ 8192)){
             errorMessage_string +=  `${count}) Die Adresse ${io2Address_textarea.value}h von IO2 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
             count++;
         }
-        if(convertHexToNumber(io3Address_textarea.value) >= RAM.startAddressRam_dec && convertHexToNumber(io3Address_textarea.value) < (RAM.startAddressRam_dec+ 8192)){
+        if(convertHexToNumber(io3Address_textarea.value) >= RAM.startAddressRam_number && convertHexToNumber(io3Address_textarea.value) < (RAM.startAddressRam_number+ 8192)){
             errorMessage_string +=  `${count}) Die Adresse ${io3Address_textarea.value}h von IO3 liegt im Adressbereich des RAM. Bitte verwenden Sie eine andere Adresse für den IO-Baustein oder für das RAM.`;
             count++;
         }
@@ -2255,96 +2323,7 @@ const checkSettings = () => {
 
 
 /*********************************** bus system and path logic ************************************/
-class Point{
-    index: number;
-    x: number;
-    y: number;
-    label: string;
-    parent: Point;
-    children: number[];
 
-
-    constructor(index,x,y,labelString, parent,childArray){
-        this.index = index;
-        this.x = x;
-        this.y = y;
-        this.label = labelString;
-        this.parent = parent;
-        this.children = childArray;
-    }
-
-    getParent(){
-        return this.parent;
-    }
-
-    getSmallerChild(){
-        if(this.children.length === 0)
-            return;
-        return this.children[0];
-    }
-    getGreaterChild(){
-        if(this.children.length === 0)
-            return;
-        else
-            return this.children[this.children.length -1];
-    }
-
-}
-
-const fixPoints = [
-    new Point(0,10,2,'ROM1',-1,[1]),
-    new Point(1,14,2,'',0,[2,4]),
-    new Point(2,14,0,'',1,[3]),
-    new Point(3,16,0,'IO1',2,[]),
-    new Point(4,18,2,'',1,[5,12]),
-    new Point(5,22,2,'',4,[6,8]),
-    new Point(6,22,0,'',5,[7]),
-    new Point(7,24,0,'IO2',6,[]),
-    new Point(8,30,2,'',5,[9,11]),
-    new Point(9,30,0,'',8,[10]),
-    new Point(10,32,0,'IO3',9,[]),
-    new Point(11,34,2,'RAM1',8,[]),
-    new Point(12,18,4,'',4,[13,23]),
-    new Point(13,24,4,'',12,[14,15]),
-    new Point(14,24,6,'ALU1',13,[]),
-    new Point(15,30,4,'',13,[16,17]),
-    new Point(16,30,6,'ALU2',15,[]),
-    new Point(17,34,4,'',15,[18]),
-    new Point(18,34,12,'',17,[19,21]),
-    new Point(19,27,12,'',18,[20]),
-    new Point(20,27,10,'ALUOUT',19,[]),
-    new Point(21,34,14,'',18,[22]),
-    new Point(22,32,14,'IR',21,[]),
-    new Point(23,13,4,'',12,[24,25]),
-    new Point(24,13,6,'A',23,[51]),
-    new Point(25,10,4,'',23,[26]),
-    new Point(26,10,15,'',25,[27]),
-    new Point(27,14,15,'',26,[28,33]),
-    new Point(28,14,14,'IX',27,[29]),
-    new Point(29,14,12,'HL',28,[30]),
-    new Point(30,14,10,'',29,[31,32]),
-    new Point(31,13,10,'B',30,[]),
-    new Point(32,15,10,'C',30,[]),
-    new Point(33,14,16,'SP',27,[34]),
-    new Point(34,14,18,'PC',33,[35]),
-    new Point(35,14,20,'ZR',34,[36]),
-    new Point(36,14,24,'DEC_UPDATE',35,[37,38]),
-    new Point(37,10,24,'ROM2',36,[]),
-    new Point(38,28,24,'',36,[39,40]),
-    new Point(39,28,26,'DEC',38,[]),
-    new Point(40,32,24,'RAM2',38,[]),
-    new Point(41,16,12,'HL_lo',29,[]),
-    new Point(42,16,14,'IX_lo',28,[]),
-    new Point(43,16,16,'SP_lo',33,[]),
-    new Point(44,16,18,'PC_lo',34,[]),
-    new Point(45,16,20,'ZR_lo',35,[]),
-    new Point(46,14,12,'HL_hi',29,[]),
-    new Point(47,14,14,'IX_hi',28,[]),
-    new Point(48,14,16,'SP_hi',33,[]),
-    new Point(49,14,18,'PC_hi',34,[]),
-    new Point(50,14,20,'ZR_hi',35,[]),
-    new Point(51,15,6,'FLAGS',24,[]),
-];
 
 //returns the index/position of a fixPoint in the fixPoint-array
 const getPointIndex = (pointID_string) => {
@@ -2356,16 +2335,16 @@ const getPointIndex = (pointID_string) => {
 }
 
 //returns the indices from Zero(ROM1) to the passed point index. 
-const getIndexArrayZeroToPoint = (pointIndex_dec) => {
+const getIndexArrayZeroToPoint = (pointIndex_number) => {
     let atoZero = [];
 
     while(true){
-        if(pointIndex_dec === 0){
+        if(pointIndex_number === 0){
             atoZero.push(0);
             return atoZero.reverse();
         }else{
-            atoZero.push(pointIndex_dec);
-            pointIndex_dec = fixPoints[pointIndex_dec].getParent(); //Only parent indices are added to array
+            atoZero.push(pointIndex_number);
+            pointIndex_number = fixPoints[pointIndex_number].getParent(); //Only parent indices are added to array
         }
     }
 }
@@ -2497,58 +2476,58 @@ const getPointsAtoB = (fixPointLabel_A_string, fixPointLabel_B_string) => {
 // }
 // const redRectangle_p = create_RedRectangle();
 const redRectangle_p = document.getElementById('redRectangle_p');
-const updateRedRectangle = (PC_dec) =>{
+const updateRedRectangle = (PC_number) =>{
     redRectangle_p.style.display = '';
-    if(PC_dec < 224){
+    if(PC_number < 224){
         //should always be on the position the PC is pointing at
-        let xPos = PC_dec%8 +2;
-        let yPos = Math.floor(PC_dec/8) + 2;
-        redRectangle_p.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
+        let xPos = PC_number%8 +2;
+        let yPos = Math.floor(PC_number/8) + 2;
+        redRectangle_p.textContent = convertNumberToHex_2digits(ROM.number_array[PC_number]);
         redRectangle_p.style.left = String(100/46*(xPos)) + "%";
         redRectangle_p.style.top = String(100/32*(yPos)) + "%";
         redRectangle_p.style.width = String(100/46*1) + "%";
         redRectangle_p.style.height = String(100/32*1) + "%";
     }
-    else if(PC_dec < 8192) {
-        let xPos = PC_dec%8 +2;
+    else if(PC_number < 8192) {
+        let xPos = PC_number%8 +2;
         let yPos = 0;
-        let bigger7 = convertNumberToHex_4digits(PC_dec)[3];
+        let bigger7 = convertNumberToHex_4digits(PC_number)[3];
         if(convertHexToNumber(bigger7) > 7)
             yPos = 1;
-        redRectangle_p.textContent = convertNumberToHex_2digits(ROM.dec_array[PC_dec]);
+        redRectangle_p.textContent = convertNumberToHex_2digits(ROM.number_array[PC_number]);
         redRectangle_p.style.top = String(100/32*(30 + yPos)) + "%";
         redRectangle_p.style.left = String(100/46*(xPos)) + "%";
     }
-    else if(PC_dec >= RAM.startAddressRam_dec && PC_dec < RAM.startAddressRam_dec+112){
-        PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
+    else if(PC_number >= RAM.startAddressRam_number && PC_number < RAM.startAddressRam_number+112){
+        PC_number = PC_number - Math.floor(PC_number/8192)*8192;
 
-        let xPos = PC_dec%8 +36;
-        let yPos = Math.floor(PC_dec/8) + 2;
-        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        let xPos = PC_number%8 +36;
+        let yPos = Math.floor(PC_number/8) + 2;
+        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.number_array[PC_number]);
         
         redRectangle_p.style.top = String(100/32*(yPos)) + "%";
         redRectangle_p.style.width = String(100/46*1) + "%";
         redRectangle_p.style.height = String(100/32*1) + "%";
     }
-    else if(PC_dec >= RAM.startAddressRam_dec+112 && PC_dec < RAM.startAddressRam_dec+8080){
-        PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
-        let xPos = PC_dec%8 +36;
+    else if(PC_number >= RAM.startAddressRam_number+112 && PC_number < RAM.startAddressRam_number+8080){
+        PC_number = PC_number - Math.floor(PC_number/8192)*8192;
+        let xPos = PC_number%8 +36;
         let yPos = 0;
-        let bigger7 = convertNumberToHex_4digits(PC_dec)[3];
+        let bigger7 = convertNumberToHex_4digits(PC_number)[3];
         if(convertHexToNumber(bigger7) > 7)
             yPos = 1;
 
-        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.number_array[PC_number]);
 
         redRectangle_p.style.left = String(100/46*(xPos)) + "%";
         redRectangle_p.style.top = String(100/32*(16+yPos)) + "%";
     }
-    else if(PC_dec >= RAM.startAddressRam_dec+8080 && PC_dec < RAM.startAddressRam_dec+8192){
-        PC_dec = PC_dec - Math.floor(PC_dec/8192)*8192;
+    else if(PC_number >= RAM.startAddressRam_number+8080 && PC_number < RAM.startAddressRam_number+8192){
+        PC_number = PC_number - Math.floor(PC_number/8192)*8192;
 
-        let xPos = PC_dec%8 +36;
-        let yPos = Math.floor((PC_dec-7952)/8) + 2;
-        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.dec_array[PC_dec]);
+        let xPos = PC_number%8 +36;
+        let yPos = Math.floor((PC_number-7952)/8) + 2;
+        redRectangle_p.textContent = convertNumberToHex_2digits(RAM.number_array[PC_number]);
         redRectangle_p.style.left = String(100/46*(xPos)) + "%";
         redRectangle_p.style.top = String(100/32*(yPos)) + "%";
         redRectangle_p.style.width = String(100/46*1) + "%";
@@ -2621,7 +2600,7 @@ const check_completeExecution = () => {
 //adds the next command to the runningProgram_array
 const pushNextCommand = () => {
     for (let i = 0; i < mc8_commands_array.length; i++) {
-        if(mc8_commands_array[i].machineCommand_dec === IR.value_dec)
+        if(mc8_commands_array[i].machineCommand_number === IR.value_number)
             runningProgram.push(mc8_commands_array[i].animationFunction);
     }
     
@@ -2695,7 +2674,7 @@ const increaseStepNumber = () => stepNumber_p.textContent = String(Number(stepNu
 //displays the the assembler notation. If the register IR contains a command which is not valid, the function returns false.
 const change_assemblerCommand = () =>{
     for(let i=0; i<mc8_commands_array.length; i++){
-        if(mc8_commands_array[i].machineCommand_dec === IR.value_dec){
+        if(mc8_commands_array[i].machineCommand_number === IR.value_number){
             assemblerCommand_p.textContent = mc8_commands_array[i].assembler_notation_string;
             return true;
         }
@@ -2865,7 +2844,7 @@ const description_update = async(description_string) => {
 
     change_stepDescription(description_string);
     increaseStepNumber();
-    await add_yellow_background_for_IDLETIME(stepNumberBackground);
+    await add_yellow_background_for_IDLETIME(stepNumberBg_div);
 }
 
 //animates the update of the assembler command, if the command is unknown the function throws an error and the execution gets terminated
@@ -2884,35 +2863,35 @@ const assemblerCommand_update = async() => {
 const updatePC = async() => {
     await checkPlayPressed()
 
-    PC.update(PC.value_dec + 1);
+    PC.update(PC.value_number + 1);
     await add_yellow_background_for_IDLETIME(PC.domElement);
 }
 
 //updates and animates register/io with the passed value
-const updateRegister_hex = async(registerName_string, value_dec) => {
+const updateRegister_hex = async(registerName_string, value_number) => {
     await checkPlayPressed();
 
     if(registerName_string.includes('hi')){
-       await updateRegister_hex4_hi(getRegisterByName(registerName_string), value_dec);
+       await updateRegister_hex4_hi(getRegisterByName(registerName_string), value_number);
     }
     else if(registerName_string.includes('lo')){
-        await updateRegister_hex4_lo(getRegisterByName(registerName_string), value_dec);
+        await updateRegister_hex4_lo(getRegisterByName(registerName_string), value_number);
     }
     else{
         //update register
         let reg = getRegisterByName(registerName_string);
-        reg.update(value_dec);
+        reg.update(value_number);
 
         //animate register update
         await add_yellow_background_for_IDLETIME(reg.domElement);
     }
 }
 
-const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
+const updateRegister_hex4_hi = async(register_class, hex2_number) => {
     await checkPlayPressed();
 
     //update register
-    register_class.update_hi(hex2_dec);
+    register_class.update_hi(hex2_number);
 
     //animate register update
     if(!playStatus.noAnim){
@@ -2928,11 +2907,11 @@ const updateRegister_hex4_hi = async(register_class, hex2_dec) => {
     }
 }
 
-const updateRegister_hex4_lo = async(register_class, hex2_dec) => {
+const updateRegister_hex4_lo = async(register_class, hex2_number) => {
     await checkPlayPressed();
 
     //update register
-    register_class.update_lo(hex2_dec);
+    register_class.update_lo(hex2_number);
 
     //animate register update if Animation is required
     if(!playStatus.noAnim){
@@ -3021,18 +3000,18 @@ const updatePosition = (movingObject, x, y) => {
 //moves the movingObject to the starting position.
 //updates the textContent, toggles visibility and adjusts the size
 const updateMovingObj = (aPath, hexValue_string) => {
-    updatePosition(movingObject,aPath[0].x,aPath[0].y);
-    movingObject.textContent = hexValue_string;
-    movingObject.classList.add('toggleGrid');
+    updatePosition(movingObject_h2,aPath[0].x,aPath[0].y);
+    movingObject_h2.textContent = hexValue_string;
+    movingObject_h2.classList.add('toggleGrid');
 
     if(aPath[0].label === 'PC'|| aPath[0].label === 'ZR' ||aPath[0].label === 'IX' || aPath[0].label ==='HL' || aPath[0].label === 'SP')
-        movingObject.classList.add('rectangle4x2');
+        movingObject_h2.classList.add('rectangle4x2');
     else{
         try{
-            movingObject.classList.remove('rectangle4x2');
+            movingObject_h2.classList.remove('rectangle4x2');
         }catch{}
     }
-    return movingObject;
+    return movingObject_h2;
 }
 
 const createGreyElement = (i, xCoordinate,yCoordinate) =>{
@@ -3086,7 +3065,7 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
 
     //add Elements to grid
     for (let i = 0; i < pathElements.length; i++) {
-        mc8Container.appendChild(pathElements[i]);
+        mc8_div.appendChild(pathElements[i]);
     }
 
     //animate for certain time
@@ -3106,7 +3085,7 @@ const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_str
 }
 
 //animates the movement from on fixPoint to another one
-const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec = 0) => {
+const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_number = 0) => {
     await checkPlayPressed();
     let startPointInCPU = false;
     let endPointInCPU = false;
@@ -3116,11 +3095,11 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
         const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
         let value_string:string;
 
-        //convert value_dec to hex_4digits if required
-        if(value_dec > 255 || fixPointLabel_B_string === 'ROM2' || fixPointLabel_B_string === 'RAM2' || fixPointLabel_B_string === 'ZR'|| fixPointLabel_B_string === 'PC'|| fixPointLabel_B_string === 'IX'|| fixPointLabel_B_string === 'HL'|| fixPointLabel_B_string === 'SP')
-            value_string = convertNumberToHex_4digits(value_dec);
+        //convert value_number to hex_4digits if required
+        if(value_number > 255 || fixPointLabel_B_string === 'ROM2' || fixPointLabel_B_string === 'RAM2' || fixPointLabel_B_string === 'ZR'|| fixPointLabel_B_string === 'PC'|| fixPointLabel_B_string === 'IX'|| fixPointLabel_B_string === 'HL'|| fixPointLabel_B_string === 'SP')
+            value_string = convertNumberToHex_4digits(value_number);
         else
-            value_string = convertNumberToHex_2digits(value_dec);
+            value_string = convertNumberToHex_2digits(value_number);
         
         //update the moving Element
         updateMovingObj(path,value_string);
@@ -3144,7 +3123,7 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
         if(playStatus.rocketSpeed){
             if(!startPointInCPU || !endPointInCPU)
                 DECODER.updateDOM();
-            await createPaintedPath(path,fixPointLabel_A_string, fixPointLabel_B_string, movingObject);
+            await createPaintedPath(path,fixPointLabel_A_string, fixPointLabel_B_string, movingObject_h2);
             if(!DECODER.ramAccess && !DECODER.ioAccess){
                 DECODER.resetDOM();
             }
@@ -3156,7 +3135,7 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
                 
                 //if singleStep is pressed during the animation, remove movingObject and jump out of function
                 if(playStatus.noAnim){
-                    movingObject.classList.remove('toggleGrid');
+                    movingObject_h2.classList.remove('toggleGrid');
                     return true;
                 }
                 
@@ -3173,11 +3152,11 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
                 }
 
                 //update position of the movingObject depending on the speed
-                await conditionalPositionUpdate(xCoordinate[i], yCoordinate[i], ANIMATION_SPEED, movingObject);
+                await conditionalPositionUpdate(xCoordinate[i], yCoordinate[i], ANIMATION_SPEED, movingObject_h2);
             }
         }
         //remove Element when transfer was successful 
-        movingObject.classList.remove('toggleGrid');
+        movingObject_h2.classList.remove('toggleGrid');
     }
     //noAnim
     else {
@@ -3191,9 +3170,9 @@ const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_dec
 //updates the position of the movingObject depending on the speed(values: 1,2,3,4,6,12) => 12/values is always an integer
 //e.g.  if the speed is 12 the position is only updated once(last coordinate of x12array)
 //      if the speed is 3 the position is updated with every third coordinate,... 
-const conditionalPositionUpdate = async(xCoordinate_x12array, yCoordinate_x12array, speed_dec, movingObject_DOM) => {
-    for (let j = 0; j < xCoordinate_x12array.length/speed_dec; j++) {
-        updatePosition(movingObject_DOM, xCoordinate_x12array[j*speed_dec], yCoordinate_x12array[j*speed_dec]);
+const conditionalPositionUpdate = async(xCoordinate_x12array, yCoordinate_x12array, speed_number, movingObject_DOM) => {
+    for (let j = 0; j < xCoordinate_x12array.length/speed_number; j++) {
+        updatePosition(movingObject_DOM, xCoordinate_x12array[j*speed_number], yCoordinate_x12array[j*speed_number]);
         
         //animate for certain time before entering next iteration
         try{
@@ -3234,7 +3213,7 @@ const resetMovingAluElements = () => {
 resetMovingAluElements();
 
 //animation of ALU-usage
-const aluAnimation = async(aluOUT_dec, twoMovingAluElements_boolean, cFlag_boolean, saveToRegister_string:string) => {
+const aluAnimation = async(aluOUT_number, twoMovingAluElements_boolean, cFlag_boolean, saveToRegister_string:string) => {
     if(!playStatus.noAnim){
         const xCoordinateAlu1 = [24];
         const xCoordinateAlu2 = [30];
@@ -3259,7 +3238,7 @@ const aluAnimation = async(aluOUT_dec, twoMovingAluElements_boolean, cFlag_boole
                 await sleep(1000/FRAMES);  
             }
             resetMovingAluElements();
-            await updateRegister_hex('ALUOUT', aluOUT_dec);
+            await updateRegister_hex('ALUOUT', aluOUT_number);
         }
         finally{
             resetMovingAluElements();
@@ -3267,7 +3246,7 @@ const aluAnimation = async(aluOUT_dec, twoMovingAluElements_boolean, cFlag_boole
         ALUOUT.domElement.classList.add('yellowBg');
     }
     else{ //noAnim
-        await updateRegister_hex('ALUOUT', aluOUT_dec);
+        await updateRegister_hex('ALUOUT', aluOUT_number);
         ALU1.domElement.textContent = '';
         ALU2.domElement.textContent = '';
     }
@@ -3283,12 +3262,12 @@ const aluAnimation = async(aluOUT_dec, twoMovingAluElements_boolean, cFlag_boole
         ALUOUT.domElement.textContent = '';
     }
     if(saveToRegister_string !== ''){
-        await transfer('ALUOUT', saveToRegister_string, aluOUT_dec);
-        await updateRegister_hex(saveToRegister_string, aluOUT_dec);
+        await transfer('ALUOUT', saveToRegister_string, aluOUT_number);
+        await updateRegister_hex(saveToRegister_string, aluOUT_number);
     }    
 }
 
-const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
+const hlBcAnimation = async(aluOUT_number, stepOne_boolean) => {
     if(!playStatus.noAnim){
         const xCoordinateAlu1 = [24];
         const xCoordinateAlu2 = [30];
@@ -3313,7 +3292,7 @@ const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
                 await sleep(1000/FRAMES);  
             }
             resetMovingAluElements();
-            await updateRegister_hex('ALUOUT', aluOUT_dec);
+            await updateRegister_hex('ALUOUT', aluOUT_number);
         }
         finally{
             resetMovingAluElements();
@@ -3321,7 +3300,7 @@ const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
         ALUOUT.domElement.classList.add('yellowBg');
     }
     else{ //noAnim
-        await updateRegister_hex('ALUOUT', aluOUT_dec);
+        await updateRegister_hex('ALUOUT', aluOUT_number);
         ALU1.domElement.textContent = '';
         ALU2.domElement.textContent = '';
     }
@@ -3329,9 +3308,9 @@ const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
     if(stepOne_boolean){
         try {
             await description_update('Setze Carry-Flag');
-            FLAGS.z_dec = '-';
-            FLAGS.s_dec = '-';
-            FLAGS.p_dec = '-';
+            FLAGS.z_number = '-';
+            FLAGS.s_number = '-';
+            FLAGS.p_number = '-';
             await setFlagsAnimation();
             await description_update('Speichere das Ergebnis in L');
         } 
@@ -3339,15 +3318,15 @@ const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
             ALUOUT.domElement.classList.remove('yellowBg');
             ALUOUT.domElement.textContent = '';
         }
-        await transfer('ALUOUT', 'HL_lo', aluOUT_dec);
-        await updateRegister_hex('HL_lo', aluOUT_dec);
+        await transfer('ALUOUT', 'HL_lo', aluOUT_number);
+        await updateRegister_hex('HL_lo', aluOUT_number);
     }
     else{
         try {
             await description_update('Setze Carry-Flag');
-            FLAGS.z_dec = '-';
-            FLAGS.s_dec = '-';
-            FLAGS.p_dec = '-';
+            FLAGS.z_number = '-';
+            FLAGS.s_number = '-';
+            FLAGS.p_number = '-';
             await setFlagsAnimation();
             await description_update('Speichere das Ergebnis in H');
         } 
@@ -3355,8 +3334,8 @@ const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
             ALUOUT.domElement.classList.remove('yellowBg');
             ALUOUT.domElement.textContent = '';
         }
-        await transfer('ALUOUT', 'HL_hi', aluOUT_dec);
-        await updateRegister_hex('HL_hi', aluOUT_dec);
+        await transfer('ALUOUT', 'HL_hi', aluOUT_number);
+        await updateRegister_hex('HL_hi', aluOUT_number);
     }
 }
 
@@ -3364,10 +3343,10 @@ const hlBcAnimation = async(aluOUT_dec, stepOne_boolean) => {
 const setFlagsAnimation = async() => {
     if (!playStatus.noAnim) {
         await addArrow('FLAGS');
-        movingFlags_div.children[0].textContent = FLAGS.c_dec;
-        movingFlags_div.children[1].textContent = FLAGS.z_dec;
-        movingFlags_div.children[2].textContent = FLAGS.p_dec;
-        movingFlags_div.children[3].textContent = FLAGS.s_dec;
+        movingFlags_div.children[0].textContent = FLAGS.c_number;
+        movingFlags_div.children[1].textContent = FLAGS.z_number;
+        movingFlags_div.children[2].textContent = FLAGS.p_number;
+        movingFlags_div.children[3].textContent = FLAGS.s_number;
         movingFlags_div.classList.add('toggleGrid');
         try{
             await sleepForIDLETIME();
@@ -3425,7 +3404,6 @@ const changeIO = async(IOName_string) =>{
     let IO_input_window_DOM: Element;
     let IO_input_DOM: any;
     let check = true;
-    let playStatusBuffer = playStatus.getStatus();
     switch (IOName_string) {
         case 'IO1':
             IO_input_window_DOM = io1InputWindow_div;
@@ -3479,13 +3457,6 @@ const changeIO = async(IOName_string) =>{
         document.getElementById('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
     }
 
-    if(playStatusBuffer === 'completeExe')
-        runCompleteExecution();
-    else if(playStatusBuffer === 'rocketSpeed')
-        rocketSpeed_on();
-    else if(playStatusBuffer === 'noAnim')
-        runNextSingleStep();
-    
     await updateRegister_hex(IOName_string,convertHexToNumber(IO_input_DOM.value));
     IO_input_DOM.value = '';    
 }
@@ -3493,205 +3464,205 @@ const changeIO = async(IOName_string) =>{
 //reads a byte from the ROM or RAM. The addressRegister 
 const readFromMemoryInRegister = async(addressRegister_x4_string, targetRegister_x2_string) =>{
     //get the address
-    let address_dec = getRegisterByName(addressRegister_x4_string).value_dec;
+    let address_number = getRegisterByName(addressRegister_x4_string).value_number;
 
     //update decoder without displaying  
-    DECODER.update(1,0,0,1,address_dec);
+    DECODER.update(1,0,0,1,address_number);
     await addArrow(addressRegister_x4_string);
     
     //determine ROM or RAM
-    if(address_dec < 8192){
-        await transfer(addressRegister_x4_string, 'ROM2', address_dec);
-        await transfer(ROM.getElementId(address_dec),targetRegister_x2_string, ROM.getValue(address_dec));
-        await updateRegister_hex(targetRegister_x2_string, ROM.getValue(address_dec));
+    if(address_number < 8192){
+        await transfer(addressRegister_x4_string, 'ROM2', address_number);
+        await transfer(ROM.getElementId(address_number),targetRegister_x2_string, ROM.getValue(address_number));
+        await updateRegister_hex(targetRegister_x2_string, ROM.getValue(address_number));
     }
-    else if (address_dec >= RAM.startAddressRam_dec && address_dec < RAM.startAddressRam_dec+RAM.size_dec){
-        RAM.updateVariableElements(address_dec);
-        await transfer(addressRegister_x4_string, 'RAM2', address_dec);
-        await transfer(RAM.getRamElementId(address_dec),targetRegister_x2_string, RAM.getValue(address_dec));
-        await updateRegister_hex(targetRegister_x2_string,RAM.getValue(address_dec));
+    else if (address_number >= RAM.startAddressRam_number && address_number < RAM.startAddressRam_number+RAM.size_number){
+        RAM.updateVariableElements(address_number);
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
+        await transfer(RAM.getRamElementId(address_number),targetRegister_x2_string, RAM.getValue(address_number));
+        await updateRegister_hex(targetRegister_x2_string,RAM.getValue(address_number));
     }
     
     else if(!IO1.ioMapped_boolean){
-       if(address_dec === IO1.address_dec){
-            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_dec);
+       if(address_number === IO1.address_number){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_number);
             await changeIO('IO1');
-            await transfer('IO1', 'A', IO1.value_dec);
-            await updateRegister_hex('A', IO1.value_dec);
+            await transfer('IO1', 'A', IO1.value_number);
+            await updateRegister_hex('A', IO1.value_number);
         }
-        else if(address_dec === IO2.address_dec){
-            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_dec);
+        else if(address_number === IO2.address_number){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_number);
             await changeIO('IO2');
-            await transfer('IO2', 'A', IO2.value_dec);
-            await updateRegister_hex('A', IO2.value_dec);
+            await transfer('IO2', 'A', IO2.value_number);
+            await updateRegister_hex('A', IO2.value_number);
         }
-        else if(address_dec === IO3.address_dec){
-            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_dec);
+        else if(address_number === IO3.address_number){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_number);
             await changeIO('IO2');
-            await transfer('IO2', 'A', IO3.value_dec);
-            await updateRegister_hex('A', IO3.value_dec);
+            await transfer('IO2', 'A', IO3.value_number);
+            await updateRegister_hex('A', IO3.value_number);
         }
     }
     //Neither ROM or RAM  or IO
     else{
         //The address of the addressRegister is unknown.
         //the following code wont be executed completely, because the decoder will interrupt execution
-        await transfer(addressRegister_x4_string, 'RAM2', address_dec);
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
     }
     DECODER.resetDOM();
 }
 
 const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_x2_string) => {
     //get address
-    let address_dec = getRegisterByName(addressRegister_x4_string).value_dec;
+    let address_number = getRegisterByName(addressRegister_x4_string).value_number;
 
     //get data
     let register_x2_class = getRegisterByName(DataRegister_x2_string);
-    let data_dec = register_x2_class.value_dec;
+    let data_number = register_x2_class.value_number;
     if(DataRegister_x2_string.includes('hi'))
-        data_dec = register_x2_class.hi_dec;
+        data_number = register_x2_class.hi_number;
     if(DataRegister_x2_string.includes('lo'))
-        data_dec = register_x2_class.lo_dec;
+        data_number = register_x2_class.lo_number;
 
     //update decoder, without displaying it
-    DECODER.update(0,1,0,1,address_dec);
+    DECODER.update(0,1,0,1,address_number);
 
     await addArrow(addressRegister_x4_string);
 
     //determine ROM or RAM
-    if(address_dec < 8192){
+    if(address_number < 8192){
         //wont be executed completely, because the decoder will interrupt execution 
-        await transfer(addressRegister_x4_string, 'ROM2', address_dec);
+        await transfer(addressRegister_x4_string, 'ROM2', address_number);
     }
-    else if (address_dec >= RAM.startAddressRam_dec && address_dec< RAM.startAddressRam_dec+RAM.size_dec){
-        RAM.updateVariableElements(address_dec);
-        await transfer(addressRegister_x4_string, 'RAM2', address_dec);
+    else if (address_number >= RAM.startAddressRam_number && address_number< RAM.startAddressRam_number+RAM.size_number){
+        RAM.updateVariableElements(address_number);
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
         if(!playStatus.noAnim)
-            document.getElementById(RAM.getRamElementId(address_dec)).classList.add('yellowBg', 'borderBox');
+            document.getElementById(RAM.getRamElementId(address_number)).classList.add('yellowBg', 'borderBox');
         try{
-            await transfer(DataRegister_x2_string, RAM.getRamElementId(address_dec), data_dec);
+            await transfer(DataRegister_x2_string, RAM.getRamElementId(address_number), data_number);
         } catch (e) {
-            document.getElementById(RAM.getRamElementId(address_dec)).classList.remove('yellowBg', 'borderBox');
+            document.getElementById(RAM.getRamElementId(address_number)).classList.remove('yellowBg', 'borderBox');
             throw e;
         }
     }
     //Neither ROM or RAM
     else{
         //wont be executed completely, because the decoder will interrupt execution 
-        await transfer(addressRegister_x4_string, 'RAM2', address_dec);
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
     }
-    RAM.update(address_dec,data_dec);
+    RAM.updateElement(address_number,data_number);
     try{
 
-        await add_yellow_background_for_IDLETIME(document.getElementById(RAM.getRamElementId(address_dec)));
+        await add_yellow_background_for_IDLETIME(document.getElementById(RAM.getRamElementId(address_number)));
 
     }
     finally{
-        document.getElementById(RAM.getRamElementId(address_dec)).classList.remove('borderBox', 'yellowBg');
+        document.getElementById(RAM.getRamElementId(address_number)).classList.remove('borderBox', 'yellowBg');
         DECODER.resetDOM();
     }
 }
 
 const readFromIo = async() =>{
     if(IO1.ioMapped_boolean){
-        DECODER.update(1,0,1,0,ZR.lo_dec);
-        await transfer('ZR', 'DEC_UPDATE', ZR.lo_dec);
+        DECODER.update(1,0,1,0,ZR.lo_number);
+        await transfer('ZR', 'DEC_UPDATE', ZR.lo_number);
 
-        if(IO1.address_dec === IO2.address_dec){
+        if(IO1.address_number === IO2.address_number){
             if(!IO1.in_boolean){
-                await transfer('A', 'IO2', A.value_dec);
-                await updateRegister_hex('IO2', A.value_dec);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await transfer('A', 'IO1', A.value_dec);
-                await updateRegister_hex('IO1', A.value_dec);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
-        else if(IO3.address_dec === IO2.address_dec){
+        else if(IO3.address_number === IO2.address_number){
             if(!IO3.in_boolean){
-                await transfer('A', 'IO2', A.value_dec);
-                await updateRegister_hex('IO2', A.value_dec);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await transfer('A', 'IO3', A.value_dec);
-                await updateRegister_hex('IO3', A.value_dec);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
         }
-        else if(IO1.address_dec === IO3.address_dec){
+        else if(IO1.address_number === IO3.address_number){
             if(!IO1.in_boolean){
-                await transfer('A', 'IO3', A.value_dec);
-                await updateRegister_hex('IO3', A.value_dec);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
             else{
-                await transfer('A', 'IO1', A.value_dec);
-                await updateRegister_hex('IO1', A.value_dec);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
-        else if(ZR.lo_dec === IO1.address_dec){
+        else if(ZR.lo_number === IO1.address_number){
             await changeIO('IO1');
-            await transfer('IO1', 'A', IO1.value_dec);
-            await updateRegister_hex('A', IO1.value_dec);
+            await transfer('IO1', 'A', IO1.value_number);
+            await updateRegister_hex('A', IO1.value_number);
         }
-        else if(ZR.lo_dec === IO2.address_dec){
+        else if(ZR.lo_number === IO2.address_number){
             await changeIO('IO2');
-            await transfer('IO2', 'A', IO2.value_dec);
-            await updateRegister_hex('A', IO2.value_dec);
+            await transfer('IO2', 'A', IO2.value_number);
+            await updateRegister_hex('A', IO2.value_number);
         }
-        else if(ZR.lo_dec === IO3.address_dec){
+        else if(ZR.lo_number === IO3.address_number){
             await changeIO('IO3');
-            await transfer('IO3', 'A', IO3.value_dec);
-            await updateRegister_hex('A', IO3.value_dec);
+            await transfer('IO3', 'A', IO3.value_number);
+            await updateRegister_hex('A', IO3.value_number);
         }
         DECODER.resetDOM();
     }
     else {
-        DECODER.update(1,0,1,0,ZR.value_dec);
-        await transfer('ZR', 'DEC_UPDATE', ZR.value_dec);
+        DECODER.update(1,0,1,0,ZR.value_number);
+        await transfer('ZR', 'DEC_UPDATE', ZR.value_number);
         
-        if(IO1.address_dec === IO2.address_dec){
+        if(IO1.address_number === IO2.address_number){
             if(!IO1.in_boolean){
-                await transfer('A', 'IO2', A.value_dec);
-                await updateRegister_hex('IO2', A.value_dec);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await transfer('A', 'IO1', A.value_dec);
-                await updateRegister_hex('IO1', A.value_dec);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
-        else if(IO3.address_dec === IO2.address_dec){
+        else if(IO3.address_number === IO2.address_number){
             if(!IO3.in_boolean){
-                await transfer('A', 'IO2', A.value_dec);
-                await updateRegister_hex('IO2', A.value_dec);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await transfer('A', 'IO3', A.value_dec);
-                await updateRegister_hex('IO3', A.value_dec);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
         }
-        else if(IO1.address_dec === IO3.address_dec){
+        else if(IO1.address_number === IO3.address_number){
             if(!IO1.in_boolean){
-                await transfer('A', 'IO3', A.value_dec);
-                await updateRegister_hex('IO3', A.value_dec);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
             else{
-                await transfer('A', 'IO1', A.value_dec);
-                await updateRegister_hex('IO1', A.value_dec);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
-        else if(ZR.value_dec === IO1.address_dec){
+        else if(ZR.value_number === IO1.address_number){
             await changeIO('IO1');
-            await transfer('IO1', 'A', IO1.value_dec);
-            await updateRegister_hex('A', IO1.value_dec);
+            await transfer('IO1', 'A', IO1.value_number);
+            await updateRegister_hex('A', IO1.value_number);
         }
-        else if(ZR.value_dec === IO2.address_dec){
+        else if(ZR.value_number === IO2.address_number){
             await changeIO('IO2');
-            await transfer('IO2', 'A', IO2.value_dec);
-            await updateRegister_hex('A', IO2.value_dec);
+            await transfer('IO2', 'A', IO2.value_number);
+            await updateRegister_hex('A', IO2.value_number);
         }
-        else if(ZR.value_dec === IO3.address_dec){
+        else if(ZR.value_number === IO3.address_number){
             await changeIO('IO3');
-            await transfer('IO3', 'A', IO3.value_dec);
-            await updateRegister_hex('A', IO3.value_dec);
+            await transfer('IO3', 'A', IO3.value_number);
+            await updateRegister_hex('A', IO3.value_number);
         }
         DECODER.resetDOM();
     }  
@@ -3699,50 +3670,50 @@ const readFromIo = async() =>{
 
 const writeToIo = async() =>{
     
-    DECODER.update(0,1,1,0,ZR.lo_dec);
-    await transfer('ZR', 'DEC_UPDATE', ZR.lo_dec);
+    DECODER.update(0,1,1,0,ZR.lo_number);
+    await transfer('ZR', 'DEC_UPDATE', ZR.lo_number);
 
-    if(IO1.address_dec === IO2.address_dec){
+    if(IO1.address_number === IO2.address_number){
         if(IO1.in_boolean){
-            await transfer('A', 'IO2', A.value_dec);
-            await updateRegister_hex('IO2', A.value_dec);
+            await transfer('A', 'IO2', A.value_number);
+            await updateRegister_hex('IO2', A.value_number);
         }
         else{
-            await transfer('A', 'IO1', A.value_dec);
-            await updateRegister_hex('IO1', A.value_dec);
+            await transfer('A', 'IO1', A.value_number);
+            await updateRegister_hex('IO1', A.value_number);
         }
     }
-    else if(IO3.address_dec === IO2.address_dec){
+    else if(IO3.address_number === IO2.address_number){
         if(IO3.in_boolean){
-            await transfer('A', 'IO2', A.value_dec);
-            await updateRegister_hex('IO2', A.value_dec);
+            await transfer('A', 'IO2', A.value_number);
+            await updateRegister_hex('IO2', A.value_number);
         }
         else{
-            await transfer('A', 'IO3', A.value_dec);
-            await updateRegister_hex('IO3', A.value_dec);
+            await transfer('A', 'IO3', A.value_number);
+            await updateRegister_hex('IO3', A.value_number);
         }
     }
-    else if(IO1.address_dec === IO3.address_dec){
+    else if(IO1.address_number === IO3.address_number){
         if(IO1.in_boolean){
-            await transfer('A', 'IO3', A.value_dec);
-            await updateRegister_hex('IO3', A.value_dec);
+            await transfer('A', 'IO3', A.value_number);
+            await updateRegister_hex('IO3', A.value_number);
         }
         else{
-            await transfer('A', 'IO1', A.value_dec);
-            await updateRegister_hex('IO1', A.value_dec);
+            await transfer('A', 'IO1', A.value_number);
+            await updateRegister_hex('IO1', A.value_number);
         }
     }
-    else if(ZR.lo_dec === IO1.address_dec){
-        await transfer('A', 'IO1', A.value_dec);
-        await updateRegister_hex('IO1', A.value_dec);
+    else if(ZR.lo_number === IO1.address_number){
+        await transfer('A', 'IO1', A.value_number);
+        await updateRegister_hex('IO1', A.value_number);
     }
-    else if(ZR.lo_dec === IO2.address_dec){
-        await transfer('A', 'IO2', A.value_dec);
-        await updateRegister_hex('IO2', A.value_dec);
+    else if(ZR.lo_number === IO2.address_number){
+        await transfer('A', 'IO2', A.value_number);
+        await updateRegister_hex('IO2', A.value_number);
     }
-    else if(ZR.lo_dec === IO3.address_dec){
-        await transfer('A', 'IO3', A.value_dec);
-        await updateRegister_hex('IO3', A.value_dec);
+    else if(ZR.lo_number === IO3.address_number){
+        await transfer('A', 'IO3', A.value_number);
+        await updateRegister_hex('IO3', A.value_number);
     }
     DECODER.resetDOM();
 }
@@ -3759,11 +3730,11 @@ const loadOperands = async(register1_string, register2_string) => {
     const reg2_class = getRegisterByName(register2_string);
 
     await description_update('Hole den 1. Operanden'); 
-    await transfer(register1_string,'ALU1',reg1_class.value_dec);
-    await updateRegister_hex('ALU1', reg1_class.value_dec);
+    await transfer(register1_string,'ALU1',reg1_class.value_number);
+    await updateRegister_hex('ALU1', reg1_class.value_number);
     await description_update('Hole den 2. Operanden');
-    await transfer(register2_string, 'ALU2',reg2_class.value_dec);
-    await updateRegister_hex('ALU2', reg2_class.value_dec);
+    await transfer(register2_string, 'ALU2',reg2_class.value_number);
+    await updateRegister_hex('ALU2', reg2_class.value_number);
 
 }
 
@@ -3842,7 +3813,7 @@ const twoByteIX = async() => {
     await addArrow('IR');
     
 
-    if(IR.value_dec === 0b00100001){
+    if(IR.value_number === 0b00100001){
         assemblerCommand_p.textContent = 'MOV IX, dat_16';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
@@ -3853,7 +3824,7 @@ const twoByteIX = async() => {
         await readFromMemoryInRegister('PC', 'IX_hi');
         await increasePC();
     }
-    else if(IR.value_dec === 0b00101010){
+    else if(IR.value_number === 0b00101010){
         assemblerCommand_p.textContent = 'MOV IX, label';
         await description_update('Hole das niederwertige Adressbyte');
         await readFromMemoryInRegister('PC', 'ZR_lo');
@@ -3865,11 +3836,11 @@ const twoByteIX = async() => {
         await readFromMemoryInRegister('ZR', 'IX_lo');
         await description_update('Erhöhe die Adresse um 1');
         await addArrow('ZR');
-        await updateRegister_hex('ZR', ZR.value_dec+1);
+        await updateRegister_hex('ZR', ZR.value_number+1);
         await description_update('Hole das höherwertige Byte');
         await readFromMemoryInRegister('ZR', 'IX_hi');
     }
-    else if(IR.value_dec === 0b00100010 ){
+    else if(IR.value_number === 0b00100010 ){
         assemblerCommand_p.textContent = 'MOV label, IX';
         await description_update('Hole das niederwertige Adressbyte');
         await readFromMemoryInRegister('PC', 'ZR_lo');
@@ -3881,24 +3852,24 @@ const twoByteIX = async() => {
         await writeToMemoryFromRegister('ZR', 'IX_lo');
         await description_update('Erhöhe die Adresse um 1');
         await addArrow('ZR');
-        await updateRegister_hex('ZR', ZR.value_dec+1);
+        await updateRegister_hex('ZR', ZR.value_number+1);
         await description_update('Schreibe das höherwertige Byte');
         await writeToMemoryFromRegister('ZR', 'IX_hi');
 
     }
-    else if(IR.value_dec === 0b00100011){
+    else if(IR.value_number === 0b00100011){
         assemblerCommand_p.textContent = 'INC IX';
         await description_update('Erhöhe die Adresse um 1');
         await addArrow('IX');
-        await updateRegister_hex('IX', IX.value_dec+1);
+        await updateRegister_hex('IX', IX.value_number+1);
     }
-    else if(IR.value_dec === 0b00101011){
+    else if(IR.value_number === 0b00101011){
         assemblerCommand_p.textContent = 'DEC IX';
         await description_update('Verringere die Adresse um 1');
         await addArrow('IX');
-        await updateRegister_hex('IX', IX.value_dec-1);
+        await updateRegister_hex('IX', IX.value_number-1);
     }
-    else if(IR.value_dec === 0b11101001){
+    else if(IR.value_number === 0b11101001){
         assemblerCommand_p.textContent = 'JP [IX]';
          
     }
@@ -3929,43 +3900,43 @@ const movSPdat_16 = async() => {
 
 const movAB = async() => {
     await description_update('Kopiere die Daten');
-    await transfer('B', 'A', B.value_dec);
-    await updateRegister_hex('A', B.value_dec);
+    await transfer('B', 'A', B.value_number);
+    await updateRegister_hex('A', B.value_number);
     check_completeExecution();
 }
 
 const movAC = async() => {
     await description_update('Kopiere die Daten');
-    await transfer('C', 'A', C.value_dec);
-    await updateRegister_hex('A', C.value_dec);
+    await transfer('C', 'A', C.value_number);
+    await updateRegister_hex('A', C.value_number);
     check_completeExecution();
 }
 
 const movBA = async() => {
     await description_update('Kopiere die Daten');
-    await transfer('A', 'B', A.value_dec);
-    await updateRegister_hex('B', A.value_dec);
+    await transfer('A', 'B', A.value_number);
+    await updateRegister_hex('B', A.value_number);
     check_completeExecution();
 }
 
 const movBC = async() => {
     await description_update('Kopiere die Daten');
-    await transfer('C', 'B', C.value_dec);
-    await updateRegister_hex('B', C.value_dec);
+    await transfer('C', 'B', C.value_number);
+    await updateRegister_hex('B', C.value_number);
     check_completeExecution();
 }
 
 const movCA = async() => {
     await description_update('Kopiere die Daten');
-    await transfer('A', 'C', A.value_dec);
-    await updateRegister_hex('C', A.value_dec);
+    await transfer('A', 'C', A.value_number);
+    await updateRegister_hex('C', A.value_number);
     check_completeExecution();
 }
 
 const movCB = async() => {
     await description_update('Kopiere die Daten');
-    await transfer('B', 'C', B.value_dec);
-    await updateRegister_hex('C', B.value_dec);
+    await transfer('B', 'C', B.value_number);
+    await updateRegister_hex('C', B.value_number);
     check_completeExecution();
 } 
 
@@ -4005,7 +3976,7 @@ const movHlLabel = async() => {
 
     await description_update('Erhöhe die Adresse um 1');
     await addArrow('ZR');
-    await updateRegister_hex('ZR', ZR.value_dec+1);
+    await updateRegister_hex('ZR', ZR.value_number+1);
     await description_update('Hole das höherwertige Byte');
     await readFromMemoryInRegister('ZR', 'HL_hi');
     check_completeExecution();
@@ -4023,7 +3994,7 @@ const movLabelHl = async() => {
 
     await description_update('Erhöhe die Adresse um 1');
     await addArrow('ZR');
-    await updateRegister_hex('ZR', ZR.value_dec+1);
+    await updateRegister_hex('ZR', ZR.value_number+1);
     await description_update('Schreibe das höherwertige Byte');
     await writeToMemoryFromRegister('ZR', 'HL_hi');
     check_completeExecution();
@@ -4044,12 +4015,12 @@ const movHlA = async() => {
 const push = async() => {
     await description_update('Erhöhe den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec-1);
+    await updateRegister_hex('SP', SP.value_number-1);
     await description_update('Schreibe den Akku');
     await writeToMemoryFromRegister('SP', 'A');
     await description_update('Erhöhe den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec-1);
+    await updateRegister_hex('SP', SP.value_number-1);
     await description_update('Schreibe die Flags');
     await writeToMemoryFromRegister('SP', 'FLAGS');
     check_completeExecution();
@@ -4060,12 +4031,12 @@ const pop = async() => {
     await readFromMemoryInRegister('SP', 'FLAGS');
     await description_update('Verringer den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec+1);
+    await updateRegister_hex('SP', SP.value_number+1);
     await description_update('Hole den Akku');
     await readFromMemoryInRegister('SP', 'A');
     await description_update('Verringer den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec+1);
+    await updateRegister_hex('SP', SP.value_number+1);
     check_completeExecution();
 }
 
@@ -4089,30 +4060,30 @@ const outA = async() => {
 
 const incA = async() => {
     await description_update('Hole den Operanden');
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Erhöhe den Operanden um 1');
-    const result = incBinary(A.value_dec);
+    const result = incBinary(A.value_number);
     await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
 const incB = async() => {
     await description_update('Hole den Operanden');
-    await transfer('B','ALU1',B.value_dec);
-    await updateRegister_hex('ALU1', B.value_dec);
+    await transfer('B','ALU1',B.value_number);
+    await updateRegister_hex('ALU1', B.value_number);
     await description_update('Erhöhe den Operanden um 1');
-    const result = incBinary(B.value_dec);
+    const result = incBinary(B.value_number);
     await aluAnimation(result,false,false, 'B');
     check_completeExecution();
 }
 
 const incC = async() => {
     await description_update('Hole den Operanden');
-    await transfer('C','ALU1',C.value_dec);
-    await updateRegister_hex('ALU1', C.value_dec);
+    await transfer('C','ALU1',C.value_number);
+    await updateRegister_hex('ALU1', C.value_number);
     await description_update('Erhöhe den Operanden um 1');
-    const result = incBinary(C.value_dec);
+    const result = incBinary(C.value_number);
     await aluAnimation(result,false,false, 'C');
     check_completeExecution();
 }
@@ -4120,37 +4091,37 @@ const incC = async() => {
 const incHl = async() =>{
     await description_update('Erhöhe die Adresse um 1');
     await addArrow('HL');
-    await updateRegister_hex('HL', HL.value_dec+1);
+    await updateRegister_hex('HL', HL.value_number+1);
     check_completeExecution();
 }
 //incIX see twoByteIx
 
 const decA = async() => {
     await description_update('Hole den Operanden');
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Verringere den Operanden um 1');
-    const result = decBinary(A.value_dec);
+    const result = decBinary(A.value_number);
     await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
 const decB = async() => {
     await description_update('Hole den Operanden');
-    await transfer('B','ALU1',B.value_dec);
-    await updateRegister_hex('ALU1', B.value_dec);
+    await transfer('B','ALU1',B.value_number);
+    await updateRegister_hex('ALU1', B.value_number);
     await description_update('Verringere den Operanden um 1');
-    const result = decBinary(B.value_dec);
+    const result = decBinary(B.value_number);
     await aluAnimation(result,false,false, 'B');
     check_completeExecution();
 }
 
 const decC = async() => {
     await description_update('Hole den Operanden');
-    await transfer('C','ALU1',C.value_dec);
-    await updateRegister_hex('ALU1', C.value_dec);
+    await transfer('C','ALU1',C.value_number);
+    await updateRegister_hex('ALU1', C.value_number);
     await description_update('Verringere den Operanden um 1');
-    const result = decBinary(C.value_dec);
+    const result = decBinary(C.value_number);
     await aluAnimation(result,false,false, 'C');
     check_completeExecution();
 }
@@ -4158,7 +4129,7 @@ const decC = async() => {
 const decHl = async() => {
     await description_update('Verringere die Adresse um 1');
     await addArrow('HL');
-    await updateRegister_hex('HL', HL.value_dec-1);
+    await updateRegister_hex('HL', HL.value_number-1);
     check_completeExecution();
 }
 
@@ -4166,7 +4137,7 @@ const addA = async() => {
     await loadOperands('A','A');
     await description_update('Addiere die Operanden');
 
-    const result = addBinary(A.value_dec, A.value_dec, false);
+    const result = addBinary(A.value_number, A.value_number, false);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4175,7 +4146,7 @@ const addB = async() => {
     await loadOperands('A','B');
     await description_update('Addiere die Operanden');
 
-    const result = addBinary(A.value_dec, B.value_dec, false);
+    const result = addBinary(A.value_number, B.value_number, false);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4184,45 +4155,45 @@ const addC = async() => {
     await loadOperands('A','C');
     await description_update('Addiere die Operanden');
 
-    const result = addBinary(A.value_dec, C.value_dec, false);
+    const result = addBinary(A.value_number, C.value_number, false);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const addDat_8 = async() => {
     await description_update('Hole den 1. Operator'); 
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Hole den 2. Operator');
     await readFromMemoryInRegister('PC','ALU2');
     await increasePC();
     await description_update('Addiere die Operanden');
 
-    const result = addBinary(A.value_dec, ALU2.value_dec, false);
+    const result = addBinary(A.value_number, ALU2.value_number, false);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const addHlBc = async() => {
     await description_update('Hole das L-Register (HL_LO)');
-    await transfer('HL_lo','ALU1',HL.lo_dec);
-    await updateRegister_hex('ALU1', HL.lo_dec);
+    await transfer('HL_lo','ALU1',HL.lo_number);
+    await updateRegister_hex('ALU1', HL.lo_number);
     await description_update('Hole das C-Register');
-    await transfer('C','ALU2',C.value_dec);
-    await updateRegister_hex('ALU2', C.value_dec);
+    await transfer('C','ALU2',C.value_number);
+    await updateRegister_hex('ALU2', C.value_number);
     await description_update('Addiere die Operanden');
 
-    let result = addBinary(HL.lo_dec,C.value_dec,false);
+    let result = addBinary(HL.lo_number,C.value_number,false);
     await hlBcAnimation(result,true);
 
     await description_update('Hole das H-Register (HL_HI)');
-    await transfer('HL_hi','ALU1',HL.hi_dec);
-    await updateRegister_hex('ALU1', HL.hi_dec);
+    await transfer('HL_hi','ALU1',HL.hi_number);
+    await updateRegister_hex('ALU1', HL.hi_number);
     await description_update('Hole das B-Register');
-    await transfer('B','ALU2',B.value_dec);
-    await updateRegister_hex('ALU2', B.value_dec);
+    await transfer('B','ALU2',B.value_number);
+    await updateRegister_hex('ALU2', B.value_number);
     await description_update('Addiere die Operanden');
-    result = addBinary(HL.hi_dec,B.value_dec+FLAGS.c_dec, false);
+    result = addBinary(HL.hi_number,B.value_number+FLAGS.c_number, false);
     await hlBcAnimation(result,false);
 
     check_completeExecution();
@@ -4232,7 +4203,7 @@ const subA = async() => {
     await loadOperands('A','A');
     await description_update('Subtrahiere die Operanden');
 
-    const result = addBinary(A.value_dec, A.value_dec, true);
+    const result = addBinary(A.value_number, A.value_number, true);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4241,7 +4212,7 @@ const subB = async() => {
     await loadOperands('A','B');
     await description_update('Subtrahiere die Operanden');
 
-    const result = addBinary(A.value_dec, B.value_dec, true);
+    const result = addBinary(A.value_number, B.value_number, true);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4250,21 +4221,21 @@ const subC = async() => {
     await loadOperands('A','C');
     await description_update('Subtrahiere die Operanden');
 
-    const result = addBinary(A.value_dec, C.value_dec, true);
+    const result = addBinary(A.value_number, C.value_number, true);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const subDat_8 = async() => {
     await description_update('Hole den 1. Operator'); 
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Hole den 2. Operator');
     await readFromMemoryInRegister('PC', 'ALU2');
     await increasePC();
     await description_update('Subtrahiere die Operanden');
 
-    const result = addBinary(A.value_dec, ALU2.value_dec, true);
+    const result = addBinary(A.value_number, ALU2.value_number, true);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4273,7 +4244,7 @@ const andA = async() => {
     await loadOperands('A','A');
     await description_update('OP1 AND OP2');
 
-    const result = andBinary(A.value_dec, A.value_dec);
+    const result = andBinary(A.value_number, A.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4282,7 +4253,7 @@ const andB = async() => {
     await loadOperands('A','B');
     await description_update('OP1 AND OP2');
 
-    const result = andBinary(A.value_dec, B.value_dec);
+    const result = andBinary(A.value_number, B.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4291,21 +4262,21 @@ const andC = async() => {
     await loadOperands('A','C');
     await description_update('OP1 AND OP2');
 
-    const result = andBinary(A.value_dec, C.value_dec);
+    const result = andBinary(A.value_number, C.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const andDat_8 = async() => {
     await description_update('Hole den 1. Operanden'); 
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Hole den 2. Operanden');
     await readFromMemoryInRegister('PC' ,'ALU2');
     await increasePC()
     await description_update('OP1 AND OP2');
 
-    const result = andBinary(A.value_dec, ALU2.value_dec);
+    const result = andBinary(A.value_number, ALU2.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4314,7 +4285,7 @@ const orA = async() => {
     await loadOperands('A','A');
     await description_update('OP1 OR OP2');
 
-    const result = orBinary(ALU1.value_dec, ALU2.value_dec);
+    const result = orBinary(ALU1.value_number, ALU2.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4323,7 +4294,7 @@ const orB = async() => {
     await loadOperands('A','B');
     await description_update('OP1 OR OP2');
 
-    const result = orBinary(ALU1.value_dec, ALU2.value_dec);
+    const result = orBinary(ALU1.value_number, ALU2.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4332,21 +4303,21 @@ const orC = async() => {
     await loadOperands('A','C');
     await description_update('OP1 OR OP2');
 
-    const result = orBinary(ALU1.value_dec, ALU2.value_dec);
+    const result = orBinary(ALU1.value_number, ALU2.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const orDat_8 = async() => {
     await description_update('Hole den 1. Operanden'); 
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Hole den 2. Operanden');
     await readFromMemoryInRegister('PC' , 'ALU2');
     await increasePC();
     await description_update('OP1 OR OP2');
 
-    const result = orBinary(ALU1.value_dec, ALU2.value_dec);
+    const result = orBinary(ALU1.value_number, ALU2.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4355,7 +4326,7 @@ const xorA = async() => {
     await loadOperands('A','A');
     await description_update('OP1 XOR OP2');
 
-    const result = xorBinary(A.value_dec, A.value_dec);
+    const result = xorBinary(A.value_number, A.value_number);
     await aluAnimation(result,true,false , 'A');
     check_completeExecution();
 }
@@ -4364,7 +4335,7 @@ const xorB = async() => {
     await loadOperands('A','B');
     await description_update('OP1 XOR OP2');
 
-    const result = xorBinary(A.value_dec, B.value_dec);
+    const result = xorBinary(A.value_number, B.value_number);
     await aluAnimation(result,true,false , 'A');
     check_completeExecution();
 }
@@ -4373,21 +4344,21 @@ const xorC = async() => {
     await loadOperands('A','C');
     await description_update('OP1 XOR OP2');
 
-    const result = xorBinary(A.value_dec, C.value_dec);
+    const result = xorBinary(A.value_number, C.value_number);
     await aluAnimation(result,true,false , 'A');
     check_completeExecution();
 }
 
 const xorDat_8 = async() => {
     await description_update('Hole den 1. Operanden'); 
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Hole den 2. Operanden');
     await readFromMemoryInRegister('PC' , 'ALU2');
     await increasePC();
     await description_update('OP1 OR OP2');
 
-    const result = xorBinary(ALU1.value_dec, ALU2.value_dec);
+    const result = xorBinary(ALU1.value_number, ALU2.value_number);
     await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
@@ -4400,28 +4371,28 @@ const twoByteShift = async() => {
     await add_yellow_background_for_IDLETIME(IR.domElement);
     
 
-    if(IR.value_dec === 0b00100111){
+    if(IR.value_number === 0b00100111){
         await addArrow('IR');
         assemblerCommand_p.textContent = 'SHL';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
         await description_update('Hole den Operanden');
-        await transfer('A','ALU1',A.value_dec);
-        await updateRegister_hex('ALU1', A.value_dec);
+        await transfer('A','ALU1',A.value_number);
+        await updateRegister_hex('ALU1', A.value_number);
         await description_update('Schiebe Operanden nach links');
-        const result = shlBinary(A.value_dec);
+        const result = shlBinary(A.value_number);
         await aluAnimation(result, false,false, 'A');
     }
-    else if(IR.value_dec === 0b00111111){
+    else if(IR.value_number === 0b00111111){
         await addArrow('IR');
         assemblerCommand_p.textContent = 'SHR';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
         await description_update('Hole den Operanden');
-        await transfer('A','ALU1',A.value_dec);
-        await updateRegister_hex('ALU1', A.value_dec);
+        await transfer('A','ALU1',A.value_number);
+        await updateRegister_hex('ALU1', A.value_number);
         await description_update('Schiebe Operanden nach rechts');
-        const result = shrBinary(A.value_dec);
+        const result = shrBinary(A.value_number);
         await aluAnimation(result, false,false, 'A');
     }
     check_completeExecution();
@@ -4429,40 +4400,40 @@ const twoByteShift = async() => {
 
 const rcl = async() => {
     await description_update('Hole den Operanden');
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Rotiere Operand mit Carry-Flag nach links');
-    const result = rclBinary(A.value_dec);
+    const result = rclBinary(A.value_number);
     await aluAnimation(result,false,true, 'A');
     check_completeExecution();
 }
 
 const rol = async() => {
     await description_update('Hole den Operanden');
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Rotiere Operand ohne Carry-Flag nach links');
-    const result = rolBinary(A.value_dec);
+    const result = rolBinary(A.value_number);
     await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
 const rcr = async() => {
     await description_update('Hole den Operanden');
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Rotiere Operand mit Carry-Flag nach rechts');
-    const result = rcrBinary(A.value_dec);
+    const result = rcrBinary(A.value_number);
     await aluAnimation(result,false,true, 'A');
     check_completeExecution();
 }
 
 const ror = async() => {
     await description_update('Hole den Operanden');
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Rotiere Operand ohne Carry-Flag nach rechts');
-    const result = rorBinary(A.value_dec);
+    const result = rorBinary(A.value_number);
     await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
@@ -4471,7 +4442,7 @@ const cpA = async() => {
     await loadOperands('A','A');
     await description_update('Vergleiche die Operanden');
 
-    const result = addBinary(A.value_dec, A.value_dec, true);
+    const result = addBinary(A.value_number, A.value_number, true);
     await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
@@ -4480,7 +4451,7 @@ const cpB = async() => {
     await loadOperands('A','B');
     await description_update('Vergleiche die Operanden');
 
-    const result = addBinary(A.value_dec, B.value_dec, true);
+    const result = addBinary(A.value_number, B.value_number, true);
     await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
@@ -4489,21 +4460,21 @@ const cpC = async() => {
     await loadOperands('A','C');
     await description_update('Vergleiche die Operanden');
 
-    const result = addBinary(A.value_dec, C.value_dec, true);
+    const result = addBinary(A.value_number, C.value_number, true);
     await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
 
 const cpDat_8 = async() => {
     await description_update('Hole den 1. Operanden'); 
-    await transfer('A','ALU1',A.value_dec);
-    await updateRegister_hex('ALU1', A.value_dec);
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
     await description_update('Hole den 2. Operanden');
     await readFromMemoryInRegister('PC' , 'ALU2');
     await increasePC();
     await description_update('Vergleiche die Operanden');
 
-    const result = addBinary(A.value_dec, ALU2.value_dec, true);
+    const result = addBinary(A.value_number, ALU2.value_number, true);
     await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
@@ -4514,11 +4485,11 @@ const jpnzLabel = async() => {
     await checkJumpAnimation('zFlag');
 
     //jump
-    if(FLAGS.z_dec === 0){
+    if(FLAGS.z_number === 0){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
         
     }
     check_completeExecution();
@@ -4530,11 +4501,11 @@ const jpzLabel = async() => {
     await checkJumpAnimation('zFlag');
 
     //jump
-    if(FLAGS.z_dec === 1){
+    if(FLAGS.z_number === 1){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
@@ -4545,11 +4516,11 @@ const jpncLabel = async() => {
     await checkJumpAnimation('cFlag');
 
     //jump
-    if(FLAGS.c_dec === 0){
+    if(FLAGS.c_number === 0){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
@@ -4560,11 +4531,11 @@ const jpcLabel = async() => {
     await checkJumpAnimation('cFlag');
 
     //jump
-    if(FLAGS.c_dec === 1){
+    if(FLAGS.c_number === 1){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
@@ -4575,11 +4546,11 @@ const jpnoLabel = async() => {
     await checkJumpAnimation('pFlag');
 
     //jump
-    if(FLAGS.p_dec === 0){
+    if(FLAGS.p_number === 0){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
@@ -4590,11 +4561,11 @@ const jpoLabel = async() => {
     await checkJumpAnimation('pFlag');
 
     //jump
-    if(FLAGS.p_dec === 1){
+    if(FLAGS.p_number === 1){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
@@ -4605,11 +4576,11 @@ const jpnsLabel = async() => {
     await checkJumpAnimation('sFlag');
 
     //jump
-    if(FLAGS.s_dec === 0){
+    if(FLAGS.s_number === 0){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
@@ -4620,11 +4591,11 @@ const jpsLabel = async() => {
     await checkJumpAnimation('sFlag');
 
     //jump
-    if(FLAGS.s_dec === 1){
+    if(FLAGS.s_number === 1){
         await description_update('Lade den Programmzähler');
         await addArrow('ZR');
-        await transfer('ZR', 'PC', ZR.value_dec);
-        await updateRegister_hex('PC', ZR.value_dec);
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
@@ -4633,8 +4604,8 @@ const jpLabel = async() => {
     await loadAddressBytesInZr();
     await description_update('Lade den Programmzähler');
     await addArrow('ZR');
-    await transfer('ZR', 'PC', ZR.value_dec);
-    await updateRegister_hex('PC', ZR.value_dec);
+    await transfer('ZR', 'PC', ZR.value_number);
+    await updateRegister_hex('PC', ZR.value_number);
     check_completeExecution();
 }
 
@@ -4647,18 +4618,18 @@ const callLabel = async() => {
     await increasePC();
     await description_update('Erhöhe den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec-1);
+    await updateRegister_hex('SP', SP.value_number-1);
     await description_update('Schreibe das HI-Byte des PC');
     await writeToMemoryFromRegister('SP','PC_hi');
     await description_update('Erhöhe den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec-1);
+    await updateRegister_hex('SP', SP.value_number-1);
     await description_update('Schreibe das LO-Byte des PC');
     await writeToMemoryFromRegister('SP','PC_lo');
     await description_update('Lade den Programmzähler');
     await addArrow('ZR');
-    await transfer('ZR', 'PC', ZR.value_dec);
-    await updateRegister_hex('PC', ZR.value_dec);
+    await transfer('ZR', 'PC', ZR.value_number);
+    await updateRegister_hex('PC', ZR.value_number);
     check_completeExecution();
 }
 
@@ -4667,16 +4638,16 @@ const ret = async() => {
     await readFromMemoryInRegister('SP', 'ZR_lo');
     await description_update('Verringere den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec+1);
+    await updateRegister_hex('SP', SP.value_number+1);
     await description_update('Hole das höherwertige Adressbyte');
     await readFromMemoryInRegister('SP', 'ZR_hi');
     await description_update('Verringere den Stackpointer um 1');
     await addArrow('SP');
-    await updateRegister_hex('SP', SP.value_dec+1);
+    await updateRegister_hex('SP', SP.value_number+1);
     await description_update('Lade den Programmzähler');
     await addArrow('ZR');
-    await transfer('ZR', 'PC', ZR.value_dec);
-    await updateRegister_hex('PC', ZR.value_dec);
+    await transfer('ZR', 'PC', ZR.value_number);
+    await updateRegister_hex('PC', ZR.value_number);
     check_completeExecution();
 }
 
@@ -4731,10 +4702,10 @@ const init = () => {
     ALU2.domElement.textContent = '';
 
     try{
-        movingObject.classList.remove('toggleGrid');
+        movingObject_h2.classList.remove('toggleGrid');
     }catch{}
     try{
-        movingObject.classList.remove('toggleGrid');
+        movingObject_h2.classList.remove('toggleGrid');
     }catch{}
 
     stepNumber_p.textContent = '0';
@@ -4764,56 +4735,52 @@ const setButtonPressed = () =>{
     if(playStatus.play){
         play_button.classList.add('buttonPressed');
     }else{
-        try{
-            play_button.classList.remove('buttonPressed');
-        }catch{}
+        play_button.classList.remove('buttonPressed');
     }
     if(playStatus.pause){
         pause_button.classList.add('buttonPressed');
     }else{
-        try{
-            pause_button.classList.remove('buttonPressed');
-        }catch{}
+        pause_button.classList.remove('buttonPressed');
     }
     if(playStatus.stop){
         stop_button.classList.add('buttonPressed');
     }else{
-        try{
-            stop_button.classList.remove('buttonPressed');
-        }catch{}
+        stop_button.classList.remove('buttonPressed');
     }
     if(playStatus.rocketSpeed){
         fast_button.classList.add('buttonPressed');
-        try{
-            slow_button.classList.remove('buttonPressed');
-        }catch{}
-    }else{
+        
+        slow_button.classList.remove('buttonPressed');
+        singleStep_button.classList.remove('buttonPressed');
+        fullCommand_button.classList.remove('buttonPressed');
+    }
+    if(!playStatus.rocketSpeed){
         slow_button.classList.add('buttonPressed');
-        try{
-            fast_button.classList.remove('buttonPressed');
-        }catch{}
+        
+        fast_button.classList.remove('buttonPressed');
+        singleStep_button.classList.remove('buttonPressed');
+        fullCommand_button.classList.remove('buttonPressed');
+    }
+    if(playStatus.completeExe){
+        fullCommand_button.classList.add('buttonPressed');
+        
+        slow_button.classList.remove('buttonPressed');
+        fast_button.classList.remove('buttonPressed');
+        singleStep_button.classList.remove('buttonPressed');
+    }
+    if(playStatus.noAnim && !playStatus.completeExe){
+        singleStep_button.classList.add('buttonPressed');
+
+        slow_button.classList.remove('buttonPressed');
+        fast_button.classList.remove('buttonPressed');
+        fullCommand_button.classList.remove('buttonPressed');
     }
     if(playStatus.oneCommand){
         oneCommand_button.classList.add('buttonPressed');
     }else{
-        try{
-            oneCommand_button.classList.remove('buttonPressed');
-        }catch{}
+        oneCommand_button.classList.remove('buttonPressed');
     }   
-    if(playStatus.completeExe){
-        fullCommand_button.classList.add('buttonPressed');
-    }else{
-        try{
-            fullCommand_button.classList.remove('buttonPressed');
-        }catch{}
-    }
-    if(playStatus.noAnim && !playStatus.completeExe){
-        singleStep_button.classList.add('buttonPressed');
-    }else{
-        try{
-            singleStep_button.classList.remove('buttonPressed');
-        }catch{}
-    }
+    
 }
 setButtonPressed();
 
@@ -4884,7 +4851,6 @@ const runOneCommand = () => {
     }else{
         playStatus.setOneCommand();
         setButtonPressed();
-        // play();
     }
 }
 const runNextSingleStep = () => {

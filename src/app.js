@@ -29,7 +29,9 @@ window.addEventListener('resize', function () {
 
 
 /***************************************** DOM_Selectors *********************************/
-const mc8Container = document.querySelector(".mc8Container");
+const mc8_div = document.getElementById('mc8_div');
+const containerSettings_div = document.getElementById('containerSettings_div');
+
 const assemblerCommand_p = document.getElementById('assemblerCommand_p');
 const stepNumber_p = document.getElementById('stepNumber_p');
 const stepDescription_p = document.getElementById('stepDescription_p');
@@ -39,7 +41,7 @@ const irArrow_div = document.getElementById('irArrow_div');
 const movingFlagsArrow_div = document.getElementById('movingFlagsArrow_div');
 const cFlagArrow_div = document.getElementById('cFlagArrow_div');
 const checkJumpArrow_div = document.getElementById('checkJumpArrow_div');
-const containerSettings_div = document.getElementById('containerSettings_div');
+
 const movingFlags_div = document.getElementById('movingFlags_div');
 const flags_DOM = document.getElementById('flags');
 const yellowBgElement_div = document.getElementById('yellowBgElement_div');

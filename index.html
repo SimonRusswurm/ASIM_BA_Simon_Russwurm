@@ -10,7 +10,7 @@
 </head>
 <body class="body">
     <div id="containerAspectRatio_div" class="containerAspectRatio">
-        <div class="mc8Container alignBg">
+        <div id="mc8_div" class="alignBg">
             <!-- ************************** ROM **************************  -->
            
             <div class="rom positionAbsolute centered">
@@ -272,7 +272,7 @@
             <h1 id="aRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox topLeft bottomLeft">A</h1>
             <h2 id="aRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox">00</h2>
             
-            <div id="flags" class="rectangle4x2 positionAbsolute centered borderBox topRight bottomRight">
+            <div id="flagsContainer_div" class="rectangle4x2 positionAbsolute centered borderBox topRight bottomRight">
                 <h1 id="cFlagLabel_h1">C</h1>
                 <h1 id="zFlagLabel_h1">Z</h1>
                 <h1 id="pFlagLabel_h1">P</h1>
@@ -341,7 +341,7 @@
 
             <div class="rectangle12x4 positionAbsolute centered borderBox bottomRight bottomLeft containerControlUnit2">
                 <div class="containerStepDescription_div centered">
-                    <div class="containerStepNumber centered borderBox rounded">
+                    <div id="stepNumberBg_div" class="containerStepNumber centered borderBox rounded">
                         <p id="stepNumber_p" class="rounded" >0</p>
                     </div>
                     <p id="stepDescription_p">Prozessor angehalten</p>
@@ -375,11 +375,11 @@
                 <button id="stop_button" type="button" class="borderRight alignBg" onclick="stopBtn()"></button>
                 <button id="slow_button" type="button" class="borderRight alignBg" onclick="snailSpeed_on()"></button>
                 <button id="fast_button" type="button" class="borderRight alignBg" onclick="rocketSpeed_on()"></button>
+                <button id="singleStep_button" type="button" class="borderRight alignBg" onclick="runNextSingleStep()"></button>
+                <button id="fullCommand_button" type="button" class="borderRight alignBg" onclick="runCompleteExecution()"></button>
                 <button id="increase_button" type="button" class="borderRight alignBg" onclick="increaseSpeed()"></button>
                 <button id="decrease_button" type="button" class="borderRight alignBg" onclick="decreaseSpeed()"></button>
                 <button id="oneCommand_button" type="button" class="borderRight alignBg" onclick="runOneCommand()"></button>
-                <button id="singleStep_button" type="button" class="borderRight alignBg" onclick="runNextSingleStep()"></button>
-                <button id="fullCommand_button" type="button" class="borderRight alignBg" onclick="runCompleteExecution()"></button>
                 <button id="settingsButton_button" type="button" class="borderRight alignBg" onclick="toggleSettings()"></button>
                 <button id="fullscreenButton_button" type="button" class="borderRight alignBg" onclick="toggleFullscreen()"></button>
                 <button id="toggleTheme_button" type="button" class="topRight bottomRight alignBg" onclick="toggleTheme()"></button>

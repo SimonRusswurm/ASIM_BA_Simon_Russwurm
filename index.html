@@ -113,7 +113,12 @@
                     
                 </div>
             </div>
-			
+            <div id="romLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">ROM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p style="text-align: end;">0000h</p><p style="text-align: end;">0</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p style="text-align: end;">1FFFh</p><p style="text-align: end;">8191</p>
+            </div>
 			<!-- ************************** RAM **************************  -->
             
             <div class="ram positionAbsolute centered">
@@ -220,18 +225,31 @@
                     <p class="RamAddressLabel">3FFx</p>
                 </div>       
             </div>
+            <div id="ramLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">RAM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p id="ramStartAddressHex_p" style="text-align: end;">2000h</p><p id="ramStartAddressDec_p" style="text-align: end;">8192</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p id="ramEndAddressHex_p"style="text-align: end;">3FFFh</p><p id="ramEndAddressDec_p"style="text-align: end;">16383</p>
+            </div>
            
             <!-- ************************** MovingObjects **************************  -->
             <h2 id="movingObject_h2" class="movingObject square2x2 positionAbsolute centered borderBox yellowBg rounded displayNone"></h2>
             <h2 id='movingAlu1_h2'   class="movingObject square2x2 positionAbsolute centered borderBox yellowBg rounded displayNone"></h2>
             <h2 id='movingAlu2_h2'   class="movingObject square2x2 positionAbsolute centered borderBox yellowBg rounded displayNone"></h2>
-            <p id="redRectangle_p" class="redRectangle square1x1 positionAbsolute centered borderBox">FF</p>
+            <p id="redRectangle_p" class="redRectangle square1x1 positionAbsolute centered borderBox"></p>
 
             <!-- ************************** IOs **************************  -->
            
             <h1 id="io1Label_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">IO1</h1>
             <div id="io1Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow"></div>
             <h2 id="io1RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight bottomRight">FF</h2>
+            <div id="io1LabelHover_div" class="hoverElement io_hover borderBox rounded">
+                <p class="bold">IO1</p><p></p>
+                <p id="io1Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io1AddressHover_p" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io1ValueDec_p" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io1ValueBin_p" style="text-align: end;">1111 1111</p>
+            </div>
             
             <div id="io1InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
@@ -245,6 +263,14 @@
             <h1 id="io2Label_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">IO2</h1>
             <div id="io2Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow ioArrowOUT"></div>
             <h2 id="io2RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight bottomRight">FF</h2>
+            <div id="io2LabelHover_div" class="hoverElement io_hover borderBox rounded">
+                <p class="bold">IO2</p><p></p>
+                <p id="io2Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io2AddressHover_p" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io2ValueDec_p" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io2ValueBin_p" style="text-align: end;">1111 1111</p>
+            </div>
+
 
             <div id="io2InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
@@ -258,6 +284,13 @@
             <h1 id="io3Label_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">IO3</h1>
             <div id="io3Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow "></div>
             <h2 id="io3RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight bottom bottomRight">FF</h2>
+            <div id="io3LabelHover_div" class="hoverElement io_hover borderBox rounded" >
+                <p class="bold">IO3</p><p></p>
+                <p id="io3Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io3AddressHover_p" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io3ValueDec_p" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io3ValueBin_p" style="text-align: end;">1111 1111</p>                
+            </div>
             
             <div id="io3InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
@@ -271,6 +304,11 @@
             <!-- ************************** akku/flags **************************  -->
             <h1 id="aRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox topLeft bottomLeft">A</h1>
             <h2 id="aRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox">00</h2>
+            <div id="aLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">A - Akkumulator</p>
+                <p id="aHoverValueDec_p"></p>
+                <p id="aHoverValueBin_p"></p>
+            </div>
             
             <div id="flagsContainer_div" class="rectangle4x2 positionAbsolute centered borderBox topRight bottomRight">
                 <h1 id="cFlagLabel_h1">C</h1>
@@ -281,6 +319,18 @@
                 <p id="zFlagValue_p" class="gridChild">0</p>
                 <p id="pFlagValue_p" class="gridChild">0</p>
                 <p id="sFlagValue_p" class="gridChild">0</p>
+            </div>
+            <div id="cFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">C - Carry Flag</p>
+            </div>
+            <div id="zFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">Z - Zero Flag</p>
+            </div>
+            <div id="pFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">P/O - Parity/Overflow Flag</p>
+            </div>
+            <div id="sFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">S - Sign Flag</p>
             </div>
 
             <div id="movingFlags_div" class="borderBox centered rounded yellowBg displayNone">
@@ -316,8 +366,42 @@
             <h1 id="zrRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox bottomLeft">ZR</h1>
             <h2 id="zrRegisterValue_h2" class="rectangle4x2 positionAbsolute centered borderBox bottomRight">0000</h2>
             
+            <div id="bLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">B - Datenregister</p>
+                <p id="bHoverValueDec_p"></p>
+                <p id="bHoverValueBin_p"></p>
+            </div>
 
+            <div id="cLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">C - Datenregister</p>
+                <p id="cHoverValueDec_p"></p>
+                <p id="cHoverValueBin_p"></p>
+            </div>
 
+            <div id="hlLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">HL - Universalregister</p>
+                <p id="hlHoverValueDec_p"></p>
+            </div>
+
+            <div id="ixLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">IX - Indexregister</p>
+                <p id="ixHoverValueDec_p"></p>
+            </div>
+
+            <div id="spLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">SP - Stackpointer</p>
+                <p id="spHoverValueDec_p"></p>
+            </div>
+
+            <div id="pcLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">PC - Program Counter</p>
+                <p id="pcHoverValueDec_p"></p>
+            </div>
+
+            <div id="zrLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">ZR - Zwischenregister</p>
+                <p id="zrHoverValueDec_p"></p>
+            </div>
 
             <!-- ************************** ALU **************************  -->
             <div style="position:absolute; top: calc(100%/32*8); left: calc(100%/46*27);" class="gridChild square2x2 positionAbsolute centered">
@@ -333,6 +417,10 @@
             <p class="rectangle8x2 positionAbsolute centered borderBox topLeft controlUnitLabel">Steuerwerk</p>
             <h1 id="irRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">IR</h1>
             <h2 id="irRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight">00</h2>
+            <div id="irLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">IR - Befehlsregister</p>
+                <p id="irHoverValueBin_p"></p>
+            </div>
             
             <div class="rectangle12x2 positionAbsolute centered borderBox containerAssemblerCommand">
                 <p id="assemblerCommand_p" class="textareaFontSize"></p>
@@ -368,6 +456,27 @@
             <h1 id="decoderLabel_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">DEC</h1>
             <p id="decDisplay_p" class="rectangle6x2 positionAbsolute centered borderBox topRight bottomRight textareaFontSize"></p>
 
+            <div id="decoderHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">DEC - Adressdecoder</p>
+                <p>Ermittelt aus den Steuerleitungen und den Adressleitungen welcher Baustein (ROM, RAM, oder I/O) angesprochen werden soll.</p>
+            </div>
+
+            <div id="wrHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">WR - Write (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU Daten für die Speicherung an der aktuellen Speicher- oder IO-Adresse bereit.</p>
+            </div>
+            <div id="rdHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">RD - Read (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, erwartet die CPU Daten von der adressierten Speicher- oder IO-Einheit.</p>
+            </div>
+            <div id="mHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">MREQ - Meomory Required  (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige Adresse für einen Speicherzugriff bereit.</p>
+            </div>
+            <div id="ioHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold">IORQ - IO Request (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige 8-Bit Adresse für einen IO-Zugriff bereit<p>
+            </div>
              <!-- ************************************************** controlPanel *************************************************  -->
              <div class="controlPanel gridChild borderBox rounded">
                 <button id="play_button" type="button" class="topLeft bottomLeft borderRight alignBg" onclick="play()"></button>
@@ -383,6 +492,59 @@
                 <button id="settingsButton_button" type="button" class="borderRight alignBg" onclick="toggleSettings()"></button>
                 <button id="fullscreenButton_button" type="button" class="borderRight alignBg" onclick="toggleFullscreen()"></button>
                 <button id="toggleTheme_button" type="button" class="topRight bottomRight alignBg" onclick="toggleTheme()"></button>
+            </div>
+
+            <div id="playHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Start</Button></p>
+                <p>Startet den Programmablauf.</p>
+            </div>
+            <div id="pauseHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Pause</Button></p>
+                <p>Pausiert den Programmablauf.</p>
+            </div>
+            <div id="stopHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Reset</Button></p>
+                <p>Setzt die CPU zurück.</p>
+            </div>
+            <div id="slowHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Langsame Animation</Button></p>
+                <p>Animation mit Bewegung.</p>
+            </div>
+            <div id="fastHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Schnelle Animation</Button></p>
+                <p>Animation ohne Bewegung.</p>
+            </div>
+            <div id="singleStepHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einzelschritt ohne Animation</Button></p>
+                <p>Führt einen Befehl ohne Animation aus.</p>
+            </div>
+            <div id="fullCommandHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Schneller Ablauf</Button></p>
+                <p>Führt die gesamte Simulation ohne Animation aus.</p>
+            </div>
+            <div id="increaseHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Schneller</Button></p>
+                <p>Erhöht die Animationsgeschwindigkeit.</p>
+            </div>
+            <div id="decreaseHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Langsamer</Button></p>
+                <p>Verringert  die Animationsgeschwindigkeit.</p>
+            </div>
+            <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einzelschritt</Button></p>
+                <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
+            </div>
+            <div id="settingsButtonHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einstellungen</Button></p>
+                <p>Konfiguration von ROM, RAM und IO.</p>
+            </div>
+            <div id="fullscreenButtonHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Vollbild</Button></p>
+                <p>Tipp: Bei Smartphones verwenden!</p>
+            </div>
+            <div id="toggleThemeHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Dunkler Modus</Button></p>
+                <p>Wechselt das Design.</p>
             </div>
 
 
@@ -559,6 +721,8 @@
                 </div>
             </div>
             
+
+            <!---------------------------------custom selction options-------------------------------------------->
             <div id="ramSelectOptions_div" class="selectOptions borderBox displayNone rounded">
                 <h5 class="option">2000h - 3FFFh</h5>
                 <h5 class="option">4000h - 5FFFh</h5>
@@ -592,189 +756,6 @@
                 <h5 class="option">Bsp 19 - Beispielprogramm</h5>
             </div>
            
-            <!-- ************************************************** hover pop ups *************************************************  -->
-            <!-- the following div blocks are the elements which appear when the mouse is hovered over the blue h1/h3 headings  -->
-
-            <!-- *****************************ROM/RAM_hover****************************  -->
-            <div id="romLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">ROM</p><p></p><p></p>
-                <p>Anfangsadresse: </p><p style="text-align: end;">0000h</p><p style="text-align: end;">0</p>
-                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
-                <p>Endadresse: </p><p style="text-align: end;">1FFFh</p><p style="text-align: end;">8191</p>
-            </div>
-
-            <div id="ramLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">RAM</p><p></p><p></p>
-                <p>Anfangsadresse: </p><p id="ramStartAddressHex_p" style="text-align: end;">2000h</p><p id="ramStartAddressDec_p" style="text-align: end;">8192</p>
-                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
-                <p>Endadresse: </p><p id="ramEndAddressHex_p"style="text-align: end;">3FFFh</p><p id="ramEndAddressDec_p"style="text-align: end;">16383</p>
-            </div>
-
-            <!-- *****************************IOs_hover****************************  -->
-            <div id="io1LabelHover_div" class="hoverElement io_hover borderBox rounded">
-                <p class="bold">IO1</p><p></p>
-                <p id="io1Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
-                <p>Adresse:</p><p id="io1AddressHover_p" style="text-align: end;">0000h</p>
-                <p>Dezimal:</p><p id="io1ValueDec_p" style="text-align: end;">255</p>
-                <p>Binär:</p><p id="io1ValueBin_p" style="text-align: end;">1111 1111</p>
-            </div>
-
-            <div id="io2LabelHover_div" class="hoverElement io_hover borderBox rounded">
-                <p class="bold">IO2</p><p></p>
-                <p id="io2Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
-                <p>Adresse:</p><p id="io2AddressHover_p" style="text-align: end;">0000h</p>
-                <p>Dezimal:</p><p id="io2ValueDec_p" style="text-align: end;">255</p>
-                <p>Binär:</p><p id="io2ValueBin_p" style="text-align: end;">1111 1111</p>
-            </div>
-
-            <div id="io3LabelHover_div" class="hoverElement io_hover borderBox rounded" >
-                <p class="bold">IO3</p><p></p>
-                <p id="io3Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
-                <p>Adresse:</p><p id="io3AddressHover_p" style="text-align: end;">0000h</p>
-                <p>Dezimal:</p><p id="io3ValueDec_p" style="text-align: end;">255</p>
-                <p>Binär:</p><p id="io3ValueBin_p" style="text-align: end;">1111 1111</p>                
-            </div>
-
-            <!-- *****************************register_hover****************************  -->
-            <div id="aLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">A - Akkumulator</p>
-                <p id="aHoverValueDec_p"></p>
-                <p id="aHoverValueBin_p"></p>
-            </div>
-
-            <div id="bLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">B - Datenregister</p>
-                <p id="bHoverValueDec_p"></p>
-                <p id="bHoverValueBin_p"></p>
-            </div>
-
-            <div id="cLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">C - Datenregister</p>
-                <p id="cHoverValueDec_p"></p>
-                <p id="cHoverValueBin_p"></p>
-            </div>
-
-            <div id="hlLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">HL - Universalregister</p>
-                <p id="hlHoverValueDec_p"></p>
-            </div>
-
-            <div id="ixLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">IX - Indexregister</p>
-                <p id="ixHoverValueDec_p"></p>
-            </div>
-
-            <div id="spLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">SP - Stackpointer</p>
-                <p id="spHoverValueDec_p"></p>
-            </div>
-
-            <div id="pcLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">PC - Program Counter</p>
-                <p id="pcHoverValueDec_p"></p>
-            </div>
-
-            <div id="zrLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">ZR - Zwischenregister</p>
-                <p id="zrHoverValueDec_p"></p>
-            </div>
-
-            <div id="irLabelHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">IR - Befehlsregister</p>
-                <p id="irHoverValueBin_p"></p>
-            </div>
-
-            <!-- *****************************flags_hover****************************  -->
-            <div id="cFlagHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">C - Carry Flag</p>
-            </div>
-            <div id="zFlagHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">Z - Zero Flag</p>
-            </div>
-            <div id="pFlagHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">P/O - Parity/Overflow Flag</p>
-            </div>
-            <div id="sFlagHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">S - Sign Flag</p>
-            </div>
-
-            <!-- *****************************dec_hover****************************  -->
-            <div id="decoderHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">DEC - Adressdecoder</p>
-                <p>Ermittelt aus den Steuerleitungen und den Adressleitungen welcher Baustein (ROM, RAM, oder I/O) angesprochen werden soll.</p>
-            </div>
-
-            <div id="wrHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">WR - Write (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, hält die CPU Daten für die Speicherung an der aktuellen Speicher- oder IO-Adresse bereit.</p>
-            </div>
-            <div id="rdHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">RD - Read (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, erwartet die CPU Daten von der adressierten Speicher- oder IO-Einheit.</p>
-            </div>
-            <div id="mHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">MREQ - Meomory Required  (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige Adresse für einen Speicherzugriff bereit.</p>
-            </div>
-            <div id="ioHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">IORQ - IO Request (0 - aktiv)</p>
-                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige 8-Bit Adresse für einen IO-Zugriff bereit<p>
-            </div>
-
-            <!-- *****************************buttons_hover****************************  -->
-            <div id="playHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Start</Button></p>
-                <p>Startet den Programmablauf.</p>
-            </div>
-            <div id="pauseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Pause</Button></p>
-                <p>Pausiert den Programmablauf.</p>
-            </div>
-            <div id="stopHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Reset</Button></p>
-                <p>Setzt die CPU zurück.</p>
-            </div>
-            <div id="slowHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Langsame Animation</Button></p>
-                <p>Animation mit Bewegung.</p>
-            </div>
-            <div id="fastHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schnelle Animation</Button></p>
-                <p>Animation ohne Bewegung.</p>
-            </div>
-            <div id="increaseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schneller</Button></p>
-                <p>Erhöht die Animationsgeschwindigkeit.</p>
-            </div>
-            <div id="decreaseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Langsamer</Button></p>
-                <p>Verringert  die Animationsgeschwindigkeit.</p>
-            </div>
-            <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einzelschritt</Button></p>
-                <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
-            </div>
-            <div id="singleStepHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einzelschritt ohne Animation</Button></p>
-                <p>Führt einen Befehl ohne Animation aus.</p>
-            </div>
-            <div id="fullCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schneller Ablauf</Button></p>
-                <p>Führt die gesamte Simulation ohne Animation aus.</p>
-            </div>
-            <div id="settingsButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einstellungen</Button></p>
-                <p>Konfiguration von ROM, RAM und IO.</p>
-            </div>
-            <div id="fullscreenButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Vollbild</Button></p>
-                <p>Tipp: Bei Smartphones verwenden!</p>
-            </div>
-            <div id="toggleThemeHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Dunkler Modus</Button></p>
-                <p>Wechselt das Design.</p>
-            </div>
-
             <!-- *****************************infoBox****************************  -->
             <div id="infoWindow_div" class="rounded centered displayNone">
                 <p>INFO</p>

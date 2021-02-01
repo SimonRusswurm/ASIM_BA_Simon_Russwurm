@@ -100,38 +100,37 @@ const FRAMES = 60;
 
 
 /***************************************************DOM-selectors***************************************************/
-const getHtmlElement = (id_string: string) => document.getElementById(id_string);
-const mc8_div:HTMLElement = getHtmlElement('mc8_div');
+const mc8_div:HTMLElement = document.getElementById('mc8_div');
 
 //control unit
-const assemblerCommand_p:HTMLElement = getHtmlElement('assemblerCommand_p');
-const stepNumber_p:HTMLElement = getHtmlElement('stepNumber_p');
-const stepDescription_p:HTMLElement = getHtmlElement('stepDescription_p');
-const stepNumberBg_div:HTMLElement = getHtmlElement('stepNumberBg_div');
+const assemblerCommand_p:HTMLElement = document.getElementById('assemblerCommand_p');
+const stepNumber_p:HTMLElement = document.getElementById('stepNumber_p');
+const stepDescription_p:HTMLElement = document.getElementById('stepDescription_p');
+const stepNumberBg_div:HTMLElement = document.getElementById('stepNumberBg_div');
 
 //arrows
-const registerArrow_div:HTMLElement = getHtmlElement('registerArrow_div');
-const irArrow_div:HTMLElement = getHtmlElement('irArrow_div');
-const movingFlagsArrow_div:HTMLElement = getHtmlElement('movingFlagsArrow_div');
-const cFlagArrow_div:HTMLElement = getHtmlElement('cFlagArrow_div');
-const checkJumpArrow_div:HTMLElement = getHtmlElement('checkJumpArrow_div');
+const registerArrow_div:HTMLElement = document.getElementById('registerArrow_div');
+const irArrow_div:HTMLElement = document.getElementById('irArrow_div');
+const movingFlagsArrow_div:HTMLElement = document.getElementById('movingFlagsArrow_div');
+const cFlagArrow_div:HTMLElement = document.getElementById('cFlagArrow_div');
+const checkJumpArrow_div:HTMLElement = document.getElementById('checkJumpArrow_div');
 
 //io input pop ups
-const io1InputWindow_div:HTMLElement = getHtmlElement('io1InputWindow_div');
-const io2InputWindow_div:HTMLElement = getHtmlElement('io2InputWindow_div');
-const io3InputWindow_div:HTMLElement = getHtmlElement('io3InputWindow_div');
-const io1Input_input:HTMLElement = getHtmlElement('io1Input_input');
-const io2Input_input:HTMLElement = getHtmlElement('io2Input_input');
-const io3Input_input:HTMLElement = getHtmlElement('io3Input_input');
+const io1InputWindow_div:HTMLElement = document.getElementById('io1InputWindow_div');
+const io2InputWindow_div:HTMLElement = document.getElementById('io2InputWindow_div');
+const io3InputWindow_div:HTMLElement = document.getElementById('io3InputWindow_div');
+const io1Input_input:HTMLElement = document.getElementById('io1Input_input');
+const io2Input_input:HTMLElement = document.getElementById('io2Input_input');
+const io3Input_input:HTMLElement = document.getElementById('io3Input_input');
 
 //moving elements
-const movingObject_h2:HTMLElement = getHtmlElement('movingObject_h2');
-const movingFlags_div:HTMLElement = getHtmlElement('movingFlags_div');
-const movingAlu1:HTMLElement = getHtmlElement('movingAlu1_h2');
-const movingAlu2:HTMLElement = getHtmlElement('movingAlu2_h2');
+const movingObject_h2:HTMLElement = document.getElementById('movingObject_h2');
+const movingFlags_div:HTMLElement = document.getElementById('movingFlags_div');
+const movingAlu1:HTMLElement = document.getElementById('movingAlu1_h2');
+const movingAlu2:HTMLElement = document.getElementById('movingAlu2_h2');
 
 //yellow register background element
-const yellowBgElement_div:HTMLElement = getHtmlElement('yellowBgElement_div');
+const yellowBgElement_div:HTMLElement = document.getElementById('yellowBgElement_div');
 
 //rom/ram variable memory blocks
 const lastRomLabel_div:HTMLElement = document.getElementById('lastRomLabel_div');
@@ -924,48 +923,46 @@ class IO extends Register_x2 {
 
 class Register_x4 {
     value_number: number;
-    backgroundHtmlElement: HTMLElement;
-    hiValue_number: number;
-    loValue_number: number;
-    hi_register: Register_x2;
-    lo_register: Register_x2;
+    htmlElement: HTMLElement;
+    hi_number: number;
+    lo_number: number;
 
-	constructor(background_htmlElement:HTMLElement, registerHi_htmlElement: HTMLElement, registerLo_htmlElement: HTMLElement){
-        this.hi_register = new Register_x2(registerHi_htmlElement);
-        this.lo_register = new Register_x2(registerLo_htmlElement);
-        this.backgroundHtmlElement = background_htmlElement;
+	constructor(register_htmlElement:HTMLElement){
+        this.htmlElement = register_htmlElement;
         this.value_number = 0;
-		this.hiValue_number = 0;
-		this.loValue_number = 0;
+		this.hi_number = 0;
+		this.lo_number = 0;
 	}
-    
-    update(value_number:number):void{
+	
+	update(value_number:number):void{
         if(value_number > 65535)
             value_number -= 65536;
         if(value_number < 0)
             value_number = 65535;
         this.value_number = value_number;
-        this.loValue_number = value_number%256;
-        this.hiValue_number = (value_number-this.loValue_number)/256;
-        this.hi_register.update(this.hiValue_number);
-        this.lo_register.update(this.loValue_number);
-    }
-    updateLoByte(value_number:number):void{
-        this.loValue_number = value_number;
-        this.value_number = this.hiValue_number*256+this.loValue_number;
-        this.lo_register.update(this.loValue_number);
+        this.htmlElement.textContent = convertNumberToHex_4digits(value_number);
+        this.hi_number = convertHexToNumber(this.htmlElement.textContent[0] + this.htmlElement.textContent[1]);
+        this.lo_number = convertHexToNumber(this.htmlElement.textContent[2] + this.htmlElement.textContent[3]);
+	}	
+	
+	update_lo(value_number:number):void{
+		let buf_string = this.htmlElement.textContent;
+		this.lo_number = value_number;
+        this.htmlElement.textContent = buf_string[0] + buf_string[1] + convertNumberToHex_2digits(value_number);
+        this.value_number = convertHexToNumber(this.htmlElement.textContent);
 	}
 	
-	updateHiByte(value_number:number):void{
-		this.hiValue_number = value_number;
-        this.value_number = this.hiValue_number*256+this.loValue_number;
-        this.hi_register.update(this.hiValue_number);
-    }
+	update_hi(value_number:number):void{
+		let buf_string = this.htmlElement.textContent;
+		this.hi_number = value_number;
+        this.htmlElement.textContent = convertNumberToHex_2digits(value_number) + buf_string[2] + buf_string[3];
+        this.value_number = convertHexToNumber(this.htmlElement.textContent);
+	}
 }
 
 class Pc_class extends Register_x4{
-    constructor(register_htmlElement:HTMLElement, registerHi_htmlElement: HTMLElement, registerLo_htmlElement: HTMLElement){
-		super(register_htmlElement, registerHi_htmlElement, registerLo_htmlElement);
+    constructor(register_htmlElement:HTMLElement){
+		super(register_htmlElement);
     }
 
     //override
@@ -975,10 +972,9 @@ class Pc_class extends Register_x4{
         if(value_number < 0)
             value_number = 65535;
         this.value_number = value_number;
-        this.loValue_number = value_number%256;
-        this.hiValue_number = (value_number-this.loValue_number)/256;
-        this.hi_register.update(this.hiValue_number);
-        this.lo_register.update(this.loValue_number);
+        this.htmlElement.textContent = convertNumberToHex_4digits(value_number);
+        this.hi_number = convertHexToNumber(this.htmlElement.textContent[0] + this.htmlElement.textContent[1]);
+        this.lo_number = convertHexToNumber(this.htmlElement.textContent[2] + this.htmlElement.textContent[3]);
 
         updateRedRectangle(PC.value_number);
         ROM.updateVariableElements(value_number);
@@ -1375,25 +1371,25 @@ class mc8_command {
 
 /***************************************************class variables***************************************************/
 const playStatus = new PlayStatus();
-const IO1 = new IO(getHtmlElement('io1RegisterValue_h2'), 0, true);
-const IO2 = new IO(getHtmlElement('io2RegisterValue_h2'), 1, false);
-const IO3 = new IO(getHtmlElement('io3RegisterValue_h2'), 2, true);
-const A   = new Register_x2(getHtmlElement('aRegisterValue_h2'));
-const B   = new Register_x2(getHtmlElement('bRegisterValue_h2'));
-const C   = new Register_x2(getHtmlElement('cRegisterValue_h2'));
-const IR  = new Register_x2(getHtmlElement('irRegisterValue_h2'));
-const ALU1 = new Register_x2(getHtmlElement('alu1RegisterValue_h2'));
-const ALU2 = new Register_x2(getHtmlElement('alu2RegisterValue_h2'));
-const ALUOUT = new Register_x2(getHtmlElement('aluOutRegisterValue_h2'));
-const HL  = new Register_x4(getHtmlElement('hlBackground_div'),getHtmlElement('hlRegisterValueHi_h2'), getHtmlElement('hlRegisterValueLo_h2'));
-const IX  = new Register_x4(getHtmlElement('ixBackground_div'),getHtmlElement('ixRegisterValueHi_h2'), getHtmlElement('ixRegisterValueLo_h2'));
-const SP  = new Register_x4(getHtmlElement('spBackground_div'),getHtmlElement('spRegisterValueHi_h2'), getHtmlElement('spRegisterValueLo_h2'));
-const PC  = new    Pc_class(getHtmlElement('pcBackground_div'),getHtmlElement('pcRegisterValueHi_h2'), getHtmlElement('pcRegisterValueLo_h2'));
-const ZR  = new Register_x4(getHtmlElement('spBackground_div'),getHtmlElement('zrRegisterValueHi_h2'), getHtmlElement('zrRegisterValueLo_h2'));
-const FLAGS = new Flags(getHtmlElement('cFlagValue_p'),getHtmlElement('zFlagValue_p'),getHtmlElement('pFlagValue_p'),getHtmlElement('sFlagValue_p'),getHtmlElement('flagsContainer_div'));
+const IO1 = new IO(document.getElementById('io1RegisterValue_h2'), 0, true);
+const IO2 = new IO(document.getElementById('io2RegisterValue_h2'), 1, false);
+const IO3 = new IO(document.getElementById('io3RegisterValue_h2'), 2, true);
+const A   = new Register_x2(document.getElementById('aRegisterValue_h2'));
+const B   = new Register_x2(document.getElementById('bRegisterValue_h2'));
+const C   = new Register_x2(document.getElementById('cRegisterValue_h2'));
+const IR  = new Register_x2(document.getElementById('irRegisterValue_h2'));
+const ALU1 = new Register_x2(document.getElementById('alu1RegisterValue_h2'));
+const ALU2 = new Register_x2(document.getElementById('alu2RegisterValue_h2'));
+const ALUOUT = new Register_x2(document.getElementById('aluOutRegisterValue_h2'));
+const HL  = new Register_x4(document.getElementById('hlRegisterValue_h2'));
+const IX  = new Register_x4(document.getElementById('ixRegisterValue_h2'));
+const SP  = new Register_x4(document.getElementById('spRegisterValue_h2'));
+const PC  = new Pc_class(document.getElementById('pcRegisterValue_h2'));
+const ZR  = new Register_x4(document.getElementById('zrRegisterValue_h2'));
+const FLAGS = new Flags(document.getElementById('cFlagValue_p'),document.getElementById('zFlagValue_p'),document.getElementById('pFlagValue_p'),document.getElementById('sFlagValue_p'),document.getElementById('flagsContainer_div'));
 const ROM = new Rom();
 const RAM = new Ram();
-const DECODER = new Decoder(getHtmlElement('wrValue_p'),getHtmlElement('rdValue_p'), getHtmlElement('mValue_p'), getHtmlElement('ioValue_p'),getHtmlElement('decDisplay_p'));
+const DECODER = new Decoder(document.getElementById('wrValue_p'),document.getElementById('rdValue_p'), document.getElementById('mValue_p'), document.getElementById('ioValue_p'),document.getElementById('decDisplay_p'));
 const fixPoints = [
     new Point(0,10,2,'ROM1',-1,[1]),
     new Point(1,14,2,'',0,[2,4]),
@@ -2189,62 +2185,6 @@ const getPointsAtoB = (fixPointLabelA_string: string, fixPointLabelB_string: str
     return pointsAtoB;
 }
 
-//calculates the coordinates between the fixPoints.
-//At Speed 1, the movingObject updates every single coordinate
-//At Speed 2, the movingObject updates every second coordinate...
-//max Speed = 12 (update only fixPoints)
-const calcIntermediatePositions = (pointsAtoB_array: Array<Point>, interPointsQuantity=12): number[][][] => {
-    let xPositions = [];
-    let yPositions = [];
-    let bufferX = [];
-    let bufferY = [];
-    let posDiff = 0;
-    const reciprocal = 1/interPointsQuantity;
-    
-    //iterate through path
-    for (let j = 0; j < pointsAtoB_array.length-1; j++) {
-        
-        //If path position is different to the next path position, calculate position difference
-        //and add intermediate Points, depending on the position difference and direction.
-        if(pointsAtoB_array[j].y !== pointsAtoB_array[j+1].y){
-            posDiff = Math.abs((pointsAtoB_array[j+1].y-pointsAtoB_array[j].y));
-
-            for (let i = 0; i < interPointsQuantity*posDiff; i++) {
-                if((pointsAtoB_array[j+1].y>pointsAtoB_array[j].y))
-                    yPositions.push(pointsAtoB_array[j].y + reciprocal*(i+1));
-                else
-                    yPositions.push(pointsAtoB_array[j].y - reciprocal*(i+1));
-
-                xPositions.push(pointsAtoB_array[j].x);
-            }
-        }
-        if(pointsAtoB_array[j].x !== pointsAtoB_array[j+1].x){
-            posDiff = Math.abs((pointsAtoB_array[j+1].x-pointsAtoB_array[j].x));
-
-            for (let i = 0; i < interPointsQuantity*posDiff; i++) {
-                if((pointsAtoB_array[j+1].x>pointsAtoB_array[j].x))
-                    xPositions.push(pointsAtoB_array[j].x + reciprocal*(i+1));
-                else
-                    xPositions.push(pointsAtoB_array[j].x - reciprocal*(i+1));
-
-                yPositions.push(pointsAtoB_array[j].y);
-            }
-        }
-    }
-
-    //create 2-dimensional array, which contains 12 coordinates per index
-    for (let i = 0, k = -1; i < xPositions.length; i++) {
-        if(i % interPointsQuantity === 0){
-            k++;
-            bufferX[k] = [];
-            bufferY[k] = [];
-        }
-        bufferX[k].push(xPositions[i]); 
-        bufferY[k].push(yPositions[i]);       
-    }
-    return [bufferX, bufferY];
-}
-
 
 /***************************************************red rectangle***************************************************/
 const redRectangle_p: HTMLElement = document.getElementById('redRectangle_p');
@@ -2291,7 +2231,8 @@ const updateRedRectangle = (PC_number: number): void =>{
 updateRedRectangle(0);
 
 
-/***************************************************implementation of the animations***************************************************/
+/******************************************************* ANIMATION IMPLEMENTATION ********************************************************* */
+/****************************************************************************************************************************************** */
 
 /**
  * The following functions are basic functions, which are requiered often.  
@@ -2310,6 +2251,7 @@ const sleep = async (milliseconds_number: number): Promise<any> => {
         else{
             await sleepForMs(10);
             await checkPlayPressed();
+            
             count -= 10;
         }
     }
@@ -2340,7 +2282,7 @@ const check_completeExecution = (): void => {
     if(!playStatus.completeExe){
         //after the completion of an animation, check if program should be paused
         if(playStatus.noAnim || playStatus.oneCommand){  
-            updateStepDescription('Prozessor angehalten');
+            changeStepDescription('Prozessor angehalten');
             stepNumber_p.textContent = '0';
             playStatus.setPause();
             setButtonPressed();
@@ -2360,7 +2302,8 @@ const pushNextCommand = (): void => {
 }
 
 const getRegisterByName = (register_string: string):any => {
-    register_string = register_string.replace('_lo','').replace('_hi','');
+
+    register_string.replace('_lo','').replace('_hi','');
 
     switch (register_string) {
         case 'IO1':
@@ -2403,16 +2346,18 @@ const getRegisterByName = (register_string: string):any => {
 /**
  * The following functions cause instant textcontent changes on the DOM.
  */
-const updateStepDescription = (description_string: string): void => {
+
+//displays the description of the current Animation
+const changeStepDescription = (description_string: string): void => {
     stepDescription_p.textContent = description_string;
 }
-
+//increases the step number by 1
 const increaseStepNumber = (): void => {
     stepNumber_p.textContent = `${Number(stepNumber_p.textContent)+1}`;
 }
 
 //Displays the the assembler notation. If the register IR contains a command which is not valid, the function throws an error.
-const updateAssemblerCommand = (): void =>{
+const change_assemblerCommand = (): void =>{
     for(let i=0; i<mc8Commands_array.length; i++){
         if(mc8Commands_array[i].machineCommand_number === IR.value_number){
             assemblerCommand_p.textContent = mc8Commands_array[i].assemblerNotation_string;
@@ -2423,215 +2368,372 @@ const updateAssemblerCommand = (): void =>{
     throw Error('Unknown command');
 }
 
-const updateRegister = (register_class: any, value_number: number): void =>{
-    register_class.update(value_number);
+const updateRegister = (reigsterName_string: string, value_number: number): void =>{
+    const reg = getRegisterByName(reigsterName_string);
+    reg.update(value_number);
 }
 
-const updateHiRegister = (register_class: any, value_number: number): void =>{
-    register_class.updateHiByte(value_number);
+const updateHiRegister = (reigsterName_string: string, value_number: number): void =>{
+    const reg = getRegisterByName(reigsterName_string);
+    reg.update_hi(value_number);
 }
 
-const updateLoRegister = (register_class: any, value_number: number): void =>{
-    register_class.updateLoByte(value_number);
+const updateLoRegister = (reigsterName_string: string, value_number: number): void =>{
+    const reg = getRegisterByName(reigsterName_string);
+    reg.update_lo(value_number);
 }
 
 /**
  * The following functions are responsible for small animations that occur over and over again.
  */
+
+//adds a yellow background to the passed DOM_Element
 const addYellowBackgroundForIDLETIME = async(htmlElement_htmlElement: HTMLElement):Promise<any> => {
-    //If the sleep function throws an error the yellowBg must be removed.
     try {
         if(!playStatus.noAnim){
             htmlElement_htmlElement.classList.add('yellowBg');
+            htmlElement_htmlElement.style.color = '#222222';
             await sleepForIDLETIME();            
         }else{
             await sleepForNOANIMATIONIDLETIME();
-        }    
+        }  
+        
     }
     finally {
         htmlElement_htmlElement.classList.remove('yellowBg');
+        htmlElement_htmlElement.style.color = '';
     }
 }
 
-const animateArrow = async(arrow_string: string): Promise<any> => {
+//animation of all arrows
+const addArrow = async(register_string) => {
+    if(!await checkPlayPressed()){
+        return false;
+    }
     if(!playStatus.noAnim){
-        switch (arrow_string) {
-            case 'PC':
-                registerArrow_div.classList.add('PC_arrow');
-                try{await sleepForIDLETIME();}
-                finally{registerArrow_div.classList.remove('PC_arrow');}
-                break;
-            
-            case 'ZR':
-                registerArrow_div.classList.add('ZR_arrow');
-                try{await sleepForIDLETIME();}
-                finally{registerArrow_div.classList.remove('ZR_arrow');}
-                break;
-            
-            case 'HL':
-                registerArrow_div.classList.add('HL_arrow');
-                try{await sleepForIDLETIME();}
-                finally{registerArrow_div.classList.remove('HL_arrow');}
-                break;
-            
-            case 'IX':
-                registerArrow_div.classList.add('IX_arrow');
-                try{await sleepForIDLETIME();}
-                finally{registerArrow_div.classList.remove('IX_arrow');}
-                break;
-            
-            case 'SP':
-                registerArrow_div.classList.add('SP_arrow');
-                try{await sleepForIDLETIME();}
-                finally{registerArrow_div.classList.remove('SP_arrow');}
-                break;
-
-            case 'IR':
-                irArrow_div.classList.add('ir_arrow');
-                try{await sleepForIDLETIME();}
-                finally{irArrow_div.classList.remove('ir_arrow');}
-                break;
-
-            case 'FLAGS':
-                movingFlagsArrow_div.classList.add('flags_arrow');
-                try{await sleepForIDLETIME();}
-                finally{movingFlagsArrow_div.classList.remove('flags_arrow');}
-                break;
-            
-            case 'cFlag':
-                cFlagArrow_div.classList.add('cFlag_arrow');
-                FLAGS.c_htmlElement.classList.add('yellowBg', 'borderBox');
-                try{await sleepForIDLETIME();}
-                finally{
-                    cFlagArrow_div.classList.remove('cFlag_arrow');
-                    FLAGS.c_htmlElement.classList.remove('yellowBg', 'borderBox');
-                }
-                break;
-            
-            case 'jumpZ':
-                checkJumpArrow_div.classList.add('jump_arrow');
-                FLAGS.z_htmlElement.classList.add('yellowBg', 'borderBox');
-                try{await sleepForIDLETIME();}
-                finally{
-                    checkJumpArrow_div.classList.remove('jump_arrow');
-                    FLAGS.z_htmlElement.classList.remove('yellowBg', 'borderBox');
-                }
-                break;
-            
-            case 'jumpC':
-                checkJumpArrow_div.classList.add('jump_arrow');
-                FLAGS.c_htmlElement.classList.add('yellowBg', 'borderBox');
-                try{await sleepForIDLETIME();}
-                finally{
-                    checkJumpArrow_div.classList.remove('jump_arrow');
-                    FLAGS.c_htmlElement.classList.remove('yellowBg', 'borderBox');
-                }
-                break;
-            
-            case 'jumpS':
-                checkJumpArrow_div.classList.add('jump_arrow');
-                FLAGS.s_htmlElement.classList.add('yellowBg', 'borderBox');
-                try{await sleepForIDLETIME();}
-                finally{
-                    checkJumpArrow_div.classList.remove('jump_arrow');
-                    FLAGS.s_htmlElement.classList.remove('yellowBg', 'borderBox');
-                }
-                break;
-
-            case 'jumpP':
-                checkJumpArrow_div.classList.add('jump_arrow');
-                FLAGS.p_htmlElement.classList.add('yellowBg', 'borderBox');
-                try{await sleepForIDLETIME();}
-                finally{
-                    checkJumpArrow_div.classList.remove('jump_arrow');
-                    FLAGS.p_htmlElement.classList.remove('yellowBg', 'borderBox');
-                }
-                break;
-        
-            default:
-                break;
+        if(register_string === 'PC'){
+            registerArrow_div.classList.add('PC_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow_div.classList.remove('PC_arrow');
+            }
         }
-    }
+        
+        else if(register_string === 'ZR'){
+            registerArrow_div.classList.add('ZR_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow_div.classList.remove('ZR_arrow');
+            }
+        }
+        else if(register_string === 'HL'){
+            registerArrow_div.classList.add('HL_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow_div.classList.remove('HL_arrow');
+            }
+        }
+        else if(register_string === 'IX'){
+            registerArrow_div.classList.add('IX_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow_div.classList.remove('IX_arrow');
+            }
+        }
+        
+        else if(register_string === 'SP'){
+            registerArrow_div.classList.add('SP_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                registerArrow_div.classList.remove('SP_arrow');
+            }
+        }
+
+        else if(register_string === 'IR'){
+            irArrow_div.classList.add('ir_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                irArrow_div.classList.remove('ir_arrow');
+            }
+        }
+        else if(register_string === 'FLAGS'){
+            movingFlagsArrow_div.classList.add('flags_arrow');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                movingFlagsArrow_div.classList.remove('flags_arrow');
+            }
+        }
+        else if(register_string === 'cFlag'){
+            cFlagArrow_div.classList.add('cFlag_arrow');
+            FLAGS.c_htmlElement.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                cFlagArrow_div.classList.remove('cFlag_arrow');
+                FLAGS.c_htmlElement.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+        else if(register_string === 'jumpZ'){
+            checkJumpArrow_div.classList.add('jump_arrow');
+            FLAGS.z_htmlElement.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                checkJumpArrow_div.classList.remove('jump_arrow');
+                FLAGS.z_htmlElement.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+        else if(register_string === 'jumpC'){
+            checkJumpArrow_div.classList.add('jump_arrow');
+            FLAGS.c_htmlElement.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                checkJumpArrow_div.classList.remove('jump_arrow');
+                FLAGS.c_htmlElement.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+        else if(register_string === 'jumpS'){
+            checkJumpArrow_div.classList.add('jump_arrow');
+            FLAGS.s_htmlElement.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                checkJumpArrow_div.classList.remove('jump_arrow');
+                FLAGS.s_htmlElement.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+        else if(register_string === 'jumpP'){
+            checkJumpArrow_div.classList.add('jump_arrow');
+            FLAGS.p_htmlElement.classList.add('yellowBg', 'borderBox');
+            try{
+                await sleepForIDLETIME();
+            }
+            finally{
+                checkJumpArrow_div.classList.remove('jump_arrow');
+                FLAGS.p_htmlElement.classList.remove('yellowBg', 'borderBox');
+            }
+        }
+    } 
+    return true;
 }
 
-const animateStepDescriptionUpdate = async(description_string:string): Promise<any> => {
-    updateStepDescription(description_string);
+//animation of updating the description
+const description_update = async(description_string) => {
+    await checkPlayPressed();
+
+    changeStepDescription(description_string);
     increaseStepNumber();
     await addYellowBackgroundForIDLETIME(stepNumberBg_div);
 }
 
-const animateAssemlberCommandUpdate = async(): Promise<any> => {
+//animates the update of the assembler command, if the command is unknown the function throws an error and the execution gets terminated
+const assemblerCommand_update = async() => {
+    await checkPlayPressed();
     await addYellowBackgroundForIDLETIME(IR.htmlElement);
-    await animateArrow('IR');
-    updateAssemblerCommand();
+    await addArrow('IR');
+    change_assemblerCommand();
     if(!playStatus.noAnim)
         await sleepForIDLETIME();
 }
 
-const animateRegisterUpdate = async(registerName_string, value_number): Promise<any> => {
-    const reg = getRegisterByName(registerName_string);
+//increases PC by one and animates it
+const updatePC = async() => {
+    await checkPlayPressed()
+
+    PC.update(PC.value_number + 1);
+    await addYellowBackgroundForIDLETIME(PC.htmlElement);
+}
+
+//updates and animates register/io with the passed value
+const updateRegister_hex = async(registerName_string, value_number) => {
+    await checkPlayPressed();
 
     if(registerName_string.includes('hi')){
-        reg.updateHiByte(value_number);
-        await addYellowBackgroundForIDLETIME(reg.hi_register.htmlElement);
+       await updateRegister_hex4_hi(getRegisterByName(registerName_string), value_number);
     }
     else if(registerName_string.includes('lo')){
-        reg.updateLoByte(value_number);
-        await addYellowBackgroundForIDLETIME(reg.lo_register.htmlElement);
+        await updateRegister_hex4_lo(getRegisterByName(registerName_string), value_number);
     }
     else{
-        updateRegister(reg, value_number);
+        //update register
+        let reg = getRegisterByName(registerName_string);
+        reg.update(value_number);
+
+        //animate register update
+        await addYellowBackgroundForIDLETIME(reg.htmlElement);
+    }
+}
+
+const updateRegister_hex4_hi = async(register_class, hex2_number) => {
+    await checkPlayPressed();
+
+    //update register
+    register_class.update_hi(hex2_number);
+
+    //animate register update
+    if(!playStatus.noAnim){
+        yellowBgElement_div.style.top = register_class.htmlElement.offsetTop + 'px';
+        yellowBgElement_div.style.left = String(100/46*14) + '%';
+        yellowBgElement_div.classList.add('toggleGrid');
+        try{
+            await sleepForIDLETIME();
+        }
+        finally{
+            yellowBgElement_div.classList.remove('toggleGrid');
+        }
+    }
+}
+
+const updateRegister_hex4_lo = async(register_class, hex2_number) => {
+    await checkPlayPressed();
+
+    //update register
+    register_class.update_lo(hex2_number);
+
+    //animate register update if Animation is required
+    if(!playStatus.noAnim){
+        yellowBgElement_div.style.top = register_class.htmlElement.offsetTop + 'px';
+        yellowBgElement_div.style.left = String(100/46*16) + '%';
+        yellowBgElement_div.classList.add('toggleGrid');
+        try{
+            await sleepForIDLETIME();
+        }
+        finally{
+            yellowBgElement_div.classList.remove('toggleGrid');
+        }
+    }
+}
+
+
+/******************************************************** complex animations ************************************************************** */
+/****************************************************************************************************************************************** */
+
+
+/************************************Moving Animations**************************************/
+
+//calculates the coordinates between the fixPoints.
+//At Speed 1, the movingObject updates every single coordinate
+//At Speed 2, the movingObject updates every second coordinate...
+//max Speed = 12 (update only fixPoints)
+const calcIntermediatePositions = (path, interPointsQuantity=12) => {
+    let xPositions = [];
+    let yPositions = [];
+    let bufferX = [];
+    let bufferY = [];
+    let posDiff = 0;
+    const reciprocal = 1/interPointsQuantity;
     
-        if(reg instanceof Register_x4){
-            addYellowBackgroundForIDLETIME(reg.hi_register.htmlElement);
-            addYellowBackgroundForIDLETIME(reg.lo_register.htmlElement);
-            await addYellowBackgroundForIDLETIME(reg.backgroundHtmlElement);
+    //iterate through path
+    for (let j = 0; j < path.length-1; j++) {
+        
+        //If path position is different to the next path position, calculate position difference
+        //and add intermediate Points, depending on the position difference and direction.
+        if(path[j].y !== path[j+1].y){
+            posDiff = Math.abs((path[j+1].y-path[j].y));
+
+            for (let i = 0; i < interPointsQuantity*posDiff; i++) {
+                if((path[j+1].y>path[j].y))
+                    yPositions.push(path[j].y + reciprocal*(i+1));
+                else
+                    yPositions.push(path[j].y - reciprocal*(i+1));
+
+                xPositions.push(path[j].x);
+            }
         }
-        else{
-            await addYellowBackgroundForIDLETIME(reg.htmlElement);
+        if(path[j].x !== path[j+1].x){
+            posDiff = Math.abs((path[j+1].x-path[j].x));
+
+            for (let i = 0; i < interPointsQuantity*posDiff; i++) {
+                if((path[j+1].x>path[j].x))
+                    xPositions.push(path[j].x + reciprocal*(i+1));
+                else
+                    xPositions.push(path[j].x - reciprocal*(i+1));
+
+                yPositions.push(path[j].y);
+            }
         }
-    }     
+    }
+
+    //create 2-dimensional array, which contains 12 coordinates per index
+    for (let i = 0, k = -1; i < xPositions.length; i++) {
+        if(i % interPointsQuantity === 0){
+            k++;
+            bufferX[k] = [];
+            bufferY[k] = [];
+        }
+        bufferX[k].push(xPositions[i]); 
+        bufferY[k].push(yPositions[i]);       
+    }
+
+    return [bufferX, bufferY];
 }
 
-const animateIncreasePcByOne = async(): Promise<any> => {
-    await animateStepDescriptionUpdate('Erhöhe Programmzähler um 1');
-    await animateArrow('PC');
-    await animateRegisterUpdate('PC', PC.value_number+1);
+//updates the position of the passed DOM_Object
+const updatePosition = (movingObject, x, y) => {
+    movingObject.style.top = String(100/32*y) +"%";
+    movingObject.style.left = String(100/46*x) +"%";
 }
 
-/**
- * Transfer animations
- */
-
-const updateMovingObjPosition = (movingObject_htmlElement: HTMLElement, x_number: number, y_number: number): void => {
-    movingObject_htmlElement.style.top = String(100/32*y_number) +"%";
-    movingObject_htmlElement.style.left = String(100/46*x_number) +"%";
-}
-
-const displayMovingObj = (pointsAtoB_array: Array<Point>, hexValue_string: string): void => {
-    updateMovingObjPosition(movingObject_h2,pointsAtoB_array[0].x,pointsAtoB_array[0].y);
+//moves the movingObject to the starting position.
+//updates the textContent, toggles visibility and adjusts the size
+const updateMovingObj = (aPath, hexValue_string) => {
+    updatePosition(movingObject_h2,aPath[0].x,aPath[0].y);
     movingObject_h2.textContent = hexValue_string;
+    movingObject_h2.classList.add('toggleGrid');
 
-    if(pointsAtoB_array[0].label === 'PC'|| pointsAtoB_array[0].label === 'ZR' ||pointsAtoB_array[0].label === 'IX' || pointsAtoB_array[0].label ==='HL' || pointsAtoB_array[0].label === 'SP')
+    if(aPath[0].label === 'PC'|| aPath[0].label === 'ZR' ||aPath[0].label === 'IX' || aPath[0].label ==='HL' || aPath[0].label === 'SP')
         movingObject_h2.classList.add('rectangle4x2');
     else{
-        movingObject_h2.classList.remove('rectangle4x2');
+        try{
+            movingObject_h2.classList.remove('rectangle4x2');
+        }catch{}
     }
-    movingObject_h2.classList.add('toggleGrid');
+    return movingObject_h2;
 }
 
-const animatePaintedPath = async(pointsAtoB_array: Array<Point>, origin_string: string, target_string: string): Promise<any> => {
+const createPathElement = (i, xCoordinate,yCoordinate) =>{
+    let ele = document.createElement('div');
+    ele.style.position = 'absolute';
+    ele.style.left = String(100/46*(xCoordinate[i]+0.5)) + '%';
+    ele.style.top = String(100/32*(yCoordinate[i]+0.5)) +'%';
+    ele.style.height = String(100/32*1) + '%';
+    ele.style.width = String(100/46*1) + '%';
+    ele.classList.add('pathElement', 'alignBg' ,'rounded');
+    return ele;
+}
+
+//animation without a movingObject
+const createPaintedPath = async(path,fixPointLabel_A_string, fixPointLabel_B_string, startElement_DOM) => {
     let pathElements = [];
-    const coords = calcIntermediatePositions(pointsAtoB_array,2);
+    const coords = calcIntermediatePositions(path,2);
     const xCoordinate = coords[0].flat(2);
     const yCoordinate = coords[1].flat(2);
    
     //fixPoints of PC,ZR,... are too far to the left due to the size of 4x2 --> Painted path has to be moved right by 1
-    if(origin_string === 'PC' || origin_string === 'ZR' || origin_string === 'HL' || origin_string === 'SP' || origin_string === 'IX'){
+    if(fixPointLabel_A_string === 'PC' || fixPointLabel_A_string === 'ZR' || fixPointLabel_A_string === 'HL' || fixPointLabel_A_string === 'SP' || fixPointLabel_A_string === 'IX'){
         for (let i = 0; i < xCoordinate.length; i++) {
             xCoordinate[i] += 1;
         }
-        if(target_string === 'ROM2'){
+        if(fixPointLabel_B_string === 'ROM2'){
             xCoordinate.push(xCoordinate[xCoordinate.length-1]-1);
             yCoordinate.push(yCoordinate[yCoordinate.length-1]);
         } else {
@@ -2642,79 +2744,62 @@ const animatePaintedPath = async(pointsAtoB_array: Array<Point>, origin_string: 
 
     //create all PathElements
     for (let i = xCoordinate.length-1; i >=0 ; i--) {
-        let ele = document.createElement('div');
-        ele.style.left = `${100/46*(xCoordinate[i]+0.5)}%`;
-        ele.style.top  = `${100/32*(yCoordinate[i]+0.5)}%`;
-        ele.classList.add('positionAbsolute', 'square1x1', 'pathElement', 'alignBg' ,'rounded');
+        let ele = createPathElement(i, xCoordinate, yCoordinate);
         pathElements.push(ele);
     }
 
     //create last PathElement (hex-number)
-    let last = document.createElement('h2');
-    last.style.left = `${100/46*(xCoordinate[xCoordinate.length-1])}%`;
-    last.style.top  = `${100/32*(yCoordinate[yCoordinate.length-1])}%`;
-    last.textContent = movingObject_h2.textContent;
-    last.classList.add('yellowBg', 'borderBox', 'square2x2', 'positionAbsolute', 'centered', 'rounded');
-    if(origin_string === 'PC' || origin_string === 'ZR' || origin_string === 'HL' || origin_string === 'SP' || origin_string === 'IX')
-        last.classList.add('rectangle4x2');
+    let reg = document.createElement('h2');
+    reg.style.left = String(100/46*(xCoordinate[xCoordinate.length-1])) + '%';
+    reg.style.top = String(100/32*(yCoordinate[xCoordinate.length-1])) +'%';
+    reg.textContent = startElement_DOM.textContent;
+    reg.classList.add('yellowBg', 'borderBox', 'square2x2', 'positionAbsolute', 'centered', 'rounded', );
+    if(fixPointLabel_A_string === 'PC' || fixPointLabel_A_string === 'ZR' || fixPointLabel_A_string === 'HL' || fixPointLabel_A_string === 'SP' || fixPointLabel_A_string === 'IX')
+        reg.classList.add('rectangle4x2');
     
-    pathElements.push(last);
+    pathElements.push(reg);
 
+    //add Elements to grid
     for (let i = 0; i < pathElements.length; i++) {
         mc8_div.appendChild(pathElements[i]);
     }
 
-    
+    //animate for certain time
     try{
         await sleep(2000/ANIMATION_SPEED);
+    }
+    catch(e) {
+        throw Error('Stop pressed');
     }
     finally {
         //remove 
         for (let i = 0; i < pathElements.length; i++) {
             pathElements[i].remove();
         }
-        movingObject_h2.classList.remove('toggleGrid');
+        startElement_DOM.classList.remove('toggleGrid');
     }
 }
 
-//updates the position of the movingObject depending on the speed(values: 1,2,3,4,6,12) => 12/values is always an integer
-//e.g.  if the speed is 12 the position is only updated once(last coordinate of x12array)
-//      if the speed is 3 the position is updated with every third coordinate,... 
-const conditionalPositionUpdate = async(xCoordinates_array: number[], yCoordinates_array: number[], speed_number: number, movObject_htmlElement: HTMLElement): Promise<any> => {
-    for (let j = 0; j < xCoordinates_array.length/speed_number; j++) {
-        updateMovingObjPosition(movObject_htmlElement, xCoordinates_array[j*speed_number], yCoordinates_array[j*speed_number]);
-        
-        try{
-            await sleep(1000/FRAMES);
-        }
-        catch (e) {
-            movingObject_h2.classList.remove('toggleGrid');
-            throw e;
-        }
-    }
-    return true;
-} 
-
 //animates the movement from on fixPoint to another one
-const animateTransfer = async(origin_string: string, target_string: string, value_number = 0): Promise<any> => {
-    let originInCPU = false;
-    let targetInCPU = false;
-    let alreadyReset = false;
+const transfer = async(fixPointLabel_A_string, fixPointLabel_B_string, value_number = 0) => {
+    await checkPlayPressed();
+    let startPointInCPU = false;
+    let endPointInCPU = false;
     
     //only execute when Animation is required
     if(!playStatus.noAnim){  
-        const pointsAtoB = getPointsAtoB(origin_string, target_string);
-        let value_string: string;
+        const path = getPointsAtoB(fixPointLabel_A_string, fixPointLabel_B_string);
+        let value_string:string;
 
         //convert value_number to hex_4digits if required
-        if(value_number > 255 || target_string === 'ROM2' || target_string === 'RAM2' || target_string === 'ZR'|| target_string === 'PC'|| target_string === 'IX'|| target_string === 'HL'|| target_string === 'SP')
+        if(value_number > 255 || fixPointLabel_B_string === 'ROM2' || fixPointLabel_B_string === 'RAM2' || fixPointLabel_B_string === 'ZR'|| fixPointLabel_B_string === 'PC'|| fixPointLabel_B_string === 'IX'|| fixPointLabel_B_string === 'HL'|| fixPointLabel_B_string === 'SP')
             value_string = convertNumberToHex_4digits(value_number);
         else
             value_string = convertNumberToHex_2digits(value_number);
         
         //update the moving Element
-        displayMovingObj(pointsAtoB,value_string);
-        const movingObjectCoordinates = calcIntermediatePositions(pointsAtoB, 12);
+        updateMovingObj(path,value_string);
+        const movingObjectCoordinates = calcIntermediatePositions(path, 12);
 
         //xCoordinate is a 2-dimensional-array which contains 12 coordinates per index
         //[Array(12), ..., Array(12)]
@@ -2722,23 +2807,20 @@ const animateTransfer = async(origin_string: string, target_string: string, valu
         const yCoordinate = movingObjectCoordinates[1];
         
 
-        //check if origin is inside CPU
+        //check if starting point is inside CPU
         if(yCoordinate[0][0] < 24 && yCoordinate[0][0]>3 && xCoordinate[0][0] > 9 && xCoordinate[0][0]){
-            originInCPU = true;
+            startPointInCPU = true;
         }
 
-        //check if target is inside CPU
-        const lastPointY = yCoordinate[yCoordinate.length-1][11];
-        const lastPointX = xCoordinate[xCoordinate.length-1][11];
-        if(lastPointY < 24 && lastPointY>3 && lastPointX > 9 && lastPointX){
-            targetInCPU = true;
+        if(yCoordinate[yCoordinate.length-1][11] < 24 && yCoordinate[yCoordinate.length-1][11]>3 && xCoordinate[xCoordinate.length-1][11] > 9 && xCoordinate[xCoordinate.length-1][11]){
+            endPointInCPU = true;
         }
 
-        //rocket Animation
+        //fast Animation
         if(playStatus.rocketSpeed){
-            if(!originInCPU || !targetInCPU)
+            if(!startPointInCPU || !endPointInCPU)
                 DECODER.updateDOM();
-            await animatePaintedPath(pointsAtoB,origin_string, target_string);
+            await createPaintedPath(path,fixPointLabel_A_string, fixPointLabel_B_string, movingObject_h2);
             if(!DECODER.isRamAccess && !DECODER.isIoAccess){
                 DECODER.resetDOM();
             }
@@ -2755,19 +2837,16 @@ const animateTransfer = async(origin_string: string, target_string: string, valu
                 }
                 
                 //display decoder
-                if((originInCPU && !targetInCPU) || (!originInCPU && targetInCPU)){
-                    if(yCoordinate[i][0] < 24 && yCoordinate[i][0]>3 && xCoordinate[i][0] > 9 && xCoordinate[i][0]){
-                        if(!alreadyReset){
-                            if(!DECODER.isRamAccess && !DECODER.isIoAccess){
-                                DECODER.resetDOM();
-                                alreadyReset = true;
-                            }
-                        }
-                    }
+                if(startPointInCPU && (yCoordinate[i][0] > 23 || yCoordinate[i][0] < 3)){
+                    startPointInCPU = false;
+                    DECODER.updateDOM();
+                    
                 }
-                if(originInCPU && (yCoordinate[i][0] > 23 || yCoordinate[i][0] < 3)){
-                    DECODER.updateDOM();   
-                }                
+                if(!startPointInCPU && (yCoordinate[i][0] < 23 && yCoordinate[i][0] > 3)){
+                    startPointInCPU = true;
+                    if(!DECODER.isRamAccess && !DECODER.isIoAccess)
+                        DECODER.resetDOM();
+                }
 
                 //update position of the movingObject depending on the speed
                 await conditionalPositionUpdate(xCoordinate[i], yCoordinate[i], ANIMATION_SPEED, movingObject_h2);
@@ -2779,121 +2858,36 @@ const animateTransfer = async(origin_string: string, target_string: string, valu
     }
     //noAnim
     else {
-        if(!originInCPU || !targetInCPU)
+        if(!startPointInCPU || !endPointInCPU)
                 DECODER.updateDOM();
         await sleepForNOANIMATIONIDLETIME();
         DECODER.resetDOM();       
     }
 }
 
-//reads a byte from the ROM or RAM. The addressRegister 
-const animateReadFromMemoryInRegister = async(addressRegister_string: string, targetRegister_string: string): Promise<any> =>{
-    //get the address
-    const address_number = getRegisterByName(addressRegister_string).value_number;
-
-    //update decoder without displaying  
-    DECODER.update(1,0,0,1,address_number);
-    await animateArrow(addressRegister_string);
-    
-    //determine ROM or RAM or IOs
-    if(address_number < 8192){
-        await animateTransfer(addressRegister_string, 'ROM2', address_number);
-        await animateTransfer(ROM.getElementId(address_number),targetRegister_string, ROM.getValue(address_number));
-        await animateRegisterUpdate(targetRegister_string, ROM.getValue(address_number));
-    }
-    else if (address_number >= RAM.startAddressRam_number && address_number < RAM.startAddressRam_number+RAM.size_number){
-        RAM.updateVariableElements(address_number);
-        await animateTransfer(addressRegister_string, 'RAM2', address_number);
-        await animateTransfer(RAM.getRamElementId(address_number),targetRegister_string, RAM.getValue(address_number));
-        await animateRegisterUpdate(targetRegister_string,RAM.getValue(address_number));
-    }
-    
-    else if(!IO1.ioMapped_boolean){
-       if(address_number === IO1.address_number){
-            await animateTransfer(addressRegister_string, 'DEC_UPDATE', address_number);
-            await animateIoUserInput('IO1');
-            await animateTransfer('IO1', 'A', IO1.value_number);
-            await animateRegisterUpdate('A', IO1.value_number);
-        }
-        else if(address_number === IO2.address_number){
-            await animateTransfer(addressRegister_string, 'DEC_UPDATE', address_number);
-            await animateIoUserInput('IO2');
-            await animateTransfer('IO2', 'A', IO2.value_number);
-            await animateRegisterUpdate('A', IO2.value_number);
-        }
-        else if(address_number === IO3.address_number){
-            await animateTransfer(addressRegister_string, 'DEC_UPDATE', address_number);
-            await animateIoUserInput('IO2');
-            await animateTransfer('IO2', 'A', IO3.value_number);
-            await animateRegisterUpdate('A', IO3.value_number);
-        }
-    }
-    //Neither ROM or RAM  or IOs
-    else{
-        //The address of the addressRegister is unknown.
-        //the following code wont be executed completely, because the decoder will interrupt execution
-        await animateTransfer(addressRegister_string, 'DEC_UPDATE', address_number);
-    }
-    DECODER.resetDOM();
-}
-
-const animateWriteToMemoryFromRegister = async(addressRegister_string: string, dataRegister_string: string): Promise<any> => {
-    let ramEle_htmlElement: HTMLElement;
-
-    //get address
-    const address_number = getRegisterByName(addressRegister_string).value_number;
-
-    //get data
-    const register_class = getRegisterByName(dataRegister_string);
-    let data_number = register_class.value_number;
-
-    if(dataRegister_string.includes('hi'))
-        data_number = register_class.hiValue_number;
-    if(dataRegister_string.includes('lo'))
-        data_number = register_class.loValue_number;
-
-    //update decoder, without displaying it
-    DECODER.update(0,1,0,1,address_number);
-
-    await animateArrow(addressRegister_string);
-
-    //determine ROM or RAM
-    if(address_number < 8192){
-        //wont be executed completely, because the decoder will interrupt execution 
-        await animateTransfer(addressRegister_string, 'ROM2', address_number);
-    }
-    else if (address_number >= RAM.startAddressRam_number && address_number< RAM.startAddressRam_number+RAM.size_number){
-        ramEle_htmlElement = getHtmlElement(RAM.getRamElementId(address_number));
-        RAM.updateVariableElements(address_number);
-        await animateTransfer(addressRegister_string, 'RAM2', address_number);
-        if(!playStatus.noAnim)
-            ramEle_htmlElement.classList.add('yellowBg', 'borderBox');
+//updates the position of the movingObject depending on the speed(values: 1,2,3,4,6,12) => 12/values is always an integer
+//e.g.  if the speed is 12 the position is only updated once(last coordinate of x12array)
+//      if the speed is 3 the position is updated with every third coordinate,... 
+const conditionalPositionUpdate = async(xCoordinate_x12array, yCoordinate_x12array, speed_number, movingObject_DOM) => {
+    for (let j = 0; j < xCoordinate_x12array.length/speed_number; j++) {
+        updatePosition(movingObject_DOM, xCoordinate_x12array[j*speed_number], yCoordinate_x12array[j*speed_number]);
+        //animate for certain time before entering next iteration
         try{
-            await animateTransfer(dataRegister_string, RAM.getRamElementId(address_number), data_number);
-        } catch (e) {
-            ramEle_htmlElement.classList.remove('yellowBg', 'borderBox');
-            throw e;
+            await sleep(1000/FRAMES);
+        }
+        catch (e) {
+            //remove movingObject if 
+            movingObject_DOM.classList.remove('toggleGrid');
+            throw Error('Stop pressed');
         }
     }
-    //Neither ROM or RAM
-    else{
-        //wont be executed completely, because the decoder will interrupt execution 
-        await animateTransfer(addressRegister_string, 'RAM2', address_number);
-    }
-    RAM.updateElement(address_number,data_number);
-    try{
-        await addYellowBackgroundForIDLETIME(document.getElementById(RAM.getRamElementId(address_number)));
-    }
-    finally{
-        ramEle_htmlElement.classList.remove('borderBox', 'yellowBg');
-        DECODER.resetDOM();
-    }
-}
+    return true;
+}  
+   
+/************************************ALU animation**************************************/
 
-/**
- * ALU animations
- */
-const setMovingAluElements = (twoMovingAluElements_boolean: boolean): void => {
+//set text content of movingAluElements and display them
+const setMovingAluElements = (twoMovingAluElements_boolean) => {
     movingAlu1.textContent = ALU1.htmlElement.textContent;
     movingAlu2.textContent = ALU2.htmlElement.textContent;    
     movingAlu1.classList.add('toggleGrid');
@@ -2901,20 +2895,22 @@ const setMovingAluElements = (twoMovingAluElements_boolean: boolean): void => {
         movingAlu2.classList.add('toggleGrid');
 }
 
-const resetMovingAluElements = (): void => {
-    movingAlu1.classList.remove('toggleGrid');
-    movingAlu2.classList.remove('toggleGrid');
+//reset position of movingAluElements
+const resetMovingAluElements = () => {
+    try{
+        movingAlu1.classList.remove('toggleGrid');
+        movingAlu2.classList.remove('toggleGrid');
+    } catch (e) {}
+    movingAlu1.style.top = String(100/32*6) +"%";
+    movingAlu1.style.left = String(100/46*24) +"%";
 
-    movingAlu1.style.top = `${100/32*6}%`;
-    movingAlu1.style.left = `${100/46*24}%`;
-
-    movingAlu2.style.top = `${100/32*6}%`;
-    movingAlu2.style.left = `${100/46*30}%`;
+    movingAlu2.style.top = String(100/32*6) +"%";
+    movingAlu2.style.left = String(100/46*30) +"%";
 }
 resetMovingAluElements();
 
 //animation of ALU-usage
-const animateALU = async(aluOUT_number: number, twoMovingAluElements_boolean: boolean, cFlag_boolean: boolean, saveToRegister_string:string): Promise<any> => {
+const aluAnimation = async(aluOUT_number, twoMovingAluElements_boolean, cFlag_boolean, saveToRegister_string:string) => {
     if(!playStatus.noAnim){
         const xCoordinateAlu1 = [24];
         const xCoordinateAlu2 = [30];
@@ -2928,20 +2924,18 @@ const animateALU = async(aluOUT_number: number, twoMovingAluElements_boolean: bo
         setMovingAluElements(twoMovingAluElements_boolean);
         ALU1.htmlElement.textContent = '';
         ALU2.htmlElement.textContent = '';
-        
+        if(cFlag_boolean)
+            await addArrow('cFlag');
         try{
-            if(cFlag_boolean)
-                await animateArrow('cFlag');
-
             await sleepForIDLETIME();
             
             for (let i = 0; i < xCoordinateAlu1.length; i++) {
-                updateMovingObjPosition(movingAlu1, xCoordinateAlu1[i],yCoordinate[i]);
-                updateMovingObjPosition(movingAlu2, xCoordinateAlu2[i],yCoordinate[i]);
+                updatePosition(movingAlu1, xCoordinateAlu1[i],yCoordinate[i]);
+                updatePosition(movingAlu2, xCoordinateAlu2[i],yCoordinate[i]);
                 await sleep(1000/FRAMES);  
             }
             resetMovingAluElements();
-            await animateRegisterUpdate('ALUOUT', aluOUT_number);
+            await updateRegister_hex('ALUOUT', aluOUT_number);
         }
         finally{
             resetMovingAluElements();
@@ -2949,28 +2943,28 @@ const animateALU = async(aluOUT_number: number, twoMovingAluElements_boolean: bo
         ALUOUT.htmlElement.classList.add('yellowBg');
     }
     else{ //noAnim
-        await animateRegisterUpdate('ALUOUT', aluOUT_number);
+        await updateRegister_hex('ALUOUT', aluOUT_number);
         ALU1.htmlElement.textContent = '';
         ALU2.htmlElement.textContent = '';
     }
     
     try {
-        await animateStepDescriptionUpdate('Setze die Flags');
-        await animateSetFlags();
+        await description_update('Setze die Flags');
+        await setFlagsAnimation();
         if(saveToRegister_string)
-            await animateStepDescriptionUpdate('Speichere das Ergebnis');
+            await description_update('Speichere das Ergebnis');
     } 
     finally{
         ALUOUT.htmlElement.classList.remove('yellowBg');
         ALUOUT.htmlElement.textContent = '';
     }
     if(saveToRegister_string !== ''){
-        await animateTransfer('ALUOUT', saveToRegister_string, aluOUT_number);
-        await animateRegisterUpdate(saveToRegister_string, aluOUT_number);
+        await transfer('ALUOUT', saveToRegister_string, aluOUT_number);
+        await updateRegister_hex(saveToRegister_string, aluOUT_number);
     }    
 }
 
-const animateHlBcAddition = async(aluOUT_number: number, stepOne_boolean: boolean): Promise<any> => {
+const hlBcAnimation = async(aluOUT_number, stepOne_boolean) => {
     if(!playStatus.noAnim){
         const xCoordinateAlu1 = [24];
         const xCoordinateAlu2 = [30];
@@ -2984,19 +2978,18 @@ const animateHlBcAddition = async(aluOUT_number: number, stepOne_boolean: boolea
         setMovingAluElements(true);
         ALU1.htmlElement.textContent = '';
         ALU2.htmlElement.textContent = '';
-        
+        if(!stepOne_boolean)
+            await addArrow('cFlag');
         try{
-            if(!stepOne_boolean)
-                await animateArrow('cFlag');
             await sleepForIDLETIME();
             
             for (let i = 0; i < xCoordinateAlu1.length; i++) {
-                updateMovingObjPosition(movingAlu1, xCoordinateAlu1[i],yCoordinate[i]);
-                updateMovingObjPosition(movingAlu2, xCoordinateAlu2[i],yCoordinate[i]);
+                updatePosition(movingAlu1, xCoordinateAlu1[i],yCoordinate[i]);
+                updatePosition(movingAlu2, xCoordinateAlu2[i],yCoordinate[i]);
                 await sleep(1000/FRAMES);  
             }
             resetMovingAluElements();
-            await animateRegisterUpdate('ALUOUT', aluOUT_number);
+            await updateRegister_hex('ALUOUT', aluOUT_number);
         }
         finally{
             resetMovingAluElements();
@@ -3004,49 +2997,49 @@ const animateHlBcAddition = async(aluOUT_number: number, stepOne_boolean: boolea
         ALUOUT.htmlElement.classList.add('yellowBg');
     }
     else{ //noAnim
-        await animateRegisterUpdate('ALUOUT', aluOUT_number);
+        await updateRegister_hex('ALUOUT', aluOUT_number);
         ALU1.htmlElement.textContent = '';
         ALU2.htmlElement.textContent = '';
     }
     
     if(stepOne_boolean){
         try {
-            await animateStepDescriptionUpdate('Setze Carry-Flag');
+            await description_update('Setze Carry-Flag');
             FLAGS.z_number = '-';
             FLAGS.s_number = '-';
             FLAGS.p_number = '-';
-            await animateSetFlags();
-            await animateStepDescriptionUpdate('Speichere das Ergebnis in L');
+            await setFlagsAnimation();
+            await description_update('Speichere das Ergebnis in L');
         } 
         finally{
             ALUOUT.htmlElement.classList.remove('yellowBg');
             ALUOUT.htmlElement.textContent = '';
         }
-        await animateTransfer('ALUOUT', 'HL_lo', aluOUT_number);
-        await animateRegisterUpdate('HL_lo', aluOUT_number);
+        await transfer('ALUOUT', 'HL_lo', aluOUT_number);
+        await updateRegister_hex('HL_lo', aluOUT_number);
     }
     else{
         try {
-            await animateStepDescriptionUpdate('Setze Carry-Flag');
+            await description_update('Setze Carry-Flag');
             FLAGS.z_number = '-';
             FLAGS.s_number = '-';
             FLAGS.p_number = '-';
-            await animateSetFlags();
-            await animateStepDescriptionUpdate('Speichere das Ergebnis in H');
+            await setFlagsAnimation();
+            await description_update('Speichere das Ergebnis in H');
         } 
         finally{
             ALUOUT.htmlElement.classList.remove('yellowBg');
             ALUOUT.htmlElement.textContent = '';
         }
-        await animateTransfer('ALUOUT', 'HL_hi', aluOUT_number);
-        await animateRegisterUpdate('HL_hi', aluOUT_number);
+        await transfer('ALUOUT', 'HL_hi', aluOUT_number);
+        await updateRegister_hex('HL_hi', aluOUT_number);
     }
 }
 
 //animation of setting flags
-const animateSetFlags = async(): Promise<any> => {
+const setFlagsAnimation = async() => {
     if (!playStatus.noAnim) {
-        await animateArrow('FLAGS');
+        await addArrow('FLAGS');
         movingFlags_div.children[0].textContent = FLAGS.c_number;
         movingFlags_div.children[1].textContent = FLAGS.z_number;
         movingFlags_div.children[2].textContent = FLAGS.p_number;
@@ -3055,35 +3048,35 @@ const animateSetFlags = async(): Promise<any> => {
         try{
             await sleepForIDLETIME();
             for (let i = 0; i < 21; i++) {
-                movingFlags_div.style.top = `${100/32*(8-i/20)}%`;
+                movingFlags_div.style.top = String(100/32*(8-i/20)) + '%';
                 await sleep(1000/FRAMES);  
             }
             await sleepForIDLETIME();
         }
         finally{
             movingFlags_div.classList.remove('toggleGrid');
-            movingFlags_div.style.top = `${100/32*8}%`;
+            movingFlags_div.style.top = String(100/32*8) + '%';
         }
     }
     FLAGS.updateDOM();
 }
 
-const animateCheckJump = async(flag_string: string): Promise<any> => {
+const checkJumpAnimation = async(flag_string) => {
     switch (flag_string) {
         case 'zFlag':
-            await animateArrow('jumpZ');
+            await addArrow('jumpZ');
             break;
         
         case 'cFlag':
-            await animateArrow('jumpC');
+            await addArrow('jumpC');
             break;
 
         case 'sFlag':
-            await animateArrow('jumpS');
+            await addArrow('jumpS');
             break;
 
         case 'pFlag':
-            await animateArrow('jumpP');
+            await addArrow('jumpP');
             break;
     
         default:
@@ -3091,11 +3084,9 @@ const animateCheckJump = async(flag_string: string): Promise<any> => {
     }
 }
 
-/**
- * IO animations
- */
 
-const checkCorrectIoInput = (input_string: string): boolean => {
+
+const checkCorrectInput = (input_string) => {
     if(checkValidHex(input_string)){
         if(input_string.length > 2){
             return false;
@@ -3106,257 +3097,366 @@ const checkCorrectIoInput = (input_string: string): boolean => {
 }
 
 //animation of IO-input
-const animateIoUserInput = async(IoName_string: string): Promise<any> =>{
-    let ioInputWindow: HTMLElement;
-    let ioInput: any;
+const changeIO = async(IOName_string) =>{
+    let IO_input_window_DOM: Element;
+    let IO_input_DOM: any;
     let check = true;
-    switch (IoName_string) {
+    switch (IOName_string) {
         case 'IO1':
-            ioInputWindow = io1InputWindow_div;
-            ioInput = io1Input_input;
+            IO_input_window_DOM = io1InputWindow_div;
+            IO_input_DOM = io1Input_input;
             break;
         case 'IO2':
-            ioInputWindow = io2InputWindow_div;
-            ioInput = io2Input_input;
+            IO_input_window_DOM = io2InputWindow_div;
+            IO_input_DOM = io2Input_input;
             break;
 
         case 'IO3':
-            ioInputWindow = io3InputWindow_div;
-            ioInput = io3Input_input;
+            IO_input_window_DOM = io3InputWindow_div;
+            IO_input_DOM = io3Input_input;
             break;
     
         default:
             throw Error('Unknown IO');
     }
-    ioInputWindow.classList.add('toggleGrid');
-    ioInput.select();
+    IO_input_window_DOM.classList.add('toggleGrid');
+    // IO_input_DOM.focus();
+    IO_input_DOM.select();
     try{
         while(check){
+            
             pause();
+
             await checkPlayPressed();
             
-            if(ioInput.value === '')
-                ioInput.value = 'FF';
-            if(checkCorrectIoInput(ioInput.value)){
+            if(IO_input_DOM.value === '')
+                IO_input_DOM.value = 'FF';
+            if(checkCorrectInput(IO_input_DOM.value)){
                 check = false;
             }
             else{
-                if (IoName_string === 'IO1') {
+                if (IOName_string === 'IO1') {
                     document.getElementById('io1InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                 }
-                else if (IoName_string === 'IO2') {
+                else if (IOName_string === 'IO2') {
                     document.getElementById('io2InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                 }
-                else if (IoName_string === 'IO3') {
+                else if (IOName_string === 'IO3') {
                     document.getElementById('io3InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                 }
             }
         }
     }
     finally{
-        ioInputWindow.classList.remove('toggleGrid');
+        IO_input_window_DOM.classList.remove('toggleGrid');
         document.getElementById('io1InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
         document.getElementById('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
         document.getElementById('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
     }
 
-    await animateRegisterUpdate(IoName_string,convertHexToNumber(ioInput.value));
-    ioInput.value = '';    
+    await updateRegister_hex(IOName_string,convertHexToNumber(IO_input_DOM.value));
+    IO_input_DOM.value = '';    
 }
 
-const animateReadFromIo = async() =>{
+//reads a byte from the ROM or RAM. The addressRegister 
+const readFromMemoryInRegister = async(addressRegister_x4_string, targetRegister_x2_string) =>{
+    //get the address
+    let address_number = getRegisterByName(addressRegister_x4_string).value_number;
+
+    //update decoder without displaying  
+    DECODER.update(1,0,0,1,address_number);
+    await addArrow(addressRegister_x4_string);
+    
+    //determine ROM or RAM
+    if(address_number < 8192){
+        await transfer(addressRegister_x4_string, 'ROM2', address_number);
+        await transfer(ROM.getElementId(address_number),targetRegister_x2_string, ROM.getValue(address_number));
+        await updateRegister_hex(targetRegister_x2_string, ROM.getValue(address_number));
+    }
+    else if (address_number >= RAM.startAddressRam_number && address_number < RAM.startAddressRam_number+RAM.size_number){
+        RAM.updateVariableElements(address_number);
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
+        await transfer(RAM.getRamElementId(address_number),targetRegister_x2_string, RAM.getValue(address_number));
+        await updateRegister_hex(targetRegister_x2_string,RAM.getValue(address_number));
+    }
+    
+    else if(!IO1.ioMapped_boolean){
+       if(address_number === IO1.address_number){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_number);
+            await changeIO('IO1');
+            await transfer('IO1', 'A', IO1.value_number);
+            await updateRegister_hex('A', IO1.value_number);
+        }
+        else if(address_number === IO2.address_number){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_number);
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO2.value_number);
+            await updateRegister_hex('A', IO2.value_number);
+        }
+        else if(address_number === IO3.address_number){
+            await transfer(addressRegister_x4_string, 'DEC_UPDATE', address_number);
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO3.value_number);
+            await updateRegister_hex('A', IO3.value_number);
+        }
+    }
+    //Neither ROM or RAM  or IO
+    else{
+        //The address of the addressRegister is unknown.
+        //the following code wont be executed completely, because the decoder will interrupt execution
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
+    }
+    DECODER.resetDOM();
+}
+
+const writeToMemoryFromRegister = async(addressRegister_x4_string, DataRegister_x2_string) => {
+    //get address
+    let address_number = getRegisterByName(addressRegister_x4_string).value_number;
+
+    //get data
+    let register_x2_class = getRegisterByName(DataRegister_x2_string);
+    let data_number = register_x2_class.value_number;
+    if(DataRegister_x2_string.includes('hi'))
+        data_number = register_x2_class.hi_number;
+    if(DataRegister_x2_string.includes('lo'))
+        data_number = register_x2_class.lo_number;
+
+    //update decoder, without displaying it
+    DECODER.update(0,1,0,1,address_number);
+
+    await addArrow(addressRegister_x4_string);
+
+    //determine ROM or RAM
+    if(address_number < 8192){
+        //wont be executed completely, because the decoder will interrupt execution 
+        await transfer(addressRegister_x4_string, 'ROM2', address_number);
+    }
+    else if (address_number >= RAM.startAddressRam_number && address_number< RAM.startAddressRam_number+RAM.size_number){
+        RAM.updateVariableElements(address_number);
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
+        if(!playStatus.noAnim)
+            document.getElementById(RAM.getRamElementId(address_number)).classList.add('yellowBg', 'borderBox');
+        try{
+            await transfer(DataRegister_x2_string, RAM.getRamElementId(address_number), data_number);
+        } catch (e) {
+            document.getElementById(RAM.getRamElementId(address_number)).classList.remove('yellowBg', 'borderBox');
+            throw e;
+        }
+    }
+    //Neither ROM or RAM
+    else{
+        //wont be executed completely, because the decoder will interrupt execution 
+        await transfer(addressRegister_x4_string, 'RAM2', address_number);
+    }
+    RAM.updateElement(address_number,data_number);
+    try{
+
+        await addYellowBackgroundForIDLETIME(document.getElementById(RAM.getRamElementId(address_number)));
+
+    }
+    finally{
+        document.getElementById(RAM.getRamElementId(address_number)).classList.remove('borderBox', 'yellowBg');
+        DECODER.resetDOM();
+    }
+}
+
+const readFromIo = async() =>{
     if(IO1.ioMapped_boolean){
-        DECODER.update(1,0,1,0,ZR.loValue_number);
-        await animateTransfer('ZR', 'DEC_UPDATE', ZR.loValue_number);
+        DECODER.update(1,0,1,0,ZR.lo_number);
+        await transfer('ZR', 'DEC_UPDATE', ZR.lo_number);
 
         if(IO1.address_number === IO2.address_number){
             if(!IO1.in_boolean){
-                await animateTransfer('A', 'IO2', A.value_number);
-                await animateRegisterUpdate('IO2', A.value_number);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await animateTransfer('A', 'IO1', A.value_number);
-                await animateRegisterUpdate('IO1', A.value_number);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
         else if(IO3.address_number === IO2.address_number){
             if(!IO3.in_boolean){
-                await animateTransfer('A', 'IO2', A.value_number);
-                await animateRegisterUpdate('IO2', A.value_number);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await animateTransfer('A', 'IO3', A.value_number);
-                await animateRegisterUpdate('IO3', A.value_number);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
         }
         else if(IO1.address_number === IO3.address_number){
             if(!IO1.in_boolean){
-                await animateTransfer('A', 'IO3', A.value_number);
-                await animateRegisterUpdate('IO3', A.value_number);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
             else{
-                await animateTransfer('A', 'IO1', A.value_number);
-                await animateRegisterUpdate('IO1', A.value_number);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
-        else if(ZR.loValue_number === IO1.address_number){
-            await animateIoUserInput('IO1');
-            await animateTransfer('IO1', 'A', IO1.value_number);
-            await animateRegisterUpdate('A', IO1.value_number);
+        else if(ZR.lo_number === IO1.address_number){
+            await changeIO('IO1');
+            await transfer('IO1', 'A', IO1.value_number);
+            await updateRegister_hex('A', IO1.value_number);
         }
-        else if(ZR.loValue_number === IO2.address_number){
-            await animateIoUserInput('IO2');
-            await animateTransfer('IO2', 'A', IO2.value_number);
-            await animateRegisterUpdate('A', IO2.value_number);
+        else if(ZR.lo_number === IO2.address_number){
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO2.value_number);
+            await updateRegister_hex('A', IO2.value_number);
         }
-        else if(ZR.loValue_number === IO3.address_number){
-            await animateIoUserInput('IO3');
-            await animateTransfer('IO3', 'A', IO3.value_number);
-            await animateRegisterUpdate('A', IO3.value_number);
+        else if(ZR.lo_number === IO3.address_number){
+            await changeIO('IO3');
+            await transfer('IO3', 'A', IO3.value_number);
+            await updateRegister_hex('A', IO3.value_number);
         }
         DECODER.resetDOM();
     }
     else {
         DECODER.update(1,0,1,0,ZR.value_number);
-        await animateTransfer('ZR', 'DEC_UPDATE', ZR.value_number);
+        await transfer('ZR', 'DEC_UPDATE', ZR.value_number);
         
         if(IO1.address_number === IO2.address_number){
             if(!IO1.in_boolean){
-                await animateTransfer('A', 'IO2', A.value_number);
-                await animateRegisterUpdate('IO2', A.value_number);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await animateTransfer('A', 'IO1', A.value_number);
-                await animateRegisterUpdate('IO1', A.value_number);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
         else if(IO3.address_number === IO2.address_number){
             if(!IO3.in_boolean){
-                await animateTransfer('A', 'IO2', A.value_number);
-                await animateRegisterUpdate('IO2', A.value_number);
+                await transfer('A', 'IO2', A.value_number);
+                await updateRegister_hex('IO2', A.value_number);
             }
             else{
-                await animateTransfer('A', 'IO3', A.value_number);
-                await animateRegisterUpdate('IO3', A.value_number);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
         }
         else if(IO1.address_number === IO3.address_number){
             if(!IO1.in_boolean){
-                await animateTransfer('A', 'IO3', A.value_number);
-                await animateRegisterUpdate('IO3', A.value_number);
+                await transfer('A', 'IO3', A.value_number);
+                await updateRegister_hex('IO3', A.value_number);
             }
             else{
-                await animateTransfer('A', 'IO1', A.value_number);
-                await animateRegisterUpdate('IO1', A.value_number);
+                await transfer('A', 'IO1', A.value_number);
+                await updateRegister_hex('IO1', A.value_number);
             }
         }
         else if(ZR.value_number === IO1.address_number){
-            await animateIoUserInput('IO1');
-            await animateTransfer('IO1', 'A', IO1.value_number);
-            await animateRegisterUpdate('A', IO1.value_number);
+            await changeIO('IO1');
+            await transfer('IO1', 'A', IO1.value_number);
+            await updateRegister_hex('A', IO1.value_number);
         }
         else if(ZR.value_number === IO2.address_number){
-            await animateIoUserInput('IO2');
-            await animateTransfer('IO2', 'A', IO2.value_number);
-            await animateRegisterUpdate('A', IO2.value_number);
+            await changeIO('IO2');
+            await transfer('IO2', 'A', IO2.value_number);
+            await updateRegister_hex('A', IO2.value_number);
         }
         else if(ZR.value_number === IO3.address_number){
-            await animateIoUserInput('IO3');
-            await animateTransfer('IO3', 'A', IO3.value_number);
-            await animateRegisterUpdate('A', IO3.value_number);
+            await changeIO('IO3');
+            await transfer('IO3', 'A', IO3.value_number);
+            await updateRegister_hex('A', IO3.value_number);
         }
         DECODER.resetDOM();
     }  
 }
 
-const animateWriteToIo = async() =>{
+const writeToIo = async() =>{
     
-    DECODER.update(0,1,1,0,ZR.loValue_number);
-    await animateTransfer('ZR', 'DEC_UPDATE', ZR.loValue_number);
+    DECODER.update(0,1,1,0,ZR.lo_number);
+    await transfer('ZR', 'DEC_UPDATE', ZR.lo_number);
 
     if(IO1.address_number === IO2.address_number){
         if(IO1.in_boolean){
-            await animateTransfer('A', 'IO2', A.value_number);
-            await animateRegisterUpdate('IO2', A.value_number);
+            await transfer('A', 'IO2', A.value_number);
+            await updateRegister_hex('IO2', A.value_number);
         }
         else{
-            await animateTransfer('A', 'IO1', A.value_number);
-            await animateRegisterUpdate('IO1', A.value_number);
+            await transfer('A', 'IO1', A.value_number);
+            await updateRegister_hex('IO1', A.value_number);
         }
     }
     else if(IO3.address_number === IO2.address_number){
         if(IO3.in_boolean){
-            await animateTransfer('A', 'IO2', A.value_number);
-            await animateRegisterUpdate('IO2', A.value_number);
+            await transfer('A', 'IO2', A.value_number);
+            await updateRegister_hex('IO2', A.value_number);
         }
         else{
-            await animateTransfer('A', 'IO3', A.value_number);
-            await animateRegisterUpdate('IO3', A.value_number);
+            await transfer('A', 'IO3', A.value_number);
+            await updateRegister_hex('IO3', A.value_number);
         }
     }
     else if(IO1.address_number === IO3.address_number){
         if(IO1.in_boolean){
-            await animateTransfer('A', 'IO3', A.value_number);
-            await animateRegisterUpdate('IO3', A.value_number);
+            await transfer('A', 'IO3', A.value_number);
+            await updateRegister_hex('IO3', A.value_number);
         }
         else{
-            await animateTransfer('A', 'IO1', A.value_number);
-            await animateRegisterUpdate('IO1', A.value_number);
+            await transfer('A', 'IO1', A.value_number);
+            await updateRegister_hex('IO1', A.value_number);
         }
     }
-    else if(ZR.loValue_number === IO1.address_number){
-        await animateTransfer('A', 'IO1', A.value_number);
-        await animateRegisterUpdate('IO1', A.value_number);
+    else if(ZR.lo_number === IO1.address_number){
+        await transfer('A', 'IO1', A.value_number);
+        await updateRegister_hex('IO1', A.value_number);
     }
-    else if(ZR.loValue_number === IO2.address_number){
-        await animateTransfer('A', 'IO2', A.value_number);
-        await animateRegisterUpdate('IO2', A.value_number);
+    else if(ZR.lo_number === IO2.address_number){
+        await transfer('A', 'IO2', A.value_number);
+        await updateRegister_hex('IO2', A.value_number);
     }
-    else if(ZR.loValue_number === IO3.address_number){
-        await animateTransfer('A', 'IO3', A.value_number);
-        await animateRegisterUpdate('IO3', A.value_number);
+    else if(ZR.lo_number === IO3.address_number){
+        await transfer('A', 'IO3', A.value_number);
+        await updateRegister_hex('IO3', A.value_number);
     }
     DECODER.resetDOM();
 }
 
-/**
- * Composition of animations which occurs often
- */ 
+//composition of animations which occurs often
+const increasePC = async() => {
+    await description_update('Erhöhe Programmzähler um 1');
+    await addArrow('PC');
+    await updatePC();
+}
 
-const animateloadOperands = async(register1_string:string, register2_string:string): Promise<any> => {
+const loadOperands = async(register1_string, register2_string) => {
     const reg1_class = getRegisterByName(register1_string);
     const reg2_class = getRegisterByName(register2_string);
 
-    await animateStepDescriptionUpdate('Hole den 1. Operanden'); 
-    await animateTransfer(register1_string,'ALU1',reg1_class.value_number);
-    await animateRegisterUpdate('ALU1', reg1_class.value_number);
-    await animateStepDescriptionUpdate('Hole den 2. Operanden');
-    await animateTransfer(register2_string, 'ALU2',reg2_class.value_number);
-    await animateRegisterUpdate('ALU2', reg2_class.value_number);
+    await description_update('Hole den 1. Operanden'); 
+    await transfer(register1_string,'ALU1',reg1_class.value_number);
+    await updateRegister_hex('ALU1', reg1_class.value_number);
+    await description_update('Hole den 2. Operanden');
+    await transfer(register2_string, 'ALU2',reg2_class.value_number);
+    await updateRegister_hex('ALU2', reg2_class.value_number);
+
 }
 
-const animateloadAddressBytesInZr = async(): Promise<any> => {
-    await animateStepDescriptionUpdate('Hole das niederwertige Adressbyte');
-    await animateReadFromMemoryInRegister('PC', 'ZR_lo');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Hole das höherwertige Adressbyte');
-    await animateReadFromMemoryInRegister('PC', 'ZR_hi');
-    await animateIncreasePcByOne();
+const loadAddressBytesInZr = async() => {
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
 }
 
-/**
- * Animation of the mc8-commands
- */
+
+/********************************** command animations ****************************** */
+
 const get_next_command = async() => {
     stepNumber_p.textContent = '0';
     assemblerCommand_p.textContent = '';
     IR.htmlElement.textContent = '';
 
-    await animateStepDescriptionUpdate('Hole den nächsten Befehl');
-    await animateReadFromMemoryInRegister('PC', 'IR');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Erkenne den Befehl');
-    await animateAssemlberCommandUpdate();
+    await description_update('Hole den nächsten Befehl');
+    await readFromMemoryInRegister('PC', 'IR');
+    await increasePC();
+    await description_update('Erkenne den Befehl');
+    await assemblerCommand_update();
     pushNextCommand();
     return true;
 
@@ -3371,91 +3471,101 @@ const nop = async() => {
 }
 
 const halt = async() => {
-    updateStepDescription('Prozessor angehalten');
+    changeStepDescription('Prozessor angehalten');
     stepNumber_p.textContent = '0';
     pause();
     check_completeExecution();
 }
 
 const movAdat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den Parameter');
-    await animateReadFromMemoryInRegister('PC', 'A');
-    await animateIncreasePcByOne();
+    await description_update('Hole den Parameter');
+    await readFromMemoryInRegister('PC', 'A');
+    await increasePC();
     check_completeExecution();
     return true;
     
 }
 
 const movBdat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den Parameter');
-    await animateReadFromMemoryInRegister('PC', 'B');
-    await animateIncreasePcByOne();
+    await description_update('Hole den Parameter');
+    await readFromMemoryInRegister('PC', 'B');
+    await increasePC();
     check_completeExecution();
     return true;
 }
 
 const movCdat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den Parameter');
-    await animateReadFromMemoryInRegister('PC', 'C');
-    await animateIncreasePcByOne();
+    await description_update('Hole den Parameter');
+    await readFromMemoryInRegister('PC', 'C');
+    await increasePC();
     check_completeExecution();
     return true;
 }
 
 const twoByteIX = async() => {
-    await animateStepDescriptionUpdate('Hole das 2. Byte des Befehls');
-    await animateReadFromMemoryInRegister('PC', 'IR');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Erkenne den Befehl');
+    await description_update('Hole das 2. Byte des Befehls');
+    await readFromMemoryInRegister('PC', 'IR');
+    await increasePC();
+    await description_update('Erkenne den Befehl');
     await addYellowBackgroundForIDLETIME(IR.htmlElement);
-    await animateArrow('IR');
+    await addArrow('IR');
     
 
     if(IR.value_number === 0b00100001){
         assemblerCommand_p.textContent = 'MOV IX, dat_16';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
-        await animateStepDescriptionUpdate('Hole das niederwertige Byte');
-        await animateReadFromMemoryInRegister('PC', 'IX_lo');
-        await animateIncreasePcByOne();
-        await animateStepDescriptionUpdate('Hole das höherwertige Byte');
-        await animateReadFromMemoryInRegister('PC', 'IX_hi');
-        await animateIncreasePcByOne();
+        await description_update('Hole das niederwertige Byte');
+        await readFromMemoryInRegister('PC', 'IX_lo');
+        await increasePC();
+        await description_update('Hole das höherwertige Byte');
+        await readFromMemoryInRegister('PC', 'IX_hi');
+        await increasePC();
     }
     else if(IR.value_number === 0b00101010){
         assemblerCommand_p.textContent = 'MOV IX, label';
-        await animateloadAddressBytesInZr();
-        await animateStepDescriptionUpdate('Hole das niederwertige Byte');
-        await animateReadFromMemoryInRegister('ZR', 'IX_lo');
-        await animateStepDescriptionUpdate('Erhöhe die Adresse um 1');
-        await animateArrow('ZR');
-        await animateRegisterUpdate('ZR', ZR.value_number+1);
-        await animateStepDescriptionUpdate('Hole das höherwertige Byte');
-        await animateReadFromMemoryInRegister('ZR', 'IX_hi');
+        await description_update('Hole das niederwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_lo');
+        await increasePC();
+        await description_update('Hole das höherwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_hi');
+        await increasePC();
+        await description_update('Hole das niederwertige Byte');
+        await readFromMemoryInRegister('ZR', 'IX_lo');
+        await description_update('Erhöhe die Adresse um 1');
+        await addArrow('ZR');
+        await updateRegister_hex('ZR', ZR.value_number+1);
+        await description_update('Hole das höherwertige Byte');
+        await readFromMemoryInRegister('ZR', 'IX_hi');
     }
     else if(IR.value_number === 0b00100010 ){
         assemblerCommand_p.textContent = 'MOV label, IX';
-        await animateloadAddressBytesInZr();
-        await animateStepDescriptionUpdate('Schreibe das niederwertige Byte');
-        await animateWriteToMemoryFromRegister('ZR', 'IX_lo');
-        await animateStepDescriptionUpdate('Erhöhe die Adresse um 1');
-        await animateArrow('ZR');
-        await animateRegisterUpdate('ZR', ZR.value_number+1);
-        await animateStepDescriptionUpdate('Schreibe das höherwertige Byte');
-        await animateWriteToMemoryFromRegister('ZR', 'IX_hi');
+        await description_update('Hole das niederwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_lo');
+        await increasePC();
+        await description_update('Hole das höherwertige Adressbyte');
+        await readFromMemoryInRegister('PC', 'ZR_hi');
+        await increasePC();
+        await description_update('Schreibe das niederwertige Byte');
+        await writeToMemoryFromRegister('ZR', 'IX_lo');
+        await description_update('Erhöhe die Adresse um 1');
+        await addArrow('ZR');
+        await updateRegister_hex('ZR', ZR.value_number+1);
+        await description_update('Schreibe das höherwertige Byte');
+        await writeToMemoryFromRegister('ZR', 'IX_hi');
 
     }
     else if(IR.value_number === 0b00100011){
         assemblerCommand_p.textContent = 'INC IX';
-        await animateStepDescriptionUpdate('Erhöhe die Adresse um 1');
-        await animateArrow('IX');
-        await animateRegisterUpdate('IX', IX.value_number+1);
+        await description_update('Erhöhe die Adresse um 1');
+        await addArrow('IX');
+        await updateRegister_hex('IX', IX.value_number+1);
     }
     else if(IR.value_number === 0b00101011){
         assemblerCommand_p.textContent = 'DEC IX';
-        await animateStepDescriptionUpdate('Verringere die Adresse um 1');
-        await animateArrow('IX');
-        await animateRegisterUpdate('IX', IX.value_number-1);
+        await description_update('Verringere die Adresse um 1');
+        await addArrow('IX');
+        await updateRegister_hex('IX', IX.value_number-1);
     }
     else if(IR.value_number === 0b11101001){
         assemblerCommand_p.textContent = 'JP [IX]';
@@ -3467,754 +3577,778 @@ const twoByteIX = async() => {
 }
 
 const movHLdat_16 = async() => {
-    await animateStepDescriptionUpdate('Hole das niederwertige Byte');
-    await animateReadFromMemoryInRegister('PC', 'HL_lo');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Hole das höherwertige Byte');
-    await animateReadFromMemoryInRegister('PC', 'HL_hi');
-    await animateIncreasePcByOne();
+    await description_update('Hole das niederwertige Byte');
+    await readFromMemoryInRegister('PC', 'HL_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Byte');
+    await readFromMemoryInRegister('PC', 'HL_hi');
+    await increasePC();
     check_completeExecution();
 }
 
 const movSPdat_16 = async() => {
-    await animateStepDescriptionUpdate('Hole das niederwertige Byte');
-    await animateReadFromMemoryInRegister('PC', 'SP_lo');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Hole das höherwertige Byte');
-    await animateReadFromMemoryInRegister('PC', 'SP_hi');
-    await animateIncreasePcByOne();
+    await description_update('Hole das niederwertige Byte');
+    await readFromMemoryInRegister('PC', 'SP_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Byte');
+    await readFromMemoryInRegister('PC', 'SP_hi');
+    await increasePC();
     check_completeExecution();
 }
 
 const movAB = async() => {
-    await animateStepDescriptionUpdate('Kopiere die Daten');
-    await animateTransfer('B', 'A', B.value_number);
-    await animateRegisterUpdate('A', B.value_number);
+    await description_update('Kopiere die Daten');
+    await transfer('B', 'A', B.value_number);
+    await updateRegister_hex('A', B.value_number);
     check_completeExecution();
 }
 
 const movAC = async() => {
-    await animateStepDescriptionUpdate('Kopiere die Daten');
-    await animateTransfer('C', 'A', C.value_number);
-    await animateRegisterUpdate('A', C.value_number);
+    await description_update('Kopiere die Daten');
+    await transfer('C', 'A', C.value_number);
+    await updateRegister_hex('A', C.value_number);
     check_completeExecution();
 }
 
 const movBA = async() => {
-    await animateStepDescriptionUpdate('Kopiere die Daten');
-    await animateTransfer('A', 'B', A.value_number);
-    await animateRegisterUpdate('B', A.value_number);
+    await description_update('Kopiere die Daten');
+    await transfer('A', 'B', A.value_number);
+    await updateRegister_hex('B', A.value_number);
     check_completeExecution();
 }
 
 const movBC = async() => {
-    await animateStepDescriptionUpdate('Kopiere die Daten');
-    await animateTransfer('C', 'B', C.value_number);
-    await animateRegisterUpdate('B', C.value_number);
+    await description_update('Kopiere die Daten');
+    await transfer('C', 'B', C.value_number);
+    await updateRegister_hex('B', C.value_number);
     check_completeExecution();
 }
 
 const movCA = async() => {
-    await animateStepDescriptionUpdate('Kopiere die Daten');
-    await animateTransfer('A', 'C', A.value_number);
-    await animateRegisterUpdate('C', A.value_number);
+    await description_update('Kopiere die Daten');
+    await transfer('A', 'C', A.value_number);
+    await updateRegister_hex('C', A.value_number);
     check_completeExecution();
 }
 
 const movCB = async() => {
-    await animateStepDescriptionUpdate('Kopiere die Daten');
-    await animateTransfer('B', 'C', B.value_number);
-    await animateRegisterUpdate('C', B.value_number);
+    await description_update('Kopiere die Daten');
+    await transfer('B', 'C', B.value_number);
+    await updateRegister_hex('C', B.value_number);
     check_completeExecution();
 } 
 
 const movALabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Hole die Daten');
-    await animateReadFromMemoryInRegister('ZR', 'A');
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Hole die Daten');
+    await readFromMemoryInRegister('ZR', 'A');
     check_completeExecution();
 }
 
 const movLabelA = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Schreibe die Daten');
-    await animateWriteToMemoryFromRegister('ZR', 'A');
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Schreibe die Daten');
+    await writeToMemoryFromRegister('ZR', 'A');
     check_completeExecution();
 }
 
 const movHlLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Hole das niederwertige Byte');
-    await animateReadFromMemoryInRegister('ZR', 'HL_lo');
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Hole das niederwertige Byte');
+    await readFromMemoryInRegister('ZR', 'HL_lo');
 
-    await animateStepDescriptionUpdate('Erhöhe die Adresse um 1');
-    await animateArrow('ZR');
-    await animateRegisterUpdate('ZR', ZR.value_number+1);
-    await animateStepDescriptionUpdate('Hole das höherwertige Byte');
-    await animateReadFromMemoryInRegister('ZR', 'HL_hi');
+    await description_update('Erhöhe die Adresse um 1');
+    await addArrow('ZR');
+    await updateRegister_hex('ZR', ZR.value_number+1);
+    await description_update('Hole das höherwertige Byte');
+    await readFromMemoryInRegister('ZR', 'HL_hi');
     check_completeExecution();
 }
 
 const movLabelHl = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Schreibe das niederwertige Byte');
-    await animateWriteToMemoryFromRegister('ZR', 'HL_lo');
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Schreibe das niederwertige Byte');
+    await writeToMemoryFromRegister('ZR', 'HL_lo');
 
-    await animateStepDescriptionUpdate('Erhöhe die Adresse um 1');
-    await animateArrow('ZR');
-    await animateRegisterUpdate('ZR', ZR.value_number+1);
-    await animateStepDescriptionUpdate('Schreibe das höherwertige Byte');
-    await animateWriteToMemoryFromRegister('ZR', 'HL_hi');
+    await description_update('Erhöhe die Adresse um 1');
+    await addArrow('ZR');
+    await updateRegister_hex('ZR', ZR.value_number+1);
+    await description_update('Schreibe das höherwertige Byte');
+    await writeToMemoryFromRegister('ZR', 'HL_hi');
     check_completeExecution();
 }
 
 const movAHl = async() => {
-    await animateStepDescriptionUpdate('Hole die Daten');
-    await animateReadFromMemoryInRegister('HL', 'A');
+    await description_update('Hole die Daten');
+    await readFromMemoryInRegister('HL', 'A');
     check_completeExecution();
 }
 
 const movHlA = async() => {
-    await animateStepDescriptionUpdate('Schreibe die Daten');
-    await animateWriteToMemoryFromRegister('HL', 'A');
+    await description_update('Schreibe die Daten');
+    await writeToMemoryFromRegister('HL', 'A');
     check_completeExecution();
 }
 
 const push = async() => {
-    await animateStepDescriptionUpdate('Erhöhe den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number-1);
-    await animateStepDescriptionUpdate('Schreibe den Akku');
-    await animateWriteToMemoryFromRegister('SP', 'A');
-    await animateStepDescriptionUpdate('Erhöhe den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number-1);
-    await animateStepDescriptionUpdate('Schreibe die Flags');
-    await animateWriteToMemoryFromRegister('SP', 'FLAGS');
+    await description_update('Erhöhe den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number-1);
+    await description_update('Schreibe den Akku');
+    await writeToMemoryFromRegister('SP', 'A');
+    await description_update('Erhöhe den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number-1);
+    await description_update('Schreibe die Flags');
+    await writeToMemoryFromRegister('SP', 'FLAGS');
     check_completeExecution();
 }
 
 const pop = async() => {
-    await animateStepDescriptionUpdate('Hole die Flags');
-    await animateReadFromMemoryInRegister('SP', 'FLAGS');
-    await animateStepDescriptionUpdate('Verringer den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number+1);
-    await animateStepDescriptionUpdate('Hole den Akku');
-    await animateReadFromMemoryInRegister('SP', 'A');
-    await animateStepDescriptionUpdate('Verringer den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number+1);
+    await description_update('Hole die Flags');
+    await readFromMemoryInRegister('SP', 'FLAGS');
+    await description_update('Verringer den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number+1);
+    await description_update('Hole den Akku');
+    await readFromMemoryInRegister('SP', 'A');
+    await description_update('Verringer den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number+1);
     check_completeExecution();
 }
 
 const inA = async() => {
-    await animateStepDescriptionUpdate('Hole das Adressbyte');
-    await animateReadFromMemoryInRegister('PC', 'ZR_lo');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Hole die Daten');
-    await animateReadFromIo();
+    await description_update('Hole das Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole die Daten');
+    await readFromIo();
     check_completeExecution();
 }
 
 const outA = async() => {
-    await animateStepDescriptionUpdate('Hole das Adressbyte');
-    await animateReadFromMemoryInRegister('PC', 'ZR_lo');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Schreibe die Daten');
-    await animateWriteToIo();
+    await description_update('Hole das Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Schreibe die Daten');
+    await writeToIo();
     check_completeExecution();
 }
 
 const incA = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Erhöhe den Operanden um 1');
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Erhöhe den Operanden um 1');
     const result = incBinary(A.value_number);
-    await animateALU(result,false,false, 'A');
+    await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
 const incB = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('B','ALU1',B.value_number);
-    await animateRegisterUpdate('ALU1', B.value_number);
-    await animateStepDescriptionUpdate('Erhöhe den Operanden um 1');
+    await description_update('Hole den Operanden');
+    await transfer('B','ALU1',B.value_number);
+    await updateRegister_hex('ALU1', B.value_number);
+    await description_update('Erhöhe den Operanden um 1');
     const result = incBinary(B.value_number);
-    await animateALU(result,false,false, 'B');
+    await aluAnimation(result,false,false, 'B');
     check_completeExecution();
 }
 
 const incC = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('C','ALU1',C.value_number);
-    await animateRegisterUpdate('ALU1', C.value_number);
-    await animateStepDescriptionUpdate('Erhöhe den Operanden um 1');
+    await description_update('Hole den Operanden');
+    await transfer('C','ALU1',C.value_number);
+    await updateRegister_hex('ALU1', C.value_number);
+    await description_update('Erhöhe den Operanden um 1');
     const result = incBinary(C.value_number);
-    await animateALU(result,false,false, 'C');
+    await aluAnimation(result,false,false, 'C');
     check_completeExecution();
 }
 
 const incHl = async() =>{
-    await animateStepDescriptionUpdate('Erhöhe die Adresse um 1');
-    await animateArrow('HL');
-    await animateRegisterUpdate('HL', HL.value_number+1);
+    await description_update('Erhöhe die Adresse um 1');
+    await addArrow('HL');
+    await updateRegister_hex('HL', HL.value_number+1);
     check_completeExecution();
 }
 //incIX see twoByteIx
 
 const decA = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Verringere den Operanden um 1');
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Verringere den Operanden um 1');
     const result = decBinary(A.value_number);
-    await animateALU(result,false,false, 'A');
+    await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
 const decB = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('B','ALU1',B.value_number);
-    await animateRegisterUpdate('ALU1', B.value_number);
-    await animateStepDescriptionUpdate('Verringere den Operanden um 1');
+    await description_update('Hole den Operanden');
+    await transfer('B','ALU1',B.value_number);
+    await updateRegister_hex('ALU1', B.value_number);
+    await description_update('Verringere den Operanden um 1');
     const result = decBinary(B.value_number);
-    await animateALU(result,false,false, 'B');
+    await aluAnimation(result,false,false, 'B');
     check_completeExecution();
 }
 
 const decC = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('C','ALU1',C.value_number);
-    await animateRegisterUpdate('ALU1', C.value_number);
-    await animateStepDescriptionUpdate('Verringere den Operanden um 1');
+    await description_update('Hole den Operanden');
+    await transfer('C','ALU1',C.value_number);
+    await updateRegister_hex('ALU1', C.value_number);
+    await description_update('Verringere den Operanden um 1');
     const result = decBinary(C.value_number);
-    await animateALU(result,false,false, 'C');
+    await aluAnimation(result,false,false, 'C');
     check_completeExecution();
 }
 
 const decHl = async() => {
-    await animateStepDescriptionUpdate('Verringere die Adresse um 1');
-    await animateArrow('HL');
-    await animateRegisterUpdate('HL', HL.value_number-1);
+    await description_update('Verringere die Adresse um 1');
+    await addArrow('HL');
+    await updateRegister_hex('HL', HL.value_number-1);
     check_completeExecution();
 }
 
 const addA = async() => {
-    await animateloadOperands('A','A');
-    await animateStepDescriptionUpdate('Addiere die Operanden');
+    await loadOperands('A','A');
+    await description_update('Addiere die Operanden');
 
     const result = addBinary(A.value_number, A.value_number, false);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const addB = async() => {
-    await animateloadOperands('A','B');
-    await animateStepDescriptionUpdate('Addiere die Operanden');
+    await loadOperands('A','B');
+    await description_update('Addiere die Operanden');
 
     const result = addBinary(A.value_number, B.value_number, false);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const addC = async() => {
-    await animateloadOperands('A','C');
-    await animateStepDescriptionUpdate('Addiere die Operanden');
+    await loadOperands('A','C');
+    await description_update('Addiere die Operanden');
 
     const result = addBinary(A.value_number, C.value_number, false);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const addDat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den 1. Operanden'); 
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Hole den 2. Operanden');
-    await animateReadFromMemoryInRegister('PC','ALU2');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Addiere die Operanden');
+    await description_update('Hole den 1. Operator'); 
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Hole den 2. Operator');
+    await readFromMemoryInRegister('PC','ALU2');
+    await increasePC();
+    await description_update('Addiere die Operanden');
 
     const result = addBinary(A.value_number, ALU2.value_number, false);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const addHlBc = async() => {
-    await animateStepDescriptionUpdate('Hole das L-Register (HL_LO)');
-    await animateTransfer('HL_lo','ALU1',HL.loValue_number);
-    await animateRegisterUpdate('ALU1', HL.loValue_number);
-    await animateStepDescriptionUpdate('Hole das C-Register');
-    await animateTransfer('C','ALU2',C.value_number);
-    await animateRegisterUpdate('ALU2', C.value_number);
-    await animateStepDescriptionUpdate('Addiere die Operanden');
+    await description_update('Hole das L-Register (HL_LO)');
+    await transfer('HL_lo','ALU1',HL.lo_number);
+    await updateRegister_hex('ALU1', HL.lo_number);
+    await description_update('Hole das C-Register');
+    await transfer('C','ALU2',C.value_number);
+    await updateRegister_hex('ALU2', C.value_number);
+    await description_update('Addiere die Operanden');
 
-    let result = addBinary(HL.loValue_number,C.value_number,false);
-    await animateHlBcAddition(result,true);
+    let result = addBinary(HL.lo_number,C.value_number,false);
+    await hlBcAnimation(result,true);
 
-    await animateStepDescriptionUpdate('Hole das H-Register (HL_HI)');
-    await animateTransfer('HL_hi','ALU1',HL.hiValue_number);
-    await animateRegisterUpdate('ALU1', HL.hiValue_number);
-    await animateStepDescriptionUpdate('Hole das B-Register');
-    await animateTransfer('B','ALU2',B.value_number);
-    await animateRegisterUpdate('ALU2', B.value_number);
-    await animateStepDescriptionUpdate('Addiere die Operanden');
-    result = addBinary(HL.hiValue_number,B.value_number+FLAGS.c_number, false);
-    await animateHlBcAddition(result,false);
+    await description_update('Hole das H-Register (HL_HI)');
+    await transfer('HL_hi','ALU1',HL.hi_number);
+    await updateRegister_hex('ALU1', HL.hi_number);
+    await description_update('Hole das B-Register');
+    await transfer('B','ALU2',B.value_number);
+    await updateRegister_hex('ALU2', B.value_number);
+    await description_update('Addiere die Operanden');
+    result = addBinary(HL.hi_number,B.value_number+FLAGS.c_number, false);
+    await hlBcAnimation(result,false);
 
     check_completeExecution();
 }
 
 const subA = async() => {
-    await animateloadOperands('A','A');
-    await animateStepDescriptionUpdate('Subtrahiere die Operanden');
+    await loadOperands('A','A');
+    await description_update('Subtrahiere die Operanden');
 
     const result = addBinary(A.value_number, A.value_number, true);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const subB = async() => {
-    await animateloadOperands('A','B');
-    await animateStepDescriptionUpdate('Subtrahiere die Operanden');
+    await loadOperands('A','B');
+    await description_update('Subtrahiere die Operanden');
 
     const result = addBinary(A.value_number, B.value_number, true);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const subC = async() => {
-    await animateloadOperands('A','C');
-    await animateStepDescriptionUpdate('Subtrahiere die Operanden');
+    await loadOperands('A','C');
+    await description_update('Subtrahiere die Operanden');
 
     const result = addBinary(A.value_number, C.value_number, true);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const subDat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den 1. Operanden'); 
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Hole den 2. Operanden');
-    await animateReadFromMemoryInRegister('PC', 'ALU2');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Subtrahiere die Operanden');
+    await description_update('Hole den 1. Operator'); 
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Hole den 2. Operator');
+    await readFromMemoryInRegister('PC', 'ALU2');
+    await increasePC();
+    await description_update('Subtrahiere die Operanden');
 
     const result = addBinary(A.value_number, ALU2.value_number, true);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const andA = async() => {
-    await animateloadOperands('A','A');
-    await animateStepDescriptionUpdate('OP1 AND OP2');
+    await loadOperands('A','A');
+    await description_update('OP1 AND OP2');
 
     const result = andBinary(A.value_number, A.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const andB = async() => {
-    await animateloadOperands('A','B');
-    await animateStepDescriptionUpdate('OP1 AND OP2');
+    await loadOperands('A','B');
+    await description_update('OP1 AND OP2');
 
     const result = andBinary(A.value_number, B.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const andC = async() => {
-    await animateloadOperands('A','C');
-    await animateStepDescriptionUpdate('OP1 AND OP2');
+    await loadOperands('A','C');
+    await description_update('OP1 AND OP2');
 
     const result = andBinary(A.value_number, C.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const andDat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den 1. Operanden'); 
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Hole den 2. Operanden');
-    await animateReadFromMemoryInRegister('PC' ,'ALU2');
-    await animateIncreasePcByOne()
-    await animateStepDescriptionUpdate('OP1 AND OP2');
+    await description_update('Hole den 1. Operanden'); 
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Hole den 2. Operanden');
+    await readFromMemoryInRegister('PC' ,'ALU2');
+    await increasePC()
+    await description_update('OP1 AND OP2');
 
     const result = andBinary(A.value_number, ALU2.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const orA = async() => {
-    await animateloadOperands('A','A');
-    await animateStepDescriptionUpdate('OP1 OR OP2');
+    await loadOperands('A','A');
+    await description_update('OP1 OR OP2');
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const orB = async() => {
-    await animateloadOperands('A','B');
-    await animateStepDescriptionUpdate('OP1 OR OP2');
+    await loadOperands('A','B');
+    await description_update('OP1 OR OP2');
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const orC = async() => {
-    await animateloadOperands('A','C');
-    await animateStepDescriptionUpdate('OP1 OR OP2');
+    await loadOperands('A','C');
+    await description_update('OP1 OR OP2');
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const orDat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den 1. Operanden'); 
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Hole den 2. Operanden');
-    await animateReadFromMemoryInRegister('PC' , 'ALU2');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('OP1 OR OP2');
+    await description_update('Hole den 1. Operanden'); 
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Hole den 2. Operanden');
+    await readFromMemoryInRegister('PC' , 'ALU2');
+    await increasePC();
+    await description_update('OP1 OR OP2');
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const xorA = async() => {
-    await animateloadOperands('A','A');
-    await animateStepDescriptionUpdate('OP1 XOR OP2');
+    await loadOperands('A','A');
+    await description_update('OP1 XOR OP2');
 
     const result = xorBinary(A.value_number, A.value_number);
-    await animateALU(result,true,false , 'A');
+    await aluAnimation(result,true,false , 'A');
     check_completeExecution();
 }
 
 const xorB = async() => {
-    await animateloadOperands('A','B');
-    await animateStepDescriptionUpdate('OP1 XOR OP2');
+    await loadOperands('A','B');
+    await description_update('OP1 XOR OP2');
 
     const result = xorBinary(A.value_number, B.value_number);
-    await animateALU(result,true,false , 'A');
+    await aluAnimation(result,true,false , 'A');
     check_completeExecution();
 }
 
 const xorC = async() => {
-    await animateloadOperands('A','C');
-    await animateStepDescriptionUpdate('OP1 XOR OP2');
+    await loadOperands('A','C');
+    await description_update('OP1 XOR OP2');
 
     const result = xorBinary(A.value_number, C.value_number);
-    await animateALU(result,true,false , 'A');
+    await aluAnimation(result,true,false , 'A');
     check_completeExecution();
 }
 
 const xorDat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den 1. Operanden'); 
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Hole den 2. Operanden');
-    await animateReadFromMemoryInRegister('PC' , 'ALU2');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('OP1 OR OP2');
+    await description_update('Hole den 1. Operanden'); 
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Hole den 2. Operanden');
+    await readFromMemoryInRegister('PC' , 'ALU2');
+    await increasePC();
+    await description_update('OP1 OR OP2');
 
     const result = xorBinary(ALU1.value_number, ALU2.value_number);
-    await animateALU(result,true,false, 'A');
+    await aluAnimation(result,true,false, 'A');
     check_completeExecution();
 }
 
 const twoByteShift = async() => {
-    await animateStepDescriptionUpdate('Hole das 2. Byte des Befehls');
-    await animateReadFromMemoryInRegister('PC', 'IR');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Erkenne den Befehl');
+    await description_update('Hole das 2. Byte des Befehls');
+    await readFromMemoryInRegister('PC', 'IR');
+    await increasePC();
+    await description_update('Erkenne den Befehl');
     await addYellowBackgroundForIDLETIME(IR.htmlElement);
     
 
     if(IR.value_number === 0b00100111){
-        await animateArrow('IR');
+        await addArrow('IR');
         assemblerCommand_p.textContent = 'SHL';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
-        await animateStepDescriptionUpdate('Hole den Operanden');
-        await animateTransfer('A','ALU1',A.value_number);
-        await animateRegisterUpdate('ALU1', A.value_number);
-        await animateStepDescriptionUpdate('Schiebe Operanden nach links');
+        await description_update('Hole den Operanden');
+        await transfer('A','ALU1',A.value_number);
+        await updateRegister_hex('ALU1', A.value_number);
+        await description_update('Schiebe Operanden nach links');
         const result = shlBinary(A.value_number);
-        await animateALU(result, false,false, 'A');
+        await aluAnimation(result, false,false, 'A');
     }
     else if(IR.value_number === 0b00111111){
-        await animateArrow('IR');
+        await addArrow('IR');
         assemblerCommand_p.textContent = 'SHR';
         if(!playStatus.noAnim)
             await sleepForIDLETIME();
-        await animateStepDescriptionUpdate('Hole den Operanden');
-        await animateTransfer('A','ALU1',A.value_number);
-        await animateRegisterUpdate('ALU1', A.value_number);
-        await animateStepDescriptionUpdate('Schiebe Operanden nach rechts');
+        await description_update('Hole den Operanden');
+        await transfer('A','ALU1',A.value_number);
+        await updateRegister_hex('ALU1', A.value_number);
+        await description_update('Schiebe Operanden nach rechts');
         const result = shrBinary(A.value_number);
-        await animateALU(result, false,false, 'A');
+        await aluAnimation(result, false,false, 'A');
     }
     check_completeExecution();
 }
 
 const rcl = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Rotiere Operand mit Carry-Flag nach links');
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Rotiere Operand mit Carry-Flag nach links');
     const result = rclBinary(A.value_number);
-    await animateALU(result,false,true, 'A');
+    await aluAnimation(result,false,true, 'A');
     check_completeExecution();
 }
 
 const rol = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Rotiere Operand ohne Carry-Flag nach links');
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Rotiere Operand ohne Carry-Flag nach links');
     const result = rolBinary(A.value_number);
-    await animateALU(result,false,false, 'A');
+    await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
 const rcr = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Rotiere Operand mit Carry-Flag nach rechts');
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Rotiere Operand mit Carry-Flag nach rechts');
     const result = rcrBinary(A.value_number);
-    await animateALU(result,false,true, 'A');
+    await aluAnimation(result,false,true, 'A');
     check_completeExecution();
 }
 
 const ror = async() => {
-    await animateStepDescriptionUpdate('Hole den Operanden');
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Rotiere Operand ohne Carry-Flag nach rechts');
+    await description_update('Hole den Operanden');
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Rotiere Operand ohne Carry-Flag nach rechts');
     const result = rorBinary(A.value_number);
-    await animateALU(result,false,false, 'A');
+    await aluAnimation(result,false,false, 'A');
     check_completeExecution();
 }
 
 const cpA = async() => {
-    await animateloadOperands('A','A');
-    await animateStepDescriptionUpdate('Vergleiche die Operanden');
+    await loadOperands('A','A');
+    await description_update('Vergleiche die Operanden');
 
     const result = addBinary(A.value_number, A.value_number, true);
-    await animateALU(result,true,false, '');
+    await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
 
 const cpB = async() => {
-    await animateloadOperands('A','B');
-    await animateStepDescriptionUpdate('Vergleiche die Operanden');
+    await loadOperands('A','B');
+    await description_update('Vergleiche die Operanden');
 
     const result = addBinary(A.value_number, B.value_number, true);
-    await animateALU(result,true,false, '');
+    await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
 
 const cpC = async() => {
-    await animateloadOperands('A','C');
-    await animateStepDescriptionUpdate('Vergleiche die Operanden');
+    await loadOperands('A','C');
+    await description_update('Vergleiche die Operanden');
 
     const result = addBinary(A.value_number, C.value_number, true);
-    await animateALU(result,true,false, '');
+    await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
 
 const cpDat_8 = async() => {
-    await animateStepDescriptionUpdate('Hole den 1. Operanden'); 
-    await animateTransfer('A','ALU1',A.value_number);
-    await animateRegisterUpdate('ALU1', A.value_number);
-    await animateStepDescriptionUpdate('Hole den 2. Operanden');
-    await animateReadFromMemoryInRegister('PC' , 'ALU2');
-    await animateIncreasePcByOne();
-    await animateStepDescriptionUpdate('Vergleiche die Operanden');
+    await description_update('Hole den 1. Operanden'); 
+    await transfer('A','ALU1',A.value_number);
+    await updateRegister_hex('ALU1', A.value_number);
+    await description_update('Hole den 2. Operanden');
+    await readFromMemoryInRegister('PC' , 'ALU2');
+    await increasePC();
+    await description_update('Vergleiche die Operanden');
 
     const result = addBinary(A.value_number, ALU2.value_number, true);
-    await animateALU(result,true,false, '');
+    await aluAnimation(result,true,false, '');
     check_completeExecution();
 }
 
 const jpnzLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('zFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('zFlag');
 
     //jump
     if(FLAGS.z_number === 0){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
         
     }
     check_completeExecution();
 }
 
 const jpzLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('zFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('zFlag');
 
     //jump
     if(FLAGS.z_number === 1){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
 
 const jpncLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('cFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('cFlag');
 
     //jump
     if(FLAGS.c_number === 0){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
 
 const jpcLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('cFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('cFlag');
 
     //jump
     if(FLAGS.c_number === 1){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
 
 const jpnoLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('pFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('pFlag');
 
     //jump
     if(FLAGS.p_number === 0){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
 
 const jpoLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('pFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('pFlag');
 
     //jump
     if(FLAGS.p_number === 1){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
 
 const jpnsLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('sFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('sFlag');
 
     //jump
     if(FLAGS.s_number === 0){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
 
 const jpsLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Prüfe die Sprungbedingung');
-    await animateCheckJump('sFlag');
+    await loadAddressBytesInZr();
+    await description_update('Prüfe die Sprungbedingung');
+    await checkJumpAnimation('sFlag');
 
     //jump
     if(FLAGS.s_number === 1){
-        await animateStepDescriptionUpdate('Lade den Programmzähler');
-        await animateArrow('ZR');
-        await animateTransfer('ZR', 'PC', ZR.value_number);
-        await animateRegisterUpdate('PC', ZR.value_number);
+        await description_update('Lade den Programmzähler');
+        await addArrow('ZR');
+        await transfer('ZR', 'PC', ZR.value_number);
+        await updateRegister_hex('PC', ZR.value_number);
     }
     check_completeExecution();
 }
 
 const jpLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Lade den Programmzähler');
-    await animateArrow('ZR');
-    await animateTransfer('ZR', 'PC', ZR.value_number);
-    await animateRegisterUpdate('PC', ZR.value_number);
+    await loadAddressBytesInZr();
+    await description_update('Lade den Programmzähler');
+    await addArrow('ZR');
+    await transfer('ZR', 'PC', ZR.value_number);
+    await updateRegister_hex('PC', ZR.value_number);
     check_completeExecution();
 }
 
 const callLabel = async() => {
-    await animateloadAddressBytesInZr();
-    await animateStepDescriptionUpdate('Erhöhe den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number-1);
-    await animateStepDescriptionUpdate('Schreibe das HI-Byte des PC');
-    await animateWriteToMemoryFromRegister('SP','PC_hi');
-    await animateStepDescriptionUpdate('Erhöhe den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number-1);
-    await animateStepDescriptionUpdate('Schreibe das LO-Byte des PC');
-    await animateWriteToMemoryFromRegister('SP','PC_lo');
-    await animateStepDescriptionUpdate('Lade den Programmzähler');
-    await animateArrow('ZR');
-    await animateTransfer('ZR', 'PC', ZR.value_number);
-    await animateRegisterUpdate('PC', ZR.value_number);
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_lo');
+    await increasePC();
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('PC', 'ZR_hi');
+    await increasePC();
+    await description_update('Erhöhe den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number-1);
+    await description_update('Schreibe das HI-Byte des PC');
+    await writeToMemoryFromRegister('SP','PC_hi');
+    await description_update('Erhöhe den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number-1);
+    await description_update('Schreibe das LO-Byte des PC');
+    await writeToMemoryFromRegister('SP','PC_lo');
+    await description_update('Lade den Programmzähler');
+    await addArrow('ZR');
+    await transfer('ZR', 'PC', ZR.value_number);
+    await updateRegister_hex('PC', ZR.value_number);
     check_completeExecution();
 }
 
 const ret = async() => {
-    await animateStepDescriptionUpdate('Hole das niederwertige Adressbyte');
-    await animateReadFromMemoryInRegister('SP', 'ZR_lo');
-    await animateStepDescriptionUpdate('Verringere den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number+1);
-    await animateStepDescriptionUpdate('Hole das höherwertige Adressbyte');
-    await animateReadFromMemoryInRegister('SP', 'ZR_hi');
-    await animateStepDescriptionUpdate('Verringere den Stackpointer um 1');
-    await animateArrow('SP');
-    await animateRegisterUpdate('SP', SP.value_number+1);
-    await animateStepDescriptionUpdate('Lade den Programmzähler');
-    await animateArrow('ZR');
-    await animateTransfer('ZR', 'PC', ZR.value_number);
-    await animateRegisterUpdate('PC', ZR.value_number);
+    await description_update('Hole das niederwertige Adressbyte');
+    await readFromMemoryInRegister('SP', 'ZR_lo');
+    await description_update('Verringere den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number+1);
+    await description_update('Hole das höherwertige Adressbyte');
+    await readFromMemoryInRegister('SP', 'ZR_hi');
+    await description_update('Verringere den Stackpointer um 1');
+    await addArrow('SP');
+    await updateRegister_hex('SP', SP.value_number+1);
+    await description_update('Lade den Programmzähler');
+    await addArrow('ZR');
+    await transfer('ZR', 'PC', ZR.value_number);
+    await updateRegister_hex('PC', ZR.value_number);
     check_completeExecution();
 }
 
-//TODO: 
 let runningProgram = [get_next_command];
 
 const run_program = async() => {

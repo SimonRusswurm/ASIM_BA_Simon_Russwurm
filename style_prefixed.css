@@ -113,6 +113,10 @@ select {
     font-family: Arial,Helvetica,sans-serif
 }
 
+.alignTextRight {
+    text-align: end;
+}
+
 .gridChild {
     display: -ms-grid;
     display: grid;
@@ -156,6 +160,12 @@ select {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border: .1px solid #6a6a6a
+}
+.noLeftBorder{
+    border-left: none;
+}
+.noRightBorder{
+    border-right: none;
 }
 
 .topLeft {
@@ -271,7 +281,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .movingObject {
-    z-index: 2
+    z-index: 2;
 }
 
 .redRectangle {
@@ -489,28 +499,39 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     left: calc(100%/46*17)
 }
 
-#hlRegisterValue_h2 {
-    top: calc(100%/32*12);
-    left: calc(100%/46*14)
-}
+
 
 #hlRegisterLabel_h1 {
     top: calc(100%/32*12);
     left: calc(100%/46*12)
 }
-
-#ixRegisterValue_h2 {
-    top: calc(100%/32*14);
+#hlBackground_div {
+    top: calc(100%/32*12);
     left: calc(100%/46*14)
+}
+#hlRegisterValueHi_h2 {
+    top: calc(100%/32*12);
+    left: calc(100%/46*14)
+}
+#hlRegisterValueLo_h2 {
+    top: calc(100%/32*12);
+    left: calc(100%/46*16);
 }
 
 #ixRegisterLabel_h1 {
     top: calc(100%/32*14);
     left: calc(100%/46*12)
 }
-
-#spRegisterValue_h2 {
-    top: calc(100%/32*16);
+#ixRegisterValueHi_h2 {
+    top: calc(100%/32*14);
+    left: calc(100%/46*14)
+}
+#ixRegisterValueLo_h2 {
+    top: calc(100%/32*14);
+    left: calc(100%/46*16);
+}
+#ixBackground_div {
+    top: calc(100%/32*14);
     left: calc(100%/46*14)
 }
 
@@ -518,9 +539,16 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     top: calc(100%/32*16);
     left: calc(100%/46*12)
 }
-
-#pcRegisterValue_h2 {
-    top: calc(100%/32*18);
+#spRegisterValueHi_h2 {
+    top: calc(100%/32*16);
+    left: calc(100%/46*14)
+}
+#spRegisterValueLo_h2 {
+    top: calc(100%/32*16);
+    left: calc(100%/46*16);
+}
+#spBackground_div {
+    top: calc(100%/32*16);
     left: calc(100%/46*14)
 }
 
@@ -528,9 +556,16 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     top: calc(100%/32*18);
     left: calc(100%/46*12)
 }
-
-#zrRegisterValue_h2 {
-    top: calc(100%/32*20);
+#pcRegisterValueHi_h2 {
+    top: calc(100%/32*18);
+    left: calc(100%/46*14)
+}
+#pcRegisterValueLo_h2 {
+    top: calc(100%/32*18);
+    left: calc(100%/46*16);
+}
+#pcBackground_div{
+    top: calc(100%/32*18);
     left: calc(100%/46*14)
 }
 
@@ -538,6 +573,20 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     top: calc(100%/32*20);
     left: calc(100%/46*12)
 }
+#zrRegisterValueHi_h2 {
+    top: calc(100%/32*20);
+    left: calc(100%/46*14)
+}
+#zrRegisterValueLo_h2 {
+    top: calc(100%/32*20);
+    left: calc(100%/46*16);
+}
+#zrBackground_div {
+    top: calc(100%/32*20);
+    left: calc(100%/46*14)
+}
+
+
 
 #alu1RegisterValue_h2 {
     top: calc(100%/32*6);

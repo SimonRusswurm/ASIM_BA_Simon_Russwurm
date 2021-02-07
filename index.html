@@ -489,71 +489,71 @@
             </div>
              <!-- ************************************************** controlPanel *************************************************  -->
              <div class="controlPanel gridChild borderBox rounded">
-                <button id="play_button" type="button" class="topLeft bottomLeft borderRight alignBg" onclick="play()"></button>
-                <button id="pause_button" type="button" class="borderRight alignBg" onclick="pause()"></button>
-                <button id="stop_button" type="button" class="borderRight alignBg" onclick="stopBtn()"></button>
-                <button id="slow_button" type="button" class="borderRight alignBg" onclick="snailSpeed_on()"></button>
-                <button id="fast_button" type="button" class="borderRight alignBg" onclick="rocketSpeed_on()"></button>
-                <button id="singleStep_button" type="button" class="borderRight alignBg" onclick="runNextSingleStep()"></button>
-                <button id="fullCommand_button" type="button" class="borderRight alignBg" onclick="runCompleteExecution()"></button>
-                <button id="increase_button" type="button" class="borderRight alignBg" onclick="increaseSpeed()"></button>
-                <button id="decrease_button" type="button" class="borderRight alignBg" onclick="decreaseSpeed()"></button>
-                <button id="oneCommand_button" type="button" class="borderRight alignBg" onclick="runOneCommand()"></button>
-                <button id="settingsButton_button" type="button" class="borderRight alignBg" onclick="toggleSettings()"></button>
-                <button id="fullscreenButton_button" type="button" class="borderRight alignBg" onclick="toggleFullscreen()"></button>
-                <button id="toggleTheme_button" type="button" class="topRight bottomRight alignBg" onclick="toggleTheme()"></button>
+                <div id="play_button"           class="button topLeft bottomLeft borderRight alignBg" onclick="play()"></div>
+                <div id="pause_button"          class="button borderRight alignBg" onclick="pause()"></div>
+                <div id="stop_button"           class="button borderRight alignBg" onclick="stopBtn()"></div>
+                <div id="slow_button"           class="button borderRight alignBg" onclick="snailSpeed_on()"></div>
+                <div id="fast_button"           class="button borderRight alignBg" onclick="rocketSpeed_on()"></div>
+                <div id="singleStep_button"     class="button borderRight alignBg" onclick="runNextSingleStep()"></div>
+                <div id="fullCommand_button"    class="button borderRight alignBg" onclick="runCompleteExecution()"></div>
+                <div id="increase_button"       class="button borderRight alignBg" onclick="increaseSpeed()"></div>
+                <div id="decrease_button"       class="button borderRight alignBg" onclick="decreaseSpeed()"></div>
+                <div id="oneCommand_button"     class="button borderRight alignBg" onclick="runOneCommand()"></div>
+                <div id="settingsButton_button" class="button borderRight alignBg" onclick="openSettings()"></div>
+                <div id="fullscreenButton_button" class="button borderRight alignBg" onclick="toggleFullscreen()"></div>
+                <div id="toggleTheme_button"    class="button topRight bottomRight alignBg" onclick="toggleTheme()"></div>
             </div>
 
             <div id="playHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Start</Button></p>
+                <p class="bold">Start [space]</Button></p>
                 <p>Startet den Programmablauf.</p>
             </div>
             <div id="pauseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Pause</Button></p>
+                <p class="bold">Pause [space]</Button></p>
                 <p>Pausiert den Programmablauf.</p>
             </div>
             <div id="stopHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Reset</Button></p>
+                <p class="bold">Reset [r]</Button></p>
                 <p>Setzt die CPU zurück.</p>
             </div>
             <div id="slowHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Langsame Animation</Button></p>
+                <p class="bold">Langsame Animation [a]</Button></p>
                 <p>Animation mit Bewegung.</p>
             </div>
             <div id="fastHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schnelle Animation</Button></p>
+                <p class="bold">Schnelle Animation [s]</Button></p>
                 <p>Animation ohne Bewegung.</p>
             </div>
             <div id="singleStepHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einzelschritt ohne Animation</Button></p>
+                <p class="bold">Einzelschritt ohne Animation [d]</Button></p>
                 <p>Führt einen Befehl ohne Animation aus.</p>
             </div>
             <div id="fullCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schneller Ablauf</Button></p>
+                <p class="bold">Schneller Ablauf [f]</Button></p>
                 <p>Führt die gesamte Simulation ohne Animation aus.</p>
             </div>
             <div id="increaseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schneller</Button></p>
+                <p class="bold">Schneller [+]</Button></p>
                 <p>Erhöht die Animationsgeschwindigkeit.</p>
             </div>
             <div id="decreaseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Langsamer</Button></p>
+                <p class="bold">Langsamer [-]</Button></p>
                 <p>Verringert  die Animationsgeschwindigkeit.</p>
             </div>
             <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einzelschritt</Button></p>
+                <p class="bold">Einzelschritt [t]</Button></p>
                 <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
             </div>
             <div id="settingsButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einstellungen</Button></p>
+                <p class="bold">Einstellungen [c]</Button></p>
                 <p>Konfiguration von ROM, RAM und IO.</p>
             </div>
             <div id="fullscreenButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Vollbild</Button></p>
+                <p class="bold">Vollbild [v]</Button></p>
                 <p>Tipp: Bei Smartphones verwenden!</p>
             </div>
             <div id="toggleThemeHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Dunkler Modus</Button></p>
+                <p class="bold">Dunkler Modus [b]</Button></p>
                 <p>Wechselt das Design.</p>
             </div>
 
@@ -561,8 +561,8 @@
             
             <!-- ************************************************** Settings *************************************************  -->
             <div id="containerSettings_div" class="settingsWindow borderBox rounded">
-                <div class="borderBox rounded innerSettings">
-                    <h4 style="position: absolute; top: calc(100%/26*2); left: calc(100%/39*2);">Konfiguration ROM:</h4>
+                <div class="rounded innerSettings">
+                    <h4 style="position: absolute; top: calc(100%/28*2); left: calc(100%/42*2);">Konfiguration ROM:</h4>
                     <select id="programSelection_select" name="programSelection" class="lightRounded borderBox textareaFontSize displayNone">
                         <option value="own">Eigenes Programm</option>
                         <option value="bsp1">Bsp 01 - Erklärung FETCH-Phase</option>
@@ -591,34 +591,34 @@
                         <p class="centered">+</p>
                     </div>
 
-                    <p style="position: absolute; top: calc(100%/26*6); left: calc(100%/39*2);">Linker-Datei:</p>                    
+                    <p style="position: absolute; top: calc(100%/28*6); left: calc(100%/42*2);">Linker-Datei:</p>                    
                     <textarea id="linkerFile_textarea" name="linkerFile" class="lightRounded borderBox textareaFontSize"></textarea>
 
                     <div class="containerBreakpoints centered">
-                        <div id="breakpointsCheckbox_div" class="whiteBg alignBg borderBox rounded">
+                        <div id="breakpointsCheckbox_div" class="whiteBg alignBg borderBox lightRounded">
                             <input id="breakpointsCheckbox_input" type="checkbox" class="displayNone" >
                         </div>
                     </div>
                     
-                    <div style="position: absolute; top: calc(100%/26*23); left: calc(100%/39*3.2); height: calc(100%/26*1); width: calc(100%/39*5);" class="centeredHorizontal" >
+                    <div style="position: absolute; top: calc(100%/28*25); left: calc(100%/42*3.2); height: calc(100%/28*1); width: calc(100%/42*5);" class="centeredHorizontal" >
                         <p>Breakpoints</p>
                     </div>
                     
-                    <h4 style="position: absolute; top: calc(100%/26*2); left: calc(100%/39*17);">Konfiguration IO-Bausteine:</h4>
+                    <h4 style="position: absolute; top: calc(100%/28*2); left: calc(100%/42*20);">Konfiguration IO-Bausteine:</h4>
 
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*17);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*20);">
                         <input id="radioIoMapped_input" type="radio" class="radiostyle" name="radioIoMap" value="IO-mapped" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*4); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*4);">
                         <p>IO mapped</p>
                     </div>
 
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*17);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*20);">
                         <input id="radioMemoryMap_input" type="radio"  class="radiostyle" name="radioIoMap" value="Memory-mapped">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/26*5); left: calc(100%/39*18); height: calc(100%/26*1); width: calc(100%/39*4);">
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*4);">
                         <p>Memory map</p>
                     </div>
                     
@@ -637,11 +637,11 @@
                             <p>Ausgang</p>
                         </div>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*18);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*21);">
                         <input id="io1InputRadio_input" type="radio" class="radio" name="IO1InOut" value="In" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*18);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*21);">
                         <input id="io1OutputRadio_input" type="radio" name="IO1InOut" value="Out">
                         <span class="checkmark borderBox"></span>
                     </div>
@@ -663,11 +663,11 @@
                             <p>Ausgang</p>
                         </div>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*25);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*28);">
                         <input id="io2InputRadio_input" type="radio" class="radio" name="IO2InOut" value="In" >
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*25);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*28);">
                         <input id="io2OutputRadio_input" type="radio"  name="IO2InOut" value="Out" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
@@ -689,18 +689,18 @@
                             <p>Ausgang</p>
                         </div>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*11); left: calc(100%/39*32);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*35);">
                         <input id="io3InputRadio_input" type="radio" class="radio" name="IO3InOut" value="In" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/26*12); left: calc(100%/39*32);">
+                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*35);">
                         <input id="io3OutputRadio_input" type="radio"  name="IO3InOut" value="Out">
                         <span class="checkmark borderBox"></span>
                     </div>
 
 
-                    <h4 style="position: absolute; top: calc(100%/26*15); left: calc(100%/39*17);">Konfiguration RAM:</h4>
-                    <div style="position: absolute; top: calc(100%/26*17); left: calc(100%/39*17); height: calc(100%/26*1); width: calc(100%/39*5);" class="centeredHorizontal">
+                    <h4 style="position: absolute; top: calc(100%/28*15); left: calc(100%/42*20);">Konfiguration RAM:</h4>
+                    <div style="position: absolute; top: calc(100%/28*17); left: calc(100%/42*20); height: calc(100%/28*1); width: calc(100%/42*5);" class="centeredHorizontal">
                         <p class="textareaFontSize">Adressbereich:</p>
                     </div>
                     
@@ -733,7 +733,7 @@
             
 
             <!---------------------------------custom selction options-------------------------------------------->
-            <div id="ramSelectOptions_div" class="selectOptions borderBox displayNone rounded">
+            <div id="ramSelectOptions_div" class="ramSelect selectOptions borderBox displayNone lightRounded">
                 <h5 class="option">2000h - 3FFFh</h5>
                 <h5 class="option">4000h - 5FFFh</h5>
                 <h5 class="option">6000h - 7FFFh</h5>
@@ -743,7 +743,7 @@
                 <h5 class="option">E000h - FFFFh</h5>
             </div>
 
-            <div id="programSelectionOptions_div" class="selectOptions borderBox displayNone rounded">
+            <div id="programSelectionOptions_div" class="programSelect selectOptions borderBox displayNone lightRounded">
                 <h5 class="option">Eigenes Programm</h5>
                 <h5 class="option">Bsp 01 - Erklärung FETCH-Phase</h5>
                 <h5 class="option">Bsp 02 - Erklärung Ausführungsphase</h5>

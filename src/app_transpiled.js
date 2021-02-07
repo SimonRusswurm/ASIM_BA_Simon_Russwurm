@@ -82,6 +82,8 @@ window.addEventListener('resize', function () {
 });
 /***************************************************global Variables***************************************************/
 let isFullscreen = false;
+let settingsDisplayed_boolean = true;
+let ioInputDisplayed_boolean = false;
 let ANIMATION_SPEED = 3;
 let IDLETIME = 400;
 let NOANIMATIONIDLETIME = 30;
@@ -485,9 +487,6 @@ class PlayStatus {
         this.play = false;
         this.stop = true;
         this.pause = false;
-        this.oneCommand = false;
-        this.noAnim = false;
-        this.completeExe = false;
     }
     setOneCommand() {
         this.oneCommand = true;
@@ -1204,7 +1203,7 @@ const fixPoints = [
 /***************************************************hover popups***************************************************/
 const allH1Elements_h1 = Array.from(document.getElementsByTagName('h1'));
 const allH3Elements_h3 = Array.from(document.getElementsByTagName('h3'));
-const controlButtons_button = Array.from(document.querySelectorAll('.controlPanel button'));
+const controlButtons_button = Array.from(document.querySelectorAll('.button'));
 const hoverElements_htmlElements = allH1Elements_h1.concat(allH3Elements_h3).concat(controlButtons_button);
 const hoverPopUps_htmlElements = document.getElementsByClassName('hoverElement');
 const updateHoverElements = () => {
@@ -1244,10 +1243,10 @@ const updateHoverElements = () => {
 for (let i = 0; i < hoverElements_htmlElements.length; i++) {
     hoverElements_htmlElements[i].addEventListener('mouseover', function () {
         updateHoverElements();
-        hoverPopUps_htmlElements[i].classList.toggle('toggleGrid');
+        hoverPopUps_htmlElements[i].classList.toggle('displayGrid');
     });
     hoverElements_htmlElements[i].addEventListener('mouseleave', function () {
-        hoverPopUps_htmlElements[i].classList.toggle('toggleGrid');
+        hoverPopUps_htmlElements[i].classList.toggle('displayGrid');
     });
 }
 /***************************************************settings window***************************************************/
@@ -1472,7 +1471,7 @@ const checkSettings = () => {
     }
     if (errorMessage_string === '')
         return true;
-    errorWindow_div.classList.add('toggleGrid');
+    errorWindow_div.classList.add('displayGrid');
     errorMessage_textarea.textContent = errorMessage_string;
     return false;
 };
@@ -1693,8 +1692,9 @@ const saveSettings = () => {
         stopBtn(); //init
         ROM.update();
         RAM.reset();
-        toggleSettings();
-        errorWindow_div.classList.remove('toggleGrid');
+        containerSettings_div.classList.remove('toggleDisplay');
+        errorWindow_div.classList.remove('displayGrid');
+        settingsDisplayed_boolean = false;
     }
 };
 /**
@@ -1709,17 +1709,21 @@ const programSelectionOptions_div = document.getElementById('programSelectionOpt
 const ramOptions = ramSelectOptions_div.children;
 const programOptions = programSelectionOptions_div.children;
 ramSelect_div.addEventListener('click', function () {
-    ramSelectOptions_div.classList.toggle('toggleGrid');
+    ramSelectOptions_div.classList.add('displayGrid');
 });
 programSelection_div.addEventListener('click', function () {
-    programSelectionOptions_div.classList.toggle('toggleGrid');
+    programSelectionOptions_div.classList.add('displayGrid');
+});
+document.addEventListener('mouseup', function () {
+    ramSelectOptions_div.classList.remove('displayGrid');
+    programSelectionOptions_div.classList.remove('displayGrid');
 });
 for (let i = 0; i < ramOptions.length; i++) {
     ramOptions[i].addEventListener('click', function () {
         ramAddress_select.value = ramAddress_select.children[i].value;
         changeRamAddress();
         ramSelection_p.textContent = ramOptions[i].textContent;
-        ramSelectOptions_div.classList.toggle('toggleGrid');
+        ramSelectOptions_div.classList.remove('displayGrid');
     });
 }
 for (let i = 0; i < programOptions.length; i++) {
@@ -1727,7 +1731,7 @@ for (let i = 0; i < programOptions.length; i++) {
         programSelection_select.value = programSelection_select.children[i].value;
         updateProgram();
         programSelection_p.textContent = programOptions[i].textContent;
-        programSelectionOptions_div.classList.toggle('toggleGrid');
+        programSelectionOptions_div.classList.remove('displayGrid');
     });
 }
 /**
@@ -1994,7 +1998,7 @@ const check_completeExecution = () => {
             updateStepDescription('Prozessor angehalten');
             stepNumber_p.textContent = '0';
             playStatus.setPause();
-            setButtonPressed();
+            setButtonsPressed();
         }
     }
 };
@@ -2273,7 +2277,7 @@ const displayMovingObj = (pointsAtoB_array, hexValue_string) => {
     else {
         movingObject_h2.classList.remove('rectangle4x2');
     }
-    movingObject_h2.classList.add('toggleGrid');
+    movingObject_h2.classList.add('displayGrid');
 };
 const animatePaintedPath = async (pointsAtoB_array, origin_string, target_string) => {
     let pathElements = [];
@@ -2322,7 +2326,7 @@ const animatePaintedPath = async (pointsAtoB_array, origin_string, target_string
         for (let i = 0; i < pathElements.length; i++) {
             pathElements[i].remove();
         }
-        movingObject_h2.classList.remove('toggleGrid');
+        movingObject_h2.classList.remove('displayGrid');
     }
 };
 //updates the position of the movingObject depending on the speed(values: 1,2,3,4,6,12) => 12/values is always an integer
@@ -2335,7 +2339,7 @@ const conditionalPositionUpdate = async (xCoordinates_array, yCoordinates_array,
             await sleep(1000 / FRAMES);
         }
         catch (e) {
-            movingObject_h2.classList.remove('toggleGrid');
+            movingObject_h2.classList.remove('displayGrid');
             throw e;
         }
     }
@@ -2387,7 +2391,7 @@ const animateTransfer = async (origin_string, target_string, value_number = 0) =
             for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
                 //if singleStep is pressed during the animation, remove movingObject and jump out of function
                 if (playStatus.noAnim) {
-                    movingObject_h2.classList.remove('toggleGrid');
+                    movingObject_h2.classList.remove('displayGrid');
                     return true;
                 }
                 //display decoder
@@ -2409,7 +2413,7 @@ const animateTransfer = async (origin_string, target_string, value_number = 0) =
             }
         }
         //remove Element when transfer was successful 
-        movingObject_h2.classList.remove('toggleGrid');
+        movingObject_h2.classList.remove('displayGrid');
     }
     //noAnim
     else {
@@ -2519,13 +2523,13 @@ const animateWriteToMemoryFromRegister = async (addressRegister_string, dataRegi
 const setMovingAluElements = (twoMovingAluElements_boolean) => {
     movingAlu1.textContent = ALU1.htmlElement.textContent;
     movingAlu2.textContent = ALU2.htmlElement.textContent;
-    movingAlu1.classList.add('toggleGrid');
+    movingAlu1.classList.add('displayGrid');
     if (twoMovingAluElements_boolean)
-        movingAlu2.classList.add('toggleGrid');
+        movingAlu2.classList.add('displayGrid');
 };
 const resetMovingAluElements = () => {
-    movingAlu1.classList.remove('toggleGrid');
-    movingAlu2.classList.remove('toggleGrid');
+    movingAlu1.classList.remove('displayGrid');
+    movingAlu2.classList.remove('displayGrid');
     movingAlu1.style.top = `${100 / 32 * 6}%`;
     movingAlu1.style.left = `${100 / 46 * 24}%`;
     movingAlu2.style.top = `${100 / 32 * 6}%`;
@@ -2659,7 +2663,7 @@ const animateSetFlags = async () => {
         movingFlags_div.children[1].textContent = FLAGS.z_number;
         movingFlags_div.children[2].textContent = FLAGS.p_number;
         movingFlags_div.children[3].textContent = FLAGS.s_number;
-        movingFlags_div.classList.add('toggleGrid');
+        movingFlags_div.classList.add('displayGrid');
         try {
             await sleepForIDLETIME();
             for (let i = 0; i < 21; i++) {
@@ -2669,7 +2673,7 @@ const animateSetFlags = async () => {
             await sleepForIDLETIME();
         }
         finally {
-            movingFlags_div.classList.remove('toggleGrid');
+            movingFlags_div.classList.remove('displayGrid');
             movingFlags_div.style.top = `${100 / 32 * 8}%`;
         }
     }
@@ -2710,6 +2714,7 @@ const animateIoUserInput = async (IoName_string) => {
     let ioInputWindow;
     let ioInput;
     let check = true;
+    ioInputDisplayed_boolean = true;
     switch (IoName_string) {
         case 'IO1':
             ioInputWindow = io1InputWindow_div;
@@ -2726,7 +2731,7 @@ const animateIoUserInput = async (IoName_string) => {
         default:
             throw Error('Unknown IO');
     }
-    ioInputWindow.classList.add('toggleGrid');
+    ioInputWindow.classList.add('displayGrid');
     ioInput.select();
     try {
         while (check) {
@@ -2751,10 +2756,11 @@ const animateIoUserInput = async (IoName_string) => {
         }
     }
     finally {
-        ioInputWindow.classList.remove('toggleGrid');
+        ioInputWindow.classList.remove('displayGrid');
         document.getElementById('io1InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
         document.getElementById('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
         document.getElementById('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+        ioInputDisplayed_boolean = false;
     }
     await animateRegisterUpdate(IoName_string, convertHexToNumber(ioInput.value));
     ioInput.value = '';
@@ -3677,244 +3683,6 @@ const ret = async () => {
     await animateRegisterUpdate('PC', ZR.value_number);
     check_completeExecution();
 };
-//TODO: 
-let runningProgram = [get_next_command];
-const run_program = async () => {
-    let i = 0;
-    while (true) {
-        if (runningProgram[i] === undefined) {
-            return false;
-        }
-        try {
-            await checkPlayPressed();
-            await runningProgram[i]();
-        }
-        catch (e) {
-            if (!playStatus.stop) {
-                playStatus.setPause();
-            }
-            setButtonPressed();
-            console.log('In catch:');
-            console.error(e);
-            return false;
-        }
-        i++;
-    }
-};
-const init = () => {
-    runningProgram = [get_next_command];
-    IO1.update(255);
-    IO2.update(255);
-    IO3.update(255);
-    A.update(0);
-    B.update(0);
-    C.update(0);
-    HL.update(0);
-    IX.update(0);
-    SP.update(0);
-    PC.update(0);
-    ZR.update(0);
-    IR.update(0);
-    FLAGS.updateDec(0, 0, 0, 0);
-    FLAGS.updateDOM();
-    DECODER.resetDOM();
-    RAM.updateVariableElements(0);
-    DECODER.error = false;
-    ALUOUT.htmlElement.textContent = '';
-    ALU1.htmlElement.textContent = '';
-    ALU2.htmlElement.textContent = '';
-    try {
-        movingObject_h2.classList.remove('toggleGrid');
-    }
-    catch { }
-    try {
-        movingObject_h2.classList.remove('toggleGrid');
-    }
-    catch { }
-    stepNumber_p.textContent = '0';
-    stepDescription_p.textContent = 'Prozessor angehalten';
-    assemblerCommand_p.textContent = '';
-    DECODER.display_htmlElement.textContent = '';
-};
-/********************************** button functions ****************************** */
-io1Input_input.addEventListener('keyup', function (e) {
-    if (e.key === 'Enter')
-        play();
-});
-io2Input_input.addEventListener('keyup', function (e) {
-    if (e.key === 'Enter')
-        play();
-});
-io3Input_input.addEventListener('keyup', function (e) {
-    if (e.key === 'Enter')
-        play();
-});
-const setButtonPressed = () => {
-    if (playStatus.play) {
-        controlButtons_button[0].classList.add('buttonPressed');
-    }
-    else {
-        controlButtons_button[0].classList.remove('buttonPressed');
-    }
-    if (playStatus.pause) {
-        controlButtons_button[1].classList.add('buttonPressed');
-    }
-    else {
-        controlButtons_button[1].classList.remove('buttonPressed');
-    }
-    if (playStatus.stop) {
-        controlButtons_button[2].classList.add('buttonPressed');
-    }
-    else {
-        controlButtons_button[2].classList.remove('buttonPressed');
-    }
-    if (playStatus.rocketSpeed) {
-        controlButtons_button[4].classList.add('buttonPressed');
-        controlButtons_button[3].classList.remove('buttonPressed');
-        controlButtons_button[5].classList.remove('buttonPressed');
-        controlButtons_button[6].classList.remove('buttonPressed');
-    }
-    if (!playStatus.rocketSpeed) {
-        controlButtons_button[3].classList.add('buttonPressed');
-        controlButtons_button[4].classList.remove('buttonPressed');
-        controlButtons_button[5].classList.remove('buttonPressed');
-        controlButtons_button[6].classList.remove('buttonPressed');
-    }
-    if (playStatus.completeExe) {
-        controlButtons_button[6].classList.add('buttonPressed');
-        controlButtons_button[3].classList.remove('buttonPressed');
-        controlButtons_button[4].classList.remove('buttonPressed');
-        controlButtons_button[5].classList.remove('buttonPressed');
-    }
-    if (playStatus.noAnim && !playStatus.completeExe) {
-        controlButtons_button[5].classList.add('buttonPressed');
-        controlButtons_button[3].classList.remove('buttonPressed');
-        controlButtons_button[4].classList.remove('buttonPressed');
-        controlButtons_button[6].classList.remove('buttonPressed');
-    }
-    if (playStatus.oneCommand) {
-        controlButtons_button[9].classList.add('buttonPressed');
-    }
-    else {
-        controlButtons_button[9].classList.remove('buttonPressed');
-    }
-};
-setButtonPressed();
-function play() {
-    //only when stop is pressed(init), the program will be started anew  
-    if (playStatus.stop) { //only when stop is pressed(init), the program will be started anew  
-        playStatus.setPlay();
-        run_program();
-    }
-    if (!playStatus.play) {
-        playStatus.setPlay();
-        setButtonPressed();
-    }
-}
-function pause() {
-    if (!playStatus.stop)
-        playStatus.setPause();
-    setButtonPressed();
-}
-function stopBtn() {
-    playStatus.setStop();
-    setButtonPressed();
-    init();
-}
-function increaseSpeed() {
-    if (ANIMATION_SPEED < 12) {
-        ANIMATION_SPEED += 1;
-        IDLETIME -= 50;
-        NOANIMATIONIDLETIME -= 5;
-    }
-    if (ANIMATION_SPEED === 5)
-        ANIMATION_SPEED = 6;
-    if (ANIMATION_SPEED === 7)
-        ANIMATION_SPEED = 12;
-}
-function decreaseSpeed() {
-    if (ANIMATION_SPEED > 1) {
-        ANIMATION_SPEED -= 1;
-        IDLETIME += 50;
-        NOANIMATIONIDLETIME += 5;
-    }
-    if (ANIMATION_SPEED === 11)
-        ANIMATION_SPEED = 6;
-    if (ANIMATION_SPEED === 5)
-        ANIMATION_SPEED = 4;
-}
-function toggleTheme() {
-    document.getElementsByTagName('html')[0].classList.toggle('black');
-}
-const rocketSpeed_on = () => {
-    playStatus.setRocketSpeed();
-    setButtonPressed();
-    play();
-};
-const snailSpeed_on = () => {
-    playStatus.setSnailSpeed();
-    setButtonPressed();
-    play();
-};
-const runOneCommand = () => {
-    if (playStatus.oneCommand) {
-        playStatus.oneCommand = false;
-        setButtonPressed();
-    }
-    else {
-        playStatus.setOneCommand();
-        setButtonPressed();
-    }
-};
-const runNextSingleStep = () => {
-    playStatus.setNoAnimation();
-    setButtonPressed();
-    play();
-};
-const runCompleteExecution = () => {
-    playStatus.setCompleteExecution();
-    setButtonPressed();
-    play();
-};
-const toggleSettings = () => {
-    containerSettings_div.classList.toggle('toggleDisplay');
-};
-toggleSettings();
-const doc = document.documentElement;
-const toggleFullscreen = () => {
-    if (!isFullscreen) {
-        if (doc.requestFullscreen) {
-            doc.requestFullscreen();
-        }
-        else if (doc.webkitRequestFullscreen) {
-            doc.webkitRequestFullscreen();
-        }
-        else if (doc.msRequestFullscreen) {
-            doc.msRequestFullscreen();
-        }
-        isFullscreen = true;
-    }
-    else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
-        else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
-        else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-        isFullscreen = false;
-    }
-};
-const openAssembler = () => {
-    window.open('https://simonrusswurm.github.io/ASIM_Simulator/', '_blank');
-};
-const openInfo = () => {
-    document.getElementById('infoWindow_div').classList.toggle('toggleGrid');
-};
-/******************************* mc8_commands *********************************** */
-//overflowflag = 1, parityflag = 2;
 const mc8Commands_array = [
     new mc8_command('MOV A, dat_8', 0b00111110, movAdat_8),
     new mc8_command('MOV B, dat_8', 0b00000110, movBdat_8),
@@ -3990,3 +3758,295 @@ const mc8Commands_array = [
     new mc8_command('NOP', 0b00000000, nop),
     new mc8_command('HALT', 0b01110110, halt),
 ];
+/***************************************************main programm loop***************************************************/
+let runningProgram = [get_next_command];
+const run_program = async () => {
+    let i = 0;
+    while (true) {
+        if (runningProgram[i] === undefined) {
+            return false;
+        }
+        try {
+            await checkPlayPressed();
+            await runningProgram[i]();
+        }
+        catch (e) {
+            if (!playStatus.stop) {
+                playStatus.setPause();
+            }
+            setButtonsPressed();
+            console.log('Error catched:');
+            console.error(e);
+            return false;
+        }
+        i++;
+    }
+};
+const init = () => {
+    runningProgram = [get_next_command];
+    IO1.update(255);
+    IO2.update(255);
+    IO3.update(255);
+    A.update(0);
+    B.update(0);
+    C.update(0);
+    HL.update(0);
+    IX.update(0);
+    SP.update(0);
+    PC.update(0);
+    ZR.update(0);
+    IR.update(0);
+    FLAGS.updateDec(0, 0, 0, 0);
+    FLAGS.updateDOM();
+    DECODER.resetDOM();
+    RAM.updateVariableElements(0);
+    DECODER.error = false;
+    ALUOUT.htmlElement.textContent = '';
+    ALU1.htmlElement.textContent = '';
+    ALU2.htmlElement.textContent = '';
+    movingObject_h2.classList.remove('displayGrid');
+    movingObject_h2.classList.remove('displayGrid');
+    stepNumber_p.textContent = '0';
+    stepDescription_p.textContent = 'Prozessor angehalten';
+    assemblerCommand_p.textContent = '';
+    DECODER.display_htmlElement.textContent = '';
+};
+/********************************** button functions ****************************** */
+// io1Input_input.addEventListener('keyup', function(e){
+//     if (e.key === 'Enter')
+//       play();    
+// });
+// io2Input_input.addEventListener('keyup', function(e){
+// if (e.key === 'Enter')
+//   play();    
+// });
+// io3Input_input.addEventListener('keyup', function(e){
+// if (e.key === 'Enter')
+//   play();    
+// });
+const setButtonsPressed = () => {
+    if (playStatus.play) {
+        controlButtons_button[0].classList.add('buttonPressed');
+    }
+    else {
+        controlButtons_button[0].classList.remove('buttonPressed');
+    }
+    if (playStatus.pause) {
+        controlButtons_button[1].classList.add('buttonPressed');
+    }
+    else {
+        controlButtons_button[1].classList.remove('buttonPressed');
+    }
+    if (playStatus.stop) {
+        controlButtons_button[2].classList.add('buttonPressed');
+    }
+    else {
+        controlButtons_button[2].classList.remove('buttonPressed');
+    }
+    if (playStatus.rocketSpeed) {
+        controlButtons_button[4].classList.add('buttonPressed');
+        controlButtons_button[3].classList.remove('buttonPressed');
+        controlButtons_button[5].classList.remove('buttonPressed');
+        controlButtons_button[6].classList.remove('buttonPressed');
+    }
+    if (!playStatus.rocketSpeed) {
+        controlButtons_button[3].classList.add('buttonPressed');
+        controlButtons_button[4].classList.remove('buttonPressed');
+        controlButtons_button[5].classList.remove('buttonPressed');
+        controlButtons_button[6].classList.remove('buttonPressed');
+    }
+    if (playStatus.completeExe) {
+        controlButtons_button[6].classList.add('buttonPressed');
+        controlButtons_button[3].classList.remove('buttonPressed');
+        controlButtons_button[4].classList.remove('buttonPressed');
+        controlButtons_button[5].classList.remove('buttonPressed');
+    }
+    if (playStatus.noAnim && !playStatus.completeExe) {
+        controlButtons_button[5].classList.add('buttonPressed');
+        controlButtons_button[3].classList.remove('buttonPressed');
+        controlButtons_button[4].classList.remove('buttonPressed');
+        controlButtons_button[6].classList.remove('buttonPressed');
+    }
+    if (playStatus.oneCommand) {
+        controlButtons_button[9].classList.add('buttonPressed');
+    }
+    else {
+        controlButtons_button[9].classList.remove('buttonPressed');
+    }
+};
+setButtonsPressed();
+const play = () => {
+    //only when stop is pressed(init), the program will be started anew  
+    if (playStatus.stop) { //only when stop is pressed(init), the program will be started anew  
+        playStatus.setPlay();
+        run_program();
+    }
+    if (!playStatus.play) {
+        playStatus.setPlay();
+    }
+    setButtonsPressed();
+};
+const pause = () => {
+    if (!playStatus.stop)
+        playStatus.setPause();
+    setButtonsPressed();
+};
+const stopBtn = () => {
+    playStatus.setStop();
+    setButtonsPressed();
+    init();
+};
+const increaseSpeed = () => {
+    if (ANIMATION_SPEED < 12) {
+        ANIMATION_SPEED += 1;
+        IDLETIME -= 50;
+        NOANIMATIONIDLETIME -= 5;
+    }
+    if (ANIMATION_SPEED === 5)
+        ANIMATION_SPEED = 6;
+    if (ANIMATION_SPEED === 7)
+        ANIMATION_SPEED = 12;
+};
+const decreaseSpeed = () => {
+    if (ANIMATION_SPEED > 1) {
+        ANIMATION_SPEED -= 1;
+        IDLETIME += 50;
+        NOANIMATIONIDLETIME += 5;
+    }
+    if (ANIMATION_SPEED === 11)
+        ANIMATION_SPEED = 6;
+    if (ANIMATION_SPEED === 5)
+        ANIMATION_SPEED = 4;
+};
+const toggleTheme = () => {
+    document.getElementsByTagName('html')[0].classList.toggle('black');
+};
+const rocketSpeed_on = () => {
+    playStatus.setRocketSpeed();
+    setButtonsPressed();
+    play();
+};
+const snailSpeed_on = () => {
+    playStatus.setSnailSpeed();
+    setButtonsPressed();
+    play();
+};
+const runOneCommand = () => {
+    if (playStatus.oneCommand) {
+        playStatus.oneCommand = false;
+        setButtonsPressed();
+    }
+    else {
+        playStatus.setOneCommand();
+        setButtonsPressed();
+    }
+};
+const runNextSingleStep = () => {
+    playStatus.setNoAnimation();
+    setButtonsPressed();
+    play();
+};
+const runCompleteExecution = () => {
+    playStatus.setCompleteExecution();
+    setButtonsPressed();
+    play();
+};
+const openSettings = () => {
+    containerSettings_div.classList.add('toggleDisplay');
+    settingsDisplayed_boolean = true;
+};
+openSettings();
+const doc = document.documentElement;
+const toggleFullscreen = () => {
+    if (!isFullscreen) {
+        if (doc.requestFullscreen) {
+            doc.requestFullscreen();
+        }
+        else if (doc.webkitRequestFullscreen) {
+            doc.webkitRequestFullscreen();
+        }
+        else if (doc.msRequestFullscreen) {
+            doc.msRequestFullscreen();
+        }
+        isFullscreen = true;
+    }
+    else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+        else if (document.webkitExitFullscreen) {
+            document.webkitexitFullscreen();
+        }
+        else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        isFullscreen = false;
+    }
+};
+const openAssembler = () => {
+    window.open('https://simonrusswurm.github.io/ASIM_Simulator/', '_blank');
+};
+const openInfo = () => {
+    document.getElementById('infoWindow_div').classList.toggle('displayGrid');
+};
+document.addEventListener('keyup', function (e) {
+    if (!settingsDisplayed_boolean && !ioInputDisplayed_boolean) {
+        switch (e.code) {
+            case 'Space':
+                if (playStatus.play)
+                    pause();
+                else
+                    play();
+                break;
+            case 'Enter':
+                if (playStatus.play)
+                    pause();
+                else
+                    play();
+                break;
+            case 'KeyR':
+                stopBtn();
+                break;
+            case 'BracketRight':
+                increaseSpeed();
+                break;
+            case 'Slash':
+                decreaseSpeed();
+                break;
+            case 'KeyA':
+                snailSpeed_on();
+                break;
+            case 'KeyS':
+                rocketSpeed_on();
+                break;
+            case 'KeyD':
+                runNextSingleStep();
+                break;
+            case 'KeyF':
+                runCompleteExecution();
+                break;
+            case 'KeyT':
+                runOneCommand();
+                break;
+            case 'KeyC':
+                openSettings();
+                break;
+            case 'KeyV':
+                toggleFullscreen();
+                break;
+            case 'KeyB':
+                toggleTheme();
+                break;
+            default:
+                break;
+        }
+    }
+    else if (settingsDisplayed_boolean) {
+        if (e.code === 'Enter' || e.code === 'KeyC')
+            saveSettings();
+    }
+    else {
+        if (e.code === 'Enter')
+            play();
+    }
+});

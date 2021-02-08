@@ -3811,19 +3811,6 @@ const init = () => {
     assemblerCommand_p.textContent = '';
     DECODER.display_htmlElement.textContent = '';
 };
-/********************************** button functions ****************************** */
-// io1Input_input.addEventListener('keyup', function(e){
-//     if (e.key === 'Enter')
-//       play();    
-// });
-// io2Input_input.addEventListener('keyup', function(e){
-// if (e.key === 'Enter')
-//   play();    
-// });
-// io3Input_input.addEventListener('keyup', function(e){
-// if (e.key === 'Enter')
-//   play();    
-// });
 const setButtonsPressed = () => {
     if (playStatus.play) {
         controlButtons_button[0].classList.add('buttonPressed');

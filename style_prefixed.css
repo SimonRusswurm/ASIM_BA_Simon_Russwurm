@@ -15,7 +15,33 @@ body {
 /* load images in cache */
 body::after{
     position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
-    content:url(images/pathElementBg.svg);
+    content:url(images/pathElementBg.svg)
+            url(images/playWhite_button.svg)
+            url(images/pauseWhite_button.svg)
+            url(images/stopWhite_button.svg)
+            url(images/slowWhite_button.svg)
+            url(images/fastWhite_button.svg)
+            url(images/singleStepWhite_button.svg)
+            url(images/fullCommandWhite_button.svg)
+            url(images/increaseWhite_button.svg)
+            url(images/decreaseWhite_button.svg)
+            url(images/oneCommandWhite_button.svg)
+            url(images/settingsWhite_button.svg)
+            url(images/fullscreenWhite_button.svg)
+            url(images/toggleThemeWhite_button.svg)
+            url(images/hl_arrow.svg)
+            url(images/ir_arrow.svg)
+            url(images/ix_arrow.svg)
+            url(images/pc_arrow.svg)
+            url(images/sp_arrow.svg)
+            url(images/zr_arrow.svg)
+            url(images/ioIn_arrow.svg)
+            url(images/jump_arrow.svg)
+            url(images/cFlag_arrow.svg)
+            url(images/flags_arrow.svg)
+            url(images/ioOut_arrow.svg)
+            url(images/breakpoint_checkmark.svg)
+            ;
  }
 
 @font-face {

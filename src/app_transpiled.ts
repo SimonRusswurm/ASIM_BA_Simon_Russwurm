@@ -4,13 +4,12 @@
  */
 const containerAspectRatio_div: HTMLElement = document.getElementById('containerAspectRatio_div');
 const masterStyle_style: HTMLElement = document.getElementById('masterStyle_style');
-let initialRatio_number: number = Math.round(window.innerWidth / window.innerHeight * 10) / 10;
+let initialRatio_number: number = Math.round(window.innerWidth / window.innerHeight * 100) / 100;
 
 const resizeWindow = (first_boolean: boolean): void => {
     const iH_number: number = window.innerHeight;
     const iW_number: number = window.innerWidth;
-    const currentRatio_number: number = Math.round(iH_number / iW_number * 10) / 10;
-
+    const currentRatio_number: number = Math.round(iH_number / iW_number * 100) / 100;
     /**
         Function only resizes application when screenRatio changes.
         When the user is zooming, innerWidth and innerHeight will change but the ratio innerWidth/innerHeight stays the same.

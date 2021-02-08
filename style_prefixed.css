@@ -1067,7 +1067,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 
 .selectOptions{
     position: absolute;   
-    background-color: #fbfbfbf6;
+    background-color: #fff;
     cursor: pointer;
 
     z-index: 12;

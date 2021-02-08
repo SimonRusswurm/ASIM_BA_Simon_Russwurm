@@ -4,11 +4,11 @@
  */
 const containerAspectRatio_div = document.getElementById('containerAspectRatio_div');
 const masterStyle_style = document.getElementById('masterStyle_style');
-let initialRatio_number = Math.round(window.innerWidth / window.innerHeight * 10) / 10;
+let initialRatio_number = Math.round(window.innerWidth / window.innerHeight * 100) / 100;
 const resizeWindow = (first_boolean) => {
     const iH_number = window.innerHeight;
     const iW_number = window.innerWidth;
-    const currentRatio_number = Math.round(iH_number / iW_number * 10) / 10;
+    const currentRatio_number = Math.round(iH_number / iW_number * 100) / 100;
     /**
         Function only resizes application when screenRatio changes.
         When the user is zooming, innerWidth and innerHeight will change but the ratio innerWidth/innerHeight stays the same.
@@ -1243,10 +1243,10 @@ const updateHoverElements = () => {
 for (let i = 0; i < hoverElements_htmlElements.length; i++) {
     hoverElements_htmlElements[i].addEventListener('mouseover', function () {
         updateHoverElements();
-        hoverPopUps_htmlElements[i].classList.toggle('displayGrid');
+        hoverPopUps_htmlElements[i].classList.add('displayGrid');
     });
     hoverElements_htmlElements[i].addEventListener('mouseleave', function () {
-        hoverPopUps_htmlElements[i].classList.toggle('displayGrid');
+        hoverPopUps_htmlElements[i].classList.remove('displayGrid');
     });
 }
 /***************************************************settings window***************************************************/

@@ -1445,10 +1445,10 @@ const updateHoverElements = (): void => {
 for (let i = 0; i < hoverElements_htmlElements.length; i++) {
     hoverElements_htmlElements[i].addEventListener('mouseover', function () {
         updateHoverElements();
-        hoverPopUps_htmlElements[i].classList.toggle('displayGrid');
+        hoverPopUps_htmlElements[i].classList.add('displayGrid');
     });
     hoverElements_htmlElements[i].addEventListener('mouseleave', function () {
-        hoverPopUps_htmlElements[i].classList.toggle('displayGrid');
+        hoverPopUps_htmlElements[i].classList.remove('displayGrid');
     });
 }
 

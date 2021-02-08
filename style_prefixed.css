@@ -370,8 +370,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     width: calc(100%/46*10);
     top: 0;
     left: 0;
-    display: -ms-grid;
-    display: grid;
     -ms-grid-columns: 1fr 4fr;
     grid-template-columns: 1fr 4fr;
     -ms-grid-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -394,8 +392,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     width: calc(100%/46*10);
     top: 0;
     left: calc(100%/46*36);
-    display: -ms-grid;
-    display: grid;
     -ms-grid-columns: 4fr 1fr;
     grid-template-columns: 4fr 1fr;
     -ms-grid-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -510,8 +506,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 #flagsContainer_div{
     top: calc(100%/32*6);
     left: calc(100%/46*15);
-    display: -ms-grid;
-    display: grid;
     -ms-grid-rows: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     -ms-grid-columns: 1fr 1fr 1fr 1fr;
@@ -673,8 +667,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 .containerAssemblerCommand {
     top: calc(100%/32*16);
     left: calc(100%/46*22);
-    display: -ms-grid;
-    display: grid;
     -ms-grid-rows: 1fr;
     grid-template-rows: 1fr;
     -ms-grid-columns: 5fr 1fr;
@@ -684,12 +676,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 .containerControlUnit2 {
     top: calc(100%/32*18);
     left: calc(100%/46*22);
-    display: -ms-grid;
-    display: grid;
-    justify-items: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     -ms-grid-rows: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     -ms-grid-columns: 1fr;
@@ -697,12 +683,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .containerStepDescription_div {
-    display: -ms-grid;
-    display: grid;
-    justify-items: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     height: 100%;
     width: 100%;
     -ms-grid-rows: 1fr;
@@ -712,12 +692,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .containerStepNumber {
-    display: -ms-grid;
-    display: grid;
-    justify-items: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     height: 60%;
     width: 60%
 }
@@ -734,8 +708,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .containerDecoderLines {
-    display: -ms-grid;
-    display: grid;
     height: 100%;
     width: 100%;
     -ms-grid-rows: 1fr;
@@ -745,8 +717,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .decoderBits {
-    display: -ms-grid;
-    display: grid;
     height: 100%;
     width: 100%;
     -ms-grid-rows: 1fr 1fr;
@@ -995,12 +965,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     height: calc(100%/28*1);
     width: calc(100%/42*1);
     cursor: pointer;
-    display: -ms-grid;
-    display: grid;
-    justify-items: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -1031,8 +995,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     position:absolute;
     cursor: pointer;
     background-color: white;
-    display: -ms-grid;
-    display: grid;
     padding-left: .3%;
 }
 
@@ -1092,11 +1054,11 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 
 .option{
     font-size: 13px;
-    padding: 2px;
+    padding: 4px;
 }
 
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px), screen and (max-height: 500px){
     .selectOptions{
         top: calc(100%/32*2);
         left: calc(100%/46*2);
@@ -1104,11 +1066,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
         width: calc(100%/46*42);
     }
     .option{
-        display: -ms-grid;
-        display: grid;
-        -webkit-box-align: center;
-            -ms-flex-align: center;
-                align-items: center;
         border-bottom: 1px solid #dbdbdb;
         padding: 20px;
     }

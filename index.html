@@ -282,7 +282,7 @@
 
            
             <h1 id="io3Label_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">IO3</h1>
-            <div id="io3Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow "></div>
+            <div id="io3Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow"></div>
             <h2 id="io3RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight bottom bottomRight">FF</h2>
             <div id="io3LabelHover_div" class="hoverElement io_hover borderBox rounded" >
                 <p class="bold">IO3</p><p></p>
@@ -606,7 +606,7 @@
                     
                     <h4 style="position: absolute; top: calc(100%/28*2); left: calc(100%/42*20);">Konfiguration IO-Bausteine:</h4>
 
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*20);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*20);">
                         <input id="radioIoMapped_input" type="radio" class="radiostyle" name="radioIoMap" value="IO-mapped" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
@@ -614,7 +614,7 @@
                         <p>IO mapped</p>
                     </div>
 
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*20);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*20);">
                         <input id="radioMemoryMap_input" type="radio"  class="radiostyle" name="radioIoMap" value="Memory-mapped">
                         <span class="checkmark borderBox"></span>
                     </div>
@@ -637,11 +637,11 @@
                             <p>Ausgang</p>
                         </div>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*21);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*21);">
                         <input id="io1InputRadio_input" type="radio" class="radio" name="IO1InOut" value="In" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*21);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*21);">
                         <input id="io1OutputRadio_input" type="radio" name="IO1InOut" value="Out">
                         <span class="checkmark borderBox"></span>
                     </div>
@@ -663,11 +663,11 @@
                             <p>Ausgang</p>
                         </div>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*28);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*28);">
                         <input id="io2InputRadio_input" type="radio" class="radio" name="IO2InOut" value="In" >
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*28);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*28);">
                         <input id="io2OutputRadio_input" type="radio"  name="IO2InOut" value="Out" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
@@ -689,11 +689,11 @@
                             <p>Ausgang</p>
                         </div>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*35);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*35);">
                         <input id="io3InputRadio_input" type="radio" class="radio" name="IO3InOut" value="In" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="radioContainer" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*35);">
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*35);">
                         <input id="io3OutputRadio_input" type="radio"  name="IO3InOut" value="Out">
                         <span class="checkmark borderBox"></span>
                     </div>
@@ -734,36 +734,36 @@
 
             <!---------------------------------custom selction options-------------------------------------------->
             <div id="ramSelectOptions_div" class="ramSelect selectOptions borderBox displayNone lightRounded">
-                <h5 class="option">2000h - 3FFFh</h5>
-                <h5 class="option">4000h - 5FFFh</h5>
-                <h5 class="option">6000h - 7FFFh</h5>
-                <h5 class="option">8000h - 9FFFh</h5>
-                <h5 class="option">A000h - BFFFh</h5>
-                <h5 class="option">C000h - DFFFh</h5>
-                <h5 class="option">E000h - FFFFh</h5>
+                <h5 class="option centered">2000h - 3FFFh</h5>
+                <h5 class="option centered">4000h - 5FFFh</h5>
+                <h5 class="option centered">6000h - 7FFFh</h5>
+                <h5 class="option centered">8000h - 9FFFh</h5>
+                <h5 class="option centered">A000h - BFFFh</h5>
+                <h5 class="option centered">C000h - DFFFh</h5>
+                <h5 class="option centered">E000h - FFFFh</h5>
             </div>
 
             <div id="programSelectionOptions_div" class="programSelect selectOptions borderBox displayNone lightRounded">
-                <h5 class="option">Eigenes Programm</h5>
-                <h5 class="option">Bsp 01 - Erklärung FETCH-Phase</h5>
-                <h5 class="option">Bsp 02 - Erklärung Ausführungsphase</h5>
-                <h5 class="option">Bsp 03 - Transportbefehle</h5>
-                <h5 class="option">Bsp 04 - 2-Byte Befehle</h5>
-                <h5 class="option">Bsp 05 - Verwendung RAM</h5>
-                <h5 class="option">Bsp 06 - Registerindirekte Adressierung</h5>
-                <h5 class="option">Bsp 07 - Verwendung Stack</h5>
-                <h5 class="option">Bsp 08 - Logische Operation</h5>
-                <h5 class="option">Bsp 09 - Vergleiche und Verzweigungen</h5>
-                <h5 class="option">Bsp 10 - I/O mapped Ein-/Ausgabe</h5>
-                <h5 class="option">Bsp 11 - Memory mapped Ein-/Ausgabe</h5>
-                <h5 class="option">Bsp 12 - Unterprogramme</h5>
-                <h5 class="option">Bsp 13 - Multiplikation</h5>
-                <h5 class="option">Bsp 14 - Reihe</h5>
-                <h5 class="option">Bsp 15 - Fehlerprogramm 1</h5>
-                <h5 class="option">Bsp 16 - Fehlerprogramm 2</h5>
-                <h5 class="option">Bsp 17 - Fehlerprogramm 3</h5>
-                <h5 class="option">Bsp 18 - Fehlerprogramm 4</h5>
-                <h5 class="option">Bsp 19 - Beispielprogramm</h5>
+                <h5 class="option centeredHorizontal">Eigenes Programm</h5>
+                <h5 class="option centeredHorizontal">Bsp 01 - Erklärung FETCH-Phase</h5>
+                <h5 class="option centeredHorizontal">Bsp 02 - Erklärung Ausführungsphase</h5>
+                <h5 class="option centeredHorizontal">Bsp 03 - Transportbefehle</h5>
+                <h5 class="option centeredHorizontal">Bsp 04 - 2-Byte Befehle</h5>
+                <h5 class="option centeredHorizontal">Bsp 05 - Verwendung RAM</h5>
+                <h5 class="option centeredHorizontal">Bsp 06 - Registerindirekte Adressierung</h5>
+                <h5 class="option centeredHorizontal">Bsp 07 - Verwendung Stack</h5>
+                <h5 class="option centeredHorizontal">Bsp 08 - Logische Operation</h5>
+                <h5 class="option centeredHorizontal">Bsp 09 - Vergleiche und Verzweigungen</h5>
+                <h5 class="option centeredHorizontal">Bsp 10 - I/O mapped Ein-/Ausgabe</h5>
+                <h5 class="option centeredHorizontal">Bsp 11 - Memory mapped Ein-/Ausgabe</h5>
+                <h5 class="option centeredHorizontal">Bsp 12 - Unterprogramme</h5>
+                <h5 class="option centeredHorizontal">Bsp 13 - Multiplikation</h5>
+                <h5 class="option centeredHorizontal">Bsp 14 - Reihe</h5>
+                <h5 class="option centeredHorizontal">Bsp 15 - Fehlerprogramm 1</h5>
+                <h5 class="option centeredHorizontal">Bsp 16 - Fehlerprogramm 2</h5>
+                <h5 class="option centeredHorizontal">Bsp 17 - Fehlerprogramm 3</h5>
+                <h5 class="option centeredHorizontal">Bsp 18 - Fehlerprogramm 4</h5>
+                <h5 class="option centeredHorizontal">Bsp 19 - Beispielprogramm</h5>
             </div>
            
             <!-- *****************************infoBox****************************  -->

@@ -67,6 +67,7 @@ h3 {
     margin: 0;
     padding: 0;
     color: #19b2ff;
+    text-decoration: overline;
     font-family: Arial,Helvetica,sans-serif;
     cursor: pointer
 }
@@ -139,6 +140,7 @@ button:hover {
 }
 
 input {
+    font-family: droid-mono;
     outline: 0;
     padding: 0;
     margin: 0
@@ -247,12 +249,12 @@ select {
     background-color: #111
 }
 
-.black h2,.black p {
+.black h2,.black p, .black input.romElement {
     color: #fff
 }
 
-.black p.blueText {
-    color: #19b2ff
+.black input.blueText {
+    color: #19b2ff;
 }
 
 .yellowBg {
@@ -306,6 +308,11 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     width: calc(100%/46*1)
 }
 
+.rectangle3x2 {
+    height: calc(100%/32*2);
+    width: calc(100%/46*3)
+}
+
 .rectangle4x2 {
     height: calc(100%/32*2);
     width: calc(100%/46*4)
@@ -332,11 +339,12 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .movingObject {
-    z-index: 2;
+    z-index: 3;
 }
 
 .redRectangle {
     border-color: #FF1930;
+    z-index: 2;
 }
 
 .containerAspectRatio {
@@ -374,6 +382,36 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     grid-template-columns: 1fr 4fr;
     -ms-grid-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: repeat(16,1fr)
+}
+
+.romElement{
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.breakpoint{
+    border: .1px solid #19b2ff;
+    background-color: #a1e0ff;
+    color: #0c577c;
+}
+.black input.breakpoint {
+    color: #0c577c;
+}
+
+.romTextarea{
+    resize: none;
+    background-color: #fbfbfb;
+    text-align: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
 }
 
 .addressLabel1toF {
@@ -518,7 +556,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     grid-template-rows: 1fr;
     -ms-grid-columns: 1fr 1fr 1fr 1fr;
     grid-template-columns: repeat(4,1fr);
-    width: calc(100%/46*4);
+    width: calc(100%/46*3);
     height: calc(100%/32*1);
     top: calc(100%/32*8);
     left: calc(100%/46*15)
@@ -727,7 +765,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 
 #decoderLabel_h1 {
     top: calc(100%/32*26);
-    left: calc(100%/46*26)
+    left: calc(100%/46*24)
 }
 
 #decDisplay_p {
@@ -799,40 +837,85 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .buttonPressed {
-    background-color: #19b2ff70
+    background-color: #19b2ffc0;
 }
 
 .borderRight {
     border-right: .1px solid #6a6a6a
 }
-
-.controlPanel {
+.playReset{
     position: absolute;
     height: calc(100%/32*2);
-    width: calc(100%/46*26);
+    width: calc(100%/46*4);
     top: calc(100%/32*30);
     left: calc(100%/46*10);
     -ms-grid-rows: 1fr;
     grid-template-rows: 1fr;
-    -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-columns: repeat(13,1fr)
+    -ms-grid-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+}
+.animationType{
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*6);
+    top: calc(100%/32*30);
+    left: calc(100%/46*16);
+    -ms-grid-rows: 1fr;
+    grid-template-rows: 1fr;
+    -ms-grid-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+#oneCommand_button{
+    top: calc(100%/32*30);
+    left: calc(100%/46*24);
+}
+.speed{
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*8);
+    top: calc(100%/32*26);
+    left: calc(100%/46*12);
+    -ms-grid-rows: 1fr;
+    grid-template-rows: 1fr;
+    -ms-grid-columns: 1fr 6fr 1fr;
+    grid-template-columns: 1fr 6fr 1fr;
+}
+.sliderContainer{
+    width: 100%;
+    height: 100%;
+}
+#speedSlider_input{
+    width: 100%;
+    height: 100%;
 }
 
-#play_button {
+.controlPanel {
+    position: absolute;
+    height: calc(100%/32*2);
+    width: calc(100%/46*4);
+    top: calc(100%/32*30);
+    left: calc(100%/46*32);
+    -ms-grid-rows: 1fr;
+    grid-template-rows: 1fr;
+    -ms-grid-columns: 1fr 1fr ;
+    grid-template-columns: repeat(2,1fr)
+}
+
+.playButton {
     background-image: url(images/play_button.svg);
     background-size: 50%
 }
 
-.black #play_button {
+.black .playButton {
     background-image: url(images/playWhite_button.svg)
 }
 
-#pause_button {
+.pause_button {
     background-image: url(images/pause_button.svg);
     background-size: 50%
 }
 
-.black #pause_button {
+.black .pause_button {
     background-image: url(images/pauseWhite_button.svg)
 }
 
@@ -1125,6 +1208,21 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     align-items: center;
     width: 90%
 }
+.ioAddressInput{
+    padding: 6% 6% 0% 0%;
+    text-align: right;
+    resize: none;
+    overflow:hidden;
+    font-family: droid-mono;
+}
+
+.ioAddressWrapper{
+    position: absolute;
+    top: calc(100%/6*2);
+    left: calc(100%/6*3);
+    width: calc(100%/6*2);
+    height: calc(100%/6*1);
+}
 
 #io1Address_textarea {
     width: 100%;
@@ -1217,13 +1315,8 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     left: calc(100%/42*34)
 }
 
-#toAssembler_button {
-    top: calc(100%/28*21);
-    left: calc(100%/42*34)
-}
-
 #info_button {
-    top: calc(100%/28*18);
+    top: calc(100%/28*21);
     left: calc(100%/42*34)
 }
 

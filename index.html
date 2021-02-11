@@ -254,7 +254,7 @@
             <div id="io1InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
                     <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()"><p class="arial">Speichern</p></button>
-                    <input id="io1Input_input" type="text" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
+                    <input id="io1Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
                 <p id="io1InputInfo_p" class="yellowBg borderBox rounded arial gridChild" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
@@ -275,7 +275,7 @@
             <div id="io2InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
                     <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p class="arial">Speichern</p></button>
-                    <input id="io2Input_input" type="text" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
+                    <input id="io2Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
                 <p  id="io2InputInfo_p" class="yellowBg borderBox rounded arial " style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
@@ -295,7 +295,7 @@
             <div id="io3InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
                     <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p class="arial">Speichern</p></button>
-                    <input id="io3Input_input" type="text" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
+                    <input id="io3Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
                 <p id="io3InputInfo_p" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
@@ -310,7 +310,7 @@
                 <p id="aHoverValueBin_p"></p>
             </div>
             
-            <div id="flagsContainer_div" class="rectangle4x2 positionAbsolute centered borderBox topRight bottomRight">
+            <div id="flagsContainer_div" class="rectangle3x2 positionAbsolute centered borderBox topRight bottomRight">
                 <h1 id="cFlagLabel_h1">C</h1>
                 <h1 id="zFlagLabel_h1">Z</h1>
                 <h1 id="pFlagLabel_h1">P</h1>
@@ -417,9 +417,9 @@
             <div style="position:absolute; top: calc(100%/32*8); left: calc(100%/46*27);" class="gridChild square2x2 positionAbsolute centered">
                 <p>ALU</p>
             </div>
-            <h2 id="alu1RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox rounded"></h2>
-            <h2 id="alu2RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox rounded"></h2>
-            <h2 id="aluOutRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox rounded"></h2>
+            <h2 id="alu1RegisterValue_h2" class="square2x2 positionAbsolute borderBox centered rounded"></h2>
+            <h2 id="alu2RegisterValue_h2" class="square2x2 positionAbsolute borderBox centered rounded"></h2>
+            <h2 id="aluOutRegisterValue_h2" class="square2x2 positionAbsolute centered rounded"></h2>
 
 
 
@@ -463,7 +463,7 @@
             <div id="registerArrow_div" class="alignBg"></div>
             
             <!-- ************************** DEC **************************  -->
-            <h1 id="decoderLabel_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">DEC</h1>
+            <h1 id="decoderLabel_h1" class="rectangle4x2 positionAbsolute centered borderBox topLeft bottomLeft">DECODER</h1>
             <p id="decDisplay_p" class="rectangle6x2 positionAbsolute centered borderBox topRight bottomRight textareaFontSize"></p>
 
             <div id="decoderHover_div" class="hoverElement borderBox rounded">
@@ -472,97 +472,103 @@
             </div>
 
             <div id="wrHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">WR - Write (0 - aktiv)</p>
+                <p class="bold"><span style="text-decoration: overline;" >WR</span> - Write (0 - aktiv)</p>
                 <p>Wenn diese Leitung 0 ist, hält die CPU Daten für die Speicherung an der aktuellen Speicher- oder IO-Adresse bereit.</p>
             </div>
             <div id="rdHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">RD - Read (0 - aktiv)</p>
+                <p class="bold"><span style="text-decoration: overline;" >RD</span> - Read (0 - aktiv)</p>
                 <p>Wenn diese Leitung 0 ist, erwartet die CPU Daten von der adressierten Speicher- oder IO-Einheit.</p>
             </div>
             <div id="mHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">MREQ - Meomory Required  (0 - aktiv)</p>
+                <p class="bold"><span style="text-decoration: overline;" >MREQ</span> - Meomory Required  (0 - aktiv)</p>
                 <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige Adresse für einen Speicherzugriff bereit.</p>
             </div>
             <div id="ioHover_div" class="hoverElement decoderLines_hover borderBox rounded">
-                <p class="bold">IORQ - IO Request (0 - aktiv)</p>
+                <p class="bold"><span style="text-decoration: overline;" >IORQ</span> - IO Request (0 - aktiv)</p>
                 <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige 8-Bit Adresse für einen IO-Zugriff bereit<p>
             </div>
              <!-- ************************************************** controlPanel *************************************************  -->
-             <div class="controlPanel gridChild borderBox rounded">
-                <div id="play_button"           class="button topLeft bottomLeft borderRight alignBg" onclick="play()"></div>
-                <div id="pause_button"          class="button borderRight alignBg" onclick="pause()"></div>
-                <div id="stop_button"           class="button borderRight alignBg" onclick="stopBtn()"></div>
-                <div id="slow_button"           class="button borderRight alignBg" onclick="snailSpeed_on()"></div>
+             <div class="playReset centered borderBox rounded">
+                <div id="play_button"           class="button topLeft bottomLeft borderRight alignBg playButton" onclick="play()"></div>
+                <div id="stop_button"           class="button topRight bottomRight alignBg" onclick="stopBtn()"></div>
+             </div>
+
+             <div class="animationType centered borderBox rounded">
+                <div id="slow_button"           class="button topLeft bottomLeft borderRight alignBg buttonPressed" onclick="snailSpeed_on()"></div>
                 <div id="fast_button"           class="button borderRight alignBg" onclick="rocketSpeed_on()"></div>
-                <div id="singleStep_button"     class="button borderRight alignBg" onclick="runNextSingleStep()"></div>
-                <div id="fullCommand_button"    class="button borderRight alignBg" onclick="runCompleteExecution()"></div>
-                <div id="increase_button"       class="button borderRight alignBg" onclick="increaseSpeed()"></div>
-                <div id="decrease_button"       class="button borderRight alignBg" onclick="decreaseSpeed()"></div>
-                <div id="oneCommand_button"     class="button borderRight alignBg" onclick="runOneCommand()"></div>
+                <div id="fullCommand_button"    class="button topRight bottomRight alignBg" onclick="runCompleteExecution()"></div>
+             </div>
+
+            
+            <div id="oneCommand_button"     class="button square2x2 borderBox positionAbsolute rounded alignBg" onclick="runOneCommand()"></div>
+             
+            <div class="speed centered borderBox rounded">
+                <div id="decrease_button"       class="button topLeft bottomLeft borderRight alignBg" onclick="decreaseSpeed()"></div>
+                <div class="sliderContainer borderRight centered">
+                    <input type="range" name="animationSpeed" id="speedSlider_input" min="1" max="6" value="3">
+                </div>
+                <div id="increase_button"       class="button topRight bottomRight alignBg" onclick="increaseSpeed()"></div>
+                
+            </div>
+
+             <div class="controlPanel gridChild borderBox rounded">
+                
+                
                 <div id="settingsButton_button" class="button borderRight alignBg" onclick="openSettings()"></div>
                 <div id="fullscreenButton_button" class="button borderRight alignBg" onclick="toggleFullscreen()"></div>
-                <div id="toggleTheme_button"    class="button topRight bottomRight alignBg" onclick="toggleTheme()"></div>
             </div>
 
             <div id="playHover_div" class="hoverElement borderBox rounded button_hover">
                 <p class="bold">Start [space]</Button></p>
                 <p>Startet den Programmablauf.</p>
             </div>
-            <div id="pauseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Pause [space]</Button></p>
-                <p>Pausiert den Programmablauf.</p>
-            </div>
             <div id="stopHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Reset [r]</Button></p>
+                <p class="bold">Reset</Button></p>
                 <p>Setzt die CPU zurück.</p>
             </div>
             <div id="slowHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Langsame Animation [a]</Button></p>
+                <p class="bold">Langsame Animation</Button></p>
                 <p>Animation mit Bewegung.</p>
             </div>
             <div id="fastHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schnelle Animation [s]</Button></p>
+                <p class="bold">Schnelle Animation</Button></p>
                 <p>Animation ohne Bewegung.</p>
             </div>
-            <div id="singleStepHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einzelschritt ohne Animation [d]</Button></p>
-                <p>Führt einen Befehl ohne Animation aus.</p>
-            </div>
             <div id="fullCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Schneller Ablauf [f]</Button></p>
+                <p class="bold">Schneller Ablauf</Button></p>
                 <p>Führt die gesamte Simulation ohne Animation aus.</p>
+            </div>
+            <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einzelschritt</Button></p>
+                <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
+            </div>
+            
+            <div id="decreaseHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Langsamer [-]</Button></p>
+                <p>Verringert  die Animationsgeschwindigkeit.</p>
             </div>
             <div id="increaseHover_div" class="hoverElement borderBox rounded button_hover">
                 <p class="bold">Schneller [+]</Button></p>
                 <p>Erhöht die Animationsgeschwindigkeit.</p>
             </div>
-            <div id="decreaseHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Langsamer [-]</Button></p>
-                <p>Verringert  die Animationsgeschwindigkeit.</p>
-            </div>
-            <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einzelschritt [t]</Button></p>
-                <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
-            </div>
+            
             <div id="settingsButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einstellungen [c]</Button></p>
+                <p class="bold">Einstellungen</Button></p>
                 <p>Konfiguration von ROM, RAM und IO.</p>
             </div>
             <div id="fullscreenButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Vollbild [v]</Button></p>
+                <p class="bold">Vollbild</Button></p>
                 <p>Tipp: Bei Smartphones verwenden!</p>
             </div>
             <div id="toggleThemeHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Dunkler Modus [b]</Button></p>
+                <p class="bold">Dunkler Modus</Button></p>
                 <p>Wechselt das Design.</p>
             </div>
-
-
             
             <!-- ************************************************** Settings *************************************************  -->
             <div id="containerSettings_div" class="settingsWindow borderBox rounded">
                 <div class="rounded innerSettings">
-                    <h4 style="position: absolute; top: calc(100%/28*2); left: calc(100%/42*2);">Konfiguration ROM:</h4>
+                    <h4 style="position: absolute; top: calc(100%/28*2); left: calc(100%/42*2);">ROM Inhalt:</h4>
                     <select id="programSelection_select" name="programSelection" class="lightRounded borderBox textareaFontSize displayNone">
                         <option value="own">Eigenes Programm</option>
                         <option value="bsp1">Bsp 01 - Erklärung FETCH-Phase</option>
@@ -610,24 +616,24 @@
                         <input id="radioIoMapped_input" type="radio" class="radiostyle" name="radioIoMap" value="IO-mapped" checked="checked">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*4);">
-                        <p>IO mapped</p>
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*6);">
+                        <p>IO-mapped</p>
                     </div>
 
                     <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*20);">
                         <input id="radioMemoryMap_input" type="radio"  class="radiostyle" name="radioIoMap" value="Memory-mapped">
                         <span class="checkmark borderBox"></span>
                     </div>
-                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*4);">
-                        <p>Memory map</p>
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*6);">
+                        <p>Memory-mapped</p>
                     </div>
                     
 
                     <div class="borderBox lightRounded gridChild containerIo1Konfig">
                         <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
-                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
-                            <textarea id="io1Address_textarea"  name="io1Address" class="borderBox lightRounded textareaFontSize" style="resize: none; text-align:right; overflow:hidden;">0000</textarea>
+                        <div class="ioAddressWrapper centered">
+                            <textarea id="io1Address_textarea" maxlength="2" name="io1Address" class="borderBox lightRounded textareaFontSize ioAddressInput">00</textarea>
                         </div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
                         <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
@@ -651,7 +657,7 @@
                         <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO2</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
-                            <textarea id="io2Address_textarea"  name="io2Address" class="borderBox lightRounded textareaFontSize" style="resize: none; text-align:right; overflow:hidden;">0001</textarea>
+                            <textarea id="io2Address_textarea" maxlength="2" name="io2Address" class="borderBox lightRounded textareaFontSize ioAddressInput">01</textarea>
                         </div>
                         
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
@@ -678,7 +684,7 @@
                         <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO3</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
-                            <textarea id="io3Address_textarea" name="io3Address"  class="borderBox lightRounded textareaFontSize" style="resize: none; text-align:right; overflow:hidden;">0002</textarea>
+                            <textarea id="io3Address_textarea" maxlength="2" name="io3Address"  class="borderBox lightRounded textareaFontSize ioAddressInput">02</textarea>
                         </div>                        
                         <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
 
@@ -726,8 +732,7 @@
                     </div>
                     
                     <button id="info_button"          class="lightRounded borderBox" type="button" onclick="openInfo()"><p>INFO</p></button>
-                    <button id="toAssembler_button"   class="lightRounded borderBox" type="button" onclick="openAssembler()"><p>Zum Assembler</p></button>
-                    <button id="closeSettings_button" class="lightRounded borderBox" type="button" onclick="saveSettings()"><p>Speichern</p></button>
+                    <button id="closeSettings_button" class="lightRounded borderBox" type="button" onclick="saveSettings()"><p>Übernehmen</p></button>
                 </div>
             </div>
             

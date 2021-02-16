@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
-    <link rel="stylesheet" href="style_v2.css">
+    <link rel="stylesheet" href="style_prefixed.css">
     <title>MC8</title>
     <style id="masterStyle_style">
     </style>
@@ -112,10 +112,6 @@
                 <div class="gridChild borderBox bottomRight">
                     
                 </div>
-            </div>
-            <div id="breakpointHover_div" class="centeredHorizontal borderBox rounded displayNone yellowBg">
-                <p id="breakpointsLabel_p" class="arial bold"></p>
-                <p class="arial">Klicken für Breakpoint setzen/löschen</p>
             </div>
             <div id="romLabelHover_div" class="hoverElement borderBox rounded">
                 <p class="bold">ROM</p><p></p><p></p>
@@ -243,13 +239,10 @@
             <p id="redRectangle_p" class="redRectangle square1x1 positionAbsolute centered borderBox"></p>
 
             <!-- ************************** IOs **************************  -->
-
-            <div class="containerIo1 positionAbsolute centered rectangle6x2">
-                <h1 id="io1Label_h1" class="centered size100 borderBox topLeft bottomLeft">IO1</h1>
-                <div id="io1Arrow_div" class="centered size100 borderBox ioArrow"></div>
-                <h2 id="io1RegisterValue_h2" class="centered size100 borderBox topRight bottomRight">FF</h2>
-            </div>
-            
+           
+            <h1 id="io1Label_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">IO1</h1>
+            <div id="io1Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow"></div>
+            <h2 id="io1RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight bottomRight">FF</h2>
             <div id="io1LabelHover_div" class="hoverElement io_hover borderBox rounded">
                 <p class="bold">IO1</p><p></p>
                 <p id="io1Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
@@ -266,12 +259,10 @@
                 <p id="io1InputInfo_p" class="yellowBg borderBox rounded arial gridChild" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
 
-            <div class="containerIo2 positionAbsolute centered rectangle6x2">
-                <h1 id="io2Label_h1" class="centered size100 borderBox topLeft bottomLeft">IO2</h1>
-                <div id="io2Arrow_div" class="centered size100 borderBox ioArrow ioArrowOUT"></div>
-                <h2 id="io2RegisterValue_h2" class="centered size100 borderBox topRight bottomRight">FF</h2>
-            </div>
-
+            
+            <h1 id="io2Label_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">IO2</h1>
+            <div id="io2Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow ioArrowOUT"></div>
+            <h2 id="io2RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight bottomRight">FF</h2>
             <div id="io2LabelHover_div" class="hoverElement io_hover borderBox rounded">
                 <p class="bold">IO2</p><p></p>
                 <p id="io2Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
@@ -289,12 +280,10 @@
                 <p  id="io2InputInfo_p" class="yellowBg borderBox rounded arial " style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
             </div>
 
-           <div class="containerIo3 positionAbsolute centered rectangle6x2">
-            <h1 id="io3Label_h1" class="centered size100 borderBox topLeft bottomLeft">IO3</h1>
-            <div id="io3Arrow_div" class="centered size100 borderBox ioArrow"></div>
-            <h2 id="io3RegisterValue_h2" class="centered size100 borderBox topRight bottom bottomRight">FF</h2>
-           </div>
-            
+           
+            <h1 id="io3Label_h1" class="square2x2 positionAbsolute centered borderBox topLeft bottomLeft">IO3</h1>
+            <div id="io3Arrow_div" class="square2x2 positionAbsolute centered borderBox ioArrow"></div>
+            <h2 id="io3RegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight bottom bottomRight">FF</h2>
             <div id="io3LabelHover_div" class="hoverElement io_hover borderBox rounded" >
                 <p class="bold">IO3</p><p></p>
                 <p id="io3Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
@@ -324,7 +313,7 @@
             <div id="flagsContainer_div" class="rectangle3x2 positionAbsolute centered borderBox topRight bottomRight">
                 <h1 id="cFlagLabel_h1">C</h1>
                 <h1 id="zFlagLabel_h1">Z</h1>
-                <h1 id="pFlagLabel_h1">O</h1>
+                <h1 id="pFlagLabel_h1">P</h1>
                 <h1 id="sFlagLabel_h1">S</h1>
                 <p id="cFlagValue_p" class="gridChild">0</p>
                 <p id="zFlagValue_p" class="gridChild">0</p>
@@ -338,7 +327,7 @@
                 <p class="bold">Z - Zero Flag</p>
             </div>
             <div id="pFlagHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">O/P - Overflow/Parity Flag</p>
+                <p class="bold">P/O - Parity/Overflow Flag</p>
             </div>
             <div id="sFlagHover_div" class="hoverElement borderBox rounded">
                 <p class="bold">S - Sign Flag</p>
@@ -355,37 +344,37 @@
             <div id="checkJumpArrow_div" class="alignBg"></div>
 
             <!-- ************************** register **************************  -->
-           
+            <div id="yellowBgElement_div" class="square2x2 positionAbsolute centered yellowBg displayNone" style="position: absolute;"></div>
             <h1 id="bRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox topLeft">B</h1>
             <h2 id="bRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox">00</h2>
             
-            <h1 id="cRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox">C</h1>
-            <h2 id="cRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight">00</h2>
+            <h1 id="cRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox topRight">C</h1>
+            <h2 id="cRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox">00</h2>
            
             <h1 id="hlRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">HL</h1>
             <div id="hlBackground_div" class="rectangle4x2 positionAbsolute"></div>
-            <h2 id="hlRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
-            <h2 id="hlRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+            <h2 id="hlRegisterValueHi_h2" class="square2x2 positionAbsolute centeredHorizontal alignTextRight borderBox noRightBorder">00</h2>
+            <h2 id="hlRegisterValueLo_h2" class="square2x2 positionAbsolute centeredHorizontal borderBox noLeftBorder">00</h2>
             
             <h1 id="ixRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">IX</h1>
             <div id="ixBackground_div" class="rectangle4x2 positionAbsolute"></div>
-            <h2 id="ixRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
-            <h2 id="ixRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+            <h2 id="ixRegisterValueHi_h2" class="square2x2 positionAbsolute centeredHorizontal alignTextRight borderBox noRightBorder">00</h2>
+            <h2 id="ixRegisterValueLo_h2" class="square2x2 positionAbsolute centeredHorizontal borderBox noLeftBorder">00</h2>
            
             <h1 id="spRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">SP</h1>
             <div id="spBackground_div" class="rectangle4x2 positionAbsolute"></div>
-            <h2 id="spRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
-            <h2 id="spRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+            <h2 id="spRegisterValueHi_h2" class="square2x2 positionAbsolute centeredHorizontal alignTextRight borderBox noRightBorder">00</h2>
+            <h2 id="spRegisterValueLo_h2" class="square2x2 positionAbsolute centeredHorizontal borderBox noLeftBorder">00</h2>
            
             <h1 id="pcRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">PC</h1>
             <div id="pcBackground_div" class="rectangle4x2 positionAbsolute"></div>
-            <h2 id="pcRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
-            <h2 id="pcRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+            <h2 id="pcRegisterValueHi_h2" class="square2x2 positionAbsolute centeredHorizontal alignTextRight borderBox noRightBorder">00</h2>
+            <h2 id="pcRegisterValueLo_h2" class="square2x2 positionAbsolute centeredHorizontal borderBox noLeftBorder">00</h2>
             
             <h1 id="zrRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox bottomLeft">ZR</h1>
             <div id="zrBackground_div" class="rectangle4x2 positionAbsolute bottomRight"></div>
-            <h2 id="zrRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
-            <h2 id="zrRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder bottomRight">00</h2>
+            <h2 id="zrRegisterValueHi_h2" class="square2x2 positionAbsolute centeredHorizontal alignTextRight borderBox noRightBorder">00</h2>
+            <h2 id="zrRegisterValueLo_h2" class="square2x2 positionAbsolute centeredHorizontal borderBox noLeftBorder bottomRight">00</h2>
             
             <div id="bLabelHover_div" class="hoverElement borderBox rounded">
                 <p class="bold">B - Datenregister</p>
@@ -425,6 +414,9 @@
             </div>
 
             <!-- ************************** ALU **************************  -->
+            <div style="position:absolute; top: calc(100%/32*8); left: calc(100%/46*27);" class="gridChild square2x2 positionAbsolute centered">
+                <p>ALU</p>
+            </div>
             <h2 id="alu1RegisterValue_h2" class="square2x2 positionAbsolute borderBox centered rounded"></h2>
             <h2 id="alu2RegisterValue_h2" class="square2x2 positionAbsolute borderBox centered rounded"></h2>
             <h2 id="aluOutRegisterValue_h2" class="square2x2 positionAbsolute centered rounded"></h2>
@@ -471,11 +463,11 @@
             <div id="registerArrow_div" class="alignBg"></div>
             
             <!-- ************************** DEC **************************  -->
-            <h1 id="decoderLabel_h1" class="rectangle4x2 positionAbsolute centered borderBox topLeft bottomLeft">Decoder</h1>
+            <h1 id="decoderLabel_h1" class="rectangle4x2 positionAbsolute centered borderBox topLeft bottomLeft">DECODER</h1>
             <p id="decDisplay_p" class="rectangle6x2 positionAbsolute centered borderBox topRight bottomRight textareaFontSize"></p>
 
             <div id="decoderHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">Adressdecoder</p>
+                <p class="bold">DEC - Adressdecoder</p>
                 <p>Ermittelt aus den Steuerleitungen und den Adressleitungen welcher Baustein (ROM, RAM, oder I/O) angesprochen werden soll.</p>
             </div>
 
@@ -516,36 +508,39 @@
                     <input type="range" name="animationSpeed" id="speedSlider_input" min="1" max="6" value="3">
                 </div>
                 <div id="increase_button"       class="button topRight bottomRight alignBg" onclick="increaseSpeed()"></div>
+                
             </div>
 
-             <div class="settings gridChild borderBox rounded">
+             <div class="controlPanel gridChild borderBox rounded">
+                
+                
                 <div id="settingsButton_button" class="button borderRight alignBg" onclick="openSettings()"></div>
-                <div id="fullscreenButton_button" class="button alignBg" onclick="toggleFullscreen()"></div>
+                <div id="fullscreenButton_button" class="button borderRight alignBg" onclick="toggleFullscreen()"></div>
             </div>
 
             <div id="playHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Start/Pause [space]</Button></p>
-                <p>Startet/Pausiert den Programmablauf.</p>
+                <p class="bold">Start [space]</Button></p>
+                <p>Startet den Programmablauf.</p>
             </div>
             <div id="stopHover_div" class="hoverElement borderBox rounded button_hover">
                 <p class="bold">Reset</Button></p>
                 <p>Setzt die CPU zurück.</p>
             </div>
             <div id="slowHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Animationstyp 1</Button></p>
+                <p class="bold">Langsame Animation</Button></p>
                 <p>Animation mit Bewegung.</p>
             </div>
             <div id="fastHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Animationstyp 2</Button></p>
-                <p>Animation mit Pfeilen.</p>
+                <p class="bold">Schnelle Animation</Button></p>
+                <p>Animation ohne Bewegung.</p>
             </div>
             <div id="fullCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Keine Animation</Button></p>
-                <p>Schneller Ablauf des Programms.</p>
+                <p class="bold">Schneller Ablauf</Button></p>
+                <p>Führt die gesamte Simulation ohne Animation aus.</p>
             </div>
             <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
                 <p class="bold">Einzelschritt</Button></p>
-                <p>Ist der Button aktiviert, wird nur ein Befehl ausgeführt.</p>
+                <p>Wenn dieser Button aktiv ist, wird nach dem aktuellen Befehl pausiert.</p>
             </div>
             
             <div id="decreaseHover_div" class="hoverElement borderBox rounded button_hover">
@@ -783,7 +778,7 @@
         </div>
     </div>
     
-    <script type="text/javascript" src="./src/app_v2.js">
+    <script type="text/javascript" src="./src/app_transpiled.js">
 
     </script>
 </body>

@@ -323,19 +323,16 @@
             
             <div id="flagsContainer_div" class="rectangle3x2 positionAbsolute centered borderBox topRight bottomRight">
                 <h1 id="cFlagLabel_h1">C</h1>
-                <h1 id="zFlagLabel_h1">Z</h1>
                 <h1 id="pFlagLabel_h1">O</h1>
                 <h1 id="sFlagLabel_h1">S</h1>
+                <h1 id="zFlagLabel_h1">Z</h1>
                 <p id="cFlagValue_p" class="gridChild">0</p>
-                <p id="zFlagValue_p" class="gridChild">0</p>
                 <p id="pFlagValue_p" class="gridChild">0</p>
                 <p id="sFlagValue_p" class="gridChild">0</p>
+                <p id="zFlagValue_p" class="gridChild bottomRight">0</p>
             </div>
             <div id="cFlagHover_div" class="hoverElement borderBox rounded">
                 <p class="bold">C - Carry Flag</p>
-            </div>
-            <div id="zFlagHover_div" class="hoverElement borderBox rounded">
-                <p class="bold">Z - Zero Flag</p>
             </div>
             <div id="pFlagHover_div" class="hoverElement borderBox rounded">
                 <p class="bold">O/P - Overflow/Parity Flag</p>
@@ -343,6 +340,10 @@
             <div id="sFlagHover_div" class="hoverElement borderBox rounded">
                 <p class="bold">S - Sign Flag</p>
             </div>
+            <div id="zFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">Z - Zero Flag</p>
+            </div>
+            
 
             <div id="movingFlags_div" class="borderBox centered rounded yellowBg displayNone">
                 <p>0</p>
@@ -519,8 +520,8 @@
             </div>
 
              <div class="settings gridChild borderBox rounded">
-                <div id="settingsButton_button" class="button borderRight alignBg" onclick="openSettings()"></div>
-                <div id="fullscreenButton_button" class="button alignBg" onclick="toggleFullscreen()"></div>
+                <div id="settingsButton_button" class="button borderRight alignBg topLeft bottomLeft" onclick="openSettings()"></div>
+                <div id="fullscreenButton_button" class="button alignBg topRight bottomRight" onclick="toggleFullscreen()"></div>
             </div>
 
             <div id="playHover_div" class="hoverElement borderBox rounded button_hover">
@@ -565,10 +566,7 @@
                 <p class="bold">Vollbild</Button></p>
                 <p>Tipp: Bei Smartphones verwenden!</p>
             </div>
-            <div id="toggleThemeHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Dunkler Modus</Button></p>
-                <p>Wechselt das Design.</p>
-            </div>
+            
             
             <!-- ************************************************** Settings *************************************************  -->
             <div id="containerSettings_div" class="settingsWindow borderBox rounded">
@@ -735,7 +733,8 @@
                         <p class="textareaFontSize" style="align-self: center;  ">Fehler in der Konfiguration:</p>
                         <textarea id="errorMessage_textarea" name="" class="textareaFontSize yellowBg" style="resize: none;"></textarea>
                     </div>
-                    
+
+                    <button id="toggleTheme_button"   class="lightRounded borderBox" type="button" onclick="toggleTheme()"><p>Design Wechseln</p></button>
                     <button id="info_button"          class="lightRounded borderBox" type="button" onclick="openInfo()"><p>INFO</p></button>
                     <button id="closeSettings_button" class="lightRounded borderBox" type="button" onclick="saveSettings()"><p>Übernehmen</p></button>
                 </div>

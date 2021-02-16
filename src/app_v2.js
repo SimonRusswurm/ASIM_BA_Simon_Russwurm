@@ -3181,9 +3181,9 @@ var animateSetFlags = function () { return __awaiter(_this, void 0, void 0, func
             case 1:
                 _a.sent();
                 movingFlags_div.children[0].textContent = FLAGS.c_number;
-                movingFlags_div.children[1].textContent = FLAGS.z_number;
-                movingFlags_div.children[2].textContent = FLAGS.p_number;
-                movingFlags_div.children[3].textContent = FLAGS.s_number;
+                movingFlags_div.children[1].textContent = FLAGS.p_number;
+                movingFlags_div.children[2].textContent = FLAGS.s_number;
+                movingFlags_div.children[3].textContent = FLAGS.z_number;
                 movingFlags_div.classList.add('displayGrid');
                 _a.label = 2;
             case 2:
@@ -5964,6 +5964,7 @@ var decreaseSpeed = function () {
 };
 var toggleTheme = function () {
     document.getElementsByTagName('html')[0].classList.toggle('black');
+    document.getElementById('toggleTheme_button').classList.toggle('light');
 };
 var snailSpeed_on = function () {
     playStatus.setSnailSpeed();

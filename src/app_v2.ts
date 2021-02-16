@@ -3122,9 +3122,9 @@ const animateSetFlags = async (): Promise < any > => {
     if (!playStatus.noAnim) {
         await animateArrow('FLAGS');
         movingFlags_div.children[0].textContent = FLAGS.c_number;
-        movingFlags_div.children[1].textContent = FLAGS.z_number;
-        movingFlags_div.children[2].textContent = FLAGS.p_number;
-        movingFlags_div.children[3].textContent = FLAGS.s_number;
+        movingFlags_div.children[1].textContent = FLAGS.p_number;
+        movingFlags_div.children[2].textContent = FLAGS.s_number;
+        movingFlags_div.children[3].textContent = FLAGS.z_number;
         movingFlags_div.classList.add('displayGrid');
         try {
             await sleepForIDLETIME();
@@ -4547,6 +4547,7 @@ const decreaseSpeed = () => {
 
 const toggleTheme = () => {
     document.getElementsByTagName('html')[0].classList.toggle('black');
+    document.getElementById('toggleTheme_button').classList.toggle('light');
 }
 
 const snailSpeed_on = () => {

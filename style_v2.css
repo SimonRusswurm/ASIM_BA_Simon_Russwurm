@@ -1011,15 +1011,6 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     background-image: url(images/fullscreenWhite_button.svg)
 }
 
-#toggleTheme_button {
-    background-image: url(images/toggleTheme_button.svg);
-    background-size: 70%
-}
-
-.black #toggleTheme_button {
-    background-image: url(images/toggleThemeWhite_button.svg)
-}
-
 .settingsWindow {
     position: absolute;
     display: none;
@@ -1124,7 +1115,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 
 .programSelect{
     top: calc(1%*var(--height)*7);
-    left: calc(1%*var(--width)*4);
+    left: calc(1%*var(--width)*6);
     height: calc(1%*var(--height)*21);
     width: calc(1%*var(--width)*14);
 }
@@ -1132,7 +1123,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 .ramSelect{
     text-align: center;
     top: calc(1%*var(--height)*20);
-    left: calc(1%*var(--width)*27);
+    left: calc(1%*var(--width)*29);
     height: calc(1%*var(--height)*8);
     width: calc(1%*var(--width)*6);
 }
@@ -1146,7 +1137,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 @media screen and (max-width: 768px), screen and (max-height: 500px){
     .selectOptions{
         top: calc(1%*var(--height)*2);
-        left: calc(1%*var(--width)*2);
+        left: calc(1%*var(--width)*4);
         height: calc(1%*var(--height)*28);
         width: calc(1%*var(--width)*42);
     }
@@ -1166,7 +1157,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     height: calc(1%*var(--height)*28);
     width: calc(1%*var(--width)*42);
     top: calc(1%*var(--height)*2);
-    left: calc(1%*var(--width)*2)
+    left: calc(1%*var(--width)*4)
 }
 
 #programSelection_select {
@@ -1312,6 +1303,24 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     border-bottom: none
 }
 
+#toggleTheme_button{
+    top: calc(100%/28*18);
+    left: calc(100%/42*34);
+    background-color: var(--black);
+}
+
+#toggleTheme_button p{
+    color: var(--light)
+}
+
+#toggleTheme_button.light{
+    background-color: var(--light)
+}
+#toggleTheme_button.light p{
+    color: var(--black)
+}
+
+
 #closeSettings_button {
     top: calc(100%/28*24);
     left: calc(100%/42*34)
@@ -1330,8 +1339,8 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     grid-template-rows: 1fr;
     z-index: 10;
     top: calc(100%/28*2);
-    left: calc(100%/42*2);
-    height: calc(100%/28*22);
+    left: calc(100%/42*4);
+    height: calc(100%/28*24);
     width: calc(100%/42*27.5);
     background-color: #fbfbfbec
 }

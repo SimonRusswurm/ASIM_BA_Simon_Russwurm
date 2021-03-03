@@ -65,7 +65,7 @@ body::after{
 h1 {
     margin: 0;
     padding: 0;
-    color: #19b2ff;
+    color: var(--blue);
     font-family: Arial,Helvetica,sans-serif;
     cursor: pointer
 }
@@ -73,7 +73,7 @@ h1 {
 h2 {
     margin: 0;
     padding: 0;
-    color: #222;
+    color: var(--black);
     letter-spacing: 1px;
     font-family: droid-mono
 }
@@ -81,7 +81,7 @@ h2 {
 h3 {
     margin: 0;
     padding: 0;
-    color: #19b2ff;
+    color: var(--blue);
     text-decoration: overline;
     font-family: Arial,Helvetica,sans-serif;
     cursor: pointer
@@ -90,14 +90,14 @@ h3 {
 h4 {
     margin: 0;
     padding: 0;
-    color: #222;
+    color: var(--black);
     font-family: Arial,Helvetica,sans-serif
 }
 
 h5{
     margin: 0;
     padding: 0;
-    color: #222;
+    color: var(--black);
     font-family: Arial,Helvetica,sans-serif;
     font-size: 17px;
 }
@@ -105,7 +105,7 @@ h5{
 p {
     margin: 0;
     padding: 0;
-    color: #222;
+    color: var(--black);
     font-family: droid-mono
 }
 
@@ -167,7 +167,7 @@ select {
 }
 
 .blueText {
-    color: #19b2ff
+    color: var(--blue)
 }
 
 .textareaFontSize {
@@ -262,24 +262,24 @@ select {
 }
 
 .black h2,.black p, .black input.romElement {
-    color: #fff
+    color: white
 }
 
 .black input.blueText {
-    color: #19b2ff;
+    color: var(--blue);
 }
 
 .yellowBg {
-    background-color: #ff0;
-    color: #222
+    background-color: var(--yellow);
+    color: var(--black)
 }
 
 h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
-    color: #222
+    color: var(--black)
 }
 
 .lightBlueBg {
-    background-color: #96dafc
+    background-color: var(--lightBlue)
 }
 
 .whiteBg{
@@ -287,17 +287,17 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .redBg {
-    background-color: #ff1930;
-    color: #fbfbfb
+    background-color: var(--red);
+    color: var(--light)
 }
 
 .lightYellowBg,.lightYellowBg p {
     background-color: #ffff5c;
-    color: #222
+    color: var(--black)
 }
 
 .pathElement {
-    background-color: #ff0;
+    background-color: var(--yellow);
     background-image: url(images/pathElementBg.svg)
 }
 
@@ -357,7 +357,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .redRectangle {
-    border-color: #FF1930;
+    border-color: var(--red);
     z-index: 1;
     pointer-events: none;
 }
@@ -413,15 +413,15 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 .breakpoint{
     border: 0.1px solid var(--blue);
     background-color: var(--lightBlue);
-    color: #0c577c;
+    color: var(--black);
 }
 .black input.breakpoint {
-    color: #0c577c;
+    color: var(--black);
 }
 
 .romTextarea{
     resize: none;
-    background-color: #fbfbfb;
+    background-color: var(--light);
     text-align: center;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -835,7 +835,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .buttonPressed {
-    background-color: #19b2ffc0;
+    background-color: var(--blue);
 }
 
 .borderRight {
@@ -1021,7 +1021,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .settingsWindow p {
-    color: #222;
+    color: var(--black);
     font-family: Arial,Helvetica,sans-serif
 }
 
@@ -1029,11 +1029,11 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     position: absolute;
     height: calc(100%/28*2);
     width: calc(100%/42*6);
-    background-color: #96dafc
+    background-color: var(--lightBlue)
 }
 
 .settingsWindow button:hover {
-    background-color: #19b2ff
+    background-color: var(--blue)
 }
 
 .radioContainer {
@@ -1059,12 +1059,12 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 .checkmark {
     height: 70%;
     width:  70%;
-    background-color: #fff;
+    background-color: white;
     border-radius: 50%;
 }
 
 .radioContainer input:checked~.checkmark {
-    background-color: #96dafc
+    background-color: var(--lightBlue)
 }
 
 .customSelect{
@@ -1075,7 +1075,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .customSelect:hover{
-    background-color: #96dafc;
+    background-color: var(--lightBlue);
 }
 
 
@@ -1105,7 +1105,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 
 .selectOptions{
     position: absolute;   
-    background-color: #fff;
+    background-color: white;
     cursor: pointer;
 
     z-index: 12;
@@ -1148,12 +1148,12 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 .option:hover{
-    background-color: #bbbbbb; 
+    background-color: lightgrey; 
 }
 
 .innerSettings {
     position: absolute;
-    background-color: #fbfbfb;
+    background-color: var(--light);
     height: calc(1%*var(--height)*28);
     width: calc(1%*var(--width)*42);
     top: calc(1%*var(--height)*2);
@@ -1293,11 +1293,13 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     height: calc(100%/28*7);
     width: calc(100%/42*13);
     padding: .5%;
-    background-color: #ff0
+    color: var(--light);
+    background-color: var(--red)
 }
 
 #errorMessage_textarea {
-    border-top: .1px solid #6a6a6a;
+    border-top: .1px solid var(--black);
+    background-color: var(--red);
     border-left: none;
     border-right: none;
     border-bottom: none
@@ -1349,17 +1351,17 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     display: none;
     z-index: 6;
     position: absolute;
-    background-color: #ff0;
+    background-color: var(--yellow);
     padding: 0 .5%;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    color: #222;
+    color: var(--black);
     font-family: Arial,Helvetica,sans-serif
 }
 
 .hoverElement p {
-    color: #222;
+    color: var(--black);
     font-family: Arial,Helvetica,sans-serif
 }
 
@@ -1370,7 +1372,7 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    color: #222;
+    color: var(--black);
     top: calc(1%*var(--height)*4);
     left: calc(1%*var(--width)*2);
     width: calc(1%*var(--width)*8);

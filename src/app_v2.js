@@ -83,7 +83,8 @@ var resizeWindow = function (first_boolean) {
          * If the application fills the entire width of the screen, the size of the application must also be calculated
          * using the width. And vice versa.
          */
-        if (iH_number * sectionsWidth / 32 > iW_number) {
+        if (iH_number * sectionsWidth / sectionsHeight > iW_number) {
+            console.log("now");
             containerAspectRatio_div.style.width = iW_number + "px";
             containerAspectRatio_div.style.height = iW_number / aspectRatio + "px";
             // containerAspectRatio_div.style.left = '0px';
@@ -1332,6 +1333,7 @@ var fixPoints = [
     new Point(50, 49, 10, 24, 'ROM2'),
     new Point(51, 49, 36, 24, 'RAM2'),
 ];
+/***************************************************ROM Breakpoints Editable***************************************************/
 var romElements_array = Array.from(document.getElementsByClassName('romElement'));
 var _loop_1 = function (i) {
     romElements_array[i].addEventListener('dblclick', function () {
@@ -6047,9 +6049,6 @@ document.addEventListener('keyup', function (e) {
                 break;
             case 'Slash':
                 decreaseSpeed();
-                break;
-            case 'KeyB':
-                toggleTheme();
                 break;
             default:
                 break;

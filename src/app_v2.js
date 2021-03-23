@@ -84,7 +84,6 @@ var resizeWindow = function (first_boolean) {
          * using the width. And vice versa.
          */
         if (iH_number * sectionsWidth / sectionsHeight > iW_number) {
-            console.log("now");
             containerAspectRatio_div.style.width = iW_number + "px";
             containerAspectRatio_div.style.height = iW_number / aspectRatio + "px";
             // containerAspectRatio_div.style.left = '0px';
@@ -131,7 +130,7 @@ var settingsDisplayed_boolean = true;
 var ioInputDisplayed_boolean = false;
 var editRom_boolean = false;
 var ANIMATION_SPEED = 3;
-var IDLETIME = 400;
+var IDLETIME = 500;
 var NOANIMATIONIDLETIME = 15;
 var FRAMES = 60;
 /***************************************************DOM-selectors***************************************************/
@@ -1953,7 +1952,6 @@ var getIndexArrayAtoB = function (zeroToA_array, zeroToB_array) {
             buffer = zeroToA_array[i];
         }
     }
-    console.log(zeroToA_array, zeroToB_array, buffer);
     //reverse indexArray zeroToA
     var aToZero_array = zeroToA_array.reverse();
     //add index to AtoB-array as long as the index is smaller than buffer
@@ -3256,16 +3254,10 @@ var animateCheckJump = function (flag_string) { return __awaiter(_this, void 0, 
 /**
  * IO animations
  */
-var checkCorrectIoInput = function (input_string) {
-    if (checkValidHex(input_string)) {
-        if (input_string.length > 2) {
-            return false;
-        }
-        return true;
-    }
-    return false;
-};
 //animation of IO-input
+var io1InputInfo_p = document.getElementById('io1InputInfo_p');
+var io2InputInfo_p = document.getElementById('io2InputInfo_p');
+var io3InputInfo_p = document.getElementById('io3InputInfo_p');
 var animateIoUserInput = function (IoName_string) { return __awaiter(_this, void 0, void 0, function () {
     var ioInputWindow, ioInput, check;
     return __generator(this, function (_a) {
@@ -3303,25 +3295,31 @@ var animateIoUserInput = function (IoName_string) { return __awaiter(_this, void
                 _a.sent();
                 if (ioInput.value === '')
                     ioInput.value = 'FF';
-                if (checkCorrectIoInput(ioInput.value)) {
+                if (checkValidHex(ioInput.value)) {
                     check = false;
                 }
                 else {
                     if (IoName_string === 'IO1') {
-                        document.getElementById('io1InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
+                        io1InputInfo_p.classList.add('redBg');
+                        io1InputInfo_p.textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                     }
                     else if (IoName_string === 'IO2') {
-                        document.getElementById('io2InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
+                        io2InputInfo_p.classList.add('redBg');
+                        io2InputInfo_p.textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                     }
                     else if (IoName_string === 'IO3') {
-                        document.getElementById('io3InputInfo_p').textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
+                        io3InputInfo_p.classList.add('redBg');
+                        io3InputInfo_p.textContent = 'Das ist keine gültige zweistellige Hex-Zahl. Verwenden Sie nur die Zahlen  0-9 und die Zeichen A-F!';
                     }
                 }
                 return [3 /*break*/, 2];
             case 4: return [3 /*break*/, 6];
             case 5:
                 ioInputWindow.classList.remove('displayGrid');
-                document.getElementById('io1InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+                io1InputInfo_p.classList.remove('redBg');
+                io2InputInfo_p.classList.remove('redBg');
+                io3InputInfo_p.classList.remove('redBg');
+                io1InputInfo_p.textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
                 document.getElementById('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
                 document.getElementById('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
                 ioInputDisplayed_boolean = false;
@@ -5950,7 +5948,7 @@ var stopBtn = function () {
 };
 speedSlider_input.oninput = function () {
     ANIMATION_SPEED = Number(speedSlider_input.value);
-    IDLETIME = 400 - ANIMATION_SPEED * 30;
+    IDLETIME = 500 - ANIMATION_SPEED * 30;
     if (ANIMATION_SPEED === 5)
         ANIMATION_SPEED = 6;
     if (ANIMATION_SPEED === 6)
@@ -6039,10 +6037,34 @@ var openInfo = function () {
     document.getElementById('infoWindow_div').classList.toggle('displayGrid');
 };
 document.addEventListener('keyup', function (e) {
-    if (!settingsDisplayed_boolean && !ioInputDisplayed_boolean) {
+    if (!settingsDisplayed_boolean && !ioInputDisplayed_boolean && !editRom_boolean) {
         switch (e.code) {
             case 'Space':
                 play();
+                break;
+            case 'KeyR':
+                stopBtn();
+                break;
+            case 'KeyT':
+                runOneCommand();
+                break;
+            case 'KeyY':
+                snailSpeed_on();
+                break;
+            case 'KeyZ':
+                snailSpeed_on();
+                break;
+            case 'KeyU':
+                rocketSpeed_on();
+                break;
+            case 'KeyI':
+                runCompleteExecution();
+                break;
+            case 'KeyS':
+                openSettings();
+                break;
+            case 'KeyV':
+                toggleFullscreen();
                 break;
             case 'BracketRight':
                 increaseSpeed();
@@ -6063,6 +6085,9 @@ document.addEventListener('keyup', function (e) {
             play();
     }
     if (editRom_boolean) {
+        if (e.code == 'Space') {
+            play();
+        }
         ROM.updateNumberArrayFromDOM();
     }
 });

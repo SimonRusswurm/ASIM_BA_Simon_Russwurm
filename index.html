@@ -260,7 +260,7 @@
             
             <div id="io1InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
-                    <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()"><p class="arial">Speichern</p></button>
+                    <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()"><p class="arial">Eingabe</p></button>
                     <input id="io1Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
                 <p id="io1InputInfo_p" class="yellowBg borderBox rounded arial gridChild" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
@@ -283,7 +283,7 @@
 
             <div id="io2InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
-                    <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p class="arial">Speichern</p></button>
+                    <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p class="arial">Eingabe</p></button>
                     <input id="io2Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
                 <p  id="io2InputInfo_p" class="yellowBg borderBox rounded arial " style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
@@ -305,7 +305,7 @@
             
             <div id="io3InputWindow_div" class="displayNone">
                 <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
-                    <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p class="arial">Speichern</p></button>
+                    <button class="borderBox topLeft bottomLeft lightBlueBg" onclick="play()" ><p class="arial">Eingabe</p></button>
                     <input id="io3Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
                 </div>
                 <p id="io3InputInfo_p" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
@@ -529,23 +529,23 @@
                 <p>Startet/Pausiert den Programmablauf.</p>
             </div>
             <div id="stopHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Reset</Button></p>
+                <p class="bold">Reset [r]</Button></p>
                 <p>Setzt die CPU zurück.</p>
             </div>
             <div id="slowHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Animationstyp 1</Button></p>
+                <p class="bold">Animationstyp 1 [z]</Button></p>
                 <p>Animation mit Bewegung.</p>
             </div>
             <div id="fastHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Animationstyp 2</Button></p>
+                <p class="bold">Animationstyp 2 [u]</Button></p>
                 <p>Animation mit Pfeilen.</p>
             </div>
             <div id="fullCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Keine Animation</Button></p>
+                <p class="bold">Keine Animation [i]</Button></p>
                 <p>Schneller Ablauf des Programms.</p>
             </div>
             <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einzelschritt</Button></p>
+                <p class="bold">Einzelschritt [t]</Button></p>
                 <p>Ist der Button aktiviert, wird nur ein Befehl ausgeführt.</p>
             </div>
             
@@ -559,11 +559,11 @@
             </div>
             
             <div id="settingsButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Einstellungen</Button></p>
+                <p class="bold">Einstellungen [s]</Button></p>
                 <p>Konfiguration von ROM, RAM und IO.</p>
             </div>
             <div id="fullscreenButtonHover_div" class="hoverElement borderBox rounded button_hover">
-                <p class="bold">Vollbild</Button></p>
+                <p class="bold">Vollbild [v]</Button></p>
                 <p>Tipp: Bei Smartphones verwenden!</p>
             </div>
             
@@ -729,9 +729,9 @@
                     </div>
 
                     
-                    <div id="errorWindow_div" class="lightRounded borderBox displayNone">
-                        <p class="textareaFontSize" style="align-self: center;  ">Fehler in der Konfiguration:</p>
-                        <textarea id="errorMessage_textarea" name="" class="textareaFontSize yellowBg" style="resize: none;"></textarea>
+                    <div id="errorWindow_div" class="lightRounded borderBox displayNone redBg">
+                        <p class="textareaFontSize redBg" style="align-self: center; color: white;">Fehler in der Konfiguration:</p>
+                        <textarea id="errorMessage_textarea" name="" class="textareaFontSize redBg" style="resize: none;"></textarea>
                     </div>
 
                     <button id="toggleTheme_button"   class="lightRounded borderBox" type="button" onclick="toggleTheme()"><p>Design Wechseln</p></button>

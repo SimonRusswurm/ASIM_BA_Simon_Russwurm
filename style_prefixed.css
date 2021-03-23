@@ -399,6 +399,8 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     border: .1px solid #19b2ff;
     background-color: #a1e0ff;
     color: #0c577c;
+    border-radius: 0;
+    box-shadow: none;
 }
 .black input.breakpoint {
     color: #0c577c;

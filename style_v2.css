@@ -290,6 +290,9 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     background-color: var(--red);
     color: var(--light)
 }
+p.redBg{
+    color: var(--light)
+}
 
 .lightYellowBg,.lightYellowBg p {
     background-color: #ffff5c;
@@ -857,15 +860,11 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     height: calc(1%*var(--height)*2);
     width: calc(1%*var(--width)*6);
     top: calc(1%*var(--height)*30);
-    left: calc(1%*var(--width)*16);
+    left: calc(1%*var(--width)*19);
     -ms-grid-rows: 1fr;
     grid-template-rows: 1fr;
     -ms-grid-columns: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
-}
-#oneCommand_button{
-    top: calc(1%*var(--height)*30);
-    left: calc(1%*var(--width)*23);
 }
 
 .speed{
@@ -961,7 +960,9 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 
 #oneCommand_button {
     background-image: url(images/oneCommand_button.svg);
-    background-size: 80%
+    background-size: 80%;
+    top: calc(1%*var(--height)*30);
+    left: calc(1%*var(--width)*16);
 }
 
 .black #oneCommand_button {
@@ -1293,12 +1294,10 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
     height: calc(100%/28*7);
     width: calc(100%/42*13);
     padding: .5%;
-    color: var(--light);
-    background-color: var(--red)
 }
 
 #errorMessage_textarea {
-    border-top: .1px solid var(--black);
+    border-top: .1px solid var(--light);
     background-color: var(--red);
     border-left: none;
     border-right: none;
@@ -1604,17 +1603,17 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 #slowHover_div {
-    left: calc(1%*var(--width)*16)
+    left: calc(1%*var(--width)*19)
 }
 
 #fastHover_div {
-    left: calc(1%*var(--width)*18)
+    left: calc(1%*var(--width)*21)
 }
 #fullCommandHover_div {
-    left: calc(1%*var(--width)*20)
+    left: calc(1%*var(--width)*23)
 }
 #oneCommandHover_div {
-    left: calc(1%*var(--width)*23)
+    left: calc(1%*var(--width)*16)
 }
 
 #decreaseHover_div {
@@ -1622,15 +1621,15 @@ h2.yellowBg,p.yellowBg,.yellowBg p,.yellowBg h2 {
 }
 
 #increaseHover_div {
-    left: calc(1%*var(--width)*31)
+    left: calc(1%*var(--width)*30)
 }
 
 #settingsButtonHover_div {
-    left: calc(1%*var(--width)*31)
+    left: calc(1%*var(--width)*30)
 }
 
 #fullscreenButtonHover_div {
-    left: calc(1%*var(--width)*31)
+    left: calc(1%*var(--width)*30)
 }
 
 .displayNone {

@@ -568,6 +568,7 @@ const rorBinary = (value_number: number): number => {
 
     return result;
 }
+
 /***************************************************Classes***************************************************/
 class PlayStatus {
     play: boolean;

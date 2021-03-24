@@ -48,17 +48,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+var getHtmlElement = function (id_string) { return document.getElementById(id_string); };
 /**
  * Resizing logic*****************************************************************************************************
  * The ratio of the containerAspectRatio_div is defined with 50/32 = aspectRatio
  */
-var containerAspectRatio_div = document.getElementById('containerAspectRatio_div');
-var masterStyle_style = document.getElementById('masterStyle_style');
-var initialRatio_number = Math.round(window.innerWidth / window.innerHeight * 100) / 100;
-var sectionsWidth = 50;
-var sectionsHeight = 32;
-var aspectRatio = sectionsWidth / sectionsHeight;
-var resizeWindow = function (first_boolean) {
+var containerAspectRatio_div = getHtmlElement('containerAspectRatio_div');
+var masterStyle_style = getHtmlElement('masterStyle_style');
+var lastRatio_number = Math.round(window.innerWidth / window.innerHeight * 100) / 100;
+var sectionsCountWidth = 50;
+var sectionsCountHeight = 32;
+var aspectRatio = sectionsCountWidth / sectionsCountHeight;
+var resizeWindow = function (firstTimeResizing_boolean) {
     var iH_number = window.innerHeight;
     var iW_number = window.innerWidth;
     var currentRatio_number = Math.round(iH_number / iW_number * 100) / 100;
@@ -66,75 +67,75 @@ var resizeWindow = function (first_boolean) {
         Function only resizes application when screenRatio changes.
         When the user is zooming, innerWidth and innerHeight will change but the ratio innerWidth/innerHeight stays the same.
     */
-    if ((currentRatio_number !== initialRatio_number && iH_number > 200 && iW_number > 400) || first_boolean) {
-        initialRatio_number = currentRatio_number;
-        var pFontSize = 0;
-        var h1FontSize = 0;
-        var h2FontSize = 0;
-        var h3FontSize = 0;
-        var h4FontSize = 0;
-        var textareaFontSize = 0;
-        var borderSize = 0;
-        var borderRadius = 0;
-        var fontSize_string = '';
-        var borderRadius_string = '';
-        var letterSpacing = 0;
-        /**
-         * If the application fills the entire width of the screen, the size of the application must also be calculated
-         * using the width. And vice versa.
-         */
-        if (iH_number * sectionsWidth / sectionsHeight > iW_number) {
-            containerAspectRatio_div.style.width = iW_number + "px";
-            containerAspectRatio_div.style.height = iW_number / aspectRatio + "px";
-            // containerAspectRatio_div.style.left = '0px';
-            pFontSize = iW_number / 100 * 1.2;
-            h1FontSize = iW_number / 100 * 1.4;
-            h2FontSize = iW_number / 100 * 3;
-            h3FontSize = iW_number / 100 * 1;
-            h4FontSize = iW_number / 100 * 2.5;
-            textareaFontSize = iW_number / 100 * 1.3;
-            borderSize = iW_number / 100 * 0.01;
-            borderRadius = iW_number / 100 * 0.7;
-            letterSpacing = iW_number / 100 * 0.03;
-        }
-        else {
-            containerAspectRatio_div.style.width = iH_number * aspectRatio + "px";
-            containerAspectRatio_div.style.height = iH_number + "px";
-            // containerAspectRatio_div.style.left = String((window.innerWidth-height_number*aspectRatio)/2) + "px";
-            pFontSize = iH_number / 100 * 1.2 * aspectRatio;
-            h1FontSize = iH_number / 100 * 1.4 * aspectRatio;
-            h2FontSize = iH_number / 100 * 3 * aspectRatio;
-            h3FontSize = iH_number / 100 * 1 * aspectRatio;
-            h4FontSize = iH_number / 100 * 2.5 * aspectRatio;
-            textareaFontSize = iH_number / 100 * 1.3 * aspectRatio;
-            borderSize = iH_number / 100 * 0.01 * aspectRatio;
-            borderRadius = iH_number / 100 * 0.7 * aspectRatio;
-            letterSpacing = iW_number / 100 * 0.03 * aspectRatio;
-        }
-        fontSize_string =
-            "p{font-size: " + pFontSize + "px;}\n                h1{font-size: " + h1FontSize + "px;}\n                h2{font-size: " + h2FontSize + "px; letter-spacing: " + letterSpacing + "px;}\n                h3{font-size: " + h3FontSize + "px;}\n                h4{font-size: " + h4FontSize + "px;}\n                .textareaFontSize{font-size: " + textareaFontSize + "px;}\n                .inputFontSize{font-size: " + h2FontSize + "px;}\n                input.romElement{font-size: " + pFontSize + "px;}";
-        borderRadius_string =
-            ".borderBox{border-width: " + borderSize + "px;}\n                .rounded{ border-radius: " + borderRadius + "px;}\n                .topLeft{border-top-left-radius: " + borderRadius + "px;}\n                .topRight{border-top-right-radius: " + borderRadius + "px;}\n                .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;}\n                .bottomRight{border-bottom-right-radius: " + borderRadius + "px;}\n                .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
-        masterStyle_style.innerHTML = fontSize_string + borderRadius_string;
+    if (!firstTimeResizing_boolean) {
+        if (currentRatio_number === lastRatio_number)
+            return;
+        if (iH_number < 200)
+            return;
+        if (iW_number < 400)
+            return;
     }
+    lastRatio_number = currentRatio_number;
+    var pFontSize = 0;
+    var h1FontSize = 0;
+    var h2FontSize = 0;
+    var h3FontSize = 0;
+    var h4FontSize = 0;
+    var textareaFontSize = 0;
+    var borderSize = 0;
+    var borderRadius = 0;
+    var fontSize_string = '';
+    var borderRadius_string = '';
+    var letterSpacing = 0;
+    /**
+     * If the application fills the entire width of the screen, the size of the application must also be calculated
+     * using the width. And vice versa.
+     */
+    if (iH_number * sectionsCountWidth / sectionsCountHeight > iW_number) {
+        containerAspectRatio_div.style.width = iW_number + "px";
+        containerAspectRatio_div.style.height = iW_number / aspectRatio + "px";
+        pFontSize = iW_number / 100 * 1.2;
+        h1FontSize = iW_number / 100 * 1.4;
+        h2FontSize = iW_number / 100 * 3;
+        h3FontSize = iW_number / 100 * 1;
+        h4FontSize = iW_number / 100 * 2.5;
+        textareaFontSize = iW_number / 100 * 1.3;
+        borderSize = iW_number / 100 * 0.01;
+        borderRadius = iW_number / 100 * 0.7;
+        letterSpacing = iW_number / 100 * 0.03;
+    }
+    else {
+        containerAspectRatio_div.style.width = iH_number * aspectRatio + "px";
+        containerAspectRatio_div.style.height = iH_number + "px";
+        pFontSize = iH_number / 100 * 1.2 * aspectRatio;
+        h1FontSize = iH_number / 100 * 1.4 * aspectRatio;
+        h2FontSize = iH_number / 100 * 3 * aspectRatio;
+        h3FontSize = iH_number / 100 * 1 * aspectRatio;
+        h4FontSize = iH_number / 100 * 2.5 * aspectRatio;
+        textareaFontSize = iH_number / 100 * 1.3 * aspectRatio;
+        borderSize = iH_number / 100 * 0.01 * aspectRatio;
+        borderRadius = iH_number / 100 * 0.7 * aspectRatio;
+        letterSpacing = iW_number / 100 * 0.03 * aspectRatio;
+    }
+    fontSize_string =
+        "p{font-size: " + pFontSize + "px;}\n        h1{font-size: " + h1FontSize + "px;}\n        h2{font-size: " + h2FontSize + "px; letter-spacing: " + letterSpacing + "px;}\n        h3{font-size: " + h3FontSize + "px;}\n        h4{font-size: " + h4FontSize + "px;}\n        .textareaFontSize{font-size: " + textareaFontSize + "px;}\n        .inputFontSize{font-size: " + h2FontSize + "px;}\n        input.romElement{font-size: " + pFontSize + "px;}";
+    borderRadius_string =
+        ".borderBox{border-width: " + borderSize + "px;}\n        .rounded{ border-radius: " + borderRadius + "px;}\n        .topLeft{border-top-left-radius: " + borderRadius + "px;}\n        .topRight{border-top-right-radius: " + borderRadius + "px;}\n        .bottomLeft{border-bottom-left-radius: " + borderRadius + "px;}\n        .bottomRight{border-bottom-right-radius: " + borderRadius + "px;}\n        .lightRounded{border-radius: " + borderRadius / 2 + "px;}";
+    masterStyle_style.innerHTML = fontSize_string + borderRadius_string;
 };
 window.addEventListener('DOMContentLoaded', function () {
     resizeWindow(true);
+    breakpointsCheckbox_input.checked = false;
 });
 window.addEventListener('resize', function () {
     resizeWindow(false);
 });
 /***************************************************global Variables***************************************************/
-var isFullscreen = false;
-var settingsDisplayed_boolean = true;
-var ioInputDisplayed_boolean = false;
-var editRom_boolean = false;
-var ANIMATION_SPEED = 3;
+var ANIMATION_SPEED = 3; //Values can be 1,2,3,4,6,12
 var IDLETIME = 500;
 var NOANIMATIONIDLETIME = 15;
 var FRAMES = 60;
 /***************************************************DOM-selectors***************************************************/
-var getHtmlElement = function (id_string) { return document.getElementById(id_string); };
 var mc8_div = getHtmlElement('mc8_div');
 //control unit
 var assemblerCommand_p = getHtmlElement('assemblerCommand_p');
@@ -162,14 +163,12 @@ var movingAlu2 = getHtmlElement('movingAlu2_h2');
 //yellow register background element
 var yellowBgElement_div = getHtmlElement('yellowBgElement_div');
 //rom/ram variable memory blocks
-var lastRomLabel_div = document.getElementById('lastRomLabel_div');
-var lastRomLabel_p = document.getElementById('lastRomLabel_p');
-var middleRamLabel_div = document.getElementById('middleRamLabel_div');
-var middleRamLabel_p = document.getElementById('middleRamLabel_p');
+var lastRomLabel_div = getHtmlElement('lastRomLabel_div');
+var lastRomLabel_p = getHtmlElement('lastRomLabel_p');
+var middleRamLabel_div = getHtmlElement('middleRamLabel_div');
+var middleRamLabel_p = getHtmlElement('middleRamLabel_p');
 /***************************************************basic functions***************************************************/
-var convertHexToNumber = function (hexValue_string) {
-    return parseInt(hexValue_string, 16);
-};
+var convertHexToNumber = function (hexValue_string) { return parseInt(hexValue_string, 16); };
 var convertNumberToHex_4digits = function (value_number) {
     var str = value_number.toString(16);
     str = str.toUpperCase();
@@ -508,53 +507,57 @@ var rorBinary = function (value_number) {
     return result;
 };
 /***************************************************Classes***************************************************/
-var PlayStatus = /** @class */ (function () {
-    function PlayStatus() {
+var ProgramStatus = /** @class */ (function () {
+    function ProgramStatus() {
         this.play = false;
-        this.stop = true;
         this.pause = false;
-        this.oneCommand = false;
-        this.noAnim = false;
-        this.completeExe = false;
-        this.rocketSpeed = false;
+        this.reset = true;
+        this.singleSteps = false;
+        this.animationType_1 = true;
+        this.animationType_2 = false;
+        this.noAnimation = false;
+        this.settingsOpened = true;
+        this.fullscreenOn = false;
+        this.ioInputDisplayed = false;
+        this.romIsEdited = false;
     }
-    PlayStatus.prototype.setPlay = function () {
+    ProgramStatus.prototype.setPlay = function () {
         this.play = true;
-        this.stop = false;
         this.pause = false;
+        this.reset = false;
     };
-    PlayStatus.prototype.setPause = function () {
+    ProgramStatus.prototype.setPause = function () {
         this.play = false;
-        this.stop = false;
         this.pause = true;
+        this.reset = false;
     };
-    PlayStatus.prototype.setStop = function () {
+    ProgramStatus.prototype.setReset = function () {
         this.play = false;
-        this.stop = true;
         this.pause = false;
+        this.reset = true;
     };
-    PlayStatus.prototype.setOneCommand = function () {
-        this.oneCommand = true;
+    ProgramStatus.prototype.setSingleSteps = function () {
+        this.singleSteps = true;
     };
-    PlayStatus.prototype.setCompleteExecution = function () {
-        this.noAnim = true;
-        this.completeExe = true;
+    ProgramStatus.prototype.resetSingleSteps = function () {
+        this.singleSteps = false;
     };
-    PlayStatus.prototype.setNoAnimation = function () {
-        this.noAnim = true;
-        this.completeExe = false;
+    ProgramStatus.prototype.setNoAnimation = function () {
+        this.animationType_1 = false;
+        this.animationType_2 = false;
+        this.noAnimation = true;
     };
-    PlayStatus.prototype.setRocketSpeed = function () {
-        this.rocketSpeed = true;
-        this.noAnim = false;
-        this.completeExe = false;
+    ProgramStatus.prototype.setAnimationType_1 = function () {
+        this.animationType_1 = true;
+        this.animationType_2 = false;
+        this.noAnimation = false;
     };
-    PlayStatus.prototype.setSnailSpeed = function () {
-        this.rocketSpeed = false;
-        this.noAnim = false;
-        this.completeExe = false;
+    ProgramStatus.prototype.setAnimationType_2 = function () {
+        this.animationType_1 = false;
+        this.animationType_2 = true;
+        this.noAnimation = false;
     };
-    return PlayStatus;
+    return ProgramStatus;
 }());
 var Rom = /** @class */ (function () {
     function Rom() {
@@ -582,8 +585,8 @@ var Rom = /** @class */ (function () {
     Rom.prototype.resetBreakpoints = function () {
         this.breakpoints_array = this.initBreakpoints();
         for (var i = 0; i < 224; i++) {
-            document.getElementById("romElement" + i).classList.remove('blueText', 'breakpoint');
-            document.getElementById("romElement" + i).removeEventListener('mouseover', function () { });
+            getHtmlElement("romElement" + i).classList.remove('blueText', 'breakpoint');
+            getHtmlElement("romElement" + i).removeEventListener('mouseover', function () { });
         }
     };
     Rom.prototype.init_DOM = function () {
@@ -605,12 +608,12 @@ var Rom = /** @class */ (function () {
                 romElement.value = 'FF';
             }
             romElement.style.top = 100 / 32 * (j + 2) + "%";
-            romElement.style.left = 100 / sectionsWidth * ((i % 8) + 2) + "%";
+            romElement.style.left = 100 / sectionsCountWidth * ((i % 8) + 2) + "%";
             //hover pop-ups                
             romElement.addEventListener('mouseover', function () {
                 if (Array.from(romElement.classList).includes('blueText'))
                     breakpointHover_div.classList.add('displayGrid');
-                breakpointHover_div.style.top = (Number(romElement.style.top.replace('%', '')) * sectionsHeight / 100 + 1) * 100 / sectionsHeight + "%";
+                breakpointHover_div.style.top = (Number(romElement.style.top.replace('%', '')) * sectionsCountHeight / 100 + 1) * 100 / sectionsCountHeight + "%";
                 var check = true;
                 for (var j_1 = 0; j_1 < mc8Commands_array.length; j_1++) {
                     if (mc8Commands_array[j_1].machineCommand_number === convertHexToNumber(romElement.value)) {
@@ -618,7 +621,7 @@ var Rom = /** @class */ (function () {
                         check = false;
                         if (convertHexToNumber(romElement.value) === 221) {
                             var bufIdNumber = Number(romElement.id.replace('romElement', ''));
-                            var secondByte = convertHexToNumber(document.getElementById("romElement" + (bufIdNumber + 1)).value);
+                            var secondByte = convertHexToNumber(getHtmlElement("romElement" + (bufIdNumber + 1)).value);
                             switch (secondByte) {
                                 case 33:
                                     breakpointsLabel_p.textContent = 'MOV IX, dat_16';
@@ -645,7 +648,7 @@ var Rom = /** @class */ (function () {
                         }
                         else if (convertHexToNumber(romElement.value) === 203) {
                             var bufIdNumber = Number(romElement.id.replace('romElement', ''));
-                            var secondByte = convertHexToNumber(document.getElementById("romElement" + (bufIdNumber + 1)).value);
+                            var secondByte = convertHexToNumber(getHtmlElement("romElement" + (bufIdNumber + 1)).value);
                             switch (secondByte) {
                                 case 39:
                                     breakpointsLabel_p.textContent = 'SHL';
@@ -675,12 +678,13 @@ var Rom = /** @class */ (function () {
     };
     Rom.prototype.updateNumberArrayFromDOM = function () {
         for (var i = 0; i < 224; i++) {
-            var buf = document.getElementById("romElement" + i);
+            var buf = getHtmlElement("romElement" + i);
             if (checkValidHex(buf.value)) {
-                this.number_array[i] = convertHexToNumber(document.getElementById("romElement" + i).value);
+                this.number_array[i] = convertHexToNumber(getHtmlElement("romElement" + i).value);
             }
             else {
                 buf.value = convertNumberToHex_2digits(this.number_array[i]);
+                programStatus.romIsEdited = false;
             }
         }
     };
@@ -706,7 +710,7 @@ var Rom = /** @class */ (function () {
         }
         //update DOM        
         for (var i = 0; i < 224; i++) {
-            var romEle = document.getElementById("romElement" + i);
+            var romEle = getHtmlElement("romElement" + i);
             buf_string = convertNumberToHex_2digits(this.number_array[i]);
             romEle.value = buf_string;
             if (breakpointsCheckbox_input.checked && this.breakpoints_array[i]) {
@@ -722,7 +726,7 @@ var Rom = /** @class */ (function () {
                 lastRomLabel_p.textContent = convertNumberToHex_4digits(address_number).slice(0, -1) + 'x';
                 lastRomLabel_div.classList.add('lightYellowBg');
                 for (var i = 0; i < 16; i++) {
-                    document.getElementById("romElementVariable" + i).value = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
+                    getHtmlElement("romElementVariable" + i).value = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
                 }
             }
             else if (lastRomLabel_p.textContent !== '') {
@@ -730,7 +734,7 @@ var Rom = /** @class */ (function () {
                 lastRomLabel_div.classList.remove('lightYellowBg');
                 lastRomLabel_p.textContent = '';
                 for (var i = 0; i < 16; i++) {
-                    document.getElementById("romElementVariable" + i).value = '';
+                    getHtmlElement("romElementVariable" + i).value = '';
                 }
             }
         }
@@ -741,9 +745,9 @@ var Rom = /** @class */ (function () {
     Rom.prototype.getElementId = function (address_number) {
         if (address_number === void 0) { address_number = PC.value_number; }
         if (address_number > 223) {
-            return document.getElementById("romElementVariable" + address_number % 16).id;
+            return getHtmlElement("romElementVariable" + address_number % 16).id;
         }
-        return document.getElementById("romElement" + address_number).id;
+        return getHtmlElement("romElement" + address_number).id;
     };
     return Rom;
 }());
@@ -780,7 +784,7 @@ var Ram = /** @class */ (function () {
             if (!(i % 8) && i !== 0)
                 j++;
             ramElement.style.top = 100 / 32 * (j + 2) + "%";
-            ramElement.style.left = 100 / sectionsWidth * ((i % 8) + 40) + "%";
+            ramElement.style.left = 100 / sectionsCountWidth * ((i % 8) + 40) + "%";
             mc8_div.appendChild(ramElement);
         }
     };
@@ -788,10 +792,10 @@ var Ram = /** @class */ (function () {
         for (var i = 0; i < this.number_array.length; i++) {
             this.number_array[i] = 255;
             if (i < 112) {
-                document.getElementById("ramElement" + i).textContent = 'FF';
+                getHtmlElement("ramElement" + i).textContent = 'FF';
             }
             if (i > 8192 - 113) {
-                document.getElementById("ramElement" + i).textContent = 'FF';
+                getHtmlElement("ramElement" + i).textContent = 'FF';
             }
         }
     };
@@ -805,10 +809,10 @@ var Ram = /** @class */ (function () {
         address_number = this.reduceToRange2000h(address_number);
         this.number_array[address_number] = value_number;
         if (address_number < 112 || address_number > 8191 - 112) {
-            document.getElementById("ramElement" + address_number).textContent = convertNumberToHex_2digits(value_number);
+            getHtmlElement("ramElement" + address_number).textContent = convertNumberToHex_2digits(value_number);
         }
         else {
-            document.getElementById("ramElementVariable" + address_number % 16).textContent = convertNumberToHex_2digits(value_number);
+            getHtmlElement("ramElementVariable" + address_number % 16).textContent = convertNumberToHex_2digits(value_number);
         }
     };
     Ram.prototype.updateVariableElements = function (address_number) {
@@ -820,7 +824,7 @@ var Ram = /** @class */ (function () {
                 middleRamLabel_p.textContent = convertNumberToHex_4digits(address_number).slice(0, -1) + 'x';
                 var lastXXX0Address = reducedAddress - reducedAddress % 16;
                 for (var i = 0; i < 16; i++) {
-                    document.getElementById("ramElementVariable" + i).textContent = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
+                    getHtmlElement("ramElementVariable" + i).textContent = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
                 }
             }
             else if (middleRamLabel_p.textContent !== '') {
@@ -828,7 +832,7 @@ var Ram = /** @class */ (function () {
                 middleRamLabel_div.classList.remove('lightYellowBg');
                 middleRamLabel_p.textContent = '';
                 for (var i = 0; i < 16; i++) {
-                    document.getElementById("ramElementVariable" + i).textContent = '';
+                    getHtmlElement("ramElementVariable" + i).textContent = '';
                 }
             }
         }
@@ -837,10 +841,10 @@ var Ram = /** @class */ (function () {
         if (address_number === void 0) { address_number = 0; }
         address_number = this.reduceToRange2000h(address_number);
         if (address_number > 111 && address_number < 8191 - 111) {
-            return document.getElementById("ramElementVariable" + address_number % 16).id;
+            return getHtmlElement("ramElementVariable" + address_number % 16).id;
         }
         else
-            return document.getElementById("ramElement" + address_number).id;
+            return getHtmlElement("ramElement" + address_number).id;
     };
     return Ram;
 }());
@@ -1258,7 +1262,7 @@ var mc8_command = /** @class */ (function () {
     return mc8_command;
 }());
 /***************************************************class variables***************************************************/
-var playStatus = new PlayStatus();
+var programStatus = new ProgramStatus();
 var IO1 = new IO(getHtmlElement('io1RegisterValue_h2'), 0, true);
 var IO2 = new IO(getHtmlElement('io2RegisterValue_h2'), 1, false);
 var IO3 = new IO(getHtmlElement('io3RegisterValue_h2'), 2, true);
@@ -1332,11 +1336,11 @@ var fixPoints = [
     new Point(50, 49, 10, 24, 'ROM2'),
     new Point(51, 49, 36, 24, 'RAM2'),
 ];
-/***************************************************ROM Breakpoints Editable***************************************************/
+/***************************************************ROM Breakpoints/Editable***************************************************/
 var romElements_array = Array.from(document.getElementsByClassName('romElement'));
 var _loop_1 = function (i) {
     romElements_array[i].addEventListener('dblclick', function () {
-        editRom_boolean = true;
+        programStatus.romIsEdited = true;
         romElements_array[i].readOnly = '';
     });
     romElements_array[i].addEventListener('click', function () {
@@ -1358,38 +1362,38 @@ var allH3Elements_h3 = Array.from(document.getElementsByTagName('h3'));
 var controlButtons_button = Array.from(document.querySelectorAll('.button'));
 var hoverElements_htmlElements = allH1Elements_h1.concat(allH3Elements_h3).concat(controlButtons_button);
 var hoverPopUps_htmlElements = document.getElementsByClassName('hoverElement');
-var breakpointHover_div = document.getElementById('breakpointHover_div');
-var breakpointsLabel_p = document.getElementById('breakpointsLabel_p');
+var breakpointHover_div = getHtmlElement('breakpointHover_div');
+var breakpointsLabel_p = getHtmlElement('breakpointsLabel_p');
 var updateHoverElements = function () {
-    document.getElementById('ramStartAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number) + 'h';
-    document.getElementById('ramStartAddressDec_p').textContent = String(RAM.startAddressRam_number);
-    document.getElementById('ramEndAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number + 8192 - 1) + 'h';
-    document.getElementById('ramEndAddressDec_p').textContent = String(RAM.startAddressRam_number + 8192 - 1);
+    getHtmlElement('ramStartAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number) + 'h';
+    getHtmlElement('ramStartAddressDec_p').textContent = String(RAM.startAddressRam_number);
+    getHtmlElement('ramEndAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number + 8192 - 1) + 'h';
+    getHtmlElement('ramEndAddressDec_p').textContent = String(RAM.startAddressRam_number + 8192 - 1);
     var checkedRadioIoMap_input = document.querySelector('input[name="radioIoMap"]:checked');
-    document.getElementById('io1Map_p').textContent = checkedRadioIoMap_input.value;
-    document.getElementById('io1AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io1Address_textarea.value)) + 'h';
-    document.getElementById('io1ValueDec_p').textContent = IO1.value_number + ' (' + convertNumberToComplementOnTwo(IO1.value_number) + ')';
-    document.getElementById('io1ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO1.value_number);
-    document.getElementById('io2Map_p').textContent = checkedRadioIoMap_input.value;
-    document.getElementById('io2AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io2Address_textarea.value)) + 'h';
-    document.getElementById('io2ValueDec_p').textContent = IO2.value_number + ' (' + convertNumberToComplementOnTwo(IO2.value_number) + ')';
-    document.getElementById('io2ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO2.value_number);
-    document.getElementById('io3Map_p').textContent = checkedRadioIoMap_input.value;
-    document.getElementById('io3AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io3Address_textarea.value)) + 'h';
-    document.getElementById('io3ValueDec_p').textContent = IO3.value_number + ' (' + convertNumberToComplementOnTwo(IO3.value_number) + ')';
-    document.getElementById('io3ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO3.value_number);
-    document.getElementById('aHoverValueDec_p').textContent = 'Dezimal: ' + A.value_number + ' (' + convertNumberToComplementOnTwo(A.value_number) + ')';
-    document.getElementById('aHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(A.value_number);
-    document.getElementById('bHoverValueDec_p').textContent = 'Dezimal: ' + B.value_number + ' (' + convertNumberToComplementOnTwo(B.value_number) + ')';
-    document.getElementById('bHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(B.value_number);
-    document.getElementById('cHoverValueDec_p').textContent = 'Dezimal: ' + C.value_number + ' (' + convertNumberToComplementOnTwo(C.value_number) + ')';
-    document.getElementById('cHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(C.value_number);
-    document.getElementById('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.value_number;
-    document.getElementById('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.value_number;
-    document.getElementById('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.value_number;
-    document.getElementById('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.value_number;
-    document.getElementById('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.value_number;
-    document.getElementById('irHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(IR.value_number);
+    getHtmlElement('io1Map_p').textContent = checkedRadioIoMap_input.value;
+    getHtmlElement('io1AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io1Address_textarea.value)) + 'h';
+    getHtmlElement('io1ValueDec_p').textContent = IO1.value_number + ' (' + convertNumberToComplementOnTwo(IO1.value_number) + ')';
+    getHtmlElement('io1ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO1.value_number);
+    getHtmlElement('io2Map_p').textContent = checkedRadioIoMap_input.value;
+    getHtmlElement('io2AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io2Address_textarea.value)) + 'h';
+    getHtmlElement('io2ValueDec_p').textContent = IO2.value_number + ' (' + convertNumberToComplementOnTwo(IO2.value_number) + ')';
+    getHtmlElement('io2ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO2.value_number);
+    getHtmlElement('io3Map_p').textContent = checkedRadioIoMap_input.value;
+    getHtmlElement('io3AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io3Address_textarea.value)) + 'h';
+    getHtmlElement('io3ValueDec_p').textContent = IO3.value_number + ' (' + convertNumberToComplementOnTwo(IO3.value_number) + ')';
+    getHtmlElement('io3ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO3.value_number);
+    getHtmlElement('aHoverValueDec_p').textContent = 'Dezimal: ' + A.value_number + ' (' + convertNumberToComplementOnTwo(A.value_number) + ')';
+    getHtmlElement('aHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(A.value_number);
+    getHtmlElement('bHoverValueDec_p').textContent = 'Dezimal: ' + B.value_number + ' (' + convertNumberToComplementOnTwo(B.value_number) + ')';
+    getHtmlElement('bHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(B.value_number);
+    getHtmlElement('cHoverValueDec_p').textContent = 'Dezimal: ' + C.value_number + ' (' + convertNumberToComplementOnTwo(C.value_number) + ')';
+    getHtmlElement('cHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(C.value_number);
+    getHtmlElement('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.value_number;
+    getHtmlElement('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.value_number;
+    getHtmlElement('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.value_number;
+    getHtmlElement('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.value_number;
+    getHtmlElement('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.value_number;
+    getHtmlElement('irHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(IR.value_number);
 };
 var _loop_2 = function (i) {
     hoverElements_htmlElements[i].addEventListener('mouseover', function () {
@@ -1407,29 +1411,29 @@ for (var i = 0; i < hoverElements_htmlElements.length; i++) {
     _loop_2(i);
 }
 /***************************************************settings window***************************************************/
-var containerSettings_div = document.getElementById('containerSettings_div');
-var programSelection_select = document.getElementById('programSelection_select');
-var linkerFile_textarea = document.getElementById('linkerFile_textarea');
-var radioIoMapped_input = document.getElementById('radioIoMapped_input');
-var radioMemoryMap_input = document.getElementById('radioMemoryMap_input');
-var io1Address_textarea = document.getElementById('io1Address_textarea');
-var io2Address_textarea = document.getElementById('io2Address_textarea');
-var io3Address_textarea = document.getElementById('io3Address_textarea');
-var io1InputRadio_input = document.getElementById('io1InputRadio_input');
-var io2InputRadio_input = document.getElementById('io2InputRadio_input');
-var io3InputRadio_input = document.getElementById('io3InputRadio_input');
-var io1OutputRadio_input = document.getElementById('io1OutputRadio_input');
-var io2OutputRadio_input = document.getElementById('io2OutputRadio_input');
-var io3OutputRadio_input = document.getElementById('io3OutputRadio_input');
-var io1Arrow_div = document.getElementById('io1Arrow_div');
-var io2Arrow_div = document.getElementById('io2Arrow_div');
-var io3Arrow_div = document.getElementById('io3Arrow_div');
-var ramAddress_select = document.getElementById('ramAddress_select');
-var breakpointsCheckbox_input = document.getElementById('breakpointsCheckbox_input');
-var breakpointsCheckbox_div = document.getElementById('breakpointsCheckbox_div');
-var errorWindow_div = document.getElementById('errorWindow_div');
-var errorMessage_textarea = document.getElementById('errorMessage_textarea');
-var speedSlider_input = document.getElementById('speedSlider_input');
+var containerSettings_div = getHtmlElement('containerSettings_div');
+var programSelection_select = getHtmlElement('programSelection_select');
+var linkerFile_textarea = getHtmlElement('linkerFile_textarea');
+var radioIoMapped_input = getHtmlElement('radioIoMapped_input');
+var radioMemoryMap_input = getHtmlElement('radioMemoryMap_input');
+var io1Address_textarea = getHtmlElement('io1Address_textarea');
+var io2Address_textarea = getHtmlElement('io2Address_textarea');
+var io3Address_textarea = getHtmlElement('io3Address_textarea');
+var io1InputRadio_input = getHtmlElement('io1InputRadio_input');
+var io2InputRadio_input = getHtmlElement('io2InputRadio_input');
+var io3InputRadio_input = getHtmlElement('io3InputRadio_input');
+var io1OutputRadio_input = getHtmlElement('io1OutputRadio_input');
+var io2OutputRadio_input = getHtmlElement('io2OutputRadio_input');
+var io3OutputRadio_input = getHtmlElement('io3OutputRadio_input');
+var io1Arrow_div = getHtmlElement('io1Arrow_div');
+var io2Arrow_div = getHtmlElement('io2Arrow_div');
+var io3Arrow_div = getHtmlElement('io3Arrow_div');
+var ramAddress_select = getHtmlElement('ramAddress_select');
+var breakpointsCheckbox_input = getHtmlElement('breakpointsCheckbox_input');
+var breakpointsCheckbox_div = getHtmlElement('breakpointsCheckbox_div');
+var errorWindow_div = getHtmlElement('errorWindow_div');
+var errorMessage_textarea = getHtmlElement('errorMessage_textarea');
+var speedSlider_input = getHtmlElement('speedSlider_input');
 var checkLinkerFile = function (errorMessage_string, count_number) {
     var intelHexArray = linkerFile_textarea.value.split('\n');
     var noError = true;
@@ -1849,23 +1853,23 @@ var updateIoClasses = function () {
 var saveSettings = function () {
     if (checkSettings()) {
         updateIoClasses();
-        stopBtn(); //init
+        reset(); //init
         ROM.update();
         RAM.reset();
         containerSettings_div.classList.remove('toggleDisplay');
         errorWindow_div.classList.remove('displayGrid');
-        settingsDisplayed_boolean = false;
+        programStatus.settingsOpened = false;
     }
 };
 /**
  * Custom select to work on all browsers without any differences
  */
-var ramSelect_div = document.getElementById('ramSelect_div');
-var ramSelection_p = document.getElementById('ramSelection_p');
-var ramSelectOptions_div = document.getElementById('ramSelectOptions_div');
-var programSelection_div = document.getElementById('programSelection_div');
-var programSelection_p = document.getElementById('programSelection_p');
-var programSelectionOptions_div = document.getElementById('programSelectionOptions_div');
+var ramSelect_div = getHtmlElement('ramSelect_div');
+var ramSelection_p = getHtmlElement('ramSelection_p');
+var ramSelectOptions_div = getHtmlElement('ramSelectOptions_div');
+var programSelection_div = getHtmlElement('programSelection_div');
+var programSelection_p = getHtmlElement('programSelection_p');
+var programSelectionOptions_div = getHtmlElement('programSelectionOptions_div');
 var ramOptions = ramSelectOptions_div.children;
 var programOptions = programSelectionOptions_div.children;
 ramSelect_div.addEventListener('click', function () {
@@ -1969,10 +1973,10 @@ var getIndexArrayAtoB = function (zeroToA_array, zeroToB_array) {
 // rom- and ram-Elements are not fixPoints. Therefore they need to be handled separately.
 var romElementToROM1 = function (romElementID_string) {
     var toROM1 = [];
-    var romElement = document.getElementById(romElementID_string);
+    var romElement = getHtmlElement(romElementID_string);
     var rEx = romElement.style.left.replace('%', '');
     var rEy = romElement.style.top.replace('%', '');
-    rEx = Math.round(Number(rEx) * sectionsWidth / 100);
+    rEx = Math.round(Number(rEx) * sectionsCountWidth / 100);
     rEy = Math.round(Number(rEy) * 32 / 100);
     var romBetweenPoint = new Point(-1, 0, rEx, 2, '');
     var romPoint = new Point(-1, 0, rEx, rEy, '');
@@ -1982,10 +1986,10 @@ var romElementToROM1 = function (romElementID_string) {
 };
 var ramElementToRAM1 = function (ramElementID_string) {
     var toRAM1 = [];
-    var ramElement = document.getElementById(ramElementID_string);
+    var ramElement = getHtmlElement(ramElementID_string);
     var rEx = ramElement.style.left.replace('%', '');
     var rEy = ramElement.style.top.replace('%', '');
-    rEx = Math.round(Number(rEx) * sectionsWidth / 100);
+    rEx = Math.round(Number(rEx) * sectionsCountWidth / 100);
     rEy = Math.round(Number(rEy) * 32 / 100);
     var romBetweenPoint = new Point(-1, 0, rEx, 2, '');
     var romPoint = new Point(-1, 0, rEx, rEy, '');
@@ -1995,10 +1999,10 @@ var ramElementToRAM1 = function (ramElementID_string) {
 };
 var RAM2ToRamElement = function (ramElementID_string) {
     var toRamElement = [];
-    var ramElement = document.getElementById(ramElementID_string);
+    var ramElement = getHtmlElement(ramElementID_string);
     var rEx = ramElement.style.left.replace('%', '');
     var rEy = ramElement.style.top.replace('%', '');
-    rEx = Math.round(Number(rEx) * sectionsWidth / 100);
+    rEx = Math.round(Number(rEx) * sectionsCountWidth / 100);
     rEy = Math.round(Number(rEy) * 32 / 100);
     var ramBetweenPoint = new Point(-1, 0, rEx, 2, '');
     var ramPoint = new Point(-1, 0, rEx, rEy, '');
@@ -2083,7 +2087,7 @@ var calcIntermediatePositions = function (pointsAtoB_array, interPointsQuantity)
     return [bufferX, bufferY];
 };
 /***************************************************red rectangle***************************************************/
-var redRectangle_p = document.getElementById('redRectangle_p');
+var redRectangle_p = getHtmlElement('redRectangle_p');
 var updateRedRectangle = function (PC_number) {
     redRectangle_p.classList.remove('displayNone');
     var xPos = 0;
@@ -2120,7 +2124,7 @@ var updateRedRectangle = function (PC_number) {
     else {
         redRectangle_p.classList.add('displayNone');
     }
-    redRectangle_p.style.left = 100 / sectionsWidth * xPos + "%";
+    redRectangle_p.style.left = 100 / sectionsCountWidth * xPos + "%";
     redRectangle_p.style.top = 100 / 32 * yPos + "%";
 };
 updateRedRectangle(0);
@@ -2130,7 +2134,7 @@ updateRedRectangle(0);
  */
 //Sleep functions for pausing Animation for a certain time
 var sleepForMs = function (milliseconds_number) { return new Promise(function (resolve) { return setTimeout(resolve, milliseconds_number); }); };
-//throws 'Stop pressed' error
+//throws 'Reset pressed' error
 var sleep = function (milliseconds_number) { return __awaiter(_this, void 0, void 0, function () {
     var count;
     return __generator(this, function (_a) {
@@ -2157,16 +2161,16 @@ var sleep = function (milliseconds_number) { return __awaiter(_this, void 0, voi
 }); };
 var sleepForIDLETIME = function () { return sleep(IDLETIME); };
 var sleepForNOANIMATIONIDLETIME = function () { return sleep(NOANIMATIONIDLETIME); };
-// function checks if play/pause/stop is pressed
+// function checks if play/pause/reset is pressed
 var checkPlayPressed = function () { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 if (!true) return [3 /*break*/, 2];
-                if (playStatus.play)
+                if (programStatus.play)
                     return [2 /*return*/, true];
-                if (playStatus.stop)
-                    throw Error('Stop Pressed');
+                if (programStatus.reset)
+                    throw Error('Reset Pressed');
                 console.log('waiting for user input');
                 return [4 /*yield*/, sleepForMs(100)];
             case 1:
@@ -2176,15 +2180,14 @@ var checkPlayPressed = function () { return __awaiter(_this, void 0, void 0, fun
         }
     });
 }); };
-//checks if completeExecution is true
-var check_completeExecution = function () {
+var pausingExecutionCheck = function () {
     var check = false;
     if (PC.value_number < 224) {
         if (Array.from(romElements_array[PC.value_number].classList).includes('breakpoint'))
             check = true;
     }
     //after the completion of an animation, check if program should be paused
-    if (playStatus.oneCommand || check) {
+    if (programStatus.singleSteps || check) {
         updateStepDescription('Prozessor angehalten');
         stepNumber_p.textContent = '0';
         play();
@@ -2275,7 +2278,7 @@ var addYellowBackgroundForIDLETIME = function (htmlElement_htmlElement) { return
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, , 5, 6]);
-                if (!!playStatus.noAnim) return [3 /*break*/, 2];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 2];
                 htmlElement_htmlElement.classList.add('yellowBg');
                 return [4 /*yield*/, sleepForIDLETIME()];
             case 1:
@@ -2298,7 +2301,7 @@ var animateArrow = function (arrow_string) { return __awaiter(_this, void 0, voi
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                if (!!playStatus.noAnim) return [3 /*break*/, 62];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 62];
                 _a = arrow_string;
                 switch (_a) {
                     case 'PC': return [3 /*break*/, 1];
@@ -2509,7 +2512,7 @@ var animateAssemlberCommandUpdate = function () { return __awaiter(_this, void 0
             case 2:
                 _a.sent();
                 updateAssemblerCommand();
-                if (!!playStatus.noAnim) return [3 /*break*/, 4];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 4];
                 return [4 /*yield*/, sleepForIDLETIME()];
             case 3:
                 _a.sent();
@@ -2575,7 +2578,7 @@ var animateIncreasePcByOne = function () { return __awaiter(_this, void 0, void 
  */
 var updateMovingObjPosition = function (movingObject_htmlElement, x_number, y_number) {
     movingObject_htmlElement.style.top = String(100 / 32 * y_number) + "%";
-    movingObject_htmlElement.style.left = String(100 / sectionsWidth * x_number) + "%";
+    movingObject_htmlElement.style.left = String(100 / sectionsCountWidth * x_number) + "%";
 };
 var displayMovingObj = function (pointsAtoB_array, hexValue_string) {
     updateMovingObjPosition(movingObject_h2, pointsAtoB_array[0].x, pointsAtoB_array[0].y);
@@ -2613,13 +2616,13 @@ var animatePaintedPath = function (pointsAtoB_array, origin_string, target_strin
                 //create all PathElements
                 for (i = xCoordinate.length - 1; i >= 0; i--) {
                     ele = document.createElement('div');
-                    ele.style.left = 100 / sectionsWidth * (xCoordinate[i] + 0.5) + "%";
+                    ele.style.left = 100 / sectionsCountWidth * (xCoordinate[i] + 0.5) + "%";
                     ele.style.top = 100 / 32 * (yCoordinate[i] + 0.5) + "%";
                     ele.classList.add('positionAbsolute', 'square1x1', 'pathElement', 'alignBg', 'rounded');
                     pathElements.push(ele);
                 }
                 last = document.createElement('h2');
-                last.style.left = 100 / sectionsWidth * (xCoordinate[xCoordinate.length - 1]) + "%";
+                last.style.left = 100 / sectionsCountWidth * (xCoordinate[xCoordinate.length - 1]) + "%";
                 last.style.top = 100 / 32 * (yCoordinate[yCoordinate.length - 1]) + "%";
                 last.textContent = movingObject_h2.textContent;
                 last.classList.add('yellowBg', 'borderBox', 'square2x2', 'positionAbsolute', 'centered', 'rounded');
@@ -2689,7 +2692,7 @@ var animateTransfer = function (origin_string, target_string, value_number) {
                     originInCPU = false;
                     targetInCPU = false;
                     alreadyReset = false;
-                    if (!!playStatus.noAnim) return [3 /*break*/, 7];
+                    if (!!programStatus.noAnimation) return [3 /*break*/, 7];
                     pointsAtoB = getPointsAtoB(origin_string, target_string);
                     value_string = void 0;
                     //convert value_number to hex_4digits if required
@@ -2711,7 +2714,7 @@ var animateTransfer = function (origin_string, target_string, value_number) {
                     if (lastPointY < 24 && lastPointY > 3 && lastPointX > 9 && lastPointX) {
                         targetInCPU = true;
                     }
-                    if (!playStatus.rocketSpeed) return [3 /*break*/, 2];
+                    if (!programStatus.animationType_2) return [3 /*break*/, 2];
                     if (!originInCPU || !targetInCPU)
                         DECODER.updateDOM();
                     return [4 /*yield*/, animatePaintedPath(pointsAtoB, origin_string, target_string)];
@@ -2727,7 +2730,7 @@ var animateTransfer = function (origin_string, target_string, value_number) {
                 case 3:
                     if (!(i < movingObjectCoordinates[0].length)) return [3 /*break*/, 6];
                     //if singleStep is pressed during the animation, remove movingObject and jump out of function
-                    if (playStatus.noAnim) {
+                    if (programStatus.noAnimation) {
                         movingObject_h2.classList.remove('displayGrid');
                         return [2 /*return*/, true];
                     }
@@ -2900,7 +2903,7 @@ var animateWriteToMemoryFromRegister = function (addressRegister_string, dataReg
                 return [4 /*yield*/, animateTransfer(addressRegister_string, 'RAM2', address_number)];
             case 4:
                 _a.sent();
-                if (!playStatus.noAnim)
+                if (!programStatus.noAnimation)
                     ramEle_htmlElement.classList.add('yellowBg', 'borderBox');
                 _a.label = 5;
             case 5:
@@ -2926,7 +2929,7 @@ var animateWriteToMemoryFromRegister = function (addressRegister_string, dataReg
                 _a.label = 12;
             case 12:
                 _a.trys.push([12, , 14, 15]);
-                return [4 /*yield*/, addYellowBackgroundForIDLETIME(document.getElementById(RAM.getRamElementId(address_number)))];
+                return [4 /*yield*/, addYellowBackgroundForIDLETIME(getHtmlElement(RAM.getRamElementId(address_number)))];
             case 13:
                 _a.sent();
                 return [3 /*break*/, 15];
@@ -2951,10 +2954,10 @@ var setMovingAluElements = function (twoMovingAluElements_boolean) {
 var resetMovingAluElements = function () {
     movingAlu1.classList.remove('displayGrid');
     movingAlu2.classList.remove('displayGrid');
-    movingAlu1.style.top = 100 / sectionsHeight * 6 + "%";
-    movingAlu1.style.left = 100 / sectionsWidth * 26 + "%";
-    movingAlu2.style.top = 100 / sectionsHeight * 6 + "%";
-    movingAlu2.style.left = 100 / sectionsWidth * 30 + "%";
+    movingAlu1.style.top = 100 / sectionsCountHeight * 6 + "%";
+    movingAlu1.style.left = 100 / sectionsCountWidth * 26 + "%";
+    movingAlu2.style.top = 100 / sectionsCountHeight * 6 + "%";
+    movingAlu2.style.left = 100 / sectionsCountWidth * 30 + "%";
 };
 resetMovingAluElements();
 //animation of ALU-usage
@@ -2963,7 +2966,7 @@ var animateALU = function (aluOUT_number, twoMovingAluElements_boolean, cFlag_bo
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!!playStatus.noAnim) return [3 /*break*/, 12];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 12];
                 xCoordinateAlu1 = [26];
                 xCoordinateAlu2 = [30];
                 yCoordinate = [6];
@@ -3056,7 +3059,7 @@ var animateHlBcAddition = function (aluOUT_number, stepOne_boolean) { return __a
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!!playStatus.noAnim) return [3 /*break*/, 12];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 12];
                 xCoordinateAlu1 = [24];
                 xCoordinateAlu2 = [30];
                 yCoordinate = [6];
@@ -3176,7 +3179,7 @@ var animateSetFlags = function () { return __awaiter(_this, void 0, void 0, func
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!!playStatus.noAnim) return [3 /*break*/, 10];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 10];
                 return [4 /*yield*/, animateArrow('FLAGS')];
             case 1:
                 _a.sent();
@@ -3255,16 +3258,16 @@ var animateCheckJump = function (flag_string) { return __awaiter(_this, void 0, 
  * IO animations
  */
 //animation of IO-input
-var io1InputInfo_p = document.getElementById('io1InputInfo_p');
-var io2InputInfo_p = document.getElementById('io2InputInfo_p');
-var io3InputInfo_p = document.getElementById('io3InputInfo_p');
+var io1InputInfo_p = getHtmlElement('io1InputInfo_p');
+var io2InputInfo_p = getHtmlElement('io2InputInfo_p');
+var io3InputInfo_p = getHtmlElement('io3InputInfo_p');
 var animateIoUserInput = function (IoName_string) { return __awaiter(_this, void 0, void 0, function () {
     var ioInputWindow, ioInput, check;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 check = true;
-                ioInputDisplayed_boolean = true;
+                programStatus.ioInputDisplayed = true;
                 switch (IoName_string) {
                     case 'IO1':
                         ioInputWindow = io1InputWindow_div;
@@ -3320,9 +3323,9 @@ var animateIoUserInput = function (IoName_string) { return __awaiter(_this, void
                 io2InputInfo_p.classList.remove('redBg');
                 io3InputInfo_p.classList.remove('redBg');
                 io1InputInfo_p.textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-                document.getElementById('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-                document.getElementById('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-                ioInputDisplayed_boolean = false;
+                getHtmlElement('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+                getHtmlElement('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+                programStatus.ioInputDisplayed = false;
                 return [7 /*endfinally*/];
             case 6: return [4 /*yield*/, animateRegisterUpdate(IoName_string, convertHexToNumber(ioInput.value))];
             case 7:
@@ -3719,7 +3722,7 @@ var nop = function () { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!playStatus.noAnim) return [3 /*break*/, 2];
+                if (!programStatus.noAnimation) return [3 /*break*/, 2];
                 return [4 /*yield*/, sleepForNOANIMATIONIDLETIME()];
             case 1:
                 _a.sent();
@@ -3729,7 +3732,7 @@ var nop = function () { return __awaiter(_this, void 0, void 0, function () {
                 _a.sent();
                 _a.label = 4;
             case 4:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -3739,7 +3742,7 @@ var halt = function () { return __awaiter(_this, void 0, void 0, function () {
         updateStepDescription('Prozessor angehalten');
         stepNumber_p.textContent = '0';
         pause();
-        check_completeExecution();
+        pausingExecutionCheck();
         return [2 /*return*/];
     });
 }); };
@@ -3755,7 +3758,7 @@ var movAdat_8 = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, animateIncreasePcByOne()];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/, true];
         }
     });
@@ -3772,7 +3775,7 @@ var movBdat_8 = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, animateIncreasePcByOne()];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/, true];
         }
     });
@@ -3789,7 +3792,7 @@ var movCdat_8 = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, animateIncreasePcByOne()];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/, true];
         }
     });
@@ -3817,7 +3820,7 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 if (!(IR.value_number === 33)) return [3 /*break*/, 15];
                 assemblerCommand_p.textContent = 'MOV IX, dat_16';
-                if (!!playStatus.noAnim) return [3 /*break*/, 8];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 8];
                 return [4 /*yield*/, sleepForIDLETIME()];
             case 7:
                 _a.sent();
@@ -3945,7 +3948,7 @@ var twoByteIX = function () { return __awaiter(_this, void 0, void 0, function (
                 assemblerCommand_p.textContent = 'Befehl Unbekannt';
                 throw Error('Unknown command');
             case 48:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/, true];
         }
     });
@@ -3971,7 +3974,7 @@ var movHLdat_16 = function () { return __awaiter(_this, void 0, void 0, function
                 return [4 /*yield*/, animateIncreasePcByOne()];
             case 6:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -3997,7 +4000,7 @@ var movSPdat_16 = function () { return __awaiter(_this, void 0, void 0, function
                 return [4 /*yield*/, animateIncreasePcByOne()];
             case 6:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4014,7 +4017,7 @@ var movAB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('A', B.value_number)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4031,7 +4034,7 @@ var movAC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('A', C.value_number)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4048,7 +4051,7 @@ var movBA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('B', A.value_number)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4065,7 +4068,7 @@ var movBC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('B', C.value_number)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4082,7 +4085,7 @@ var movCA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('C', A.value_number)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4099,7 +4102,7 @@ var movCB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('C', B.value_number)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4116,7 +4119,7 @@ var movALabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, animateReadFromMemoryInRegister('ZR', 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4133,7 +4136,7 @@ var movLabelA = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, animateWriteToMemoryFromRegister('ZR', 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4165,7 +4168,7 @@ var movHlLabel = function () { return __awaiter(_this, void 0, void 0, function 
                 return [4 /*yield*/, animateReadFromMemoryInRegister('ZR', 'HL_hi')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4197,7 +4200,7 @@ var movLabelHl = function () { return __awaiter(_this, void 0, void 0, function 
                 return [4 /*yield*/, animateWriteToMemoryFromRegister('ZR', 'HL_hi')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4211,7 +4214,7 @@ var movAHl = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateReadFromMemoryInRegister('HL', 'A')];
             case 2:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4225,7 +4228,7 @@ var movHlA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateWriteToMemoryFromRegister('HL', 'A')];
             case 2:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4263,7 +4266,7 @@ var push = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateWriteToMemoryFromRegister('SP', 'FLAGS')];
             case 10:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4301,7 +4304,7 @@ var pop = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('SP', SP.value_number + 1)];
             case 10:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4324,7 +4327,7 @@ var inA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateReadFromIo()];
             case 5:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4347,7 +4350,7 @@ var outA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateWriteToIo()];
             case 5:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4375,7 +4378,7 @@ var incA = function () { return __awaiter(_this, void 0, void 0, function () {
             case 5:
                 _a.sent();
                 movingAlu2.classList.add('yellowBg');
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4403,7 +4406,7 @@ var incB = function () { return __awaiter(_this, void 0, void 0, function () {
             case 5:
                 _a.sent();
                 movingAlu2.classList.add('yellowBg');
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4431,7 +4434,7 @@ var incC = function () { return __awaiter(_this, void 0, void 0, function () {
             case 5:
                 _a.sent();
                 movingAlu2.classList.add('yellowBg');
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4448,7 +4451,7 @@ var incHl = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('HL', HL.value_number + 1)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4477,7 +4480,7 @@ var decA = function () { return __awaiter(_this, void 0, void 0, function () {
             case 5:
                 _a.sent();
                 movingAlu2.classList.add('yellowBg');
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4505,7 +4508,7 @@ var decB = function () { return __awaiter(_this, void 0, void 0, function () {
             case 5:
                 _a.sent();
                 movingAlu2.classList.add('yellowBg');
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4533,7 +4536,7 @@ var decC = function () { return __awaiter(_this, void 0, void 0, function () {
             case 5:
                 _a.sent();
                 movingAlu2.classList.add('yellowBg');
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4550,7 +4553,7 @@ var decHl = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('HL', HL.value_number - 1)];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4569,7 +4572,7 @@ var addA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4588,7 +4591,7 @@ var addB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4607,7 +4610,7 @@ var addC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4641,7 +4644,7 @@ var addDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4700,7 +4703,7 @@ var addHlBc = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, animateHlBcAddition(result, false)];
             case 16:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4719,7 +4722,7 @@ var subA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4738,7 +4741,7 @@ var subB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4757,7 +4760,7 @@ var subC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4791,7 +4794,7 @@ var subDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4810,7 +4813,7 @@ var andA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4829,7 +4832,7 @@ var andB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4848,7 +4851,7 @@ var andC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4882,7 +4885,7 @@ var andDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4901,7 +4904,7 @@ var orA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4920,7 +4923,7 @@ var orB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4939,7 +4942,7 @@ var orC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4973,7 +4976,7 @@ var orDat_8 = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -4992,7 +4995,7 @@ var xorA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5011,7 +5014,7 @@ var xorB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5030,7 +5033,7 @@ var xorC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5064,7 +5067,7 @@ var xorDat_8 = function () { return __awaiter(_this, void 0, void 0, function ()
                 return [4 /*yield*/, animateALU(result, true, false, 'A')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5093,7 +5096,7 @@ var twoByteShift = function () { return __awaiter(_this, void 0, void 0, functio
             case 6:
                 _a.sent();
                 assemblerCommand_p.textContent = 'SHL';
-                if (!!playStatus.noAnim) return [3 /*break*/, 8];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 8];
                 return [4 /*yield*/, sleepForIDLETIME()];
             case 7:
                 _a.sent();
@@ -5121,7 +5124,7 @@ var twoByteShift = function () { return __awaiter(_this, void 0, void 0, functio
             case 15:
                 _a.sent();
                 assemblerCommand_p.textContent = 'SHR';
-                if (!!playStatus.noAnim) return [3 /*break*/, 17];
+                if (!!programStatus.noAnimation) return [3 /*break*/, 17];
                 return [4 /*yield*/, sleepForIDLETIME()];
             case 16:
                 _a.sent();
@@ -5152,7 +5155,7 @@ var twoByteShift = function () { return __awaiter(_this, void 0, void 0, functio
                 assemblerCommand_p.textContent = 'Befehl Unbekannt';
                 throw Error('Unknown command');
             case 26:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5177,7 +5180,7 @@ var rcl = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, false, true, 'A')];
             case 5:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5202,7 +5205,7 @@ var rol = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, false, false, 'A')];
             case 5:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5227,7 +5230,7 @@ var rcr = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, false, true, 'A')];
             case 5:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5252,7 +5255,7 @@ var ror = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, false, false, 'A')];
             case 5:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5271,7 +5274,7 @@ var cpA = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, '')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5290,7 +5293,7 @@ var cpB = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, '')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5309,7 +5312,7 @@ var cpC = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateALU(result, true, false, '')];
             case 3:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5343,7 +5346,7 @@ var cpDat_8 = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, animateALU(result, true, false, '')];
             case 8:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5375,7 +5378,7 @@ var jpnzLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5407,7 +5410,7 @@ var jpzLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5439,7 +5442,7 @@ var jpncLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5471,7 +5474,7 @@ var jpcLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5503,7 +5506,7 @@ var jpnoLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5535,7 +5538,7 @@ var jpoLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5567,7 +5570,7 @@ var jpnsLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5599,7 +5602,7 @@ var jpsLabel = function () { return __awaiter(_this, void 0, void 0, function ()
                 _a.sent();
                 _a.label = 8;
             case 8:
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5622,7 +5625,7 @@ var jpLabel = function () { return __awaiter(_this, void 0, void 0, function () 
                 return [4 /*yield*/, animateRegisterUpdate('PC', ZR.value_number)];
             case 5:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5675,7 +5678,7 @@ var callLabel = function () { return __awaiter(_this, void 0, void 0, function (
                 return [4 /*yield*/, animateRegisterUpdate('PC', ZR.value_number)];
             case 15:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5725,7 +5728,7 @@ var ret = function () { return __awaiter(_this, void 0, void 0, function () {
                 return [4 /*yield*/, animateRegisterUpdate('PC', ZR.value_number)];
             case 14:
                 _a.sent();
-                check_completeExecution();
+                pausingExecutionCheck();
                 return [2 /*return*/];
         }
     });
@@ -5831,10 +5834,9 @@ var run_program = function () { return __awaiter(_this, void 0, void 0, function
                 return [3 /*break*/, 6];
             case 5:
                 e_3 = _a.sent();
-                if (!playStatus.stop) {
-                    playStatus.setPause();
+                if (!programStatus.reset) {
+                    programStatus.setPause();
                 }
-                setButtonsPressed();
                 console.log('Error catched:');
                 console.error(e_3);
                 return [2 /*return*/, false];
@@ -5875,76 +5877,56 @@ var init = function () {
     assemblerCommand_p.textContent = '';
     DECODER.display_htmlElement.textContent = '';
 };
-var setButtonsPressed = function () {
-    // if (playStatus.play) {
-    //     controlButtons_button[0].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[0].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.pause) {
-    //     controlButtons_button[1].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[1].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.stop) {
-    //     controlButtons_button[2].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[2].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.rocketSpeed) {
-    //     controlButtons_button[4].classList.add('buttonPressed');
-    //     controlButtons_button[3].classList.remove('buttonPressed');
-    //     controlButtons_button[5].classList.remove('buttonPressed');
-    //     controlButtons_button[6].classList.remove('buttonPressed');
-    // }
-    // if (!playStatus.rocketSpeed) {
-    //     controlButtons_button[3].classList.add('buttonPressed');
-    //     controlButtons_button[4].classList.remove('buttonPressed');
-    //     controlButtons_button[5].classList.remove('buttonPressed');
-    //     controlButtons_button[6].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.completeExe) {
-    //     controlButtons_button[6].classList.add('buttonPressed');
-    //     controlButtons_button[3].classList.remove('buttonPressed');
-    //     controlButtons_button[4].classList.remove('buttonPressed');
-    //     controlButtons_button[5].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.noAnim && !playStatus.completeExe) {
-    //     controlButtons_button[5].classList.add('buttonPressed');
-    //     controlButtons_button[3].classList.remove('buttonPressed');
-    //     controlButtons_button[4].classList.remove('buttonPressed');
-    //     controlButtons_button[6].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.oneCommand) {
-    //     controlButtons_button[9].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[9].classList.remove('buttonPressed');
-    // }
-};
-setButtonsPressed();
 var play = function () {
-    if (!playStatus.play) {
-        if (playStatus.stop) { //only when stop is pressed(init), the program will be started anew  
-            editRom_boolean = false;
-            playStatus.setPlay();
+    if (!programStatus.play) {
+        programStatus.romIsEdited = false;
+        if (programStatus.reset) { //only when reset is pressed(init), the program will be started anew  
+            programStatus.setPlay();
             run_program();
         }
-        playStatus.setPlay();
+        programStatus.setPlay();
         controlButtons_button[0].classList.add('pause_button', 'buttonPressed');
     }
     else {
-        playStatus.setPause();
+        programStatus.setPause();
         controlButtons_button[0].classList.remove('pause_button', 'buttonPressed');
     }
 };
 var pause = function () {
-    playStatus.setPause();
+    programStatus.setPause();
     controlButtons_button[0].classList.remove('pause_button', 'buttonPressed');
 };
-var stopBtn = function () {
-    playStatus.setStop();
+var reset = function () {
+    programStatus.setReset();
     controlButtons_button[0].classList.remove('pause_button', 'buttonPressed');
     init();
+};
+var toggleSingleSteps = function () {
+    if (programStatus.singleSteps) {
+        programStatus.resetSingleSteps();
+        controlButtons_button[5].classList.remove('buttonPressed', 'oneCommandPressed');
+        return;
+    }
+    programStatus.setSingleSteps();
+    controlButtons_button[5].classList.add('buttonPressed', 'oneCommandPressed');
+};
+var enableAnimationType_1 = function () {
+    programStatus.setAnimationType_1();
+    controlButtons_button[2].classList.add('buttonPressed');
+    controlButtons_button[3].classList.remove('buttonPressed');
+    controlButtons_button[4].classList.remove('buttonPressed');
+};
+var enableAnimationType_2 = function () {
+    programStatus.setAnimationType_2();
+    controlButtons_button[3].classList.add('buttonPressed');
+    controlButtons_button[2].classList.remove('buttonPressed');
+    controlButtons_button[4].classList.remove('buttonPressed');
+};
+var enableNoAnimation = function () {
+    programStatus.setNoAnimation();
+    controlButtons_button[4].classList.add('buttonPressed');
+    controlButtons_button[2].classList.remove('buttonPressed');
+    controlButtons_button[3].classList.remove('buttonPressed');
 };
 speedSlider_input.oninput = function () {
     ANIMATION_SPEED = Number(speedSlider_input.value);
@@ -5962,50 +5944,18 @@ var decreaseSpeed = function () {
     speedSlider_input.stepDown();
     speedSlider_input.dispatchEvent(new Event('input'));
 };
-var toggleTheme = function () {
-    document.getElementsByTagName('html')[0].classList.toggle('black');
-    document.getElementById('toggleTheme_button').classList.toggle('light');
-};
-var snailSpeed_on = function () {
-    playStatus.setSnailSpeed();
-    controlButtons_button[2].classList.add('buttonPressed');
-    controlButtons_button[3].classList.remove('buttonPressed');
-    controlButtons_button[4].classList.remove('buttonPressed');
-};
-var rocketSpeed_on = function () {
-    playStatus.setRocketSpeed();
-    controlButtons_button[3].classList.add('buttonPressed');
-    controlButtons_button[2].classList.remove('buttonPressed');
-    controlButtons_button[4].classList.remove('buttonPressed');
-};
-var runCompleteExecution = function () {
-    playStatus.setCompleteExecution();
-    controlButtons_button[4].classList.add('buttonPressed');
-    controlButtons_button[2].classList.remove('buttonPressed');
-    controlButtons_button[3].classList.remove('buttonPressed');
-};
-var runOneCommand = function () {
-    if (playStatus.oneCommand) {
-        playStatus.oneCommand = false;
-        controlButtons_button[5].classList.remove('buttonPressed', 'oneCommandPressed');
-    }
-    else {
-        playStatus.setOneCommand();
-        controlButtons_button[5].classList.add('buttonPressed', 'oneCommandPressed');
-    }
-};
-var runNextSingleStep = function () {
-    playStatus.setNoAnimation();
-    setButtonsPressed();
-};
 var openSettings = function () {
     containerSettings_div.classList.add('toggleDisplay');
-    settingsDisplayed_boolean = true;
+    programStatus.settingsOpened = true;
 };
 openSettings();
+var toggleTheme = function () {
+    document.getElementsByTagName('html')[0].classList.toggle('black');
+    getHtmlElement('toggleTheme_button').classList.toggle('light');
+};
 var doc = document.documentElement;
 var toggleFullscreen = function () {
-    if (!isFullscreen) {
+    if (!programStatus.fullscreenOn) {
         if (doc.requestFullscreen) {
             doc.requestFullscreen();
         }
@@ -6015,7 +5965,7 @@ var toggleFullscreen = function () {
         else if (doc.msRequestFullscreen) {
             doc.msRequestFullscreen();
         }
-        isFullscreen = true;
+        programStatus.fullscreenOn = true;
     }
     else {
         if (document.exitFullscreen) {
@@ -6027,67 +5977,66 @@ var toggleFullscreen = function () {
         else if (document.msExitFullscreen) {
             document.msExitFullscreen();
         }
-        isFullscreen = false;
+        programStatus.fullscreenOn = false;
     }
-};
-var openAssembler = function () {
-    window.open('https://simonrusswurm.github.io/ASIM_Simulator/', '_blank');
 };
 var openInfo = function () {
-    document.getElementById('infoWindow_div').classList.toggle('displayGrid');
+    getHtmlElement('infoWindow_div').classList.toggle('displayGrid');
 };
 document.addEventListener('keyup', function (e) {
-    if (!settingsDisplayed_boolean && !ioInputDisplayed_boolean && !editRom_boolean) {
-        switch (e.code) {
-            case 'Space':
-                play();
-                break;
-            case 'KeyR':
-                stopBtn();
-                break;
-            case 'KeyT':
-                runOneCommand();
-                break;
-            case 'KeyY':
-                snailSpeed_on();
-                break;
-            case 'KeyZ':
-                snailSpeed_on();
-                break;
-            case 'KeyU':
-                rocketSpeed_on();
-                break;
-            case 'KeyI':
-                runCompleteExecution();
-                break;
-            case 'KeyS':
-                openSettings();
-                break;
-            case 'KeyV':
-                toggleFullscreen();
-                break;
-            case 'BracketRight':
-                increaseSpeed();
-                break;
-            case 'Slash':
-                decreaseSpeed();
-                break;
-            default:
-                break;
-        }
-    }
-    else if (settingsDisplayed_boolean) {
-        if (e.code === 'Enter')
-            saveSettings();
-    }
-    else {
-        if (e.code === 'Enter')
-            play();
-    }
-    if (editRom_boolean) {
-        if (e.code == 'Space') {
+    if (programStatus.romIsEdited) {
+        if (e.code === 'Space' || e.code === 'Enter') {
             play();
         }
         ROM.updateNumberArrayFromDOM();
+        return;
     }
+    if (programStatus.settingsOpened) {
+        if (e.code === 'Enter' || e.code === 'KeyS')
+            saveSettings();
+        return;
+    }
+    if (programStatus.ioInputDisplayed) {
+        if (e.code === 'Enter')
+            play();
+        return;
+    }
+    switch (e.code) {
+        case 'Space':
+            play();
+            break;
+        case 'KeyR':
+            reset();
+            break;
+        case 'KeyT':
+            toggleSingleSteps();
+            break;
+        case 'KeyY':
+            enableAnimationType_1();
+            break;
+        case 'KeyZ':
+            enableAnimationType_1();
+            break;
+        case 'KeyU':
+            enableAnimationType_2();
+            break;
+        case 'KeyI':
+            enableNoAnimation();
+            break;
+        case 'KeyS':
+            openSettings();
+            break;
+        case 'KeyV':
+            toggleFullscreen();
+            break;
+        case 'BracketRight':
+            increaseSpeed();
+            break;
+        case 'Slash':
+            decreaseSpeed();
+            break;
+        default:
+            break;
+    }
+    return;
 });

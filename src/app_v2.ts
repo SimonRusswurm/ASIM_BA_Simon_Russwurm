@@ -1,15 +1,17 @@
+const getHtmlElement = (id_string: string) => document.getElementById(id_string);
 /**
  * Resizing logic*****************************************************************************************************
  * The ratio of the containerAspectRatio_div is defined with 50/32 = aspectRatio
  */
-const containerAspectRatio_div: HTMLElement = document.getElementById('containerAspectRatio_div');
-const masterStyle_style: HTMLElement = document.getElementById('masterStyle_style');
-let initialRatio_number: number = Math.round(window.innerWidth / window.innerHeight * 100) / 100;
-const sectionsWidth = 50;
-const sectionsHeight = 32;
-const aspectRatio = sectionsWidth/sectionsHeight;
 
-const resizeWindow = (first_boolean: boolean): void => {
+const containerAspectRatio_div: HTMLElement = getHtmlElement('containerAspectRatio_div');
+const masterStyle_style: HTMLElement = getHtmlElement('masterStyle_style');
+let lastRatio_number: number = Math.round(window.innerWidth / window.innerHeight * 100) / 100;
+const sectionsCountWidth = 50;
+const sectionsCountHeight = 32;
+const aspectRatio = sectionsCountWidth/sectionsCountHeight;
+
+const resizeWindow = (firstTimeResizing_boolean: boolean): void => {
     const iH_number: number = window.innerHeight;
     const iW_number: number = window.innerWidth;
     const currentRatio_number: number = Math.round(iH_number / iW_number * 100) / 100;
@@ -17,79 +19,83 @@ const resizeWindow = (first_boolean: boolean): void => {
         Function only resizes application when screenRatio changes.
         When the user is zooming, innerWidth and innerHeight will change but the ratio innerWidth/innerHeight stays the same.
     */
-    if ((currentRatio_number !== initialRatio_number && iH_number > 200 && iW_number > 400) || first_boolean) {
-
-        initialRatio_number = currentRatio_number;
-
-        let pFontSize: number = 0;
-        let h1FontSize: number = 0;
-        let h2FontSize: number = 0;
-        let h3FontSize: number = 0;
-        let h4FontSize: number = 0;
-        let textareaFontSize: number = 0;
-        let borderSize: number = 0;
-        let borderRadius: number = 0;
-        let fontSize_string: string = '';
-        let borderRadius_string: string = '';
-        let letterSpacing = 0;
-
-        /**
-         * If the application fills the entire width of the screen, the size of the application must also be calculated
-         * using the width. And vice versa.
-         */
-        if (iH_number * sectionsWidth / sectionsHeight > iW_number) {
-            containerAspectRatio_div.style.width = `${iW_number}px`;
-            containerAspectRatio_div.style.height = `${iW_number/aspectRatio}px`;
-            // containerAspectRatio_div.style.left = '0px';
-
-            pFontSize = iW_number / 100 * 1.2;
-            h1FontSize = iW_number / 100 * 1.4;
-            h2FontSize = iW_number / 100 * 3;
-            h3FontSize = iW_number / 100 * 1;
-            h4FontSize = iW_number / 100 * 2.5;
-            textareaFontSize = iW_number / 100 * 1.3;
-            borderSize = iW_number / 100 * 0.01;
-            borderRadius = iW_number / 100 * 0.7;
-            letterSpacing = iW_number / 100 * 0.03;
-        } else {
-            containerAspectRatio_div.style.width = `${iH_number*aspectRatio}px`;
-            containerAspectRatio_div.style.height = `${iH_number}px`;
-            // containerAspectRatio_div.style.left = String((window.innerWidth-height_number*aspectRatio)/2) + "px";
-
-            pFontSize = iH_number / 100 * 1.2 * aspectRatio;
-            h1FontSize = iH_number / 100 * 1.4 * aspectRatio;
-            h2FontSize = iH_number / 100 * 3 * aspectRatio;
-            h3FontSize = iH_number / 100 * 1 * aspectRatio;
-            h4FontSize = iH_number / 100 * 2.5 * aspectRatio;
-            textareaFontSize = iH_number / 100 * 1.3 * aspectRatio;
-            borderSize = iH_number / 100 * 0.01 * aspectRatio;
-            borderRadius = iH_number / 100 * 0.7 * aspectRatio;
-            letterSpacing = iW_number / 100 * 0.03 * aspectRatio;
-        }
-        fontSize_string =
-            `p{font-size: ${pFontSize}px;}
-                h1{font-size: ${h1FontSize}px;}
-                h2{font-size: ${h2FontSize}px; letter-spacing: ${letterSpacing}px;}
-                h3{font-size: ${h3FontSize}px;}
-                h4{font-size: ${h4FontSize}px;}
-                .textareaFontSize{font-size: ${textareaFontSize}px;}
-                .inputFontSize{font-size: ${h2FontSize}px;}
-                input.romElement{font-size: ${pFontSize}px;}`;
-        borderRadius_string =
-            `.borderBox{border-width: ${borderSize}px;}
-                .rounded{ border-radius: ${borderRadius}px;}
-                .topLeft{border-top-left-radius: ${borderRadius}px;}
-                .topRight{border-top-right-radius: ${borderRadius}px;}
-                .bottomLeft{border-bottom-left-radius: ${borderRadius}px;}
-                .bottomRight{border-bottom-right-radius: ${borderRadius}px;}
-                .lightRounded{border-radius: ${borderRadius/2}px;}`;
-
-        masterStyle_style.innerHTML = fontSize_string + borderRadius_string;
+    if(!firstTimeResizing_boolean){
+        if(currentRatio_number === lastRatio_number) return
+        if(iH_number < 200) return
+        if(iW_number < 400) return
     }
+
+    lastRatio_number = currentRatio_number;
+
+    let pFontSize: number = 0;
+    let h1FontSize: number = 0;
+    let h2FontSize: number = 0;
+    let h3FontSize: number = 0;
+    let h4FontSize: number = 0;
+    let textareaFontSize: number = 0;
+    let borderSize: number = 0;
+    let borderRadius: number = 0;
+    let fontSize_string: string = '';
+    let borderRadius_string: string = '';
+    let letterSpacing = 0;
+
+    /**
+     * If the application fills the entire width of the screen, the size of the application must also be calculated
+     * using the width. And vice versa.
+     */
+    if (iH_number * sectionsCountWidth / sectionsCountHeight > iW_number) {
+        containerAspectRatio_div.style.width = `${iW_number}px`;
+        containerAspectRatio_div.style.height = `${iW_number/aspectRatio}px`;
+
+        pFontSize = iW_number / 100 * 1.2;
+        h1FontSize = iW_number / 100 * 1.4;
+        h2FontSize = iW_number / 100 * 3;
+        h3FontSize = iW_number / 100 * 1;
+        h4FontSize = iW_number / 100 * 2.5;
+        textareaFontSize = iW_number / 100 * 1.3;
+        borderSize = iW_number / 100 * 0.01;
+        borderRadius = iW_number / 100 * 0.7;
+        letterSpacing = iW_number / 100 * 0.03;
+    } else {
+        containerAspectRatio_div.style.width = `${iH_number*aspectRatio}px`;
+        containerAspectRatio_div.style.height = `${iH_number}px`;
+
+        pFontSize = iH_number / 100 * 1.2 * aspectRatio;
+        h1FontSize = iH_number / 100 * 1.4 * aspectRatio;
+        h2FontSize = iH_number / 100 * 3 * aspectRatio;
+        h3FontSize = iH_number / 100 * 1 * aspectRatio;
+        h4FontSize = iH_number / 100 * 2.5 * aspectRatio;
+        textareaFontSize = iH_number / 100 * 1.3 * aspectRatio;
+        borderSize = iH_number / 100 * 0.01 * aspectRatio;
+        borderRadius = iH_number / 100 * 0.7 * aspectRatio;
+        letterSpacing = iW_number / 100 * 0.03 * aspectRatio;
+    }
+
+    fontSize_string =
+        `p{font-size: ${pFontSize}px;}
+        h1{font-size: ${h1FontSize}px;}
+        h2{font-size: ${h2FontSize}px; letter-spacing: ${letterSpacing}px;}
+        h3{font-size: ${h3FontSize}px;}
+        h4{font-size: ${h4FontSize}px;}
+        .textareaFontSize{font-size: ${textareaFontSize}px;}
+        .inputFontSize{font-size: ${h2FontSize}px;}
+        input.romElement{font-size: ${pFontSize}px;}`;
+    
+    borderRadius_string =
+        `.borderBox{border-width: ${borderSize}px;}
+        .rounded{ border-radius: ${borderRadius}px;}
+        .topLeft{border-top-left-radius: ${borderRadius}px;}
+        .topRight{border-top-right-radius: ${borderRadius}px;}
+        .bottomLeft{border-bottom-left-radius: ${borderRadius}px;}
+        .bottomRight{border-bottom-right-radius: ${borderRadius}px;}
+        .lightRounded{border-radius: ${borderRadius/2}px;}`;
+
+    masterStyle_style.innerHTML = fontSize_string + borderRadius_string;   
 }
 
 window.addEventListener('DOMContentLoaded', function () {
     resizeWindow(true);
+    breakpointsCheckbox_input.checked = false;
 });
 
 window.addEventListener('resize', function () {
@@ -97,18 +103,14 @@ window.addEventListener('resize', function () {
 });
 
 /***************************************************global Variables***************************************************/
-let isFullscreen = false;
-let settingsDisplayed_boolean = true;
-let ioInputDisplayed_boolean = false;
-let editRom_boolean = false;
-let ANIMATION_SPEED = 3;
+
+let ANIMATION_SPEED = 3; //Values can be 1,2,3,4,6,12
 let IDLETIME = 500;
 const NOANIMATIONIDLETIME = 15;
 const FRAMES = 60;
 
 
 /***************************************************DOM-selectors***************************************************/
-const getHtmlElement = (id_string: string) => document.getElementById(id_string);
 const mc8_div: HTMLElement = getHtmlElement('mc8_div');
 
 //control unit
@@ -142,16 +144,14 @@ const movingAlu2: HTMLElement = getHtmlElement('movingAlu2_h2');
 const yellowBgElement_div: HTMLElement = getHtmlElement('yellowBgElement_div');
 
 //rom/ram variable memory blocks
-const lastRomLabel_div: HTMLElement = document.getElementById('lastRomLabel_div');
-const lastRomLabel_p: HTMLElement = document.getElementById('lastRomLabel_p');
-const middleRamLabel_div: HTMLElement = document.getElementById('middleRamLabel_div');
-const middleRamLabel_p: HTMLElement = document.getElementById('middleRamLabel_p');
+const lastRomLabel_div: HTMLElement = getHtmlElement('lastRomLabel_div');
+const lastRomLabel_p: HTMLElement = getHtmlElement('lastRomLabel_p');
+const middleRamLabel_div: HTMLElement = getHtmlElement('middleRamLabel_div');
+const middleRamLabel_p: HTMLElement = getHtmlElement('middleRamLabel_p');
 
 
 /***************************************************basic functions***************************************************/
-const convertHexToNumber = (hexValue_string: string): number => {
-    return parseInt(hexValue_string, 16);
-}
+const convertHexToNumber = (hexValue_string: string): number => parseInt(hexValue_string, 16);
 
 const convertNumberToHex_4digits = (value_number: number): string => {
     let str: string = value_number.toString(16);
@@ -570,68 +570,83 @@ const rorBinary = (value_number: number): number => {
 }
 
 /***************************************************Classes***************************************************/
-class PlayStatus {
+class ProgramStatus {
     play: boolean;
-    stop: boolean;
     pause: boolean;
-    oneCommand: boolean;
-    noAnim: boolean;
-    completeExe: boolean;
-    rocketSpeed: boolean;
+    reset: boolean;
+
+    singleSteps: boolean;
+    animationType_1: boolean;
+    animationType_2: boolean;
+    noAnimation: boolean;
+
+    
+    settingsOpened: boolean;
+    fullscreenOn: boolean;    
+    ioInputDisplayed: boolean;
+    romIsEdited: boolean;
 
     constructor() {
         this.play = false;
-        this.stop = true;
         this.pause = false;
-        this.oneCommand = false;
-        this.noAnim = false;
-        this.completeExe = false;
-        this.rocketSpeed = false;
+        this.reset = true;
+
+        this.singleSteps = false;
+        this.animationType_1 = true;
+        this.animationType_2 = false;
+        this.noAnimation = false;
+
+        this.settingsOpened = true;
+        this.fullscreenOn = false;
+        this.ioInputDisplayed = false;
+        this.romIsEdited = false;
     }
 
     setPlay(): void {
         this.play = true;
-        this.stop = false;
         this.pause = false;
+        this.reset = false;
     }
 
     setPause(): void {
         this.play = false;
-        this.stop = false;
         this.pause = true;
+        this.reset = false;
     }
 
-    setStop(): void {
+    setReset(): void {
         this.play = false;
-        this.stop = true;
         this.pause = false;
-    }
-    setOneCommand(): void {
-        this.oneCommand = true;
+        this.reset = true;
     }
 
-    setCompleteExecution(): void {
-        this.noAnim = true;
-        this.completeExe = true;
+    setSingleSteps(): void {
+        this.singleSteps = true;
+    }
+
+    resetSingleSteps(): void {
+        this.singleSteps = false;
     }
 
     setNoAnimation(): void {
-        this.noAnim = true;
-        this.completeExe = false;
+        this.animationType_1 = false;
+        this.animationType_2 = false;
+        this.noAnimation = true;
     }
 
-    setRocketSpeed(): void {
-        this.rocketSpeed = true;
-        this.noAnim = false;
-        this.completeExe = false;
+    setAnimationType_1(): void {
+        this.animationType_1 = true;
+        this.animationType_2 = false;
+        this.noAnimation = false;
     }
 
-    setSnailSpeed(): void {
-        this.rocketSpeed = false;
-        this.noAnim = false;
-        this.completeExe = false;
+    setAnimationType_2(): void {
+        this.animationType_1 = false;
+        this.animationType_2 = true;
+        this.noAnimation = false;
     }
 }
+
 class Rom {
     breakpoints_array: Array < number > ;
     number_array: Array < number > ;
@@ -664,8 +679,8 @@ class Rom {
     resetBreakpoints(): void {
         this.breakpoints_array = this.initBreakpoints();
         for (let i = 0; i < 224; i++) {
-            document.getElementById(`romElement${i}`).classList.remove('blueText', 'breakpoint');
-            document.getElementById(`romElement${i}`).removeEventListener('mouseover',function(){},);
+            getHtmlElement(`romElement${i}`).classList.remove('blueText', 'breakpoint');
+            getHtmlElement(`romElement${i}`).removeEventListener('mouseover',function(){},);
         }
     }
 
@@ -690,13 +705,13 @@ class Rom {
             }
 
             romElement.style.top = `${100/32*(j+2)}%`;
-            romElement.style.left = `${100/sectionsWidth*((i%8)+2)}%`;
+            romElement.style.left = `${100/sectionsCountWidth*((i%8)+2)}%`;
 
             //hover pop-ups                
             romElement.addEventListener('mouseover', function() {
                 if(Array.from(romElement.classList).includes('blueText'))
                     breakpointHover_div.classList.add('displayGrid');
-                breakpointHover_div.style.top = `${(Number(romElement.style.top.replace('%',''))*sectionsHeight/100+1)*100/sectionsHeight}%`;
+                breakpointHover_div.style.top = `${(Number(romElement.style.top.replace('%',''))*sectionsCountHeight/100+1)*100/sectionsCountHeight}%`;
                 let check = true;
 
                 for (let j = 0; j < mc8Commands_array.length; j++) {
@@ -707,7 +722,7 @@ class Rom {
 
                         if(convertHexToNumber(romElement.value) === 221){
                             const bufIdNumber = Number(romElement.id.replace('romElement',''));
-                            let secondByte = convertHexToNumber(document.getElementById(`romElement${bufIdNumber+1}`).value);
+                            let secondByte = convertHexToNumber(getHtmlElement(`romElement${bufIdNumber+1}`).value);
                             switch (secondByte) {
                                 case 33:
                                     breakpointsLabel_p.textContent = 'MOV IX, dat_16';
@@ -740,7 +755,7 @@ class Rom {
                         }
                         else if(convertHexToNumber(romElement.value) === 203){
                             const bufIdNumber = Number(romElement.id.replace('romElement',''));
-                            let secondByte = convertHexToNumber(document.getElementById(`romElement${bufIdNumber+1}`).value);
+                            let secondByte = convertHexToNumber(getHtmlElement(`romElement${bufIdNumber+1}`).value);
                             switch (secondByte) {
     
                                 case 39:
@@ -773,16 +788,15 @@ class Rom {
 
     updateNumberArrayFromDOM():void {
         for (let i = 0; i < 224; i++) {
-            const buf = document.getElementById(`romElement${i}`);
+            const buf = getHtmlElement(`romElement${i}`);
 
             if(checkValidHex(buf.value)){
-                this.number_array[i] = convertHexToNumber(document.getElementById(`romElement${i}`).value);
+                this.number_array[i] = convertHexToNumber(getHtmlElement(`romElement${i}`).value);
             }
             else{
                 buf.value = convertNumberToHex_2digits(this.number_array[i]);
+                programStatus.romIsEdited = false;
             }
-                
-
         }
     }
 
@@ -811,7 +825,7 @@ class Rom {
 
         //update DOM        
         for (let i = 0; i < 224; i++) {
-            const romEle = document.getElementById(`romElement${i}`);
+            const romEle = getHtmlElement(`romElement${i}`);
             buf_string = convertNumberToHex_2digits(this.number_array[i]);
             romEle.value = buf_string;
 
@@ -835,14 +849,14 @@ class Rom {
 
 
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById(`romElementVariable${i}`).value = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
+                    getHtmlElement(`romElementVariable${i}`).value = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
                 }
             } else if (lastRomLabel_p.textContent !== '') {
                 lastRomLabel_div.classList.add('ellipses');
                 lastRomLabel_div.classList.remove('lightYellowBg');
                 lastRomLabel_p.textContent = '';
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById(`romElementVariable${i}`).value = '';
+                    getHtmlElement(`romElementVariable${i}`).value = '';
                 }
             }
         }
@@ -854,9 +868,9 @@ class Rom {
 
     getElementId(address_number = PC.value_number): string {
         if (address_number > 223) {
-            return document.getElementById(`romElementVariable${address_number%16}`).id;
+            return getHtmlElement(`romElementVariable${address_number%16}`).id;
         }
-        return document.getElementById(`romElement${address_number}`).id;
+        return getHtmlElement(`romElement${address_number}`).id;
     }
 }
 
@@ -899,7 +913,7 @@ class Ram {
                 j++;
 
             ramElement.style.top = `${100/32*(j+2)}%`;
-            ramElement.style.left = `${100/sectionsWidth*((i%8)+40)}%`;
+            ramElement.style.left = `${100/sectionsCountWidth*((i%8)+40)}%`;
 
             mc8_div.appendChild(ramElement);
         }
@@ -909,10 +923,10 @@ class Ram {
         for (let i = 0; i < this.number_array.length; i++) {
             this.number_array[i] = 255;
             if (i < 112) {
-                document.getElementById(`ramElement${i}`).textContent = 'FF';
+                getHtmlElement(`ramElement${i}`).textContent = 'FF';
             }
             if (i > 8192 - 113) {
-                document.getElementById(`ramElement${i}`).textContent = 'FF';
+                getHtmlElement(`ramElement${i}`).textContent = 'FF';
             }
         }
     }
@@ -930,9 +944,9 @@ class Ram {
 
         this.number_array[address_number] = value_number;
         if (address_number < 112 || address_number > 8191 - 112) {
-            document.getElementById(`ramElement${address_number}`).textContent = convertNumberToHex_2digits(value_number);
+            getHtmlElement(`ramElement${address_number}`).textContent = convertNumberToHex_2digits(value_number);
         } else {
-            document.getElementById(`ramElementVariable${address_number%16}`).textContent = convertNumberToHex_2digits(value_number);
+            getHtmlElement(`ramElementVariable${address_number%16}`).textContent = convertNumberToHex_2digits(value_number);
         }
     }
 
@@ -947,14 +961,14 @@ class Ram {
 
                 let lastXXX0Address: number = reducedAddress - reducedAddress % 16;
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById(`ramElementVariable${i}`).textContent = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
+                    getHtmlElement(`ramElementVariable${i}`).textContent = convertNumberToHex_2digits(this.number_array[lastXXX0Address + i]);
                 }
             } else if (middleRamLabel_p.textContent !== '') {
                 middleRamLabel_div.classList.add('ellipses');
                 middleRamLabel_div.classList.remove('lightYellowBg');
                 middleRamLabel_p.textContent = '';
                 for (let i = 0; i < 16; i++) {
-                    document.getElementById(`ramElementVariable${i}`).textContent = '';
+                    getHtmlElement(`ramElementVariable${i}`).textContent = '';
                 }
             }
         }
@@ -964,9 +978,9 @@ class Ram {
         address_number = this.reduceToRange2000h(address_number);
 
         if (address_number > 111 && address_number < 8191 - 111) {
-            return document.getElementById(`ramElementVariable${address_number%16}`).id;
+            return getHtmlElement(`ramElementVariable${address_number%16}`).id;
         } else
-            return document.getElementById(`ramElement${address_number}`).id;
+            return getHtmlElement(`ramElement${address_number}`).id;
     }
 }
 
@@ -988,6 +1002,7 @@ class Register_x2 {
         this.htmlElement.textContent = convertNumberToHex_2digits(value_number);
     }
 }
+
 class IO extends Register_x2 {
     address_number: number;
     ioMapped_boolean: boolean;
@@ -1313,6 +1328,7 @@ class Decoder {
         this.display_htmlElement.classList.remove('redBg');
     }
 }
+
 class Flags {
     c_number: any;
     z_number: any;
@@ -1370,6 +1386,7 @@ class Flags {
         this.s_htmlElement.textContent = this.s_number.toString();
     }
 }
+
 class Point {
     index: number;
     x: number;
@@ -1391,6 +1408,7 @@ class Point {
         return this.parentIndex;
     }
 }
+
 class mc8_command {
     assemblerNotation_string: string;
     machineCommand_number: number;
@@ -1407,7 +1425,7 @@ class mc8_command {
 }
 
 /***************************************************class variables***************************************************/
-const playStatus = new PlayStatus();
+const programStatus = new ProgramStatus();
 const IO1 = new IO(getHtmlElement('io1RegisterValue_h2'), 0, true);
 const IO2 = new IO(getHtmlElement('io2RegisterValue_h2'), 1, false);
 const IO3 = new IO(getHtmlElement('io3RegisterValue_h2'), 2, true);
@@ -1484,12 +1502,12 @@ const fixPoints = [
 ]
 
 
-/***************************************************ROM Breakpoints Editable***************************************************/
+/***************************************************ROM Breakpoints/Editable***************************************************/
 const romElements_array: any = Array.from(document.getElementsByClassName('romElement'));
 
 for (let i = 0; i < romElements_array.length; i++) {
     romElements_array[i].addEventListener('dblclick', function(){
-        editRom_boolean = true;
+        programStatus.romIsEdited = true;
         romElements_array[i].readOnly = '';
     }); 
     romElements_array[i].addEventListener('click', function(){
@@ -1511,47 +1529,47 @@ const allH3Elements_h3: any = Array.from(document.getElementsByTagName('h3'));
 const controlButtons_button: any = Array.from(document.querySelectorAll('.button'));
 const hoverElements_htmlElements: any = allH1Elements_h1.concat(allH3Elements_h3).concat(controlButtons_button);
 const hoverPopUps_htmlElements: any = document.getElementsByClassName('hoverElement');
-const breakpointHover_div: any = document.getElementById('breakpointHover_div');
-const breakpointsLabel_p: any = document.getElementById('breakpointsLabel_p');
+const breakpointHover_div: any = getHtmlElement('breakpointHover_div');
+const breakpointsLabel_p: any = getHtmlElement('breakpointsLabel_p');
 
 const updateHoverElements = (): void => {
-    document.getElementById('ramStartAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number) + 'h';
-    document.getElementById('ramStartAddressDec_p').textContent = String(RAM.startAddressRam_number);
-    document.getElementById('ramEndAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number + 8192 - 1) + 'h';
-    document.getElementById('ramEndAddressDec_p').textContent = String(RAM.startAddressRam_number + 8192 - 1);
+    getHtmlElement('ramStartAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number) + 'h';
+    getHtmlElement('ramStartAddressDec_p').textContent = String(RAM.startAddressRam_number);
+    getHtmlElement('ramEndAddressHex_p').textContent = convertNumberToHex_4digits(RAM.startAddressRam_number + 8192 - 1) + 'h';
+    getHtmlElement('ramEndAddressDec_p').textContent = String(RAM.startAddressRam_number + 8192 - 1);
 
     const checkedRadioIoMap_input: any = document.querySelector('input[name="radioIoMap"]:checked');
-    document.getElementById('io1Map_p').textContent = checkedRadioIoMap_input.value;
-    document.getElementById('io1AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io1Address_textarea.value)) + 'h';
-    document.getElementById('io1ValueDec_p').textContent = IO1.value_number + ' (' + convertNumberToComplementOnTwo(IO1.value_number) + ')';
-    document.getElementById('io1ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO1.value_number);
+    getHtmlElement('io1Map_p').textContent = checkedRadioIoMap_input.value;
+    getHtmlElement('io1AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io1Address_textarea.value)) + 'h';
+    getHtmlElement('io1ValueDec_p').textContent = IO1.value_number + ' (' + convertNumberToComplementOnTwo(IO1.value_number) + ')';
+    getHtmlElement('io1ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO1.value_number);
 
-    document.getElementById('io2Map_p').textContent = checkedRadioIoMap_input.value;
-    document.getElementById('io2AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io2Address_textarea.value)) + 'h';
-    document.getElementById('io2ValueDec_p').textContent = IO2.value_number + ' (' + convertNumberToComplementOnTwo(IO2.value_number) + ')';
-    document.getElementById('io2ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO2.value_number);
+    getHtmlElement('io2Map_p').textContent = checkedRadioIoMap_input.value;
+    getHtmlElement('io2AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io2Address_textarea.value)) + 'h';
+    getHtmlElement('io2ValueDec_p').textContent = IO2.value_number + ' (' + convertNumberToComplementOnTwo(IO2.value_number) + ')';
+    getHtmlElement('io2ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO2.value_number);
 
-    document.getElementById('io3Map_p').textContent = checkedRadioIoMap_input.value;
-    document.getElementById('io3AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io3Address_textarea.value)) + 'h';
-    document.getElementById('io3ValueDec_p').textContent = IO3.value_number + ' (' + convertNumberToComplementOnTwo(IO3.value_number) + ')';
-    document.getElementById('io3ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO3.value_number);
+    getHtmlElement('io3Map_p').textContent = checkedRadioIoMap_input.value;
+    getHtmlElement('io3AddressHover_p').textContent = convertNumberToHex_2digits(convertHexToNumber(io3Address_textarea.value)) + 'h';
+    getHtmlElement('io3ValueDec_p').textContent = IO3.value_number + ' (' + convertNumberToComplementOnTwo(IO3.value_number) + ')';
+    getHtmlElement('io3ValueBin_p').textContent = convertNumberTo8DigitsBinaryString(IO3.value_number);
 
-    document.getElementById('aHoverValueDec_p').textContent = 'Dezimal: ' + A.value_number + ' (' + convertNumberToComplementOnTwo(A.value_number) + ')';
-    document.getElementById('aHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(A.value_number);
+    getHtmlElement('aHoverValueDec_p').textContent = 'Dezimal: ' + A.value_number + ' (' + convertNumberToComplementOnTwo(A.value_number) + ')';
+    getHtmlElement('aHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(A.value_number);
 
-    document.getElementById('bHoverValueDec_p').textContent = 'Dezimal: ' + B.value_number + ' (' + convertNumberToComplementOnTwo(B.value_number) + ')';
-    document.getElementById('bHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(B.value_number);
+    getHtmlElement('bHoverValueDec_p').textContent = 'Dezimal: ' + B.value_number + ' (' + convertNumberToComplementOnTwo(B.value_number) + ')';
+    getHtmlElement('bHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(B.value_number);
 
-    document.getElementById('cHoverValueDec_p').textContent = 'Dezimal: ' + C.value_number + ' (' + convertNumberToComplementOnTwo(C.value_number) + ')';
-    document.getElementById('cHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(C.value_number);
+    getHtmlElement('cHoverValueDec_p').textContent = 'Dezimal: ' + C.value_number + ' (' + convertNumberToComplementOnTwo(C.value_number) + ')';
+    getHtmlElement('cHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(C.value_number);
 
-    document.getElementById('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.value_number;
-    document.getElementById('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.value_number;
-    document.getElementById('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.value_number;
-    document.getElementById('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.value_number;
-    document.getElementById('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.value_number;
+    getHtmlElement('hlHoverValueDec_p').textContent = 'Dezimal: ' + HL.value_number;
+    getHtmlElement('ixHoverValueDec_p').textContent = 'Dezimal: ' + IX.value_number;
+    getHtmlElement('spHoverValueDec_p').textContent = 'Dezimal: ' + SP.value_number;
+    getHtmlElement('pcHoverValueDec_p').textContent = 'Dezimal: ' + PC.value_number;
+    getHtmlElement('zrHoverValueDec_p').textContent = 'Dezimal: ' + ZR.value_number;
 
-    document.getElementById('irHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(IR.value_number);
+    getHtmlElement('irHoverValueBin_p').textContent = 'Binär: ' + convertNumberTo8DigitsBinaryString(IR.value_number);
 }
 
 /**
@@ -1569,36 +1587,36 @@ for (let i = 0; i < hoverElements_htmlElements.length; i++) {
 
 /***************************************************settings window***************************************************/
 
-const containerSettings_div: any = document.getElementById('containerSettings_div');
-const programSelection_select: any = document.getElementById('programSelection_select');
-const linkerFile_textarea: any = document.getElementById('linkerFile_textarea');
-const radioIoMapped_input: any = document.getElementById('radioIoMapped_input');
-const radioMemoryMap_input: any = document.getElementById('radioMemoryMap_input');
+const containerSettings_div: any = getHtmlElement('containerSettings_div');
+const programSelection_select: any = getHtmlElement('programSelection_select');
+const linkerFile_textarea: any = getHtmlElement('linkerFile_textarea');
+const radioIoMapped_input: any = getHtmlElement('radioIoMapped_input');
+const radioMemoryMap_input: any = getHtmlElement('radioMemoryMap_input');
 
-const io1Address_textarea: any = document.getElementById('io1Address_textarea');
-const io2Address_textarea: any = document.getElementById('io2Address_textarea');
-const io3Address_textarea: any = document.getElementById('io3Address_textarea');
+const io1Address_textarea: any = getHtmlElement('io1Address_textarea');
+const io2Address_textarea: any = getHtmlElement('io2Address_textarea');
+const io3Address_textarea: any = getHtmlElement('io3Address_textarea');
 
-const io1InputRadio_input: any = document.getElementById('io1InputRadio_input');
-const io2InputRadio_input: any = document.getElementById('io2InputRadio_input');
-const io3InputRadio_input: any = document.getElementById('io3InputRadio_input');
+const io1InputRadio_input: any = getHtmlElement('io1InputRadio_input');
+const io2InputRadio_input: any = getHtmlElement('io2InputRadio_input');
+const io3InputRadio_input: any = getHtmlElement('io3InputRadio_input');
 
-const io1OutputRadio_input: any = document.getElementById('io1OutputRadio_input');
-const io2OutputRadio_input: any = document.getElementById('io2OutputRadio_input');
-const io3OutputRadio_input: any = document.getElementById('io3OutputRadio_input');
+const io1OutputRadio_input: any = getHtmlElement('io1OutputRadio_input');
+const io2OutputRadio_input: any = getHtmlElement('io2OutputRadio_input');
+const io3OutputRadio_input: any = getHtmlElement('io3OutputRadio_input');
 
-const io1Arrow_div: any = document.getElementById('io1Arrow_div');
-const io2Arrow_div: any = document.getElementById('io2Arrow_div');
-const io3Arrow_div: any = document.getElementById('io3Arrow_div');
+const io1Arrow_div: any = getHtmlElement('io1Arrow_div');
+const io2Arrow_div: any = getHtmlElement('io2Arrow_div');
+const io3Arrow_div: any = getHtmlElement('io3Arrow_div');
 
-const ramAddress_select: any = document.getElementById('ramAddress_select');
-const breakpointsCheckbox_input: any = document.getElementById('breakpointsCheckbox_input');
-const breakpointsCheckbox_div: any = document.getElementById('breakpointsCheckbox_div');
+const ramAddress_select: any = getHtmlElement('ramAddress_select');
+const breakpointsCheckbox_input: any = getHtmlElement('breakpointsCheckbox_input');
+const breakpointsCheckbox_div: any = getHtmlElement('breakpointsCheckbox_div');
 
-const errorWindow_div = document.getElementById('errorWindow_div');
-const errorMessage_textarea = document.getElementById('errorMessage_textarea');
+const errorWindow_div = getHtmlElement('errorWindow_div');
+const errorMessage_textarea = getHtmlElement('errorMessage_textarea');
 
-const speedSlider_input = document.getElementById('speedSlider_input');
+const speedSlider_input = getHtmlElement('speedSlider_input');
 
 const checkLinkerFile = (errorMessage_string: string, count_number: number): Array < any > => {
     const intelHexArray = linkerFile_textarea.value.split('\n');
@@ -2039,25 +2057,25 @@ const updateIoClasses = (): void => {
 const saveSettings = () => {
     if (checkSettings()) {
         updateIoClasses();
-        stopBtn(); //init
+        reset(); //init
         ROM.update();
         RAM.reset();
         containerSettings_div.classList.remove('toggleDisplay');
         errorWindow_div.classList.remove('displayGrid');
-        settingsDisplayed_boolean = false;
+        programStatus.settingsOpened = false;
     }
 }
 
 /**
  * Custom select to work on all browsers without any differences
  */
-const ramSelect_div: HTMLElement = document.getElementById('ramSelect_div');
-const ramSelection_p: HTMLElement = document.getElementById('ramSelection_p');
-const ramSelectOptions_div: HTMLElement = document.getElementById('ramSelectOptions_div');
+const ramSelect_div: HTMLElement = getHtmlElement('ramSelect_div');
+const ramSelection_p: HTMLElement = getHtmlElement('ramSelection_p');
+const ramSelectOptions_div: HTMLElement = getHtmlElement('ramSelectOptions_div');
 
-const programSelection_div: HTMLElement = document.getElementById('programSelection_div');
-const programSelection_p: HTMLElement = document.getElementById('programSelection_p');
-const programSelectionOptions_div: HTMLElement = document.getElementById('programSelectionOptions_div');
+const programSelection_div: HTMLElement = getHtmlElement('programSelection_div');
+const programSelection_p: HTMLElement = getHtmlElement('programSelection_p');
+const programSelectionOptions_div: HTMLElement = getHtmlElement('programSelectionOptions_div');
 
 const ramOptions = ramSelectOptions_div.children;
 const programOptions = programSelectionOptions_div.children;
@@ -2073,7 +2091,6 @@ programSelection_div.addEventListener('click', function () {
 document.addEventListener('mouseup', function () {
     ramSelectOptions_div.classList.remove('displayGrid');
     programSelectionOptions_div.classList.remove('displayGrid');
-
 });
 
 
@@ -2178,10 +2195,10 @@ const getIndexArrayAtoB = (zeroToA_array: number[], zeroToB_array: number[]): nu
 // rom- and ram-Elements are not fixPoints. Therefore they need to be handled separately.
 const romElementToROM1 = (romElementID_string: string): Array < Point > => {
     let toROM1 = [];
-    let romElement = document.getElementById(romElementID_string);
+    let romElement = getHtmlElement(romElementID_string);
     let rEx: any = romElement.style.left.replace('%', '');
     let rEy: any = romElement.style.top.replace('%', '');
-    rEx = Math.round(Number(rEx) * sectionsWidth / 100);
+    rEx = Math.round(Number(rEx) * sectionsCountWidth / 100);
     rEy = Math.round(Number(rEy) * 32 / 100);
 
     let romBetweenPoint = new Point(-1, 0, rEx, 2, '');
@@ -2194,10 +2211,10 @@ const romElementToROM1 = (romElementID_string: string): Array < Point > => {
 
 const ramElementToRAM1 = (ramElementID_string: string): Array < Point > => {
     let toRAM1 = [];
-    let ramElement = document.getElementById(ramElementID_string);
+    let ramElement = getHtmlElement(ramElementID_string);
     let rEx: any = ramElement.style.left.replace('%', '');
     let rEy: any = ramElement.style.top.replace('%', '');
-    rEx = Math.round(Number(rEx) * sectionsWidth / 100);
+    rEx = Math.round(Number(rEx) * sectionsCountWidth / 100);
     rEy = Math.round(Number(rEy) * 32 / 100);
 
     let romBetweenPoint = new Point(-1, 0, rEx, 2, '');
@@ -2210,10 +2227,10 @@ const ramElementToRAM1 = (ramElementID_string: string): Array < Point > => {
 
 const RAM2ToRamElement = (ramElementID_string: string): Array < Point > => {
     let toRamElement = [];
-    const ramElement = document.getElementById(ramElementID_string);
+    const ramElement = getHtmlElement(ramElementID_string);
     let rEx: any = ramElement.style.left.replace('%', '');
     let rEy: any = ramElement.style.top.replace('%', '');
-    rEx = Math.round(Number(rEx) * sectionsWidth / 100);
+    rEx = Math.round(Number(rEx) * sectionsCountWidth / 100);
     rEy = Math.round(Number(rEy) * 32 / 100);
 
     let ramBetweenPoint = new Point(-1, 0, rEx, 2, '');
@@ -2314,7 +2331,7 @@ const calcIntermediatePositions = (pointsAtoB_array: Array < Point > , interPoin
 
 
 /***************************************************red rectangle***************************************************/
-const redRectangle_p: HTMLElement = document.getElementById('redRectangle_p');
+const redRectangle_p: HTMLElement = getHtmlElement('redRectangle_p');
 const updateRedRectangle = (PC_number: number): void => {
     redRectangle_p.classList.remove('displayNone');
     let xPos: number = 0;
@@ -2349,7 +2366,7 @@ const updateRedRectangle = (PC_number: number): void => {
     } else {
         redRectangle_p.classList.add('displayNone')
     }
-    redRectangle_p.style.left = `${100/sectionsWidth*xPos}%`;
+    redRectangle_p.style.left = `${100/sectionsCountWidth*xPos}%`;
     redRectangle_p.style.top = `${100/32*yPos}%`;
 }
 updateRedRectangle(0);
@@ -2364,7 +2381,7 @@ updateRedRectangle(0);
 //Sleep functions for pausing Animation for a certain time
 const sleepForMs = (milliseconds_number: number): Promise < any > => new Promise(resolve => setTimeout(resolve, milliseconds_number));
 
-//throws 'Stop pressed' error
+//throws 'Reset pressed' error
 const sleep = async (milliseconds_number: number): Promise < any > => {
     let count = milliseconds_number;
     while (true) {
@@ -2383,22 +2400,21 @@ const sleepForIDLETIME = (): Promise < any > => sleep(IDLETIME);
 const sleepForNOANIMATIONIDLETIME = (): Promise < any > => sleep(NOANIMATIONIDLETIME);
 
 
-// function checks if play/pause/stop is pressed
+// function checks if play/pause/reset is pressed
 const checkPlayPressed = async (): Promise < any > => {
-    //if pause is pressed user will be caught in this loop till pressing play or stop
+    //if pause is pressed user will be caught in this loop till pressing play or reset
     while (true) {
-        if (playStatus.play)
+        if (programStatus.play)
             return true;
-        if (playStatus.stop)
-            throw Error('Stop Pressed');
+        if (programStatus.reset)
+            throw Error('Reset Pressed');
 
         console.log('waiting for user input');
         await sleepForMs(100);
     }
 }
 
-//checks if completeExecution is true
-const check_completeExecution = (): void => {
+const pausingExecutionCheck = (): void => {
     let check = false;
     
     if(PC.value_number < 224){
@@ -2407,11 +2423,10 @@ const check_completeExecution = (): void => {
     }
 
     //after the completion of an animation, check if program should be paused
-    if (playStatus.oneCommand || check) {
+    if (programStatus.singleSteps || check) {
         updateStepDescription('Prozessor angehalten');
         stepNumber_p.textContent = '0';
         play();
-        
     }
 }
 
@@ -2508,7 +2523,7 @@ const updateLoRegister = (register_class: any, value_number: number): void => {
 const addYellowBackgroundForIDLETIME = async (htmlElement_htmlElement: HTMLElement): Promise < any > => {
     //If the sleep function throws an error the yellowBg must be removed.
     try {
-        if (!playStatus.noAnim) {
+        if (!programStatus.noAnimation) {
             htmlElement_htmlElement.classList.add('yellowBg');
             await sleepForIDLETIME();
         } else {
@@ -2520,7 +2535,7 @@ const addYellowBackgroundForIDLETIME = async (htmlElement_htmlElement: HTMLEleme
 }
 
 const animateArrow = async (arrow_string: string): Promise < any > => {
-    if (!playStatus.noAnim) {
+    if (!programStatus.noAnimation) {
         switch (arrow_string) {
             case 'PC':
                 registerArrow_div.classList.add('PC_arrow');
@@ -2656,7 +2671,7 @@ const animateAssemlberCommandUpdate = async (): Promise < any > => {
     await addYellowBackgroundForIDLETIME(IR.htmlElement);
     await animateArrow('IR');
     updateAssemblerCommand();
-    if (!playStatus.noAnim)
+    if (!programStatus.noAnimation)
         await sleepForIDLETIME();
 }
 
@@ -2694,7 +2709,7 @@ const animateIncreasePcByOne = async (): Promise < any > => {
 
 const updateMovingObjPosition = (movingObject_htmlElement: HTMLElement, x_number: number, y_number: number): void => {
     movingObject_htmlElement.style.top = String(100 / 32 * y_number) + "%";
-    movingObject_htmlElement.style.left = String(100 / sectionsWidth * x_number) + "%";
+    movingObject_htmlElement.style.left = String(100 / sectionsCountWidth * x_number) + "%";
 }
 
 const displayMovingObj = (pointsAtoB_array: Array < Point > , hexValue_string: string): void => {
@@ -2732,7 +2747,7 @@ const animatePaintedPath = async (pointsAtoB_array: Array < Point > , origin_str
     //create all PathElements
     for (let i = xCoordinate.length - 1; i >= 0; i--) {
         let ele = document.createElement('div');
-        ele.style.left = `${100/sectionsWidth*(xCoordinate[i]+0.5)}%`;
+        ele.style.left = `${100/sectionsCountWidth*(xCoordinate[i]+0.5)}%`;
         ele.style.top = `${100/32*(yCoordinate[i]+0.5)}%`;
         ele.classList.add('positionAbsolute', 'square1x1', 'pathElement', 'alignBg', 'rounded');
         pathElements.push(ele);
@@ -2740,7 +2755,7 @@ const animatePaintedPath = async (pointsAtoB_array: Array < Point > , origin_str
 
     //create last PathElement (hex-number)
     let last = document.createElement('h2');
-    last.style.left = `${100/sectionsWidth*(xCoordinate[xCoordinate.length-1])}%`;
+    last.style.left = `${100/sectionsCountWidth*(xCoordinate[xCoordinate.length-1])}%`;
     last.style.top = `${100/32*(yCoordinate[yCoordinate.length-1])}%`;
     last.textContent = movingObject_h2.textContent;
     last.classList.add('yellowBg', 'borderBox', 'square2x2', 'positionAbsolute', 'centered', 'rounded');
@@ -2789,7 +2804,7 @@ const animateTransfer = async (origin_string: string, target_string: string, val
     let alreadyReset = false;
 
     //only execute when Animation is required
-    if (!playStatus.noAnim) {
+    if (!programStatus.noAnimation) {
         const pointsAtoB = getPointsAtoB(origin_string, target_string);
         let value_string: string;
 
@@ -2822,7 +2837,7 @@ const animateTransfer = async (origin_string: string, target_string: string, val
         }
 
         //rocket Animation
-        if (playStatus.rocketSpeed) {
+        if (programStatus.animationType_2) {
             if (!originInCPU || !targetInCPU)
                 DECODER.updateDOM();
             await animatePaintedPath(pointsAtoB, origin_string, target_string);
@@ -2836,7 +2851,7 @@ const animateTransfer = async (origin_string: string, target_string: string, val
             for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
 
                 //if singleStep is pressed during the animation, remove movingObject and jump out of function
-                if (playStatus.noAnim) {
+                if (programStatus.noAnimation) {
                     movingObject_h2.classList.remove('displayGrid');
                     return true;
                 }
@@ -2947,7 +2962,7 @@ const animateWriteToMemoryFromRegister = async (addressRegister_string: string, 
         ramEle_htmlElement = getHtmlElement(RAM.getRamElementId(address_number));
         RAM.updateVariableElements(address_number);
         await animateTransfer(addressRegister_string, 'RAM2', address_number);
-        if (!playStatus.noAnim)
+        if (!programStatus.noAnimation)
             ramEle_htmlElement.classList.add('yellowBg', 'borderBox');
         try {
             await animateTransfer(dataRegister_string, RAM.getRamElementId(address_number), data_number);
@@ -2963,7 +2978,7 @@ const animateWriteToMemoryFromRegister = async (addressRegister_string: string, 
     }
     RAM.updateElement(address_number, data_number);
     try {
-        await addYellowBackgroundForIDLETIME(document.getElementById(RAM.getRamElementId(address_number)));
+        await addYellowBackgroundForIDLETIME(getHtmlElement(RAM.getRamElementId(address_number)));
     } finally {
         ramEle_htmlElement.classList.remove('borderBox', 'yellowBg');
         DECODER.resetDOM();
@@ -2985,17 +3000,17 @@ const resetMovingAluElements = (): void => {
     movingAlu1.classList.remove('displayGrid');
     movingAlu2.classList.remove('displayGrid');
 
-    movingAlu1.style.top = `${100/sectionsHeight*6}%`;
-    movingAlu1.style.left = `${100/sectionsWidth*26}%`;
+    movingAlu1.style.top = `${100/sectionsCountHeight*6}%`;
+    movingAlu1.style.left = `${100/sectionsCountWidth*26}%`;
 
-    movingAlu2.style.top = `${100/sectionsHeight*6}%`;
-    movingAlu2.style.left = `${100/sectionsWidth*30}%`;
+    movingAlu2.style.top = `${100/sectionsCountHeight*6}%`;
+    movingAlu2.style.left = `${100/sectionsCountWidth*30}%`;
 }
 resetMovingAluElements();
 
 //animation of ALU-usage
 const animateALU = async (aluOUT_number: number, twoMovingAluElements_boolean: boolean, cFlag_boolean: boolean, saveToRegister_string: string): Promise < any > => {
-    if (!playStatus.noAnim) {
+    if (!programStatus.noAnimation) {
         const xCoordinateAlu1 = [26]; //28
         const xCoordinateAlu2 = [30];
         const yCoordinate = [6];
@@ -3050,7 +3065,7 @@ const animateALU = async (aluOUT_number: number, twoMovingAluElements_boolean: b
 }
 
 const animateHlBcAddition = async (aluOUT_number: number, stepOne_boolean: boolean): Promise < any > => {
-    if (!playStatus.noAnim) {
+    if (!programStatus.noAnimation) {
         const xCoordinateAlu1 = [24];
         const xCoordinateAlu2 = [30];
         const yCoordinate = [6];
@@ -3119,7 +3134,7 @@ const animateHlBcAddition = async (aluOUT_number: number, stepOne_boolean: boole
 
 //animation of setting flags
 const animateSetFlags = async (): Promise < any > => {
-    if (!playStatus.noAnim) {
+    if (!programStatus.noAnimation) {
         await animateArrow('FLAGS');
         movingFlags_div.children[0].textContent = FLAGS.c_number;
         movingFlags_div.children[1].textContent = FLAGS.p_number;
@@ -3169,15 +3184,15 @@ const animateCheckJump = async (flag_string: string): Promise < any > => {
  */
 
 //animation of IO-input
-const io1InputInfo_p: HTMLElement = document.getElementById('io1InputInfo_p');
-const io2InputInfo_p: HTMLElement = document.getElementById('io2InputInfo_p');
-const io3InputInfo_p: HTMLElement = document.getElementById('io3InputInfo_p');
+const io1InputInfo_p: HTMLElement = getHtmlElement('io1InputInfo_p');
+const io2InputInfo_p: HTMLElement = getHtmlElement('io2InputInfo_p');
+const io3InputInfo_p: HTMLElement = getHtmlElement('io3InputInfo_p');
 
 const animateIoUserInput = async (IoName_string: string): Promise < any > => {
     let ioInputWindow: HTMLElement;
     let ioInput: any;
     let check = true;
-    ioInputDisplayed_boolean = true;
+    programStatus.ioInputDisplayed = true;
     switch (IoName_string) {
         case 'IO1':
             ioInputWindow = io1InputWindow_div;
@@ -3226,9 +3241,9 @@ const animateIoUserInput = async (IoName_string: string): Promise < any > => {
         io2InputInfo_p.classList.remove('redBg');
         io3InputInfo_p.classList.remove('redBg');
         io1InputInfo_p.textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-        document.getElementById('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-        document.getElementById('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-        ioInputDisplayed_boolean = false;
+        getHtmlElement('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+        getHtmlElement('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
+        programStatus.ioInputDisplayed = false;
     }
 
 
@@ -3410,25 +3425,25 @@ const get_next_command = async () => {
 }
 
 const nop = async () => {
-    if (playStatus.noAnim)
+    if (programStatus.noAnimation)
         await sleepForNOANIMATIONIDLETIME();
     else
         await sleepForIDLETIME();
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const halt = async () => {
     updateStepDescription('Prozessor angehalten');
     stepNumber_p.textContent = '0';
     pause();
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movAdat_8 = async () => {
     await animateStepDescriptionUpdate('Hole den Parameter');
     await animateReadFromMemoryInRegister('PC', 'A');
     await animateIncreasePcByOne();
-    check_completeExecution();
+    pausingExecutionCheck();
     return true;
 
 }
@@ -3437,7 +3452,7 @@ const movBdat_8 = async () => {
     await animateStepDescriptionUpdate('Hole den Parameter');
     await animateReadFromMemoryInRegister('PC', 'B');
     await animateIncreasePcByOne();
-    check_completeExecution();
+    pausingExecutionCheck();
     return true;
 }
 
@@ -3445,7 +3460,7 @@ const movCdat_8 = async () => {
     await animateStepDescriptionUpdate('Hole den Parameter');
     await animateReadFromMemoryInRegister('PC', 'C');
     await animateIncreasePcByOne();
-    check_completeExecution();
+    pausingExecutionCheck();
     return true;
 }
 
@@ -3460,7 +3475,7 @@ const twoByteIX = async () => {
 
     if (IR.value_number === 0b00100001) {
         assemblerCommand_p.textContent = 'MOV IX, dat_16';
-        if (!playStatus.noAnim)
+        if (!programStatus.noAnimation)
             await sleepForIDLETIME();
         await animateStepDescriptionUpdate('Hole das niederwertige Byte');
         await animateReadFromMemoryInRegister('PC', 'IX_lo');
@@ -3511,7 +3526,7 @@ const twoByteIX = async () => {
         throw Error('Unknown command');
     }
 
-    check_completeExecution();
+    pausingExecutionCheck();
     return true;
 }
 
@@ -3522,7 +3537,7 @@ const movHLdat_16 = async () => {
     await animateStepDescriptionUpdate('Hole das höherwertige Byte');
     await animateReadFromMemoryInRegister('PC', 'HL_hi');
     await animateIncreasePcByOne();
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movSPdat_16 = async () => {
@@ -3532,63 +3547,63 @@ const movSPdat_16 = async () => {
     await animateStepDescriptionUpdate('Hole das höherwertige Byte');
     await animateReadFromMemoryInRegister('PC', 'SP_hi');
     await animateIncreasePcByOne();
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movAB = async () => {
     await animateStepDescriptionUpdate('Kopiere die Daten');
     await animateTransfer('B', 'A', B.value_number);
     await animateRegisterUpdate('A', B.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movAC = async () => {
     await animateStepDescriptionUpdate('Kopiere die Daten');
     await animateTransfer('C', 'A', C.value_number);
     await animateRegisterUpdate('A', C.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movBA = async () => {
     await animateStepDescriptionUpdate('Kopiere die Daten');
     await animateTransfer('A', 'B', A.value_number);
     await animateRegisterUpdate('B', A.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movBC = async () => {
     await animateStepDescriptionUpdate('Kopiere die Daten');
     await animateTransfer('C', 'B', C.value_number);
     await animateRegisterUpdate('B', C.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movCA = async () => {
     await animateStepDescriptionUpdate('Kopiere die Daten');
     await animateTransfer('A', 'C', A.value_number);
     await animateRegisterUpdate('C', A.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movCB = async () => {
     await animateStepDescriptionUpdate('Kopiere die Daten');
     await animateTransfer('B', 'C', B.value_number);
     await animateRegisterUpdate('C', B.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movALabel = async () => {
     await animateloadAddressBytesInZr();
     await animateStepDescriptionUpdate('Hole die Daten');
     await animateReadFromMemoryInRegister('ZR', 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movLabelA = async () => {
     await animateloadAddressBytesInZr();
     await animateStepDescriptionUpdate('Schreibe die Daten');
     await animateWriteToMemoryFromRegister('ZR', 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movHlLabel = async () => {
@@ -3601,7 +3616,7 @@ const movHlLabel = async () => {
     await animateRegisterUpdate('ZR', ZR.value_number + 1);
     await animateStepDescriptionUpdate('Hole das höherwertige Byte');
     await animateReadFromMemoryInRegister('ZR', 'HL_hi');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movLabelHl = async () => {
@@ -3614,19 +3629,19 @@ const movLabelHl = async () => {
     await animateRegisterUpdate('ZR', ZR.value_number + 1);
     await animateStepDescriptionUpdate('Schreibe das höherwertige Byte');
     await animateWriteToMemoryFromRegister('ZR', 'HL_hi');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movAHl = async () => {
     await animateStepDescriptionUpdate('Hole die Daten');
     await animateReadFromMemoryInRegister('HL', 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const movHlA = async () => {
     await animateStepDescriptionUpdate('Schreibe die Daten');
     await animateWriteToMemoryFromRegister('HL', 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const push = async () => {
@@ -3640,7 +3655,7 @@ const push = async () => {
     await animateRegisterUpdate('SP', SP.value_number - 1);
     await animateStepDescriptionUpdate('Schreibe die Flags');
     await animateWriteToMemoryFromRegister('SP', 'FLAGS');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const pop = async () => {
@@ -3654,7 +3669,7 @@ const pop = async () => {
     await animateStepDescriptionUpdate('Verringer den Stackpointer um 1');
     await animateArrow('SP');
     await animateRegisterUpdate('SP', SP.value_number + 1);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const inA = async () => {
@@ -3663,7 +3678,7 @@ const inA = async () => {
     await animateIncreasePcByOne();
     await animateStepDescriptionUpdate('Hole die Daten');
     await animateReadFromIo();
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const outA = async () => {
@@ -3672,7 +3687,7 @@ const outA = async () => {
     await animateIncreasePcByOne();
     await animateStepDescriptionUpdate('Schreibe die Daten');
     await animateWriteToIo();
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const incA = async () => {
@@ -3685,7 +3700,7 @@ const incA = async () => {
     movingAlu2.classList.remove('yellowBg');
     await animateALU(result, true, false, 'A');
     movingAlu2.classList.add('yellowBg');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const incB = async () => {
@@ -3698,7 +3713,7 @@ const incB = async () => {
     movingAlu2.classList.remove('yellowBg');
     await animateALU(result, true, false, 'B');
     movingAlu2.classList.add('yellowBg');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const incC = async () => {
@@ -3711,14 +3726,14 @@ const incC = async () => {
     movingAlu2.classList.remove('yellowBg');
     await animateALU(result, true, false, 'C');
     movingAlu2.classList.add('yellowBg');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const incHl = async () => {
     await animateStepDescriptionUpdate('Erhöhe die Adresse um 1');
     await animateArrow('HL');
     await animateRegisterUpdate('HL', HL.value_number + 1);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 //incIX see twoByteIx
 
@@ -3732,7 +3747,7 @@ const decA = async () => {
     movingAlu2.classList.remove('yellowBg');
     await animateALU(result, true, false, 'A');
     movingAlu2.classList.add('yellowBg');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const decB = async () => {
@@ -3745,7 +3760,7 @@ const decB = async () => {
     movingAlu2.classList.remove('yellowBg');
     await animateALU(result, true, false, 'B');
     movingAlu2.classList.add('yellowBg');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const decC = async () => {
@@ -3758,14 +3773,14 @@ const decC = async () => {
     movingAlu2.classList.remove('yellowBg');
     await animateALU(result, true, false, 'C');
     movingAlu2.classList.add('yellowBg');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const decHl = async () => {
     await animateStepDescriptionUpdate('Verringere die Adresse um 1');
     await animateArrow('HL');
     await animateRegisterUpdate('HL', HL.value_number - 1);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const addA = async () => {
@@ -3774,7 +3789,7 @@ const addA = async () => {
 
     const result = addBinary(A.value_number, A.value_number, false);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const addB = async () => {
@@ -3783,7 +3798,7 @@ const addB = async () => {
 
     const result = addBinary(A.value_number, B.value_number, false);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const addC = async () => {
@@ -3792,7 +3807,7 @@ const addC = async () => {
 
     const result = addBinary(A.value_number, C.value_number, false);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const addDat_8 = async () => {
@@ -3806,7 +3821,7 @@ const addDat_8 = async () => {
 
     const result = addBinary(A.value_number, ALU2.value_number, false);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const addHlBc = async () => {
@@ -3831,7 +3846,7 @@ const addHlBc = async () => {
     result = addBinary(HL.hiValue_number, B.value_number + FLAGS.c_number, false);
     await animateHlBcAddition(result, false);
 
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const subA = async () => {
@@ -3840,7 +3855,7 @@ const subA = async () => {
 
     const result = addBinary(A.value_number, A.value_number, true);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const subB = async () => {
@@ -3849,7 +3864,7 @@ const subB = async () => {
 
     const result = addBinary(A.value_number, B.value_number, true);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const subC = async () => {
@@ -3858,7 +3873,7 @@ const subC = async () => {
 
     const result = addBinary(A.value_number, C.value_number, true);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const subDat_8 = async () => {
@@ -3872,7 +3887,7 @@ const subDat_8 = async () => {
 
     const result = addBinary(A.value_number, ALU2.value_number, true);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const andA = async () => {
@@ -3881,7 +3896,7 @@ const andA = async () => {
 
     const result = andBinary(A.value_number, A.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const andB = async () => {
@@ -3890,7 +3905,7 @@ const andB = async () => {
 
     const result = andBinary(A.value_number, B.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const andC = async () => {
@@ -3899,7 +3914,7 @@ const andC = async () => {
 
     const result = andBinary(A.value_number, C.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const andDat_8 = async () => {
@@ -3913,7 +3928,7 @@ const andDat_8 = async () => {
 
     const result = andBinary(A.value_number, ALU2.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const orA = async () => {
@@ -3922,7 +3937,7 @@ const orA = async () => {
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const orB = async () => {
@@ -3931,7 +3946,7 @@ const orB = async () => {
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const orC = async () => {
@@ -3940,7 +3955,7 @@ const orC = async () => {
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const orDat_8 = async () => {
@@ -3954,7 +3969,7 @@ const orDat_8 = async () => {
 
     const result = orBinary(ALU1.value_number, ALU2.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const xorA = async () => {
@@ -3963,7 +3978,7 @@ const xorA = async () => {
 
     const result = xorBinary(A.value_number, A.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const xorB = async () => {
@@ -3972,7 +3987,7 @@ const xorB = async () => {
 
     const result = xorBinary(A.value_number, B.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const xorC = async () => {
@@ -3981,7 +3996,7 @@ const xorC = async () => {
 
     const result = xorBinary(A.value_number, C.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const xorDat_8 = async () => {
@@ -3995,7 +4010,7 @@ const xorDat_8 = async () => {
 
     const result = xorBinary(ALU1.value_number, ALU2.value_number);
     await animateALU(result, true, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const twoByteShift = async () => {
@@ -4009,7 +4024,7 @@ const twoByteShift = async () => {
     if (IR.value_number === 0b00100111) {
         await animateArrow('IR');
         assemblerCommand_p.textContent = 'SHL';
-        if (!playStatus.noAnim)
+        if (!programStatus.noAnimation)
             await sleepForIDLETIME();
         await animateStepDescriptionUpdate('Hole den Operanden');
         await animateTransfer('A', 'ALU1', A.value_number);
@@ -4020,7 +4035,7 @@ const twoByteShift = async () => {
     } else if (IR.value_number === 0b00111111) {
         await animateArrow('IR');
         assemblerCommand_p.textContent = 'SHR';
-        if (!playStatus.noAnim)
+        if (!programStatus.noAnimation)
             await sleepForIDLETIME();
         await animateStepDescriptionUpdate('Hole den Operanden');
         await animateTransfer('A', 'ALU1', A.value_number);
@@ -4034,7 +4049,7 @@ const twoByteShift = async () => {
         assemblerCommand_p.textContent = 'Befehl Unbekannt';
         throw Error('Unknown command');
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const rcl = async () => {
@@ -4044,7 +4059,7 @@ const rcl = async () => {
     await animateStepDescriptionUpdate('Rotiere Operand mit Carry-Flag nach links');
     const result = rclBinary(A.value_number);
     await animateALU(result, false, true, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const rol = async () => {
@@ -4054,7 +4069,7 @@ const rol = async () => {
     await animateStepDescriptionUpdate('Rotiere Operand ohne Carry-Flag nach links');
     const result = rolBinary(A.value_number);
     await animateALU(result, false, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const rcr = async () => {
@@ -4064,7 +4079,7 @@ const rcr = async () => {
     await animateStepDescriptionUpdate('Rotiere Operand mit Carry-Flag nach rechts');
     const result = rcrBinary(A.value_number);
     await animateALU(result, false, true, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const ror = async () => {
@@ -4074,7 +4089,7 @@ const ror = async () => {
     await animateStepDescriptionUpdate('Rotiere Operand ohne Carry-Flag nach rechts');
     const result = rorBinary(A.value_number);
     await animateALU(result, false, false, 'A');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const cpA = async () => {
@@ -4083,7 +4098,7 @@ const cpA = async () => {
 
     const result = addBinary(A.value_number, A.value_number, true);
     await animateALU(result, true, false, '');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const cpB = async () => {
@@ -4092,7 +4107,7 @@ const cpB = async () => {
 
     const result = addBinary(A.value_number, B.value_number, true);
     await animateALU(result, true, false, '');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const cpC = async () => {
@@ -4101,7 +4116,7 @@ const cpC = async () => {
 
     const result = addBinary(A.value_number, C.value_number, true);
     await animateALU(result, true, false, '');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const cpDat_8 = async () => {
@@ -4115,7 +4130,7 @@ const cpDat_8 = async () => {
 
     const result = addBinary(A.value_number, ALU2.value_number, true);
     await animateALU(result, true, false, '');
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpnzLabel = async () => {
@@ -4131,7 +4146,7 @@ const jpnzLabel = async () => {
         await animateRegisterUpdate('PC', ZR.value_number);
 
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpzLabel = async () => {
@@ -4146,7 +4161,7 @@ const jpzLabel = async () => {
         await animateTransfer('ZR', 'PC', ZR.value_number);
         await animateRegisterUpdate('PC', ZR.value_number);
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpncLabel = async () => {
@@ -4161,7 +4176,7 @@ const jpncLabel = async () => {
         await animateTransfer('ZR', 'PC', ZR.value_number);
         await animateRegisterUpdate('PC', ZR.value_number);
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpcLabel = async () => {
@@ -4176,7 +4191,7 @@ const jpcLabel = async () => {
         await animateTransfer('ZR', 'PC', ZR.value_number);
         await animateRegisterUpdate('PC', ZR.value_number);
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpnoLabel = async () => {
@@ -4191,7 +4206,7 @@ const jpnoLabel = async () => {
         await animateTransfer('ZR', 'PC', ZR.value_number);
         await animateRegisterUpdate('PC', ZR.value_number);
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpoLabel = async () => {
@@ -4206,7 +4221,7 @@ const jpoLabel = async () => {
         await animateTransfer('ZR', 'PC', ZR.value_number);
         await animateRegisterUpdate('PC', ZR.value_number);
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpnsLabel = async () => {
@@ -4221,7 +4236,7 @@ const jpnsLabel = async () => {
         await animateTransfer('ZR', 'PC', ZR.value_number);
         await animateRegisterUpdate('PC', ZR.value_number);
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpsLabel = async () => {
@@ -4236,7 +4251,7 @@ const jpsLabel = async () => {
         await animateTransfer('ZR', 'PC', ZR.value_number);
         await animateRegisterUpdate('PC', ZR.value_number);
     }
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const jpLabel = async () => {
@@ -4245,7 +4260,7 @@ const jpLabel = async () => {
     await animateArrow('ZR');
     await animateTransfer('ZR', 'PC', ZR.value_number);
     await animateRegisterUpdate('PC', ZR.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const callLabel = async () => {
@@ -4264,7 +4279,7 @@ const callLabel = async () => {
     await animateArrow('ZR');
     await animateTransfer('ZR', 'PC', ZR.value_number);
     await animateRegisterUpdate('PC', ZR.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const ret = async () => {
@@ -4282,7 +4297,7 @@ const ret = async () => {
     await animateArrow('ZR');
     await animateTransfer('ZR', 'PC', ZR.value_number);
     await animateRegisterUpdate('PC', ZR.value_number);
-    check_completeExecution();
+    pausingExecutionCheck();
 }
 
 const mc8Commands_array = [
@@ -4397,11 +4412,10 @@ const run_program = async (): Promise < any > => {
             await checkPlayPressed();
             await runningProgram[i]();
         } catch (e) {
-            if (!playStatus.stop) {
-                playStatus.setPause();
+            if (!programStatus.reset) {
+                programStatus.setPause();
             }
 
-            setButtonsPressed();
             console.log('Error catched:');
             console.error(e);
             return false;
@@ -4445,83 +4459,65 @@ const init = () => {
     DECODER.display_htmlElement.textContent = '';
 }
 
-const setButtonsPressed = (): void => {
-    // if (playStatus.play) {
-    //     controlButtons_button[0].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[0].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.pause) {
-    //     controlButtons_button[1].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[1].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.stop) {
-    //     controlButtons_button[2].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[2].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.rocketSpeed) {
-    //     controlButtons_button[4].classList.add('buttonPressed');
 
-    //     controlButtons_button[3].classList.remove('buttonPressed');
-    //     controlButtons_button[5].classList.remove('buttonPressed');
-    //     controlButtons_button[6].classList.remove('buttonPressed');
-    // }
-    // if (!playStatus.rocketSpeed) {
-    //     controlButtons_button[3].classList.add('buttonPressed');
-
-    //     controlButtons_button[4].classList.remove('buttonPressed');
-    //     controlButtons_button[5].classList.remove('buttonPressed');
-    //     controlButtons_button[6].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.completeExe) {
-    //     controlButtons_button[6].classList.add('buttonPressed');
-
-    //     controlButtons_button[3].classList.remove('buttonPressed');
-    //     controlButtons_button[4].classList.remove('buttonPressed');
-    //     controlButtons_button[5].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.noAnim && !playStatus.completeExe) {
-    //     controlButtons_button[5].classList.add('buttonPressed');
-
-    //     controlButtons_button[3].classList.remove('buttonPressed');
-    //     controlButtons_button[4].classList.remove('buttonPressed');
-    //     controlButtons_button[6].classList.remove('buttonPressed');
-    // }
-    // if (playStatus.oneCommand) {
-    //     controlButtons_button[9].classList.add('buttonPressed');
-    // } else {
-    //     controlButtons_button[9].classList.remove('buttonPressed');
-    // }
-}
-setButtonsPressed();
 
 const play = () => {
-    if (!playStatus.play) {
-        if (playStatus.stop) { //only when stop is pressed(init), the program will be started anew  
-            editRom_boolean = false;
-            playStatus.setPlay();
+    if (!programStatus.play) {
+        programStatus.romIsEdited = false;
+        if (programStatus.reset) { //only when reset is pressed(init), the program will be started anew  
+            programStatus.setPlay();
             run_program();
         }
-        playStatus.setPlay();
+        programStatus.setPlay();
         controlButtons_button[0].classList.add('pause_button', 'buttonPressed');
     }
     else{
-        playStatus.setPause();
+        programStatus.setPause();
         controlButtons_button[0].classList.remove('pause_button', 'buttonPressed');
     }
 }
 
 const pause = () => {
-    playStatus.setPause();
+    programStatus.setPause();
     controlButtons_button[0].classList.remove('pause_button', 'buttonPressed');
 }
 
-const stopBtn = () => {
-    playStatus.setStop();
+const reset = () => {
+    programStatus.setReset();
     controlButtons_button[0].classList.remove('pause_button', 'buttonPressed');
     init();
+}
+
+const toggleSingleSteps = ():void => {
+    if (programStatus.singleSteps) {
+        programStatus.resetSingleSteps();
+        controlButtons_button[5].classList.remove('buttonPressed', 'oneCommandPressed');
+        return
+    }
+    
+    programStatus.setSingleSteps();
+    controlButtons_button[5].classList.add('buttonPressed', 'oneCommandPressed');
+}
+
+const enableAnimationType_1 = () => {
+    programStatus.setAnimationType_1();
+    controlButtons_button[2].classList.add('buttonPressed');
+    controlButtons_button[3].classList.remove('buttonPressed');
+    controlButtons_button[4].classList.remove('buttonPressed');
+}
+
+const enableAnimationType_2 = () => {
+    programStatus.setAnimationType_2();
+    controlButtons_button[3].classList.add('buttonPressed');
+    controlButtons_button[2].classList.remove('buttonPressed');
+    controlButtons_button[4].classList.remove('buttonPressed');
+}
+
+const enableNoAnimation = () => {
+    programStatus.setNoAnimation();
+    controlButtons_button[4].classList.add('buttonPressed');
+    controlButtons_button[2].classList.remove('buttonPressed');
+    controlButtons_button[3].classList.remove('buttonPressed');
 }
 
 speedSlider_input.oninput = function(){
@@ -4544,61 +4540,22 @@ const decreaseSpeed = () => {
     speedSlider_input.dispatchEvent(new Event('input'));
 }
 
-
-const toggleTheme = () => {
-    document.getElementsByTagName('html')[0].classList.toggle('black');
-    document.getElementById('toggleTheme_button').classList.toggle('light');
-}
-
-const snailSpeed_on = () => {
-    playStatus.setSnailSpeed();
-    controlButtons_button[2].classList.add('buttonPressed');
-    controlButtons_button[3].classList.remove('buttonPressed');
-    controlButtons_button[4].classList.remove('buttonPressed');
-}
-
-const rocketSpeed_on = () => {
-    playStatus.setRocketSpeed();
-    controlButtons_button[3].classList.add('buttonPressed');
-    controlButtons_button[2].classList.remove('buttonPressed');
-    controlButtons_button[4].classList.remove('buttonPressed');
-}
-
-const runCompleteExecution = () => {
-    playStatus.setCompleteExecution();
-    controlButtons_button[4].classList.add('buttonPressed');
-    controlButtons_button[2].classList.remove('buttonPressed');
-    controlButtons_button[3].classList.remove('buttonPressed');
-}
-
-const runOneCommand = () => {
-    if (playStatus.oneCommand) {
-        playStatus.oneCommand = false;
-        controlButtons_button[5].classList.remove('buttonPressed', 'oneCommandPressed');
-    } else {
-        playStatus.setOneCommand();
-        controlButtons_button[5].classList.add('buttonPressed', 'oneCommandPressed');
-    }
-}
-
-const runNextSingleStep = () => {
-    playStatus.setNoAnimation();
-    setButtonsPressed();
-}
-
-
-
 const openSettings = () => {
     containerSettings_div.classList.add('toggleDisplay');
-    settingsDisplayed_boolean = true;
+    programStatus.settingsOpened = true;
 }
 
 openSettings();
 
-const doc: any = document.documentElement;
+const toggleTheme = () => {
+    document.getElementsByTagName('html')[0].classList.toggle('black');
+    getHtmlElement('toggleTheme_button').classList.toggle('light');
+}
 
+
+const doc: any = document.documentElement;
 const toggleFullscreen = () => {
-    if (!isFullscreen) {
+    if (!programStatus.fullscreenOn) {
         if (doc.requestFullscreen) {
             doc.requestFullscreen();
         } else if (doc.webkitRequestFullscreen) {
@@ -4606,7 +4563,7 @@ const toggleFullscreen = () => {
         } else if (doc.msRequestFullscreen) {
             doc.msRequestFullscreen();
         }
-        isFullscreen = true;
+        programStatus.fullscreenOn = true;
     } else {
         if (document.exitFullscreen) {
             document.exitFullscreen();
@@ -4615,81 +4572,82 @@ const toggleFullscreen = () => {
         } else if (document.msExitFullscreen) {
             document.msExitFullscreen();
         }
-        isFullscreen = false;
+        programStatus.fullscreenOn = false;
     }
 }
 
-const openAssembler = () => {
-    window.open('https://simonrusswurm.github.io/ASIM_Simulator/', '_blank');
-}
-
 const openInfo = () => {
-    document.getElementById('infoWindow_div').classList.toggle('displayGrid');
+    getHtmlElement('infoWindow_div').classList.toggle('displayGrid');
 }
 
 
 document.addEventListener('keyup', function (e) {
-    if (!settingsDisplayed_boolean && !ioInputDisplayed_boolean && !editRom_boolean) {
-        switch (e.code) {
-            case 'Space':
-                play();
-                break;
-            case 'KeyR':
-                stopBtn();
-                break;
-
-            case 'KeyT':
-                runOneCommand();
-                break;
-
-            case 'KeyY':
-                snailSpeed_on();
-                break;
-
-            case 'KeyZ':
-                snailSpeed_on();
-                break;
-
-            case 'KeyU':
-                rocketSpeed_on();
-                break;
-            
-            case 'KeyI':
-                runCompleteExecution();
-                break;
-
-            case 'KeyS':
-                openSettings();
-                break;
-
-            case 'KeyV':
-                toggleFullscreen();
-                break;
-
-            case 'BracketRight':
-                increaseSpeed();
-                break;
-
-            case 'Slash':
-                decreaseSpeed();
-                break;
-
-            default:
-                break;
+    if(programStatus.romIsEdited){    
+        if(e.code === 'Space' || e.code === 'Enter'){
+            play();
         }
-    } else if (settingsDisplayed_boolean) {
-        if (e.code === 'Enter')
+        ROM.updateNumberArrayFromDOM();
+        return
+    }
+
+    if(programStatus.settingsOpened){
+        if (e.code === 'Enter' || e.code === 'KeyS')
             saveSettings();
-    } else {
+        return
+    }
+
+    if(programStatus.ioInputDisplayed){
         if (e.code === 'Enter')
             play();
+        return
     }
-    if(editRom_boolean){    
-        if(e.code == 'Space'){
-            play();
-        }
 
-        ROM.updateNumberArrayFromDOM();  
+    switch (e.code) {
+        case 'Space':
+            play();
+            break;
+        case 'KeyR':
+            reset();
+            break;
+
+        case 'KeyT':
+            toggleSingleSteps();
+            break;
+
+        case 'KeyY':
+            enableAnimationType_1();
+            break;
+
+        case 'KeyZ':
+            enableAnimationType_1();
+            break;
+
+        case 'KeyU':
+            enableAnimationType_2();
+            break;
         
+        case 'KeyI':
+            enableNoAnimation();
+            break;
+
+        case 'KeyS':
+            openSettings();
+            break;
+
+        case 'KeyV':
+            toggleFullscreen();
+            break;
+
+        case 'BracketRight':
+            increaseSpeed();
+            break;
+
+        case 'Slash':
+            decreaseSpeed();
+            break;
+
+        default:
+            break;
     }
+    return
 });

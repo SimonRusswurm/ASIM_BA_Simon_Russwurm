@@ -499,17 +499,17 @@
              <!-- ************************************************** controlPanel *************************************************  -->
              <div class="playReset centered borderBox rounded">
                 <div id="play_button"           class="button topLeft bottomLeft borderRight alignBg playButton" onclick="play()"></div>
-                <div id="stop_button"           class="button topRight bottomRight alignBg" onclick="stopBtn()"></div>
+                <div id="reset_button"           class="button topRight bottomRight alignBg" onclick="reset()"></div>
              </div>
 
              <div class="animationType centered borderBox rounded">
-                <div id="slow_button"           class="button topLeft bottomLeft borderRight alignBg buttonPressed" onclick="snailSpeed_on()"></div>
-                <div id="fast_button"           class="button borderRight alignBg" onclick="rocketSpeed_on()"></div>
-                <div id="fullCommand_button"    class="button topRight bottomRight alignBg" onclick="runCompleteExecution()"></div>
+                <div id="slow_button"           class="button topLeft bottomLeft borderRight alignBg buttonPressed" onclick="enableAnimationType_1()"></div>
+                <div id="fast_button"           class="button borderRight alignBg" onclick="enableAnimationType_2()"></div>
+                <div id="fullCommand_button"    class="button topRight bottomRight alignBg" onclick="enableNoAnimation()"></div>
              </div>
 
             
-            <div id="oneCommand_button"     class="button square2x2 borderBox positionAbsolute rounded alignBg" onclick="runOneCommand()"></div>
+            <div id="oneCommand_button"     class="button square2x2 borderBox positionAbsolute rounded alignBg" onclick="toggleSingleSteps()"></div>
              
             <div class="speed centered borderBox rounded">
                 <div id="decrease_button"       class="button topLeft bottomLeft borderRight alignBg" onclick="decreaseSpeed()"></div>
@@ -528,7 +528,7 @@
                 <p class="bold">Start/Pause [space]</Button></p>
                 <p>Startet/Pausiert den Programmablauf.</p>
             </div>
-            <div id="stopHover_div" class="hoverElement borderBox rounded button_hover">
+            <div id="resetHover_div" class="hoverElement borderBox rounded button_hover">
                 <p class="bold">Reset [r]</Button></p>
                 <p>Setzt die CPU zurück.</p>
             </div>

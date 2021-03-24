@@ -908,12 +908,12 @@ p.redBg{
     background-image: url(images/pauseWhite_button.svg)
 }
 
-#stop_button {
+#reset_button {
     background-image: url(images/stop_button.svg);
     background-size: 50%
 }
 
-.black #stop_button {
+.black #reset_button {
     background-image: url(images/stopWhite_button.svg)
 }
 
@@ -1589,7 +1589,7 @@ p.redBg{
     left: calc(1%*var(--width)*11)
 }
 
-#stopHover_div {
+#resetHover_div {
     left: calc(1%*var(--width)*13)
 }
 

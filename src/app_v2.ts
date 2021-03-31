@@ -2836,7 +2836,7 @@ const animateTransfer = async (origin_string: string, target_string: string, val
             targetInCPU = true;
         }
 
-        //rocket Animation
+        //Animationtype 2
         if (programStatus.animationType_2) {
             if (!originInCPU || !targetInCPU)
                 DECODER.updateDOM();
@@ -2845,7 +2845,7 @@ const animateTransfer = async (origin_string: string, target_string: string, val
                 DECODER.resetDOM();
             }
         }
-        //slow Animation
+        //Animationtype 1
         else {
             //iterate through Coordinates
             for (let i = 0; i < movingObjectCoordinates[0].length; i++) {
@@ -2957,7 +2957,7 @@ const animateWriteToMemoryFromRegister = async (addressRegister_string: string, 
     //determine ROM or RAM
     if (address_number < 8192) {
         //wont be executed completely, because the decoder will interrupt execution 
-        await animateTransfer(addressRegister_string, 'ROM1', address_number);
+        await animateTransfer(addressRegister_string, 'ROM2', address_number);
     } else if (address_number >= RAM.startAddressRam_number && address_number < RAM.startAddressRam_number + RAM.size_number) {
         ramEle_htmlElement = getHtmlElement(RAM.getRamElementId(address_number));
         RAM.updateVariableElements(address_number);
@@ -4548,7 +4548,7 @@ const openSettings = () => {
 openSettings();
 
 const toggleTheme = () => {
-    document.getElementsByTagName('html')[0].classList.toggle('black');
+    document.getElementsByTagName('body')[0].classList.toggle('black');
     getHtmlElement('toggleTheme_button').classList.toggle('light');
 }
 

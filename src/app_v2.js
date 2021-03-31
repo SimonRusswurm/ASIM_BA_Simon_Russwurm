@@ -2891,7 +2891,7 @@ var animateWriteToMemoryFromRegister = function (addressRegister_string, dataReg
                 _a.sent();
                 if (!(address_number < 8192)) return [3 /*break*/, 3];
                 //wont be executed completely, because the decoder will interrupt execution 
-                return [4 /*yield*/, animateTransfer(addressRegister_string, 'ROM1', address_number)];
+                return [4 /*yield*/, animateTransfer(addressRegister_string, 'ROM2', address_number)];
             case 2:
                 //wont be executed completely, because the decoder will interrupt execution 
                 _a.sent();
@@ -5950,7 +5950,7 @@ var openSettings = function () {
 };
 openSettings();
 var toggleTheme = function () {
-    document.getElementsByTagName('html')[0].classList.toggle('black');
+    document.getElementsByTagName('body')[0].classList.toggle('black');
     getHtmlElement('toggleTheme_button').classList.toggle('light');
 };
 var doc = document.documentElement;

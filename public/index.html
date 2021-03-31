@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
+    <link rel="stylesheet" href="style.css">
+    <title>MC8</title>
+    <style id="masterStyle_style">
+    </style>
+</head>
+<body class="body">
+    <div id="containerMC8_div" class="containerAspectRatio">
+        <div id="mc8_div" class="alignBg">
+            <!-- ************************** ROM **************************  -->
+           
+            <div class="rom positionAbsolute centered">
+                <div class="label gridChild borderBox topLeft">
+                    <h1 id="romLabel_h1">ROM</h1>
+                </div>
+                <div class="addressLabel1toF gridChild borderBox topRight">
+                    <p>0</p><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p>
+                    <p>8</p><p>9</p><p>A</p><p>B</p><p>C</p><p>D</p><p>E</p><p>F</p>
+                </div>
+                
+                <div class="gridChild borderBox">
+                    <p>000x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>001x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>002x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>003x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>004x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>005x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>006x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>007x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>008x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>009x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>00Ax</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>00Bx</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>00Cx</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p>00Dx</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div  id="lastRomLabel_div" class="gridChild borderBox bottomLeft ellipses alignBg">
+                    <p id="lastRomLabel_p"></p>
+                </div>
+                <div class="gridChild borderBox bottomRight">
+                    
+                </div>
+            </div>
+            <div id="breakpointHover_div" class="centeredHorizontal borderBox rounded displayNone yellowBg">
+                <p id="breakpointsLabel_p" class="arial bold"></p>
+                <p class="arial">Klicken für Breakpoint setzen/löschen</p>
+            </div>
+            <div id="romLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">ROM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p style="text-align: end;">0000h</p><p style="text-align: end;">0</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p style="text-align: end;">1FFFh</p><p style="text-align: end;">8191</p>
+            </div>
+			<!-- ************************** RAM **************************  -->
+            
+            <div class="ram positionAbsolute centered">
+                <div class="addressLabel1toF gridChild borderBox topLeft">
+                    <p>0</p><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p>
+                    <p>8</p><p>9</p><p>A</p><p>B</p><p>C</p><p>D</p><p>E</p><p>F</p>
+                </div>
+                <div class="label gridChild borderBox topRight">
+                    <h1  id="ramLabel_h1">RAM</h1>
+                </div>                    
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">200x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">201x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">202x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">203x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">204x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">205x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">206x</p>
+                </div>
+
+                <div class="gridChild borderBox">
+                    
+                </div>
+
+                <!-- variable Ram Element -->
+                <div id="middleRamLabel_div" class="ellipses alignBg gridChild borderBox ">
+                    <p id="middleRamLabel_p" class="RamAddressLabel"></p>
+                </div>
+
+                <div class="gridChild borderBox">
+                    
+                </div>
+
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">3F9x</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">3FAx</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">3FBx</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">3FCx</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">3FDx</p>
+                </div>
+                <div class="gridChild borderBox">
+                    
+                </div>
+                <div class="gridChild borderBox">
+                    <p class="RamAddressLabel">3FEx</p>
+                </div>
+                <div class="gridChild borderBox bottomLeft">
+                    
+                </div>
+                <div class="gridChild borderBox bottomRight">
+                    <p class="RamAddressLabel">3FFx</p>
+                </div>       
+            </div>
+            <div id="ramLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">RAM</p><p></p><p></p>
+                <p>Anfangsadresse: </p><p id="ramStartAddressHex_p" style="text-align: end;">2000h</p><p id="ramStartAddressDec_p" style="text-align: end;">8192</p>
+                <p>Speichergröße: </p><p style="text-align: end;">2000h</p><p style="text-align: end;">8192</p>
+                <p>Endadresse: </p><p id="ramEndAddressHex_p"style="text-align: end;">3FFFh</p><p id="ramEndAddressDec_p"style="text-align: end;">16383</p>
+            </div>
+           
+            <!-- ************************** MovingObjects **************************  -->
+            <h2 id="movingObject_h2" class="movingObject square2x2 positionAbsolute centered borderBox yellowBg rounded displayNone"></h2>
+            <h2 id='movingAlu1_h2'   class="movingObject square2x2 positionAbsolute centered borderBox yellowBg rounded displayNone"></h2>
+            <h2 id='movingAlu2_h2'   class="movingObject square2x2 positionAbsolute centered borderBox yellowBg rounded displayNone"></h2>
+            <p id="redRectangle_p" class="redRectangle square1x1 positionAbsolute centered borderBox"></p>
+
+            <!-- ************************** IOs **************************  -->
+
+            <div class="containerIo1 positionAbsolute centered rectangle6x2">
+                <h1 id="io1Label_h1" class="centered size100 borderBox topLeft bottomLeft">IO1</h1>
+                <div id="io1Arrow_div" class="centered size100 borderBox ioArrow"></div>
+                <h2 id="io1RegisterValue_h2" class="centered size100 borderBox topRight bottomRight">FF</h2>
+            </div>
+            
+            <div id="io1LabelHover_div" class="hoverElement io_hover borderBox rounded">
+                <p class="bold">IO1</p><p></p>
+                <p id="io1Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io1AddressHover_p" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io1ValueDec_p" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io1ValueBin_p" style="text-align: end;">1111 1111</p>
+            </div>
+            
+            <div id="io1InputWindow_div" class="displayNone">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
+                    <button id="io1Input_button" class="borderBox topLeft bottomLeft lightBlueBg"><p class="arial">Eingabe</p></button>
+                    <input id="io1Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
+                </div>
+                <p id="io1InputInfo_p" class="yellowBg borderBox rounded arial gridChild" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+            </div>
+
+            <div class="containerIo2 positionAbsolute centered rectangle6x2">
+                <h1 id="io2Label_h1" class="centered size100 borderBox topLeft bottomLeft">IO2</h1>
+                <div id="io2Arrow_div" class="centered size100 borderBox ioArrow ioArrowOUT"></div>
+                <h2 id="io2RegisterValue_h2" class="centered size100 borderBox topRight bottomRight">FF</h2>
+            </div>
+
+            <div id="io2LabelHover_div" class="hoverElement io_hover borderBox rounded">
+                <p class="bold">IO2</p><p></p>
+                <p id="io2Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io2AddressHover_p" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io2ValueDec_p" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io2ValueBin_p" style="text-align: end;">1111 1111</p>
+            </div>
+
+
+            <div id="io2InputWindow_div" class="displayNone">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
+                    <button id="io2Input_button" class="borderBox topLeft bottomLeft lightBlueBg"><p class="arial">Eingabe</p></button>
+                    <input id="io2Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
+                </div>
+                <p  id="io2InputInfo_p" class="yellowBg borderBox rounded arial " style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+            </div>
+
+           <div class="containerIo3 positionAbsolute centered rectangle6x2">
+            <h1 id="io3Label_h1" class="centered size100 borderBox topLeft bottomLeft">IO3</h1>
+            <div id="io3Arrow_div" class="centered size100 borderBox ioArrow"></div>
+            <h2 id="io3RegisterValue_h2" class="centered size100 borderBox topRight bottom bottomRight">FF</h2>
+           </div>
+            
+            <div id="io3LabelHover_div" class="hoverElement io_hover borderBox rounded" >
+                <p class="bold">IO3</p><p></p>
+                <p id="io3Map_p" style="grid-column-start: 1; grid-column-end: 3;">IO-mapped</p>
+                <p>Adresse:</p><p id="io3AddressHover_p" style="text-align: end;">0000h</p>
+                <p>Dezimal:</p><p id="io3ValueDec_p" style="text-align: end;">255</p>
+                <p>Binär:</p><p id="io3ValueBin_p" style="text-align: end;">1111 1111</p>                
+            </div>
+            
+            <div id="io3InputWindow_div" class="displayNone">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; align-items: center; justify-items: center;">
+                    <button id="io3Input_button" class="borderBox topLeft bottomLeft lightBlueBg"><p class="arial">Eingabe</p></button>
+                    <input id="io3Input_input" type="text" maxlength="2" class="borderBox topRight bottomRight yellowBg inputFontSize" style="width: 100%; height: 100%; text-align: center;" placeholder="FF">  
+                </div>
+                <p id="io3InputInfo_p" class="yellowBg borderBox rounded arial" style="padding-left: 2%;">Geben Sie eine zweistellige Hexadezimalzahl ein!</p>
+            </div>
+
+
+            <!-- ************************** akku/flags **************************  -->
+            <h1 id="aRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox topLeft bottomLeft">A</h1>
+            <h2 id="aRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox">00</h2>
+            <div id="aLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">A - Akkumulator</p>
+                <p id="aHoverValueDec_p"></p>
+                <p id="aHoverValueBin_p"></p>
+            </div>
+            
+            <div id="flagsContainer_div" class="rectangle3x2 positionAbsolute centered borderBox topRight bottomRight">
+                <h1 id="cFlagLabel_h1">C</h1>
+                <h1 id="pFlagLabel_h1">O</h1>
+                <h1 id="sFlagLabel_h1">S</h1>
+                <h1 id="zFlagLabel_h1">Z</h1>
+                <p id="cFlagValue_p" class="gridChild">0</p>
+                <p id="pFlagValue_p" class="gridChild">0</p>
+                <p id="sFlagValue_p" class="gridChild">0</p>
+                <p id="zFlagValue_p" class="gridChild bottomRight">0</p>
+            </div>
+            <div id="cFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">C - Carry Flag</p>
+            </div>
+            <div id="pFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">O/P - Overflow/Parity Flag</p>
+            </div>
+            <div id="sFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">S - Sign Flag</p>
+            </div>
+            <div id="zFlagHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">Z - Zero Flag</p>
+            </div>
+            
+
+            <div id="movingFlags_div" class="borderBox centered rounded yellowBg displayNone">
+                <p>0</p>
+                <p>0</p>
+                <p>0</p>
+                <p>0</p>
+            </div>
+            <div id="movingFlagsArrow_div" class="alignBg"></div>
+            <div id="cFlagArrow_div" class="alignBg"></div>
+            <div id="checkJumpArrow_div" class="alignBg"></div>
+
+            <!-- ************************** register **************************  -->
+           
+            <h1 id="bRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox topLeft">B</h1>
+            <h2 id="bRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox">00</h2>
+            
+            <h1 id="cRegisterLabel_h1" class="rectangle1x2 positionAbsolute centered borderBox">C</h1>
+            <h2 id="cRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight">00</h2>
+           
+            <h1 id="hlRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">HL</h1>
+            <div id="hlBackground_div" class="rectangle4x2 positionAbsolute"></div>
+            <h2 id="hlRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
+            <h2 id="hlRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+            
+            <h1 id="ixRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">IX</h1>
+            <div id="ixBackground_div" class="rectangle4x2 positionAbsolute"></div>
+            <h2 id="ixRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
+            <h2 id="ixRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+           
+            <h1 id="spRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">SP</h1>
+            <div id="spBackground_div" class="rectangle4x2 positionAbsolute"></div>
+            <h2 id="spRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
+            <h2 id="spRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+           
+            <h1 id="pcRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">PC</h1>
+            <div id="pcBackground_div" class="rectangle4x2 positionAbsolute"></div>
+            <h2 id="pcRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
+            <h2 id="pcRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder">00</h2>
+            
+            <h1 id="zrRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox bottomLeft">ZR</h1>
+            <div id="zrBackground_div" class="rectangle4x2 positionAbsolute bottomRight"></div>
+            <h2 id="zrRegisterValueHi_h2" class="square2x2 positionAbsolute centered borderBox noRightBorder">00</h2>
+            <h2 id="zrRegisterValueLo_h2" class="square2x2 positionAbsolute centered borderBox noLeftBorder bottomRight">00</h2>
+            
+            <div id="bLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">B - Datenregister</p>
+                <p id="bHoverValueDec_p"></p>
+                <p id="bHoverValueBin_p"></p>
+            </div>
+
+            <div id="cLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">C - Datenregister</p>
+                <p id="cHoverValueDec_p"></p>
+                <p id="cHoverValueBin_p"></p>
+            </div>
+
+            <div id="hlLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">HL - Universalregister</p>
+                <p id="hlHoverValueDec_p"></p>
+            </div>
+
+            <div id="ixLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">IX - Indexregister</p>
+                <p id="ixHoverValueDec_p"></p>
+            </div>
+
+            <div id="spLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">SP - Stackpointer</p>
+                <p id="spHoverValueDec_p"></p>
+            </div>
+
+            <div id="pcLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">PC - Program Counter</p>
+                <p id="pcHoverValueDec_p"></p>
+            </div>
+
+            <div id="zrLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">ZR - Zwischenregister</p>
+                <p id="zrHoverValueDec_p"></p>
+            </div>
+
+            <!-- ************************** ALU **************************  -->
+            <h2 id="alu1RegisterValue_h2" class="square2x2 positionAbsolute borderBox centered rounded"></h2>
+            <h2 id="alu2RegisterValue_h2" class="square2x2 positionAbsolute borderBox centered rounded"></h2>
+            <h2 id="aluOutRegisterValue_h2" class="square2x2 positionAbsolute centered rounded"></h2>
+
+
+
+			<!-- ************************** controlunit **************************  -->
+            <p class="rectangle8x2 positionAbsolute centered borderBox topLeft controlUnitLabel">Steuerwerk</p>
+            <h1 id="irRegisterLabel_h1" class="square2x2 positionAbsolute centered borderBox">IR</h1>
+            <h2 id="irRegisterValue_h2" class="square2x2 positionAbsolute centered borderBox topRight">00</h2>
+            <div id="irLabelHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">IR - Befehlsregister</p>
+                <p id="irHoverValueBin_p"></p>
+            </div>
+            
+            <div class="rectangle12x2 positionAbsolute centered borderBox containerAssemblerCommand">
+                <p id="assemblerCommand_p" class="textareaFontSize"></p>
+                <div id="irArrow_div" class="alignBg"></div>
+            </div>
+
+            <div class="rectangle12x4 positionAbsolute centered borderBox bottomRight bottomLeft containerControlUnit2">
+                <div class="containerStepDescription_div centered">
+                    <div id="stepNumberBg_div" class="containerStepNumber centered borderBox rounded">
+                        <p id="stepNumber_p" class="rounded" >0</p>
+                    </div>
+                    <p id="stepDescription_p">Prozessor angehalten</p>
+                </div>
+                <div class="containerDecoderLines centered">
+                    <div></div>
+                    <div class="decoderBits centered">
+                        <h3 id="wrLabel_h3">WR</h3>
+                        <h3 id="rdLabel_h3">RD</h3>
+                        <h3 id="mLabel_h3">M</h3>
+                        <h3 id="ioLabel_h3">IO</h3>
+                        <p id="wrValue_p"></p>
+                        <p id="rdValue_p"></p>
+                        <p id="mValue_p"></p>
+                        <p id="ioValue_p"></p>    
+                    </div>
+                </div>
+            </div>
+            
+
+            <div id="registerArrow_div" class="alignBg"></div>
+            
+            <!-- ************************** DEC **************************  -->
+            <h1 id="decoderLabel_h1" class="rectangle4x2 positionAbsolute centered borderBox topLeft bottomLeft">Decoder</h1>
+            <p id="decDisplay_p" class="rectangle6x2 positionAbsolute centered borderBox topRight bottomRight textareaFontSize"></p>
+
+            <div id="decoderHover_div" class="hoverElement borderBox rounded">
+                <p class="bold">Adressdecoder</p>
+                <p>Ermittelt aus den Steuerleitungen und den Adressleitungen welcher Baustein (ROM, RAM, oder I/O) angesprochen werden soll.</p>
+            </div>
+
+            <div id="wrHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold"><span style="text-decoration: overline;" >WR</span> - Write (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU Daten für die Speicherung an der aktuellen Speicher- oder IO-Adresse bereit.</p>
+            </div>
+            <div id="rdHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold"><span style="text-decoration: overline;" >RD</span> - Read (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, erwartet die CPU Daten von der adressierten Speicher- oder IO-Einheit.</p>
+            </div>
+            <div id="mHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold"><span style="text-decoration: overline;" >MREQ</span> - Meomory Required  (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige Adresse für einen Speicherzugriff bereit.</p>
+            </div>
+            <div id="ioHover_div" class="hoverElement decoderLines_hover borderBox rounded">
+                <p class="bold"><span style="text-decoration: overline;" >IORQ</span> - IO Request (0 - aktiv)</p>
+                <p>Wenn diese Leitung 0 ist, hält die CPU eine gültige 8-Bit Adresse für einen IO-Zugriff bereit<p>
+            </div>
+             <!-- ************************************************** controlPanel *************************************************  -->
+             <div class="playReset centered borderBox rounded">
+                <div id="play_button"           class="button topLeft bottomLeft borderRight alignBg playButton"></div>
+                <div id="reset_button"          class="button topRight bottomRight alignBg"></div>
+             </div>
+
+             <div class="animationType centered borderBox rounded">
+                <div id="slow_button"           class="button topLeft bottomLeft borderRight alignBg buttonPressed"></div>
+                <div id="fast_button"           class="button borderRight alignBg"></div>
+                <div id="noAnimation_button"    class="button topRight bottomRight alignBg"></div>
+             </div>
+
+            
+            <div id="singleStep_button"     class="button square2x2 borderBox positionAbsolute rounded alignBg"></div>
+             
+            <div class="speed centered borderBox rounded">
+                <div id="decrease_button"       class="button topLeft bottomLeft borderRight alignBg"></div>
+                <div class="sliderContainer borderRight centered">
+                    <input type="range" name="animationSpeed" id="speedSlider_input" min="1" max="6" value="3">
+                </div>
+                <div id="increase_button"       class="button topRight bottomRight alignBg"></div>
+            </div>
+
+             <div class="settings gridChild borderBox rounded">
+                <div id="settingsButton_button" class="button borderRight alignBg topLeft bottomLeft"></div>
+                <div id="fullscreenButton_button" class="button alignBg topRight bottomRight"></div>
+            </div>
+
+            <div id="playHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Start/Pause [space]</Button></p>
+                <p>Startet/Pausiert den Programmablauf.</p>
+            </div>
+            <div id="resetHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Reset [r]</Button></p>
+                <p>Setzt die CPU zurück.</p>
+            </div>
+            <div id="slowHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Animationstyp 1 [z]</Button></p>
+                <p>Animation mit Bewegung.</p>
+            </div>
+            <div id="fastHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Animationstyp 2 [u]</Button></p>
+                <p>Animation mit Pfeilen.</p>
+            </div>
+            <div id="fullCommandHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Keine Animation [i]</Button></p>
+                <p>Schneller Ablauf des Programms.</p>
+            </div>
+            <div id="oneCommandHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einzelschritt [t]</Button></p>
+                <p>Ist der Button aktiviert, wird nur ein Befehl ausgeführt.</p>
+            </div>
+            
+            <div id="decreaseHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Langsamer [-]</Button></p>
+                <p>Verringert  die Animationsgeschwindigkeit.</p>
+            </div>
+            <div id="increaseHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Schneller [+]</Button></p>
+                <p>Erhöht die Animationsgeschwindigkeit.</p>
+            </div>
+            
+            <div id="settingsButtonHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Einstellungen [s]</Button></p>
+                <p>Konfiguration von ROM, RAM und IO.</p>
+            </div>
+            <div id="fullscreenButtonHover_div" class="hoverElement borderBox rounded button_hover">
+                <p class="bold">Vollbild [v]</Button></p>
+                <p>Tipp: Bei Smartphones verwenden!</p>
+            </div>
+            
+            
+            <!-- ************************************************** Settings *************************************************  -->
+            <div id="containerSettings_div" class="settingsWindow borderBox rounded">
+                <div class="rounded innerSettings">
+                    <h4 style="position: absolute; top: calc(100%/28*2); left: calc(100%/42*2);">ROM Inhalt:</h4>
+                    <select id="programSelection_select" name="programSelection" class="lightRounded borderBox textareaFontSize displayNone">
+                        <option value="own">Eigenes Programm</option>
+                        <option value="bsp1">Bsp 01 - Erklärung FETCH-Phase</option>
+                        <option value="bsp2">Bsp 02 - Erklärung Ausführungsphase</option>
+                        <option value="bsp3">Bsp 03 - Transportbefehle</option>
+                        <option value="bsp4">Bsp 04 - 2-Byte Befehle</option>
+                        <option value="bsp5">Bsp 05 - Verwendung RAM</option>
+                        <option value="bsp6">Bsp 06 - Registerindirekte Adressierung</option>
+                        <option value="bsp7">Bsp 07 - Verwendung Stack</option>
+                        <option value="bsp8">Bsp 08 - Logische Operation</option>
+                        <option value="bsp9">Bsp 09 - Vergleiche und Verzweigungen</option>
+                        <option value="bsp10">Bsp 10 - I/O mapped Ein-/Ausgabe</option>
+                        <option value="bsp11">Bsp 11 - Memory mapped Ein-/Ausgabe</option>
+                        <option value="bsp12">Bsp 12 - Unterprogramme</option>
+                        <option value="bsp13">Bsp 13 - Multiplikation</option>
+                        <option value="bsp14">Bsp 14 - Reihe</option>
+                        <option value="bsp15">Bsp 15 - Fehlerprogramm 1</option>
+                        <option value="bsp16">Bsp 16 - Fehlerprogramm 2</option>
+                        <option value="bsp17">Bsp 17 - Fehlerprogramm 3</option>
+                        <option value="bsp18">Bsp 18 - Fehlerprogramm 4</option>
+                        <option value="bsp19">Bsp 19 - Beispielprogramm</option>
+                    </select>
+
+                    <div id="programSelection_div" class="customSelect lightRounded borderBox textareaFontSize centeredHorizontal">
+                        <p id="programSelection_p">Wählen Sie ein Programm</p>
+                        <p class="centered">+</p>
+                    </div>
+
+                    <p style="position: absolute; top: calc(100%/28*6); left: calc(100%/42*2);">Linker-Datei:</p>                    
+                    <textarea id="linkerFile_textarea" name="linkerFile" class="lightRounded borderBox textareaFontSize"></textarea>
+
+                    <div class="containerBreakpoints centered">
+                        <div id="breakpointsCheckbox_div" class="whiteBg alignBg borderBox lightRounded">
+                            <input id="breakpointsCheckbox_input" type="checkbox" class="displayNone" >
+                        </div>
+                    </div>
+                    
+                    <div style="position: absolute; top: calc(100%/28*25); left: calc(100%/42*3.2); height: calc(100%/28*1); width: calc(100%/42*5);" class="centeredHorizontal" >
+                        <p>Breakpoints</p>
+                    </div>
+                    
+                    <h4 style="position: absolute; top: calc(100%/28*2); left: calc(100%/42*20);">Konfiguration IO-Bausteine:</h4>
+
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*20);">
+                        <input id="radioIoMapped_input" type="radio" class="radiostyle" name="radioIoMap" value="IO-mapped" checked="checked">
+                        <span class="checkmark borderBox"></span>
+                    </div>
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*4); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*6);">
+                        <p>IO-mapped</p>
+                    </div>
+
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*20);">
+                        <input id="radioMemoryMap_input" type="radio"  class="radiostyle" name="radioIoMap" value="Memory-mapped">
+                        <span class="checkmark borderBox"></span>
+                    </div>
+                    <div class="centeredHorizontal" style="position: absolute; top: calc(100%/28*5); left: calc(100%/42*21); height: calc(100%/28*1); width: calc(100%/42*6);">
+                        <p>Memory-mapped</p>
+                    </div>
+                    
+
+                    <div class="borderBox lightRounded gridChild containerIo1Konfig">
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO1</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
+                        <div class="ioAddressWrapper centered">
+                            <textarea id="io1Address_textarea" maxlength="2" name="io1Address" class="borderBox lightRounded textareaFontSize ioAddressInput">00</textarea>
+                        </div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
+                            <p>Eingang</p>
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
+                            <p>Ausgang</p>
+                        </div>
+                    </div>
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*21);">
+                        <input id="io1InputRadio_input" type="radio" class="radio" name="IO1InOut" value="In" checked="checked">
+                        <span class="checkmark borderBox"></span>
+                    </div>
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*21);">
+                        <input id="io1OutputRadio_input" type="radio" name="IO1InOut" value="Out">
+                        <span class="checkmark borderBox"></span>
+                    </div>
+
+
+                    <div class="borderBox lightRounded gridChild containerIo2Konfig">
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO2</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
+                            <textarea id="io2Address_textarea" maxlength="2" name="io2Address" class="borderBox lightRounded textareaFontSize ioAddressInput">01</textarea>
+                        </div>
+                        
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
+
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
+                            <p>Eingang</p>
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
+                            <p>Ausgang</p>
+                        </div>
+                    </div>
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*28);">
+                        <input id="io2InputRadio_input" type="radio" class="radio" name="IO2InOut" value="In" >
+                        <span class="checkmark borderBox"></span>
+                    </div>
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*28);">
+                        <input id="io2OutputRadio_input" type="radio"  name="IO2InOut" value="Out" checked="checked">
+                        <span class="checkmark borderBox"></span>
+                    </div>
+
+
+
+                    <div class="borderBox lightRounded gridChild containerIo3Konfig">
+                        <div class="centered" style="position: absolute; top: calc(100%/6*0); left: calc(100%/6*2); width: calc(100%/6*2); height: calc(100%/6*1);"><p>IO3</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*0); width: calc(100%/6*3); height: calc(100%/6*1);"><p>Adresse:</p></div>
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*3); width: calc(100%/6*2); height: calc(100%/6*1);">
+                            <textarea id="io3Address_textarea" maxlength="2" name="io3Address"  class="borderBox lightRounded textareaFontSize ioAddressInput">02</textarea>
+                        </div>                        
+                        <div class="centered" style="position: absolute; top: calc(100%/6*2); left: calc(100%/6*5); width: calc(100%/6*1); height: calc(100%/6*1);"><p>h</p></div>
+
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*4); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
+                            <p>Eingang</p>
+                        </div>
+                        <div class="centeredHorizontal" style="position: absolute; top: calc(100%/6*5); left: calc(100%/6*2); width: calc(100%/6*3); height: calc(100%/6*1);">
+                            <p>Ausgang</p>
+                        </div>
+                    </div>
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*11); left: calc(100%/42*35);">
+                        <input id="io3InputRadio_input" type="radio" class="radio" name="IO3InOut" value="In" checked="checked">
+                        <span class="checkmark borderBox"></span>
+                    </div>
+                    <div class="radioContainer centered" style="position: absolute; top: calc(100%/28*12); left: calc(100%/42*35);">
+                        <input id="io3OutputRadio_input" type="radio"  name="IO3InOut" value="Out">
+                        <span class="checkmark borderBox"></span>
+                    </div>
+
+
+                    <h4 style="position: absolute; top: calc(100%/28*15); left: calc(100%/42*20);">Konfiguration RAM:</h4>
+                    <div style="position: absolute; top: calc(100%/28*17); left: calc(100%/42*20); height: calc(100%/28*1); width: calc(100%/42*5);" class="centeredHorizontal">
+                        <p class="textareaFontSize">Adressbereich:</p>
+                    </div>
+                    
+                    <select id="ramAddress_select" name="addressRAM" class="lightRounded borderBox textareaFontSize displayNone" >
+                        <option value="2000">2000h - 3FFFh</option>
+                        <option value="4000">4000h - 5FFFh</option>
+                        <option value="6000">6000h - 7FFFh</option>
+                        <option value="8000">8000h - 9FFFh</option>
+                        <option value="A000">A000h - BFFFh</option>
+                        <option value="C000">C000h - DFFFh</option>
+                        <option value="E000">E000h - FFFFh</option>
+                    </select>
+
+                    <div id="ramSelect_div" class="customSelect lightRounded borderBox textareaFontSize centeredHorizontal">
+                        <p id="ramSelection_p">2000h - 3FFFh</p>
+                        <p class="centered">+</p>
+                    </div>
+
+                    
+                    <div id="errorWindow_div" class="lightRounded borderBox displayNone redBg">
+                        <p class="textareaFontSize redBg" style="align-self: center; color: white;">Fehler in der Konfiguration:</p>
+                        <textarea id="errorMessage_textarea" name="" class="textareaFontSize redBg" style="resize: none;"></textarea>
+                    </div>
+
+                    <button id="toggleTheme_button"   class="lightRounded borderBox" type="button"><p>Design Wechseln</p></button>
+                    <button id="info_button"          class="lightRounded borderBox" type="button"><p>INFO</p></button>
+                    <button id="closeSettings_button" class="lightRounded borderBox" type="button"><p>Übernehmen</p></button>
+                </div>
+            </div>
+            
+
+            <!---------------------------------custom selction options-------------------------------------------->
+            <div id="ramSelectOptions_div" class="ramSelect selectOptions borderBox displayNone lightRounded">
+                <h5 class="option centered">2000h - 3FFFh</h5>
+                <h5 class="option centered">4000h - 5FFFh</h5>
+                <h5 class="option centered">6000h - 7FFFh</h5>
+                <h5 class="option centered">8000h - 9FFFh</h5>
+                <h5 class="option centered">A000h - BFFFh</h5>
+                <h5 class="option centered">C000h - DFFFh</h5>
+                <h5 class="option centered">E000h - FFFFh</h5>
+            </div>
+
+            <div id="programSelectionOptions_div" class="programSelect selectOptions borderBox displayNone lightRounded">
+                <h5 class="option centeredHorizontal">Eigenes Programm</h5>
+                <h5 class="option centeredHorizontal">Bsp 01 - Erklärung FETCH-Phase</h5>
+                <h5 class="option centeredHorizontal">Bsp 02 - Erklärung Ausführungsphase</h5>
+                <h5 class="option centeredHorizontal">Bsp 03 - Transportbefehle</h5>
+                <h5 class="option centeredHorizontal">Bsp 04 - 2-Byte Befehle</h5>
+                <h5 class="option centeredHorizontal">Bsp 05 - Verwendung RAM</h5>
+                <h5 class="option centeredHorizontal">Bsp 06 - Registerindirekte Adressierung</h5>
+                <h5 class="option centeredHorizontal">Bsp 07 - Verwendung Stack</h5>
+                <h5 class="option centeredHorizontal">Bsp 08 - Logische Operation</h5>
+                <h5 class="option centeredHorizontal">Bsp 09 - Vergleiche und Verzweigungen</h5>
+                <h5 class="option centeredHorizontal">Bsp 10 - I/O mapped Ein-/Ausgabe</h5>
+                <h5 class="option centeredHorizontal">Bsp 11 - Memory mapped Ein-/Ausgabe</h5>
+                <h5 class="option centeredHorizontal">Bsp 12 - Unterprogramme</h5>
+                <h5 class="option centeredHorizontal">Bsp 13 - Multiplikation</h5>
+                <h5 class="option centeredHorizontal">Bsp 14 - Reihe</h5>
+                <h5 class="option centeredHorizontal">Bsp 15 - Fehlerprogramm 1</h5>
+                <h5 class="option centeredHorizontal">Bsp 16 - Fehlerprogramm 2</h5>
+                <h5 class="option centeredHorizontal">Bsp 17 - Fehlerprogramm 3</h5>
+                <h5 class="option centeredHorizontal">Bsp 18 - Fehlerprogramm 4</h5>
+                <h5 class="option centeredHorizontal">Bsp 19 - Beispielprogramm</h5>
+            </div>
+           
+            <!-- *****************************infoBox****************************  -->
+            <div id="infoWindow_div" class="rounded centered displayNone">
+                <p>INFO</p>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="./bundle.js">
+
+    </script>
+</body>
+</html>

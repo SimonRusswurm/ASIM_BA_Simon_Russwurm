@@ -2,6 +2,7 @@ const { resolve } = require('path');
 const path = require('path');
 
 module.exports = {
+    devtool: 'eval-source-map',
     entry: './src/index.ts',
     mode: 'production',
     module: {

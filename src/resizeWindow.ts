@@ -1,13 +1,58 @@
-/**
- * The aspect ratio is defined with 50/32.
- */
-
 const containerMC8_div: HTMLElement = document.getElementById('containerMC8_div')!;
 const masterStyle_style: HTMLElement = document.getElementById('masterStyle_style')!;
 const sectionsCountWidth = 50;
 const sectionsCountHeight = 32;
 const aspectRatio = sectionsCountWidth/sectionsCountHeight;
 let lastRatio_number: number = Math.round(window.innerWidth / window.innerHeight * 100) / 100;
+
+export const resizeWindow = (firstTimeResizing: boolean): void => {
+    
+    if(isWindowToResize(firstTimeResizing))
+        changeSizeOfApplicationContainer();
+    return;
+
+}
+
+const isWindowToResize = (firstTimeResizing: boolean): boolean => {
+    const iH: number = window.innerHeight;
+    const iW: number = window.innerWidth;
+    const currentRatio: number = Math.round(iH / iW * 100) / 100;
+
+    if(firstTimeResizing) return true;
+    if(currentRatio === lastRatio_number) return false;
+    if(iH < 200) return false;
+    if(iW < 400) return false;
+    
+    lastRatio_number = currentRatio;
+    return true;
+}
+
+const changeSizeOfApplicationContainer = (): void => {
+    const innerWindowHeight: number = window.innerHeight;
+    const innerWindowWidth: number = window.innerWidth;
+
+    if (calculateAppByWidth(innerWindowWidth, innerWindowHeight)){
+        styleByWidth(innerWindowWidth);
+    } else {
+        styleByHeight(innerWindowHeight);
+    }
+}
+
+const calculateAppByWidth = (windowWidth: number, windowHeight: number): boolean => windowWidth < windowHeight * aspectRatio;
+
+const styleByWidth = (windowWidth: number): void => {
+    containerMC8_div.style.width = `${windowWidth}px`;
+    containerMC8_div.style.height = `${windowWidth/aspectRatio}px`;
+
+    masterStyle_style.innerHTML = getFontSizeStyle(windowWidth, 1) + getBorderRadiusStyle(windowWidth, 1);
+}
+
+const styleByHeight = (windowHeight: number): void => {
+    containerMC8_div.style.width = `${windowHeight*aspectRatio}px`;
+    containerMC8_div.style.height = `${windowHeight}px`;
+    
+    masterStyle_style.innerHTML = getFontSizeStyle(windowHeight, aspectRatio) + getBorderRadiusStyle(windowHeight, aspectRatio);
+}
 
 const getFontSizeStyle = (widthOrHight:number, multiplier: number):string => {
 
@@ -20,6 +65,7 @@ const getFontSizeStyle = (widthOrHight:number, multiplier: number):string => {
     .inputFontSize{font-size: ${widthOrHight / 100 * 3 * multiplier}px;}
     input.romElement{font-size: ${widthOrHight / 100 * 1.2 * multiplier}px;}`;
 }
+
 const getBorderRadiusStyle = (widthOrHight:number, multiplier: number):string => {
     const borderRadius = widthOrHight / 100 * 0.7 * multiplier;
     
@@ -30,37 +76,4 @@ const getBorderRadiusStyle = (widthOrHight:number, multiplier: number):string =>
     .bottomLeft{border-bottom-left-radius: ${borderRadius}px;}
     .bottomRight{border-bottom-right-radius: ${borderRadius}px;}
     .lightRounded{border-radius: ${borderRadius/2}px;}`;
-}
-
-export const resizeWindow = (firstTimeResizing_boolean: boolean): void => {
-    const iH: number = window.innerHeight;
-    const iW: number = window.innerWidth;
-    const currentRatio: number = Math.round(iH / iW * 100) / 100;
-    /**
-     * The function only resizes the application when the screenRatio changes and the screen is larger than a certain width/hight.
-    */
-    if(!firstTimeResizing_boolean){
-        if(currentRatio === lastRatio_number) return
-        if(iH < 200) return
-        if(iW < 400) return
-    }
-
-    lastRatio_number = currentRatio;
-
-    /**
-     * If the application fills the entire width of the screen, the size of the application must be calculated
-     * using the width. And vice versa.
-     */
-    if (iH * sectionsCountWidth / sectionsCountHeight > iW) {
-        containerMC8_div.style.width = `${iW}px`;
-        containerMC8_div.style.height = `${iW/aspectRatio}px`;
-
-        masterStyle_style.innerHTML = getFontSizeStyle(iW, 1) + getBorderRadiusStyle(iW, 1);
-    } else {
-        containerMC8_div.style.width = `${iH*aspectRatio}px`;
-        containerMC8_div.style.height = `${iH}px`;
-        
-        masterStyle_style.innerHTML = getFontSizeStyle(iH, aspectRatio) + getBorderRadiusStyle(iH, aspectRatio);
-    }
-
 }

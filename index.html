@@ -10,6 +10,17 @@
 </head>
 <body class="body">
     <div id="containerMC8_div" class="containerAspectRatio">
+        <div id="loading" style="position: fixed;
+        background-color: var(--light);
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;">
+            <h2>LOADING...</h2>
+        </div>
+        
         <div id="mc8_div" class="alignBg">
             <!-- ************************** ROM **************************  -->
            
@@ -604,7 +615,7 @@
                     <textarea id="linkerFile_textarea" name="linkerFile" class="lightRounded borderBox textareaFontSize"></textarea>
 
                     <div class="containerBreakpoints centered">
-                        <div id="breakpointsCheckbox_div" class="whiteBg alignBg borderBox lightRounded">
+                        <div id="breakpointsCheckbox_div" class="whiteBg alignBg borderBox lightRounded breakpointsMark">
                             <input id="breakpointsCheckbox_input" type="checkbox" class="displayNone" >
                         </div>
                     </div>
@@ -784,6 +795,13 @@
     
     <script type="text/javascript" src="./public/bundle.js">
 
+    </script>
+    <script>
+        document.onreadystatechange = function () {
+        var state = document.readyState
+        if (state === 'complete') {
+            document.getElementById('loading').style.visibility="hidden";
+        }}
     </script>
 </body>
 </html>

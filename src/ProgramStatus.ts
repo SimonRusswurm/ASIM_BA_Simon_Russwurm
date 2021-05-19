@@ -1,4 +1,4 @@
-export class ProgramStatus {
+class ProgramStatus {
     play: boolean;
     pause: boolean;
     reset: boolean;
@@ -7,7 +7,6 @@ export class ProgramStatus {
     animationType_1: boolean;
     animationType_2: boolean;
     noAnimation: boolean;
-
     
     settingsOpened: boolean;
     fullscreenOn: boolean;    
@@ -74,3 +73,5 @@ export class ProgramStatus {
         this.noAnimation = false;
     }
 }
+
+export const programStatus = new ProgramStatus();

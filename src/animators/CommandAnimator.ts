@@ -412,7 +412,7 @@ class CommandAnimator {
         await registerAnimator.registerUpdate('ALU2', mc8Components.B.value);
         await controlUnitAnimator.stepDescriptionUpdate('Addiere die Operanden');
         result = mc8Components.ALU.addBinary(mc8Components.HL.hiValue, mc8Components.B.value + mc8Components.FLAGS.cFlag, false);
-        await aluAnimator.basicAnimation(result, true, true, 'Hl_hi');
+        await aluAnimator.basicAnimation(result, true, true, 'HL_hi');
         // await aluAnimator.hlBcAddition(result, false);
 
         pausingExecutionCheck();

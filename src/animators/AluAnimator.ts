@@ -23,6 +23,7 @@ class AluAnimator {
         this.xCoordinatesElement_2 = [];
         this.yCoordinates = [];
         this.initCoordinates();
+        this.resetMovingAluElements();
 
         this.movingFlags = getHtmlElement('movingFlags_div');
     }

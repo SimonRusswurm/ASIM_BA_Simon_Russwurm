@@ -262,7 +262,6 @@ document.addEventListener('keyup', function (e) {
 export const pausingExecutionCheck = (): void => {
     let check = false;
     
-    
     if(mc8Components.ROM.breakpointPositions[mc8Components.PC.value])
         check = true;
 

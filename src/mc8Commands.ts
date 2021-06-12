@@ -3,11 +3,11 @@ import { commandAnimator } from "./animators/CommandAnimator";
 
 class mc8_command {
     assemblerNotation: string;
-    machineCommand: number;
+    opCode: number;
     animationFunction: Function;
     constructor(assemblerNotation: string, machineCommand: number, animationFunction: any) {
         this.assemblerNotation = assemblerNotation;
-        this.machineCommand = machineCommand;
+        this.opCode = machineCommand;
         this.animationFunction = animationFunction;
     }
 

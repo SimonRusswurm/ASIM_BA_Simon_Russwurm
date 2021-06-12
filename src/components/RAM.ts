@@ -5,16 +5,14 @@ import { convertNumberToHex_2digits, convertNumberToHex_4digits } from "../numbe
 
 
 export class Ram {
-    startAddress: number;
-    size: number;
-    firstVariableCellPosition: number;
-    lastVariableCellPosition: number;
-    integerCells: Array <number> ;
-    htmlCells: Array <HTMLParagraphElement>;
-    middleRamLabel_p: HTMLElement;
-    middleRamLabel_div: HTMLElement;
-    
-
+    public startAddress: number;
+    public size: number;
+    private firstVariableCellPosition: number;
+    private lastVariableCellPosition: number;
+    private integerCells: Array <number> ;
+    private htmlCells: Array <HTMLParagraphElement>;
+    private middleRamLabel_p: HTMLElement;
+    private middleRamLabel_div: HTMLElement;
 
     constructor() {
         this.middleRamLabel_div = getHtmlElement('middleRamLabel_div');
@@ -28,7 +26,7 @@ export class Ram {
         this.appendHtmlCellsToDOM();
     }
 
-    createRamCells(): Array <HTMLParagraphElement> {
+    private createRamCells(): Array <HTMLParagraphElement> {
         let rowCount = 0;
         const cellContainer: Array<HTMLParagraphElement> = [];
 
@@ -57,30 +55,21 @@ export class Ram {
         return cellContainer;
     }
 
-    appendHtmlCellsToDOM(): void {
+    private appendHtmlCellsToDOM(): void {
         this.htmlCells.forEach(element => {
             animationWindow.mc8_div.appendChild(element);
         });
     }
 
-    reset(): void {
-        this.integerCells.fill(255);
-        this.htmlCells.forEach((element,index) => {
-            element.textContent = 'FF';
-            if(index >= this.firstVariableCellPosition && index <= this.lastVariableCellPosition)
-                element.textContent = '';       
-        });
-    }
-
-    reduceToRange0to2000h(address: number): number {
+    private reduceToRange0to2000h(address: number): number {
         return address - Math.floor(address / 8192) * 8192;
     }
 
-    getValue(address: number): number {
+    public getValueFrom(address: number): number {
         return this.integerCells[this.reduceToRange0to2000h(address)];
     }
 
-    updateElement(address: number, value: number): void {
+    public updateElement(address: number, value: number): void {
         address = this.reduceToRange0to2000h(address);
 
         this.integerCells[address] = value;
@@ -97,7 +86,7 @@ export class Ram {
         }
     }
 
-    updateVariableCells(address: number): void {
+    public updateVariableCells(address: number): void {
         const reducedAddress = this.reduceToRange0to2000h(address);
 
         if (convertNumberToHex_4digits(reducedAddress).slice(0, -1) !== this.middleRamLabel_p.textContent!.slice(0, -1)) {
@@ -109,7 +98,7 @@ export class Ram {
         }
     }
 
-    changeVariableRange(address: number): void {
+    private changeVariableRange(address: number): void {
         const reducedAddress = this.reduceToRange0to2000h(address);
 
         this.middleRamLabel_div.classList.remove('ellipses');
@@ -122,7 +111,7 @@ export class Ram {
         }
     }
 
-    removeVariableCellsContent(): void{
+    private removeVariableCellsContent(): void{
         this.middleRamLabel_div.classList.add('ellipses');
         this.middleRamLabel_div.classList.remove('lightYellowBg');
         this.middleRamLabel_p.textContent = '';
@@ -131,7 +120,7 @@ export class Ram {
         }
     }
 
-    getRamElementId(address: number = 0): string {
+    public getRamElementId(address: number = 0): string {
         address = this.reduceToRange0to2000h(address);
 
         if(address < this.firstVariableCellPosition){
@@ -144,5 +133,14 @@ export class Ram {
         else{
             return this.htmlCells[address%16+this.firstVariableCellPosition].id;
         }
+    }
+
+    public reset(): void {
+        this.integerCells.fill(255);
+        this.htmlCells.forEach((element,index) => {
+            element.textContent = 'FF';
+            if(index >= this.firstVariableCellPosition && index <= this.lastVariableCellPosition)
+                element.textContent = '';       
+        });
     }
 }

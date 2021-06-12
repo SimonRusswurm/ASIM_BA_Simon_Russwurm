@@ -35,8 +35,6 @@ class settingsWindow {
     private errorWindow_div: HTMLDivElement;
     private errorMessage_textarea: HTMLTextAreaElement;
 
-
-
     constructor() {
         this.containerSettings = <HTMLDivElement>getHtmlElement('containerSettings_div');
         
@@ -526,16 +524,16 @@ const updateProgram = (): void => {
 
 const updateIoClasses = (): void => {
     if (radioIoMapped_input.checked) {
-        IO1.ioMapped_boolean = true;
-        IO2.ioMapped_boolean = true;
-        IO3.ioMapped_boolean = true;
+        IO1.isIoMapped = true;
+        IO2.isIoMapped = true;
+        IO3.isIoMapped = true;
         io1Address_textarea.maxLength = 2;
         io2Address_textarea.maxLength = 2;
         io3Address_textarea.maxLength = 2;
     } else {
-        IO1.ioMapped_boolean = false;
-        IO2.ioMapped_boolean = false;
-        IO3.ioMapped_boolean = false;
+        IO1.isIoMapped = false;
+        IO2.isIoMapped = false;
+        IO3.isIoMapped = false;
         io1Address_textarea.maxLength = 4;
         io2Address_textarea.maxLength = 4;
         io3Address_textarea.maxLength = 4;

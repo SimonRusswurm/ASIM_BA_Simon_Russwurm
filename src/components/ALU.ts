@@ -1,18 +1,21 @@
 import { getHtmlElement } from "../utils";
 import { convertNumberToBinaryArray, convertBinaryToNumber, } from '../numberManipulations';
-import { Flags, Register_x2 } from './RegisterClasses';
+import { Flags, Register_x2} from './RegisterClasses';
 
 export class Alu {
-    FLAGS: Flags;
-    operandRegister1 = new Register_x2(getHtmlElement('alu1RegisterValue_h2'));
-    operandRegister2 = new Register_x2(getHtmlElement('alu2RegisterValue_h2'));
-    resultRegister = new Register_x2(getHtmlElement('aluOutRegisterValue_h2'));
+    public FLAGS: Flags;
+    public operandRegister1: Register_x2;
+    public operandRegister2: Register_x2;
+    public resultRegister: Register_x2;
 
-    constructor(FLAGS_class: Flags){
-        this.FLAGS = FLAGS_class;
+    constructor(flags: Flags){
+        this.FLAGS = flags;
+        this.operandRegister1 = new Register_x2(getHtmlElement('alu1RegisterValue_h2'));
+        this.operandRegister2 = new Register_x2(getHtmlElement('alu2RegisterValue_h2'));
+        this.resultRegister = new Register_x2(getHtmlElement('aluOutRegisterValue_h2'));
     };
 
-    setFlags(resultValue: number, binaryResult: number[], carryArray: number[], cFlag: number, zFlag: number, setP: number, vFlag: number, sFlag: number): void{
+    private setFlags(resultValue: number, binaryResult: number[], carryArray: number[], cFlag: number, zFlag: number, pFlag: number, vFlag: number, sFlag: number): void{
 
         //carry flag
         if (cFlag) {
@@ -39,7 +42,7 @@ export class Alu {
         }
     
         //parity flag
-        if (setP) {
+        if (pFlag) {
             let cnt = 0;
             for (let i = 0; i < binaryResult.length; i++) {
                 if (binaryResult[i])
@@ -61,7 +64,7 @@ export class Alu {
         }
     }
 
-    invertBinaryArray(binaryArray: number[]): number[] {
+    private invertBinaryArray(binaryArray: number[]): number[] {
         for (let i = 0; i < binaryArray.length; i++) {
             if (binaryArray[i] === 0)
                 binaryArray[i] = 1;
@@ -71,7 +74,7 @@ export class Alu {
         return binaryArray;
     }
 
-    addThreeBinaryNumbers(number1: number, number2: number, number3: number): number[]{
+    private addThreeBinaryNumbers(number1: number, number2: number, number3: number): number[]{
         const sum = number1 + number2 + number3;
     
         if(sum === 0) return [0,0];
@@ -81,7 +84,7 @@ export class Alu {
         throw Error('NoBinaryNumbers');
     }
 
-    addBinary(firstSummand: number, secondSummand: number, isReplacementAddition: boolean): number{
+    public addBinary(firstSummand: number, secondSummand: number, isReplacementAddition: boolean): number{
         let firstSummandBinaryArray: number[] = convertNumberToBinaryArray(firstSummand);
         let secondSummandBinaryArray: number[] = convertNumberToBinaryArray(secondSummand);
         let carryBinaryArray: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -115,20 +118,19 @@ export class Alu {
         return sum;
     }
 
-
-    incBinary = (value: number): number => {
+    public incBinary = (value: number): number => {
         const result: number = this.addBinary(value, 1, false);
         this.FLAGS.cFlag = '-';
         return result;
     }
 
-    decBinary(value: number): number {
+    public decBinary(value: number): number {
         const result: number = this.addBinary(value, 1, true);
         this.FLAGS.cFlag = '-';
         return result;
     }
 
-    andBinary(value1: number, value2: number): number {
+    public andBinary(value1: number, value2: number): number {
         let value1_bin: number[] = convertNumberToBinaryArray(value1);
         let value2_bin: number[] = convertNumberToBinaryArray(value2);
         let result_bin: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -148,7 +150,7 @@ export class Alu {
         return result;
     }
 
-    orBinary(value1: number, value2: number): number {
+    public orBinary(value1: number, value2: number): number {
         let value1_bin: number[] = convertNumberToBinaryArray(value1);
         let value2_bin: number[] = convertNumberToBinaryArray(value2);
         let result_bin: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -167,7 +169,7 @@ export class Alu {
         return result;
     }
 
-    xorBinary(value1: number, value2: number): number {
+    public xorBinary(value1: number, value2: number): number {
         let value1_bin: number[] = convertNumberToBinaryArray(value1);
         let value2_bin: number[] = convertNumberToBinaryArray(value2);
         let result_bin: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -187,7 +189,7 @@ export class Alu {
         return result;
     }
 
-    shlBinary(value: number): number {
+    public shlBinary(value: number): number {
         let value_bin: number[] = convertNumberToBinaryArray(value);
         let result: number = 0;
         let firstBit: number = value_bin[0];
@@ -204,7 +206,7 @@ export class Alu {
         return result;
     }
 
-    shrBinary(value: number): number {
+    public shrBinary(value: number): number {
         let value_bin: number[] = convertNumberToBinaryArray(value);
         let result: number = 0;
         let lastBit: number = value_bin[7];
@@ -221,7 +223,7 @@ export class Alu {
         return result;
     }
 
-    rclBinary(value: number): number {
+    public rclBinary(value: number): number {
         let value_bin: number[] = convertNumberToBinaryArray(value);
         let result: number = 0;
     
@@ -244,7 +246,7 @@ export class Alu {
         return result;
     }
 
-    rolBinary(value: number): number {
+    public rolBinary(value: number): number {
         let value_bin: number[] = convertNumberToBinaryArray(value);
         let result: number = 0;
     
@@ -267,7 +269,7 @@ export class Alu {
         return result;
     }
 
-    rcrBinary(value: number): number {
+    public rcrBinary(value: number): number {
         let value_bin: number[] = convertNumberToBinaryArray(value);
         let result: number = 0;
     
@@ -288,7 +290,7 @@ export class Alu {
         return result;
     }
 
-    rorBinary(value: number): number {
+    public rorBinary(value: number): number {
         let value_bin: number[] = convertNumberToBinaryArray(value);
         let result: number = 0;
     

@@ -1,36 +1,36 @@
 import { getHtmlElement } from "../utils";
 import { Ram } from "./RAM";
-import { Flags, IO, Pc_class, Register, Register_x2, Register_x4 } from "./RegisterClasses";
+import { Flags, IO, ProgramCounter, Register, Register_x2, Register_x4 } from "./RegisterClasses";
 import { Rom } from "./ROM";
 import { Decoder } from "./Decoder";
 import { Alu } from "./ALU"
 import { ControlUnit } from "./controlUnit";
 
 class Mc8Components {
-    ROM: Rom;
-    RAM: Ram;
-    IO1: IO;
-    IO2: IO;
-    IO3: IO;
+    private static INSTANCE: Mc8Components;
+    public ROM: Rom;
+    public RAM: Ram;
+    public IO1: IO;
+    public IO2: IO;
+    public IO3: IO;
 
-    FLAGS: Flags;
-    ALU: Alu;
+    public FLAGS: Flags;
+    public ALU: Alu;
 
-    CONTROL_UNIT: ControlUnit;
+    public CONTROL_UNIT: ControlUnit;
 
-    A: Register_x2;
-    B: Register_x2;
-    C: Register_x2;
+    public A: Register_x2;
+    public B: Register_x2;
+    public C: Register_x2;
+    public HL: Register_x4;
+    public IX: Register_x4;
+    public SP: Register_x4;
+    public ZR: Register_x4;
+    public PC: Register_x4;
 
-    HL: Register_x4;
-    IX: Register_x4;
-    SP: Register_x4;
-    ZR: Register_x4;
-    PC: Register_x4;
+    public DECODER: Decoder;
 
-    DECODER: Decoder;
-
-    constructor(){
+    private constructor(){
         this.ROM = new Rom();
         this.RAM = new Ram();
     
@@ -51,15 +51,22 @@ class Mc8Components {
         this.IX = new Register_x4(getHtmlElement('ixBackground_div'), getHtmlElement('ixRegisterValueHi_h2'), getHtmlElement('ixRegisterValueLo_h2'));
         this.SP = new Register_x4(getHtmlElement('spBackground_div'), getHtmlElement('spRegisterValueHi_h2'), getHtmlElement('spRegisterValueLo_h2'));
         this.ZR = new Register_x4(getHtmlElement('zrBackground_div'), getHtmlElement('zrRegisterValueHi_h2'), getHtmlElement('zrRegisterValueLo_h2'));
-        this.PC = new Pc_class(getHtmlElement('pcBackground_div'), getHtmlElement('pcRegisterValueHi_h2'), getHtmlElement('pcRegisterValueLo_h2'),this.ROM,this.RAM);
+        this.PC = new ProgramCounter(getHtmlElement('pcBackground_div'), getHtmlElement('pcRegisterValueHi_h2'), getHtmlElement('pcRegisterValueLo_h2'),this.ROM,this.RAM);
         
         this.DECODER = new Decoder(this.RAM, this.IO1, this.IO2, this.IO3);
     }
 
-    getRegisterByName(registerName: string): Register{
-        registerName = registerName.replace('_lo', '').replace('_hi', '');
+    public static getInstance(){
+        if(!Mc8Components.INSTANCE){
+            Mc8Components.INSTANCE = new Mc8Components();
+        }
+        return Mc8Components.INSTANCE;
+    }
+
+    public getRegisterBy(name: string): Register{
+        name = name.replace('_lo', '').replace('_hi', '');
     
-        switch (registerName) {
+        switch (name) {
             case 'IO1':
                 return this.IO1;
             case 'IO2':
@@ -93,11 +100,11 @@ class Mc8Components {
             case 'FLAGS':
                 return this.FLAGS;
             default:
-                throw new Error(`no such Register: ${registerName}`);
+                throw new Error(`no such Register: ${name}`);
         }
     }
 
-    initComponents() {
+    public initComponents(): void{
         this.IO1.update(255);
         this.IO2.update(255);
         this.IO3.update(255);
@@ -110,8 +117,7 @@ class Mc8Components {
         this.PC.update(0);
         this.ZR.update(0);
         this.CONTROL_UNIT.reset();
-        this.FLAGS.updateDec(0, 0, 0, 0);
-        this.FLAGS.updateDOM();
+        this.FLAGS.update(0);
         this.DECODER.resetDOM();
         this.RAM.updateVariableCells(0);
         this.ALU.operandRegister1.htmlElement.textContent = '';
@@ -120,4 +126,4 @@ class Mc8Components {
     }
 }
 
-export const mc8Components = new Mc8Components();
+export const mc8Components = Mc8Components.getInstance();

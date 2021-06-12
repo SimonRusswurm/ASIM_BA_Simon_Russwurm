@@ -4,11 +4,11 @@ import { Register_x2 } from "./RegisterClasses";
 
 
 export class ControlUnit {
-    IR: Register_x2;
-    assemblerCommand: HTMLParagraphElement;
-    stepNumber: HTMLParagraphElement;
-    stepNumberBackground: HTMLDivElement;
-    stepDescription: HTMLParagraphElement;
+    public IR: Register_x2;
+    public assemblerCommand: HTMLParagraphElement;
+    public stepNumber: HTMLParagraphElement;
+    public stepNumberBackground: HTMLDivElement;
+    public stepDescription: HTMLParagraphElement;
 
     constructor(){
         this.IR = new Register_x2(getHtmlElement('irRegisterValue_h2'));
@@ -18,26 +18,27 @@ export class ControlUnit {
         this.stepDescription = <HTMLParagraphElement>getHtmlElement('stepDescription_p');
     }
 
-    updateStepDescription(description: string): void{
+    public updateStepDescription(description: string): void{
         this.stepDescription.textContent = description;
     }
 
-    increaseStepNumber(): void {
+    public increaseStepNumber(): void {
         this.stepNumber.textContent = `${Number(this.stepNumber.textContent)+1}`;
     }
 
-    updateAssemblerCommand(): void {
+    public updateAssemblerCommand(): void {
         for (let i = 0; i < mc8Commands.length; i++) {
-            if (mc8Commands[i].machineCommand === this.IR.value) {
+            if (mc8Commands[i].opCode === this.IR.value) {
                 this.assemblerCommand.textContent = mc8Commands[i].assemblerNotation;
                 return;
             }
         }
         this.assemblerCommand.textContent = 'Befehl unbekannt';
+        this.assemblerCommand.parentElement!.style.backgroundColor = '#ff1930';
         throw Error('Unknown command');
     }
 
-    reset(): void {
+    public reset(): void {
         this.IR.update(0);
         this.stepNumber.textContent = '0';
         this.stepDescription.textContent = 'Prozessor angehalten';

@@ -17,15 +17,15 @@ const breakpointsCheckbox_input: HTMLInputElement = <HTMLInputElement>getHtmlEle
 let ID_COUNTER = 0;
 
 class HtmlCell{
-    htmlElement: HTMLInputElement;
-    allocatedIndex: number;
+    public htmlElement: HTMLInputElement;
+    public allocatedIndex: number;
 
     constructor(allocatedIndex = -1){
         this.htmlElement = document.createElement('input');
         this.allocatedIndex = allocatedIndex;
     }
 
-    setImmutableCellProperties(): void {
+    public setImmutableCellProperties(): void {
         this.htmlElement.value = 'FF';
         this.htmlElement.readOnly = true;
         this.htmlElement.maxLength = 2;
@@ -34,7 +34,7 @@ class HtmlCell{
         ID_COUNTER++;
     }
 
-    setVariableCellProperties(): void {
+    public setVariableCellProperties(): void {
         this.htmlElement.value = '';
         this.htmlElement.readOnly = true;
         this.htmlElement.maxLength = 2;
@@ -43,42 +43,35 @@ class HtmlCell{
         ID_COUNTER++;
     }
 
-    resetImmutableCellProperties(): void {
+    public resetImmutableCellProperties(): void {
         this.htmlElement.value = 'FF';
         this.htmlElement.readOnly = true;
         this.htmlElement.classList.remove('blueText', 'breakpoint');
     }
 
-    resetVariableCellProperties(): void {
+    public resetVariableCellProperties(): void {
         this.htmlElement.value = '';
         this.htmlElement.readOnly = true;
         this.htmlElement.classList.remove('blueText', 'breakpoint');
         this.allocatedIndex = -1;
     }
 
-    update(value: number): void {
+    public update(value: number): void {
         this.htmlElement.value = convertNumberToHex_2digits(value);
     }
-
-    
-    
 }
 
 export class Rom {
-    cellCount: number;
-    integerCells: Array <number>;
-    opCommandPositions: Array < boolean >;
-    breakpointPositions: Array < boolean >;
-
-    immutableHtmlCells: Array <HtmlCell>;
-    variableHtmlCells: Array <HtmlCell>;
-    immutableHtmlCellsCount: number;
-    variableHtmlCellsCount: number;
-
-    ID_COUNTER: number;
+    private cellCount: number;
+    private integerCells: Array <number>;
+    private opCommandPositions: Array <boolean>;
+    public breakpointPositions: Array <boolean>;
+    private immutableHtmlCellsCount: number;
+    private variableHtmlCellsCount: number;
+    private immutableHtmlCells: Array <HtmlCell>;
+    private variableHtmlCells: Array <HtmlCell>;
 
     constructor(){
-        this.ID_COUNTER = 0;
         this.cellCount = 8192;
         this.integerCells = new Array(this.cellCount).fill(255);
         this.opCommandPositions = new Array(this.cellCount).fill(false);
@@ -93,7 +86,7 @@ export class Rom {
         this.appendCellsToDOM();
     }
 
-    appendCellsToDOM(){
+    private appendCellsToDOM(){
         this.immutableHtmlCells.forEach(cell => {
             mc8_div.appendChild(cell.htmlElement);
         });
@@ -102,7 +95,7 @@ export class Rom {
         });
     }
 
-    createImmutableHtmlCells(): Array<HtmlCell>{
+    private createImmutableHtmlCells(): Array<HtmlCell>{
         const cellContainer: Array <HtmlCell> = [];
 
         for(let i= 0; i < this.immutableHtmlCellsCount; i++){
@@ -116,7 +109,7 @@ export class Rom {
         return cellContainer;
     }
 
-    createVariableHtmlCells(): Array<HtmlCell>{
+    private createVariableHtmlCells(): Array<HtmlCell>{
         const cellContainer: Array <HtmlCell> = [];
 
         for(let i = 0; i < this.variableHtmlCellsCount; i++){
@@ -130,13 +123,13 @@ export class Rom {
         return cellContainer;
     }
 
-    addAllListenerToHtmlCell(cell: HtmlCell): void {
+    private addAllListenerToHtmlCell(cell: HtmlCell): void {
         this.addDoubleClickListenerTo(cell);
         this.addClickListenerTo(cell);
         this.addHoverListenersTo(cell);
     }
 
-    addDoubleClickListenerTo(cell: HtmlCell): void{
+    private addDoubleClickListenerTo(cell: HtmlCell): void{
         cell.htmlElement.addEventListener('dblclick', function(){
             if(cell.allocatedIndex !== -1){
                 programStatus.romIsEdited = true;
@@ -145,7 +138,7 @@ export class Rom {
         });
     }
 
-    addClickListenerTo(cell: HtmlCell): void{
+    private addClickListenerTo(cell: HtmlCell): void{
         const self = this;
         cell.htmlElement.addEventListener('click', function(){
             if(self.opCommandPositions[cell.allocatedIndex] && breakpointsCheckbox_input.checked){
@@ -161,7 +154,7 @@ export class Rom {
         });
     }
 
-    addHoverListenersTo(cell: HtmlCell): void{
+    private addHoverListenersTo(cell: HtmlCell): void{
         const self = this;
         cell.htmlElement.addEventListener('mouseover', function (){
             if(self.opCommandPositions[cell.allocatedIndex] && breakpointsCheckbox_input.checked){
@@ -175,7 +168,7 @@ export class Rom {
         });
     }
 
-    updateHoverInfoBoxFromIntegerCellAt(index: number){
+    private updateHoverInfoBoxFromIntegerCellAt(index: number): void{
         this.updateHoverInfoBoxPosition(index);
 
         if(this.integerCells[index] === 221){
@@ -189,7 +182,7 @@ export class Rom {
         }
 
         for(let i=0; i<mc8Commands.length; i++){
-            if(mc8Commands[i].machineCommand === this.integerCells[index]){
+            if(mc8Commands[i].opCode === this.integerCells[index]){
                 breakpointsLabel_p.textContent = mc8Commands[i].assemblerNotation;
                 return;
             } 
@@ -198,7 +191,7 @@ export class Rom {
         breakpointsLabel_p.textContent = 'Unbekannt';
     }
 
-    updateHoverInfoBoxPosition(index: number){
+    private updateHoverInfoBoxPosition(index: number): void{
         if(index >= this.immutableHtmlCellsCount)
             breakpointHover_div.style.top = `${(100/32)*27}%`;
         else if(index < this.immutableHtmlCellsCount/2)
@@ -207,7 +200,7 @@ export class Rom {
             breakpointHover_div.style.top = `${100/32*Math.floor(index/8+2-3)}%`;
     }
 
-    setTwoByteIxInfoText(index: number){
+    private setTwoByteIxInfoText(index: number): void{
         switch (this.integerCells[index+1]) {
             case 33:
                 breakpointsLabel_p.textContent = 'MOV IX, dat_16';
@@ -239,7 +232,7 @@ export class Rom {
         }
     }
 
-    setTwoByteShiftInfoText(index: number){
+    private setTwoByteShiftInfoText(index: number){
         switch (this.integerCells[index+1]) {
             case 39:
                 breakpointsLabel_p.textContent = 'SHL';
@@ -255,13 +248,13 @@ export class Rom {
         }
     }
 
-    loadCommandsFromLinkerFile(){
+    public loadCommandsFromLinkerFile(): void{
         this.resetCells();
-        this.writeLinkerFileToIntegerCellsAndUpdateOpCommandPositions();
+        this.writeLinkerFileToIntegerCells();
         this.updateImmutableHtmlCellsFromIntegerCells();
     }
 
-    resetCells(): void {
+    private resetCells(): void {
         this.integerCells.fill(255);
         this.opCommandPositions.fill(false);
         this.breakpointPositions.fill(false);
@@ -270,13 +263,13 @@ export class Rom {
         this.resetVariableHtmlCells();
     }
 
-    resetImmutableHtmlCells(){
+    private resetImmutableHtmlCells() :void{
         this.immutableHtmlCells.forEach(cell => {
             cell.resetImmutableCellProperties();
         });
     }
 
-    resetVariableHtmlCells() {
+    private resetVariableHtmlCells(): void{
         lastRomLabel_div.classList.add('ellipses');
         lastRomLabel_div.classList.remove('lightYellowBg');
         lastRomLabel_p.textContent = '';
@@ -286,7 +279,7 @@ export class Rom {
         });
     }
 
-    writeLinkerFileToIntegerCellsAndUpdateOpCommandPositions(){
+    private writeLinkerFileToIntegerCells(): void{
         let linkerString = linkerFile_textarea.value.replace(/\r\n|\n|\r/gm, '');
         let dataLength = 0;
         let address = 0;
@@ -310,7 +303,7 @@ export class Rom {
         }
     }
 
-    updateImmutableHtmlCellsFromIntegerCells() {
+    private updateImmutableHtmlCellsFromIntegerCells(): void{
         for (let i = 0; i < this.immutableHtmlCells.length; i++) {
             this.immutableHtmlCells[i].update(this.integerCells[i]);
             if (breakpointsCheckbox_input.checked && this.opCommandPositions[i])
@@ -318,7 +311,7 @@ export class Rom {
         }
     }
 
-    updateVariableHtmlCells(address: number): void {
+    public updateVariableHtmlCells(address: number): void {
         if (convertNumberToHex_4digits(address).slice(0, -1) !== lastRomLabel_p.textContent!.slice(0, -1)) {
             if (address >= this.immutableHtmlCellsCount && address < this.cellCount) {
                 this.setVariableHtmlCellsDependingOn(address);
@@ -328,7 +321,7 @@ export class Rom {
         }
     }
 
-    setVariableHtmlCellsDependingOn(address: number){
+    private setVariableHtmlCellsDependingOn(address: number): void{
         const roundedAddress: number = address - address % 16;
 
         lastRomLabel_div.classList.remove('ellipses');
@@ -351,7 +344,7 @@ export class Rom {
         }
     }
 
-    updateIntegerCellsFromDOM() {
+    public updateIntegerCellsFromDOM(): void{
         for (let i = 0; i < this.immutableHtmlCells.length; i++) {
             const newHexValue = this.immutableHtmlCells[i].htmlElement.value;
 
@@ -378,7 +371,7 @@ export class Rom {
         }
     }
 
-    getCellId(address: number): string {
+    public getCellId(address: number): string {
         if(address >= this.immutableHtmlCellsCount){
             return this.variableHtmlCells[address%16].htmlElement.id;
         }
@@ -386,7 +379,7 @@ export class Rom {
         return this.immutableHtmlCells[address].htmlElement.id;
     }
 
-    getCellValue(address: number): number {
+    public getCellValue(address: number): number {
         return this.integerCells[address];
     }
 }

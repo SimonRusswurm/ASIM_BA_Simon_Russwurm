@@ -40,15 +40,15 @@ class AluAnimator {
         }
     }
 
-    async loadOperands (register1: string, register2: string): Promise<any> {
-        const reg1_class = mc8Components.getRegisterByName(register1);
-        const reg2_class = mc8Components.getRegisterByName(register2);
+    async loadOperands (registerName1: string, registerName2: string): Promise<any> {
+        const reg1_class = mc8Components.getRegisterBy(registerName1);
+        const reg2_class = mc8Components.getRegisterBy(registerName2);
     
         await controlUnitAnimator.stepDescriptionUpdate('Hole den 1. Operanden');
-        await transferAnimator.transfer(register1, 'ALU1', reg1_class.value);
+        await transferAnimator.transfer(registerName1, 'ALU1', reg1_class.value);
         await registerAnimator.registerUpdate('ALU1', reg1_class.value);
         await controlUnitAnimator.stepDescriptionUpdate('Hole den 2. Operanden');
-        await transferAnimator.transfer(register2, 'ALU2', reg2_class.value);
+        await transferAnimator.transfer(registerName2, 'ALU2', reg2_class.value);
         await registerAnimator.registerUpdate('ALU2', reg2_class.value);
     }
 

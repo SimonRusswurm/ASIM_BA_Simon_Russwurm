@@ -6,7 +6,7 @@ import { mc8Components } from './components/Mc8Components';
 import { controlUnitAnimator } from './animators/ControlUnitAnimator';
 import { transferAnimator } from './animators/TransferAnimator';
 import { registerAnimator } from './animators/RegisterAnimator';
-
+import { addHoverListeners } from './hoverPopUps';
 
 window.addEventListener('DOMContentLoaded', function () {
     resizeWindow(true);
@@ -17,6 +17,8 @@ window.addEventListener('DOMContentLoaded', function () {
 window.addEventListener('resize', function () {
     resizeWindow(false);
 });
+
+addHoverListeners();
 
 export class globalVars {
     public static IDLE_TIME: number = 500;
@@ -38,38 +40,38 @@ const loadNextCommand = async() => {
 
 const pushNextCommand = () => {
     for (let i = 0; i < mc8Commands.length; i++) {
-        if (mc8Commands[i].machineCommand === mc8Components.CONTROL_UNIT.IR.value)
-            commandsToBeProcessed.push(mc8Commands[i].animationFunction);
+        if (mc8Commands[i].opCode === mc8Components.CONTROL_UNIT.IR.value)
+            commandsToProcess.push(mc8Commands[i].animationFunction);
     }
 
-    commandsToBeProcessed.push(loadNextCommand);
+    commandsToProcess.push(loadNextCommand);
     return;
 }
 
-let commandsToBeProcessed: Array<Function> = [loadNextCommand];
+let commandsToProcess: Array<Function> = [loadNextCommand];
 
 
 export const resetAnimation = () => {
-    commandsToBeProcessed = [loadNextCommand];
+    commandsToProcess = [loadNextCommand];
     mc8Components.initComponents();
     // movingObject_h2.classList.remove('displayGrid');
 }
 
-
 export const startAnimation = async (): Promise < any > => {
     let i = 0;
     while (true) {
-        if (commandsToBeProcessed[i] === undefined) {
+        if (commandsToProcess[i] === undefined) {
             return false;
         }
         try {
-            await checkPlayPressed();
-            await commandsToBeProcessed[i]();
+            // await checkPlayPressed();
+            await commandsToProcess[i]();
         } catch (e) {
             if (!programStatus.reset) {
                 programStatus.setPause();
             }
             console.error(e);
+            
             return false;
         }
         i++;

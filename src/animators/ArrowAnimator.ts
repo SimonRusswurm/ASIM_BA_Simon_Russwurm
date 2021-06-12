@@ -69,12 +69,12 @@ class ArrowAnimator {
     async displayAluCarryArrow(): Promise <any> {
         if(!programStatus.noAnimation){
             cFlagArrow_div.classList.add('cFlag_arrow');
-            mc8Components.FLAGS.c_htmlElement.classList.add('yellowBg', 'borderBox');
+            mc8Components.FLAGS.cHtml.classList.add('yellowBg', 'borderBox');
             try {
                 await sleepForIDLETIME();
             } finally {
                 cFlagArrow_div.classList.remove('cFlag_arrow');
-                mc8Components.FLAGS.c_htmlElement.classList.remove('yellowBg', 'borderBox');
+                mc8Components.FLAGS.cHtml.classList.remove('yellowBg', 'borderBox');
             }
         }
     }
@@ -96,13 +96,13 @@ class ArrowAnimator {
     private getFlagHtmlElementBy(flagName: string): HTMLElement {
         switch (flagName) {
             case 'cFlag':
-                return mc8Components.FLAGS.c_htmlElement;
+                return mc8Components.FLAGS.cHtml;
             case 'zFlag':
-                return mc8Components.FLAGS.z_htmlElement;
+                return mc8Components.FLAGS.zHtml;
             case 'sFlag':
-                return mc8Components.FLAGS.s_htmlElement;
+                return mc8Components.FLAGS.sHtml;
             case 'pFlag':
-                return mc8Components.FLAGS.p_htmlElement;        
+                return mc8Components.FLAGS.pHtml;        
             default:
                 throw Error('No Such flagName');
         }

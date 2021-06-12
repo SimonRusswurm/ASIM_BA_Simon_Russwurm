@@ -12,7 +12,7 @@ import { animationWindow } from "../animationWindow";
 
 class TransferAnimator {
     private movingObject: HTMLElement;
-    animationSpeed: number; //value can be 1,2,3,4,6,12
+    public animationSpeed: number; //value can be 1,2,3,4,6,12
     private origin: string;
     private target: string;
     private valueToTransfer: number;
@@ -120,27 +120,6 @@ class TransferAnimator {
         }
     }
 
-    private checkDisplayDecoder(point?: Point): boolean {
-        const originPoint = this.pointsFromOriginToTarget[0];
-        const targetPoint = this.pointsFromOriginToTarget[this.pointsFromOriginToTarget.length-1];
-
-        if(point !== undefined){
-            if(!this.isInCpu(point))
-                 return true;
-            return false;            
-        }
-        if(this.isInCpu(originPoint) && !this.isInCpu(targetPoint))
-            return true;
-        return false;
-    }
-
-    
-    private isInCpu(point: Point): boolean {
-        if(point.y < 24 && point.y > 3 && point.x > 11 && point.x < 38)
-            return true;
-        return false;
-    }
-
     private async transferType2(): Promise < any > {
         let pathElements: Array<HTMLElement> = [];
         let addX = 0;
@@ -180,6 +159,26 @@ class TransferAnimator {
         }
     }
 
+    private checkDisplayDecoder(point?: Point): boolean {
+        const originPoint = this.pointsFromOriginToTarget[0];
+        const targetPoint = this.pointsFromOriginToTarget[this.pointsFromOriginToTarget.length-1];
+
+        if(point !== undefined){
+            if(!this.isInCpu(point))
+                 return true;
+            return false;            
+        }
+        if(this.isInCpu(originPoint) && !this.isInCpu(targetPoint))
+            return true;
+        return false;
+    }
+
+    private isInCpu(point: Point): boolean {
+        if(point.y < 24 && point.y > 3 && point.x > 11 && point.x < 38)
+            return true;
+        return false;
+    }
+    
     private createPathElement(xCoordinate: number, yCoordinate: number): HTMLElement {
         let element = document.createElement('div');
         element.style.left = `${100/animationWindow.sectionsCountWidth*(xCoordinate+0.5)}%`;
@@ -233,7 +232,7 @@ class TransferAnimator {
 
     async readFromMemoryInRegister(addressRegister: string, targetRegister: string): Promise < any >{
 
-        const address = mc8Components.getRegisterByName(addressRegister).value;
+        const address = mc8Components.getRegisterBy(addressRegister).value;
     
         mc8Components.DECODER.update(1, 0, 0, 1, address);
         await arrowAnimator.displayRegisterArrow(addressRegister);
@@ -243,23 +242,27 @@ class TransferAnimator {
             await this.transfer(addressRegister, 'ROM2', address);
             await this.transfer(mc8Components.ROM.getCellId(address), targetRegister, mc8Components.ROM.getCellValue(address));
             await registerAnimator.registerUpdate(targetRegister, mc8Components.ROM.getCellValue(address));
-        } else if (address >= mc8Components.RAM.startAddress && address < mc8Components.RAM.startAddress + mc8Components.RAM.size) {
+        }
+        else if (address >= mc8Components.RAM.startAddress && address < mc8Components.RAM.startAddress + mc8Components.RAM.size) {
             mc8Components.RAM.updateVariableCells(address);
             await this.transfer(addressRegister, 'RAM2', address);
-            await this.transfer(mc8Components.RAM.getRamElementId(address), targetRegister, mc8Components.RAM.getValue(address));
-            await registerAnimator.registerUpdate(targetRegister, mc8Components.RAM.getValue(address));
-        } else if (!mc8Components.IO1.ioMapped_boolean) {
+            await this.transfer(mc8Components.RAM.getRamElementId(address), targetRegister, mc8Components.RAM.getValueFrom(address));
+            await registerAnimator.registerUpdate(targetRegister, mc8Components.RAM.getValueFrom(address));
+        }
+        else if (!mc8Components.IO1.isIoMapped) {
             if (address ===  mc8Components.IO1.address) {
                 await this.transfer(addressRegister, 'DEC_UPDATE', address);
                 await ioAnimator.animateIoUserInput('IO1');
                 await this.transfer('IO1', 'A', mc8Components.IO1.value);
                 await registerAnimator.registerUpdate('A', mc8Components.IO1.value);
-            } else if (address === mc8Components.IO2.address) {
+            }
+            else if (address === mc8Components.IO2.address) {
                 await this.transfer(addressRegister, 'DEC_UPDATE', address);
                 await ioAnimator.animateIoUserInput('IO2');
                 await this.transfer('IO2', 'A', mc8Components.IO2.value);
                 await registerAnimator.registerUpdate('A', mc8Components.IO2.value);
-            } else if (address === mc8Components.IO3.address) {
+            }
+            else if (address === mc8Components.IO3.address) {
                 await this.transfer(addressRegister, 'DEC_UPDATE', address);
                 await ioAnimator.animateIoUserInput('IO2');
                 await this.transfer('IO2', 'A', mc8Components.IO3.value);
@@ -279,10 +282,10 @@ class TransferAnimator {
         let ramEle_htmlElement: HTMLElement;
     
         //get address
-        const address_number = mc8Components.getRegisterByName(addressRegister).value;
+        const address_number = mc8Components.getRegisterBy(addressRegister).value;
     
         //get data
-        const register_class = mc8Components.getRegisterByName(dataRegister);
+        const register_class = mc8Components.getRegisterBy(dataRegister);
         let data_number = register_class.value;
     
         if(register_class instanceof Register_x4){
@@ -328,7 +331,7 @@ class TransferAnimator {
     }
 
     async readFromIo () {
-        if (mc8Components.IO1.ioMapped_boolean) {
+        if (mc8Components.IO1.isIoMapped) {
             mc8Components.DECODER.update(1, 0, 1, 0, mc8Components.ZR.loValue);
             await transferAnimator.transfer('ZR', 'DEC_UPDATE', mc8Components.ZR.loValue);
     

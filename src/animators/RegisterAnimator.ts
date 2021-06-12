@@ -9,7 +9,7 @@ class RegisterAnimator {
     constructor(){}
 
     async registerUpdate(registerName: string, value: number): Promise < any > {
-        const register = mc8Components.getRegisterByName(registerName);
+        const register = mc8Components.getRegisterBy(registerName);
     
         if(register instanceof Register_x4){
             if (registerName.includes('hi')) {

@@ -11,16 +11,16 @@ export class Decoder {
     private RD: number;
     private M: number;
     private IO: number;
-    private display: HTMLElement;
+    private displayPanel: HTMLElement;
     private displayedNotification: string;
     private error: boolean;
-    isRamAccess: boolean;
-    isIoAccess: boolean;
+    public isRamAccess: boolean;
+    public isIoAccess: boolean;
 
-    RAM: Ram;
-    IO1: IO;
-    IO2: IO;
-    IO3: IO;
+    private RAM: Ram;
+    private IO1: IO;
+    private IO2: IO;
+    private IO3: IO;
     
     constructor(ram: Ram, io1: IO, io2: IO, io3: IO) {
         this.write = getHtmlElement('wrValue_p');
@@ -31,7 +31,7 @@ export class Decoder {
         this.RD = 1;
         this.M = 1;
         this.IO = 1;
-        this.display = getHtmlElement('decDisplay_p');
+        this.displayPanel = getHtmlElement('decDisplay_p');
         this.displayedNotification = '';
         this.error = false;
         this.isRamAccess = false;
@@ -43,7 +43,7 @@ export class Decoder {
         this.IO3 = io3;
     }
 
-    update(wr: number, rd: number, m: number, io: number, address: number): void {
+    public update(wr: number, rd: number, m: number, io: number, address: number): void {
         this.WR = wr;
         this.RD = rd;
         this.M = m;
@@ -63,7 +63,7 @@ export class Decoder {
         }
     }
 
-    readFromMemory(address: number){
+    private readFromMemory(address: number): void{
         this.isIoAccess = false;
         this.isRamAccess = false;
 
@@ -103,7 +103,7 @@ export class Decoder {
 
     }
 
-    writeToMemory(address: number){
+    private writeToMemory(address: number): void{
         this.isIoAccess = false;
         this.isRamAccess = false;
 
@@ -143,7 +143,7 @@ export class Decoder {
         }
     }
 
-    readFromIo(address: number){
+    private readFromIo(address: number): void{
         this.isIoAccess = true;
         this.isRamAccess = false;
 
@@ -192,7 +192,7 @@ export class Decoder {
         }
     }
 
-    writeToIo(address: number){
+    private writeToIo(address: number): void{
         this.isIoAccess = true;
         this.isRamAccess = false;
 
@@ -241,32 +241,32 @@ export class Decoder {
         }
     }
 
-    updateDOM(): void {
-        this.write.textContent = String(this.WR);
-        this.read.textContent = String(this.RD);
-        this.memoryRequired.textContent = String(this.M);
-        this.ioRequest.textContent = String(this.IO);
-        this.display.textContent = this.displayedNotification;
+    public updateDOM(): void {
+        this.write.textContent = this.WR.toString();
+        this.read.textContent = this.RD.toString();
+        this.memoryRequired.textContent = this.M.toString();
+        this.ioRequest.textContent = this.IO.toString();
+        this.displayPanel.textContent = this.displayedNotification;
         if (this.isRamAccess || this.isIoAccess)
-            this.display.classList.add('yellowBg');
+            this.displayPanel.classList.add('yellowBg');
         if (this.error) {
-            this.display.classList.add('redBg');
+            this.displayPanel.classList.add('redBg');
             throw Error('Decoder error');
         }
     }
 
-    resetDOM(): void {
+    public resetDOM(): void {
         this.write.textContent = '';
         this.read.textContent = '';
         this.memoryRequired.textContent = '';
         this.ioRequest.textContent = '';
-        this.display.textContent = '';
+        this.displayPanel.textContent = '';
         this.displayedNotification = '';
         this.error = false;
         this.isRamAccess = false;
         this.isIoAccess = false;
 
-        this.display.classList.remove('yellowBg');
-        this.display.classList.remove('redBg');
+        this.displayPanel.classList.remove('yellowBg');
+        this.displayPanel.classList.remove('redBg');
     }
 }

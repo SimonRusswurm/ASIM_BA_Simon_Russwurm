@@ -12,7 +12,6 @@ import { animationWindow } from "../animationWindow";
 
 class TransferAnimator {
     private movingObject: HTMLElement;
-    public animationSpeed: number; //value can be 1,2,3,4,6,12
     private origin: string;
     private target: string;
     private valueToTransfer: number;
@@ -21,7 +20,6 @@ class TransferAnimator {
 
     constructor(){
         this.movingObject = getHtmlElement('movingObject_h2');
-        this.animationSpeed = 3;
         this.target = '';
         this.origin = '';
         this.pointsFromOriginToTarget = [];
@@ -91,7 +89,7 @@ class TransferAnimator {
     }
 
     private async transferType1(): Promise < any > {
-        for (let i = 0; i < this.pointsFromOriginToTarget.length; i = i+this.animationSpeed) {
+        for (let i = 0; i < this.pointsFromOriginToTarget.length; i = i+ programStatus.transferSpeed) {
             const currentPoint = this.pointsFromOriginToTarget[i];
 
             this.updateMovingObjectPosition(currentPoint.x,currentPoint.y);
@@ -142,7 +140,7 @@ class TransferAnimator {
 
             try {
                 for(let i = 0; i < 10; i++){
-                    await pauseableSleep(200 / this.animationSpeed);
+                    await pauseableSleep(200 / programStatus.transferSpeed);
                     if(programStatus.noAnimation){
                         break;
                     }

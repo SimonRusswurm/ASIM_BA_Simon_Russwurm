@@ -22,7 +22,7 @@ class IOAnimator {
         let ioInputWindow: HTMLElement;
         let ioInput: any;
         let check = true;
-        programStatus.ioInputDisplayed = true;
+        programStatus.ioInput = true;
         switch (IoName) {
             case 'IO1':
                 ioInputWindow = io1InputWindow_div;
@@ -73,7 +73,7 @@ class IOAnimator {
             io1InputInfo_p.textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
             getHtmlElement('io2InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
             getHtmlElement('io3InputInfo_p').textContent = 'Geben Sie eine zweistellige Hexadezimalzahl ein!';
-            programStatus.ioInputDisplayed = false;
+            programStatus.ioInput = false;
         }
     
         await registerAnimator.registerUpdate(IoName, convertHexToNumber(ioInput.value));

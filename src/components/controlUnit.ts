@@ -34,6 +34,7 @@ export class ControlUnit {
             }
         }
         this.assemblerCommand.textContent = 'Befehl unbekannt';
+        this.assemblerCommand.style.color = '#fbfbfb';
         this.assemblerCommand.parentElement!.style.backgroundColor = '#ff1930';
         throw Error('Unknown command');
     }
@@ -43,5 +44,7 @@ export class ControlUnit {
         this.stepNumber.textContent = '0';
         this.stepDescription.textContent = 'Prozessor angehalten';
         this.assemblerCommand.textContent = '';
+        this.assemblerCommand.parentElement!.style.backgroundColor = '';
+        this.assemblerCommand.style.color = '';
     }
 }

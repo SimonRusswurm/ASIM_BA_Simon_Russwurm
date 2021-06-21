@@ -20,11 +20,6 @@ window.addEventListener('resize', function () {
 
 addHoverListeners();
 
-export class globalVars {
-    public static IDLE_TIME: number = 500;
-    public static NO_ANIMATION_IDLE_TIME: number = 15;
-}
-
 const loadNextCommand = async() => {
     mc8Components.CONTROL_UNIT.stepNumber.textContent = '0';
     mc8Components.CONTROL_UNIT.assemblerCommand.textContent = '';
@@ -60,17 +55,14 @@ export const resetAnimation = () => {
 export const startAnimation = async (): Promise < any > => {
     let i = 0;
     while (true) {
-        if (commandsToProcess[i] === undefined) {
-            return false;
-        }
         try {
-            // await checkPlayPressed();
+            await checkPlayPressed();
             await commandsToProcess[i]();
         } catch (e) {
-            if (!programStatus.reset) {
-                programStatus.setPause();
-            }
-            console.error(e);
+            // if (!programStatus.reset) {
+            //     programStatus.setPause();
+            // }
+            // console.error(e);
             
             return false;
         }

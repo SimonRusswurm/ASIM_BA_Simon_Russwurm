@@ -1,5 +1,4 @@
 import { programStatus} from "./ProgramStatus";
-import { globalVars } from "./index";
 
 
 export const getHtmlElement = (id: string) => document.getElementById(id)!;
@@ -7,6 +6,7 @@ export const getPElement = (id: string) => <HTMLParagraphElement>document.getEle
 export const getDivElement = (id: string) => <HTMLDivElement>document.getElementById(id)!;
 export const getInputElement = (id: string) => <HTMLInputElement>document.getElementById(id)!;
 
+const sleepFor = (milliseconds: number): Promise < any > => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 export const pauseableSleep = async (milliseconds: number): Promise < any > => {
     let count = milliseconds;
@@ -21,8 +21,6 @@ export const pauseableSleep = async (milliseconds: number): Promise < any > => {
     }
 }
 
-const sleepFor = (milliseconds: number): Promise < any > => new Promise(resolve => setTimeout(resolve, milliseconds));
-
 export const checkPlayPressed = async (): Promise < any > => {
     //if pause is pressed user will be caught in this loop till pressing play or reset
     while (true) {
@@ -36,9 +34,10 @@ export const checkPlayPressed = async (): Promise < any > => {
     }
 }
 
-export const sleepForIDLETIME = (): Promise < any > => pauseableSleep(globalVars.IDLE_TIME);
+export const sleepForIDLETIME = (): Promise < any > => pauseableSleep(programStatus.idleTime);
 
-export const sleepForNOANIMATIONIDLETIME = (): Promise < any > => pauseableSleep(globalVars.NO_ANIMATION_IDLE_TIME);
+const noAnimationIdleTime = 15;
+export const sleepForNOANIMATIONIDLETIME = (): Promise < any > => pauseableSleep(noAnimationIdleTime);
 
 const framesPerSecond = 60;
 export const sleepBetweenFrames = (): Promise < any > => pauseableSleep(1000/framesPerSecond);

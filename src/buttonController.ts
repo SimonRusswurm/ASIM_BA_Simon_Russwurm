@@ -3,7 +3,7 @@ import { programStatus } from "./ProgramStatus";
 import { transferAnimator } from "./animators/TransferAnimator";
 import { containerSettings_div, saveSettings } from "./settingsWindow";
 import { mc8Components } from "./components/Mc8Components";
-import { globalVars, resetAnimation, startAnimation } from "./index";
+import { resetAnimation, startAnimation } from "./index";
 
 declare global {
     interface Document {
@@ -180,12 +180,7 @@ info_button.addEventListener('click', buttonController.openInfo);
 closeSettings_button.addEventListener('click', saveSettings);
 
 speedSlider_input.oninput = function(){
-    transferAnimator.animationSpeed = Number(speedSlider_input.value);
-    globalVars.IDLE_TIME = 500 - transferAnimator.animationSpeed*30;
-    if (transferAnimator.animationSpeed === 5)
-        transferAnimator.animationSpeed = 6;
-    if (transferAnimator.animationSpeed === 6)
-        transferAnimator.animationSpeed = 12;
+    programStatus.updateAnimationSpeed(Number(speedSlider_input.value));
 };
 document.addEventListener('keyup', function (e) {
     if(programStatus.romIsEdited){    
@@ -202,7 +197,7 @@ document.addEventListener('keyup', function (e) {
         return
     }
 
-    if(programStatus.ioInputDisplayed){
+    if(programStatus.ioInput){
         if (e.code === 'Enter')
             buttonController.playOrPause();
         return

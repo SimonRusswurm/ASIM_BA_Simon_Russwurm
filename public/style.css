@@ -1315,18 +1315,18 @@ p.redBg{
     left: calc(100%/42*34)
 }
 
-#infoWindow_div {
+.infoWindow_div {
     position: absolute;
-    -ms-grid-columns: 1fr;
-    grid-template-columns: 1fr;
-    -ms-grid-rows: 1fr;
-    grid-template-rows: 1fr;
     z-index: 10;
     top: calc(100%/28*2);
     left: calc(100%/42*4);
     height: calc(100%/28*24);
     width: calc(100%/42*27.5);
-    background-color: #fbfbfbec
+    background-color: var(--light);
+    background-image: url(./images/info.svg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .hoverElement {

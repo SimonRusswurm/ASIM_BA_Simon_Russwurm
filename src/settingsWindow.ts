@@ -577,6 +577,7 @@ export const saveSettings = () => {
         containerSettings_div.classList.remove('toggleDisplay');
         errorWindow_div.classList.remove('displayGrid');
         programStatus.settingsOpened = false;
+        getHtmlElement('infoWindow_div').classList.add('displayNone');
     }
 }
 

@@ -1,6 +1,5 @@
 import { getHtmlElement, getInputElement } from "./utils";
 import { programStatus } from "./ProgramStatus";
-import { transferAnimator } from "./animators/TransferAnimator";
 import { containerSettings_div, saveSettings } from "./settingsWindow";
 import { mc8Components } from "./components/Mc8Components";
 import { resetAnimation, startAnimation } from "./index";
@@ -42,7 +41,8 @@ const io3Input_button: HTMLElement = getHtmlElement('io3Input_button');
 
 const toggleTheme_button: HTMLElement = getHtmlElement('toggleTheme_button');
 const info_button: HTMLElement = getHtmlElement('info_button');
-const closeSettings_button: HTMLElement = getHtmlElement('closeSettings_button');    
+const closeSettings_button: HTMLElement = getHtmlElement('closeSettings_button');
+const infoWindow_div: HTMLElement = getHtmlElement('infoWindow_div');
 
 class ButtonController {
     
@@ -153,7 +153,7 @@ class ButtonController {
     }
 
     openInfo() {
-        getHtmlElement('infoWindow_div').classList.toggle('displayGrid');
+        infoWindow_div.classList.toggle('displayNone');
     }
 
 }

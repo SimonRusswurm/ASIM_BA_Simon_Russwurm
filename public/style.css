@@ -21,6 +21,7 @@ html,body {
 body::after{
     position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
     content:url(images/pathElementBg.svg)
+            url(images/pause_button.svg)
             url(images/playWhite_button.svg)
             url(images/pauseWhite_button.svg)
             url(images/stopWhite_button.svg)

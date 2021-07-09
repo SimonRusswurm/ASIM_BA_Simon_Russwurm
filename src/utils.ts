@@ -28,8 +28,6 @@ export const checkPlayPressed = async (): Promise < any > => {
             return true;
         if (programStatus.reset)
             throw Error('Reset Pressed');
-
-        console.log('waiting for user input');
         await sleepFor(100);
     }
 }

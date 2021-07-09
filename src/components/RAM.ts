@@ -9,7 +9,7 @@ export class Ram {
     public size: number;
     private firstVariableCellPosition: number;
     private lastVariableCellPosition: number;
-    private integerCells: Array <number> ;
+    public integerCells: Array <number> ;
     private htmlCells: Array <HTMLParagraphElement>;
     private middleRamLabel_p: HTMLElement;
     private middleRamLabel_div: HTMLElement;
